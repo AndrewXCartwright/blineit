@@ -40,6 +40,15 @@ import Search from "./pages/Search";
 import CompareProperties from "./pages/CompareProperties";
 import CompareLoans from "./pages/CompareLoans";
 import ComparePredictions from "./pages/ComparePredictions";
+import Calculators from "./pages/Calculators";
+import EquityCalculator from "./pages/EquityCalculator";
+import DebtCalculator from "./pages/DebtCalculator";
+import PredictionCalculator from "./pages/PredictionCalculator";
+import PortfolioCalculator from "./pages/PortfolioCalculator";
+import CompoundCalculator from "./pages/CompoundCalculator";
+import DRIPSettings from "./pages/DRIPSettings";
+import DRIPDashboard from "./pages/DRIPDashboard";
+import DRIPHistory from "./pages/DRIPHistory";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProperties from "./pages/admin/AdminProperties";
 import AdminLoans from "./pages/admin/AdminLoans";
@@ -89,6 +98,15 @@ const App = () => (
                 <Route path="/compare/properties" element={<ProtectedRoute><CompareProperties /></ProtectedRoute>} />
                 <Route path="/compare/loans" element={<ProtectedRoute><CompareLoans /></ProtectedRoute>} />
                 <Route path="/compare/predictions" element={<ProtectedRoute><ComparePredictions /></ProtectedRoute>} />
+                <Route path="/calculators" element={<ProtectedRoute><Calculators /></ProtectedRoute>} />
+                <Route path="/calculators/equity" element={<ProtectedRoute><EquityCalculator /></ProtectedRoute>} />
+                <Route path="/calculators/debt" element={<ProtectedRoute><DebtCalculator /></ProtectedRoute>} />
+                <Route path="/calculators/prediction" element={<ProtectedRoute><PredictionCalculator /></ProtectedRoute>} />
+                <Route path="/calculators/portfolio" element={<ProtectedRoute><PortfolioCalculator /></ProtectedRoute>} />
+                <Route path="/calculators/compound" element={<ProtectedRoute><CompoundCalculator /></ProtectedRoute>} />
+                <Route path="/settings/drip" element={<ProtectedRoute><DRIPSettings /></ProtectedRoute>} />
+                <Route path="/drip" element={<ProtectedRoute><DRIPDashboard /></ProtectedRoute>} />
+                <Route path="/drip/history" element={<ProtectedRoute><DRIPHistory /></ProtectedRoute>} />
                 <Route path="/r/:code" element={<ReferralLanding />} />
                 <Route path="/install" element={<InstallPage />} />
                 <Route path="/coming-soon/:assetClass" element={<ComingSoon />} />
