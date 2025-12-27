@@ -2,6 +2,78 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
 import { toast } from "sonner";
+import { z } from "zod";
+
+// Comprehensive KYC validation schema
+const kycPersonalInfoSchema = z.object({
+  full_legal_name: z.string()
+    .min(2, "Name must be at least 2 characters")
+    .max(200, "Name must be less than 200 characters")
+    .regex(/^[a-zA-Z\s'-]+$/, "Name contains invalid characters"),
+  
+  date_of_birth: z.string()
+    .refine((date) => {
+      const dob = new Date(date);
+      const age = (Date.now() - dob.getTime()) / (365.25 * 24 * 60 * 60 * 1000);
+      return age >= 18 && age <= 120;
+    }, "Must be between 18 and 120 years old"),
+  
+  phone_number: z.string()
+    .regex(/^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/, "Invalid phone number format")
+    .min(7, "Phone number too short")
+    .max(20, "Phone number too long"),
+  
+  ssn_last4: z.string()
+    .regex(/^[0-9]{4}$/, "SSN must be exactly 4 digits"),
+  
+  postal_code: z.string()
+    .regex(/^[A-Z0-9\s-]{3,20}$/i, "Invalid postal code format")
+    .max(20, "Postal code too long"),
+  
+  address_line1: z.string()
+    .min(5, "Address too short")
+    .max(200, "Address too long")
+    .regex(/^[a-zA-Z0-9\s,.#-]+$/, "Address contains invalid characters"),
+  
+  address_line2: z.string()
+    .max(200, "Address too long")
+    .regex(/^[a-zA-Z0-9\s,.#-]*$/, "Address contains invalid characters")
+    .optional()
+    .or(z.literal("")),
+  
+  city: z.string()
+    .min(2, "City name too short")
+    .max(100, "City name too long")
+    .regex(/^[a-zA-Z\s'-]+$/, "City contains invalid characters"),
+  
+  state: z.string()
+    .min(2, "State name too short")
+    .max(100, "State name too long")
+    .regex(/^[a-zA-Z\s-]+$/, "State contains invalid characters"),
+  
+  country: z.string()
+    .min(2, "Country name too short")
+    .max(100, "Country name too long")
+    .regex(/^[a-zA-Z\s-]+$/, "Country contains invalid characters"),
+});
+
+export type KYCPersonalInfoInput = z.infer<typeof kycPersonalInfoSchema>;
+
+export function validateKYCPersonalInfo(data: Partial<KYCData>): { success: boolean; errors?: Record<string, string> } {
+  const result = kycPersonalInfoSchema.safeParse(data);
+  
+  if (!result.success) {
+    const errors: Record<string, string> = {};
+    result.error.errors.forEach((err) => {
+      if (err.path[0]) {
+        errors[err.path[0] as string] = err.message;
+      }
+    });
+    return { success: false, errors };
+  }
+  
+  return { success: true };
+}
 
 export interface KYCData {
   id?: string;
@@ -111,8 +183,16 @@ export function useKYC() {
     return data.signedUrl;
   };
 
-  const savePersonalInfo = async (data: Partial<KYCData>): Promise<boolean> => {
-    if (!user) return false;
+  const savePersonalInfo = async (data: Partial<KYCData>): Promise<{ success: boolean; errors?: Record<string, string> }> => {
+    if (!user) return { success: false, errors: { general: "Not authenticated" } };
+
+    // Validate input data
+    const validation = validateKYCPersonalInfo(data);
+    if (!validation.success) {
+      const firstError = Object.values(validation.errors || {})[0];
+      toast.error(firstError || "Invalid input data");
+      return { success: false, errors: validation.errors };
+    }
 
     try {
       const { error } = await supabase
@@ -126,11 +206,11 @@ export function useKYC() {
       if (error) throw error;
 
       setKycData(prev => prev ? { ...prev, ...data } : { user_id: user.id, ...data } as KYCData);
-      return true;
+      return { success: true };
     } catch (error) {
       console.error("Error saving personal info:", error);
       toast.error("Failed to save personal information");
-      return false;
+      return { success: false, errors: { general: "Failed to save" } };
     }
   };
 
