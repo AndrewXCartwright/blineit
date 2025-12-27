@@ -129,6 +129,19 @@ export function NotificationBell() {
               </div>
             )}
           </div>
+
+          {/* View All Link */}
+          {notifications.length > 0 && (
+            <div className="p-3 border-t border-border">
+              <Link
+                to="/notifications"
+                onClick={() => setIsOpen(false)}
+                className="block text-center text-sm text-primary hover:text-primary/80 font-medium"
+              >
+                View All →
+              </Link>
+            </div>
+          )}
         </div>
       )}
     </div>
