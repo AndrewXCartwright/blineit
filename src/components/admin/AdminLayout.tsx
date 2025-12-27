@@ -4,6 +4,7 @@ import { AdminSidebar } from "./AdminSidebar";
 import { useIsAdmin } from "@/hooks/useAdmin";
 import { toast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/Skeleton";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 interface AdminLayoutProps {
   children: ReactNode;
@@ -56,7 +57,13 @@ export function AdminLayout({ children }: AdminLayoutProps) {
     <div className="min-h-screen flex bg-background">
       <AdminSidebar />
       <main className="flex-1 overflow-auto">
-        {children}
+        {/* Admin Header with Theme Toggle */}
+        <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b border-border px-6 py-3 flex justify-end">
+          <ThemeToggle size="sm" />
+        </div>
+        <div className="p-6">
+          {children}
+        </div>
       </main>
     </div>
   );

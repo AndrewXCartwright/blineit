@@ -1,4 +1,4 @@
-import { User, Settings, Bell, Shield, HelpCircle, LogOut, ChevronRight, Trophy, Target, Building2, Wallet, ShieldCheck, AlertCircle, Crown, Gift } from "lucide-react";
+import { User, Settings, Bell, Shield, HelpCircle, LogOut, ChevronRight, Trophy, Target, Building2, Wallet, ShieldCheck, AlertCircle, Crown, Gift, Palette } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserData } from "@/hooks/useUserData";
 import { useKYC } from "@/hooks/useKYC";
@@ -9,10 +9,10 @@ import { CountUp } from "@/components/CountUp";
 import { EmptyState } from "@/components/EmptyState";
 import { ReferralCard } from "@/components/ReferralCard";
 import { KYCStatusBadge } from "@/components/KYCStatusBadge";
+import { ThemeSwitcher } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 
 const menuItems = [
-  { icon: Settings, label: "Account Settings", action: () => {} },
   { icon: Bell, label: "Notifications", action: () => {} },
   { icon: Shield, label: "Security", action: () => {} },
   { icon: HelpCircle, label: "Help & Support", action: () => {} },
@@ -209,8 +209,19 @@ export default function Profile() {
           </Link>
         </div>
 
+        {/* Appearance */}
+        <div className="glass-card rounded-2xl p-5 space-y-4 animate-fade-in stagger-5">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-primary/20">
+              <Palette className="w-5 h-5 text-primary" />
+            </div>
+            <h3 className="font-display font-semibold text-foreground">Appearance</h3>
+          </div>
+          <ThemeSwitcher />
+        </div>
+
         {/* Menu */}
-        <div className="glass-card rounded-2xl overflow-hidden animate-fade-in stagger-5">
+        <div className="glass-card rounded-2xl overflow-hidden animate-fade-in stagger-6">
           {menuItems.map((item, index) => {
             const Icon = item.icon;
             return (
