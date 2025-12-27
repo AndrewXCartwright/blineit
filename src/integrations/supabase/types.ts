@@ -505,6 +505,15 @@ export type Database = {
         Args: { p_property_id: string; p_token_price: number; p_tokens: number }
         Returns: Json
       }
+      place_bet: {
+        Args: {
+          p_amount: number
+          p_entry_price: number
+          p_market_id: string
+          p_position: string
+        }
+        Returns: Json
+      }
       sell_tokens: {
         Args: { p_property_id: string; p_token_price: number; p_tokens: number }
         Returns: Json
