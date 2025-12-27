@@ -53,6 +53,8 @@ export type Database = {
           property_id: string | null
           question: string
           resolution: string | null
+          status: string | null
+          title: string | null
           traders_count: number
           updated_at: string
           volume: number
@@ -67,6 +69,8 @@ export type Database = {
           property_id?: string | null
           question: string
           resolution?: string | null
+          status?: string | null
+          title?: string | null
           traders_count?: number
           updated_at?: string
           volume?: number
@@ -81,6 +85,8 @@ export type Database = {
           property_id?: string | null
           question?: string
           resolution?: string | null
+          status?: string | null
+          title?: string | null
           traders_count?: number
           updated_at?: string
           volume?: number
@@ -100,29 +106,35 @@ export type Database = {
         Row: {
           avatar_url: string | null
           created_at: string
+          display_name: string | null
           email: string | null
           id: string
           name: string | null
           updated_at: string
           user_id: string
+          wallet_balance: number | null
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string
+          display_name?: string | null
           email?: string | null
           id?: string
           name?: string | null
           updated_at?: string
           user_id: string
+          wallet_balance?: number | null
         }
         Update: {
           avatar_url?: string | null
           created_at?: string
+          display_name?: string | null
           email?: string | null
           id?: string
           name?: string | null
           updated_at?: string
           user_id?: string
+          wallet_balance?: number | null
         }
         Relationships: []
       }
@@ -192,6 +204,54 @@ export type Database = {
         }
         Relationships: []
       }
+      transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          description: string | null
+          id: string
+          market_id: string | null
+          property_id: string | null
+          type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          market_id?: string | null
+          property_id?: string | null
+          type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          market_id?: string | null
+          property_id?: string | null
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "prediction_markets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_bets: {
         Row: {
           amount: number
@@ -203,6 +263,7 @@ export type Database = {
           payout: number | null
           position: string
           shares: number
+          status: string | null
           user_id: string
         }
         Insert: {
@@ -215,6 +276,7 @@ export type Database = {
           payout?: number | null
           position: string
           shares: number
+          status?: string | null
           user_id: string
         }
         Update: {
@@ -227,6 +289,7 @@ export type Database = {
           payout?: number | null
           position?: string
           shares?: number
+          status?: string | null
           user_id?: string
         }
         Relationships: [
