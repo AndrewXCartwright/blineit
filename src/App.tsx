@@ -16,6 +16,7 @@ import Auth from "./pages/Auth";
 import PropertyDetail from "./pages/PropertyDetail";
 import LoanDetail from "./pages/LoanDetail";
 import KYCVerification from "./pages/KYCVerification";
+import ComingSoon from "./pages/ComingSoon";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -39,6 +40,7 @@ const App = () => (
               <Route path="/property/:id" element={<ProtectedRoute><PropertyDetail /></ProtectedRoute>} />
               <Route path="/loan/:id" element={<ProtectedRoute><LoanDetail /></ProtectedRoute>} />
               <Route path="/kyc" element={<ProtectedRoute><KYCVerification /></ProtectedRoute>} />
+              <Route path="/coming-soon/:assetClass" element={<ComingSoon />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />
