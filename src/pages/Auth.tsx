@@ -5,6 +5,7 @@ import { Mail, Lock, User, Eye, EyeOff, AlertCircle, Gift } from "lucide-react";
 import { z } from "zod";
 import logo from "@/assets/logo.png";
 import { toast } from "sonner";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const emailSchema = z.string().email("Please enter a valid email address");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
@@ -112,7 +113,12 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 relative">
+      {/* Theme Toggle in corner */}
+      <div className="absolute top-4 right-4">
+        <ThemeToggle size="md" />
+      </div>
+      
       <div className="w-full max-w-md space-y-8 animate-fade-in">
         {/* Logo */}
         <div className="text-center">

@@ -1,6 +1,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useUserData } from "@/hooks/useUserData";
 import { NotificationBell } from "./NotificationBell";
+import { ThemeToggle } from "./ThemeToggle";
 import logo from "@/assets/logo.png";
 
 export function Header() {
@@ -21,7 +22,10 @@ export function Header() {
             <p className="text-xs text-muted-foreground">Real Estate Tokenization</p>
           </div>
         </div>
-        <NotificationBell />
+        <div className="flex items-center gap-2">
+          <ThemeToggle size="sm" />
+          <NotificationBell />
+        </div>
       </div>
     </header>
   );
