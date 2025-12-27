@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      asset_price_history: {
+        Row: {
+          entity_id: string
+          entity_type: string
+          id: string
+          price: number
+          recorded_at: string
+        }
+        Insert: {
+          entity_id: string
+          entity_type: string
+          id?: string
+          price: number
+          recorded_at?: string
+        }
+        Update: {
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          price?: number
+          recorded_at?: string
+        }
+        Relationships: []
+      }
       comments: {
         Row: {
           content: string
@@ -391,6 +415,42 @@ export type Database = {
           message?: string
           title?: string
           type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      portfolio_snapshots: {
+        Row: {
+          cash_balance: number
+          created_at: string
+          debt_value: number
+          equity_value: number
+          id: string
+          prediction_value: number
+          snapshot_date: string
+          total_value: number
+          user_id: string
+        }
+        Insert: {
+          cash_balance?: number
+          created_at?: string
+          debt_value?: number
+          equity_value?: number
+          id?: string
+          prediction_value?: number
+          snapshot_date?: string
+          total_value?: number
+          user_id: string
+        }
+        Update: {
+          cash_balance?: number
+          created_at?: string
+          debt_value?: number
+          equity_value?: number
+          id?: string
+          prediction_value?: number
+          snapshot_date?: string
+          total_value?: number
           user_id?: string
         }
         Relationships: []
@@ -955,6 +1015,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_performance: {
+        Row: {
+          created_at: string
+          deposits: number
+          dividends_earned: number
+          ending_value: number
+          id: string
+          interest_earned: number
+          period: string
+          period_start: string
+          prediction_pnl: number
+          return_percentage: number
+          starting_value: number
+          total_return: number
+          user_id: string
+          withdrawals: number
+        }
+        Insert: {
+          created_at?: string
+          deposits?: number
+          dividends_earned?: number
+          ending_value?: number
+          id?: string
+          interest_earned?: number
+          period: string
+          period_start: string
+          prediction_pnl?: number
+          return_percentage?: number
+          starting_value?: number
+          total_return?: number
+          user_id: string
+          withdrawals?: number
+        }
+        Update: {
+          created_at?: string
+          deposits?: number
+          dividends_earned?: number
+          ending_value?: number
+          id?: string
+          interest_earned?: number
+          period?: string
+          period_start?: string
+          prediction_pnl?: number
+          return_percentage?: number
+          starting_value?: number
+          total_return?: number
+          user_id?: string
+          withdrawals?: number
+        }
+        Relationships: []
       }
       user_posts: {
         Row: {

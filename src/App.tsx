@@ -26,6 +26,7 @@ import NotificationSettings from "./pages/NotificationSettings";
 import Community from "./pages/Community";
 import UserProfile from "./pages/UserProfile";
 import Leaderboard from "./pages/Leaderboard";
+import PortfolioAnalytics from "./pages/PortfolioAnalytics";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProperties from "./pages/admin/AdminProperties";
 import AdminLoans from "./pages/admin/AdminLoans";
@@ -64,6 +65,7 @@ const App = () => (
               <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
               <Route path="/user/:userId" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
               <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
+              <Route path="/portfolio/analytics" element={<ProtectedRoute><PortfolioAnalytics /></ProtectedRoute>} />
               <Route path="/r/:code" element={<ReferralLanding />} />
               <Route path="/coming-soon/:assetClass" element={<ComingSoon />} />
               {/* Admin Routes */}
