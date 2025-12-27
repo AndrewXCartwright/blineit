@@ -31,10 +31,9 @@ const categoryLabels: Record<string, string> = {
 // Mock loans data
 const mockLoans: LoanData[] = [
   { id: "loan-1", name: "Loan-001", propertyName: "Sunset Apartments", loanType: "Bridge Loan", city: "Austin", state: "TX", loanAmount: 2400000, apy: 10.5, termMonths: 18, ltv: 65, fundedAmount: 1872000, minInvestment: 1000, isSecured: true, lienPosition: "1st" },
-  { id: "loan-2", name: "Loan-002", propertyName: "Downtown Office Tower", loanType: "Construction", city: "Miami", state: "FL", loanAmount: 5200000, apy: 12.5, termMonths: 24, ltv: 70, fundedAmount: 2600000, minInvestment: 2500, isSecured: true, lienPosition: "1st" },
-  { id: "loan-3", name: "Loan-003", propertyName: "Riverside Commons", loanType: "Stabilized", city: "Denver", state: "CO", loanAmount: 1800000, apy: 8.5, termMonths: 36, ltv: 55, fundedAmount: 1620000, minInvestment: 1000, isSecured: true, lienPosition: "1st" },
-  { id: "loan-4", name: "Loan-004", propertyName: "Tech Park Plaza", loanType: "Mezzanine", city: "Seattle", state: "WA", loanAmount: 3500000, apy: 14.0, termMonths: 24, ltv: 75, fundedAmount: 1400000, minInvestment: 5000, isSecured: true, lienPosition: "2nd" },
-  { id: "loan-5", name: "Loan-005", propertyName: "Harbor View Condos", loanType: "Bridge Loan", city: "San Diego", state: "CA", loanAmount: 4100000, apy: 11.0, termMonths: 12, ltv: 60, fundedAmount: 3690000, minInvestment: 1000, isSecured: true, lienPosition: "1st" },
+  { id: "loan-2", name: "Loan-002", propertyName: "Marina Heights", loanType: "Construction", city: "Miami", state: "FL", loanAmount: 5100000, apy: 13.0, termMonths: 24, ltv: 70, fundedAmount: 2295000, minInvestment: 2500, isSecured: true, lienPosition: "1st" },
+  { id: "loan-3", name: "Loan-003", propertyName: "Downtown Tower", loanType: "Stabilized", city: "Denver", state: "CO", loanAmount: 8200000, apy: 8.5, termMonths: 36, ltv: 55, fundedAmount: 7544000, minInvestment: 1000, isSecured: true, lienPosition: "1st" },
+  { id: "loan-4", name: "Loan-004", propertyName: "Palm Gardens", loanType: "Mezzanine", city: "Phoenix", state: "AZ", loanAmount: 1800000, apy: 14.5, termMonths: 12, ltv: 75, fundedAmount: 1800000, minInvestment: 5000, isSecured: true, lienPosition: "2nd" },
 ];
 
 export default function AssetsExplore() {
