@@ -542,6 +542,12 @@ export type Database = {
           show_predictions: boolean | null
           total_invested: number | null
           twitter_handle: string | null
+          two_factor_backup_codes: string[] | null
+          two_factor_enabled: boolean | null
+          two_factor_enabled_at: string | null
+          two_factor_method: string | null
+          two_factor_phone: string | null
+          two_factor_secret: string | null
           updated_at: string
           user_id: string
           wallet_balance: number | null
@@ -574,6 +580,12 @@ export type Database = {
           show_predictions?: boolean | null
           total_invested?: number | null
           twitter_handle?: string | null
+          two_factor_backup_codes?: string[] | null
+          two_factor_enabled?: boolean | null
+          two_factor_enabled_at?: string | null
+          two_factor_method?: string | null
+          two_factor_phone?: string | null
+          two_factor_secret?: string | null
           updated_at?: string
           user_id: string
           wallet_balance?: number | null
@@ -606,6 +618,12 @@ export type Database = {
           show_predictions?: boolean | null
           total_invested?: number | null
           twitter_handle?: string | null
+          two_factor_backup_codes?: string[] | null
+          two_factor_enabled?: boolean | null
+          two_factor_enabled_at?: string | null
+          two_factor_method?: string | null
+          two_factor_phone?: string | null
+          two_factor_secret?: string | null
           updated_at?: string
           user_id?: string
           wallet_balance?: number | null
@@ -853,6 +871,66 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      trusted_devices: {
+        Row: {
+          created_at: string
+          device_hash: string
+          device_name: string | null
+          id: string
+          last_used_at: string
+          trusted_until: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          device_hash: string
+          device_name?: string | null
+          id?: string
+          last_used_at?: string
+          trusted_until?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          device_hash?: string
+          device_name?: string | null
+          id?: string
+          last_used_at?: string
+          trusted_until?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      two_factor_attempts: {
+        Row: {
+          created_at: string
+          id: string
+          ip_address: string | null
+          method: string
+          success: boolean
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          method: string
+          success?: boolean
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          method?: string
+          success?: boolean
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       user_badges: {
         Row: {
@@ -1181,6 +1259,7 @@ export type Database = {
         Args: { p_property_id: string; p_token_price: number; p_tokens: number }
         Returns: Json
       }
+      check_2fa_rate_limit: { Args: { p_user_id: string }; Returns: Json }
       check_rate_limit: {
         Args: { p_max_per_minute?: number; p_user_id: string }
         Returns: Json
@@ -1209,6 +1288,20 @@ export type Database = {
         Returns: Json
       }
       is_admin: { Args: never; Returns: boolean }
+      is_device_trusted: {
+        Args: { p_device_hash: string; p_user_id: string }
+        Returns: boolean
+      }
+      log_2fa_attempt: {
+        Args: {
+          p_ip_address?: string
+          p_method: string
+          p_success: boolean
+          p_user_agent?: string
+          p_user_id: string
+        }
+        Returns: string
+      }
       notify_bet_result: {
         Args: {
           p_amount: number
@@ -1250,6 +1343,14 @@ export type Database = {
       toggle_like: {
         Args: { p_entity_id: string; p_entity_type: string }
         Returns: Json
+      }
+      trust_device: {
+        Args: {
+          p_device_hash: string
+          p_device_name?: string
+          p_user_id: string
+        }
+        Returns: string
       }
     }
     Enums: {
