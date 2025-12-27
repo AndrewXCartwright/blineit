@@ -38,6 +38,33 @@ export type Database = {
         }
         Relationships: []
       }
+      calculation_history: {
+        Row: {
+          calculator_type: string
+          created_at: string
+          id: string
+          inputs: Json
+          results: Json
+          user_id: string
+        }
+        Insert: {
+          calculator_type: string
+          created_at?: string
+          id?: string
+          inputs?: Json
+          results?: Json
+          user_id: string
+        }
+        Update: {
+          calculator_type?: string
+          created_at?: string
+          id?: string
+          inputs?: Json
+          results?: Json
+          user_id?: string
+        }
+        Relationships: []
+      }
       comments: {
         Row: {
           content: string
@@ -1189,6 +1216,60 @@ export type Database = {
           status?: string | null
         }
         Relationships: []
+      }
+      saved_calculations: {
+        Row: {
+          calculator_type: string
+          created_at: string
+          id: string
+          inputs: Json
+          loan_id: string | null
+          name: string
+          property_id: string | null
+          results: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          calculator_type: string
+          created_at?: string
+          id?: string
+          inputs?: Json
+          loan_id?: string | null
+          name: string
+          property_id?: string | null
+          results?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          calculator_type?: string
+          created_at?: string
+          id?: string
+          inputs?: Json
+          loan_id?: string | null
+          name?: string
+          property_id?: string | null
+          results?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_calculations_loan_id_fkey"
+            columns: ["loan_id"]
+            isOneToOne: false
+            referencedRelation: "loans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "saved_calculations_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       saved_searches: {
         Row: {
