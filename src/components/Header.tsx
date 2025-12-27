@@ -1,12 +1,16 @@
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Search } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserData } from "@/hooks/useUserData";
 import { NotificationBell } from "./NotificationBell";
 import { ThemeToggle } from "./ThemeToggle";
 import { LanguageSelector } from "./LanguageSelector";
+import { Button } from "./ui/button";
 import logo from "@/assets/logo.png";
 
 export function Header() {
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const { user } = useAuth();
   const { profile } = useUserData();
@@ -25,7 +29,10 @@ export function Header() {
             <p className="text-xs text-muted-foreground">Real Estate Tokenization</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
+          <Button variant="ghost" size="icon" onClick={() => navigate('/search')}>
+            <Search className="h-5 w-5" />
+          </Button>
           <ThemeToggle size="sm" />
           <LanguageSelector variant="icon" />
           <NotificationBell />
