@@ -11,6 +11,8 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 import { NetworkStatus } from "@/components/NetworkStatus";
 import { UpdatePrompt } from "@/components/UpdatePrompt";
+import { ComparisonProvider } from "@/hooks/useComparison";
+import { ComparisonTray } from "@/components/comparison/ComparisonTray";
 import Index from "./pages/Index";
 import Assets from "./pages/Assets";
 import AssetsExplore from "./pages/AssetsExplore";
@@ -35,6 +37,9 @@ import InstallPage from "./pages/InstallPage";
 import SecuritySettings from "./pages/SecuritySettings";
 import Documents from "./pages/Documents";
 import Search from "./pages/Search";
+import CompareProperties from "./pages/CompareProperties";
+import CompareLoans from "./pages/CompareLoans";
+import ComparePredictions from "./pages/ComparePredictions";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProperties from "./pages/admin/AdminProperties";
 import AdminLoans from "./pages/admin/AdminLoans";
@@ -53,51 +58,57 @@ const App = () => (
     <ThemeProvider>
       <TooltipProvider>
         <AuthProvider>
-          <Toaster />
-          <Sonner />
-          <NetworkStatus />
-          <PWAInstallPrompt />
-          <UpdatePrompt />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
-              <Route path="/assets" element={<ProtectedRoute><Assets /></ProtectedRoute>} />
-              <Route path="/assets/explore" element={<ProtectedRoute><AssetsExplore /></ProtectedRoute>} />
-              <Route path="/predict" element={<ProtectedRoute><Predict /></ProtectedRoute>} />
-              <Route path="/wallet" element={<ProtectedRoute><Wallet /></ProtectedRoute>} />
-              <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-              <Route path="/property/:id" element={<ProtectedRoute><PropertyDetail /></ProtectedRoute>} />
-              <Route path="/loan/:id" element={<ProtectedRoute><LoanDetail /></ProtectedRoute>} />
-              <Route path="/kyc" element={<ProtectedRoute><KYCVerification /></ProtectedRoute>} />
-              <Route path="/referrals" element={<ProtectedRoute><Referrals /></ProtectedRoute>} />
-              <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
-              <Route path="/settings/notifications" element={<ProtectedRoute><NotificationSettings /></ProtectedRoute>} />
-              <Route path="/settings/security" element={<ProtectedRoute><SecuritySettings /></ProtectedRoute>} />
-              <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
-              <Route path="/user/:userId" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
-              <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
-              <Route path="/portfolio/analytics" element={<ProtectedRoute><PortfolioAnalytics /></ProtectedRoute>} />
-              <Route path="/documents" element={<ProtectedRoute><Documents /></ProtectedRoute>} />
-              <Route path="/search" element={<ProtectedRoute><Search /></ProtectedRoute>} />
-              <Route path="/r/:code" element={<ReferralLanding />} />
-              <Route path="/install" element={<InstallPage />} />
-              <Route path="/coming-soon/:assetClass" element={<ComingSoon />} />
-              {/* Admin Routes */}
-              <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-              <Route path="/admin/properties" element={<ProtectedRoute><AdminProperties /></ProtectedRoute>} />
-              <Route path="/admin/loans" element={<ProtectedRoute><AdminLoans /></ProtectedRoute>} />
-              <Route path="/admin/predictions" element={<ProtectedRoute><AdminPredictions /></ProtectedRoute>} />
-              <Route path="/admin/users" element={<ProtectedRoute><AdminUsers /></ProtectedRoute>} />
-              <Route path="/admin/kyc" element={<ProtectedRoute><AdminKYC /></ProtectedRoute>} />
-              <Route path="/admin/referrals" element={<ProtectedRoute><AdminReferrals /></ProtectedRoute>} />
-              <Route path="/admin/waitlists" element={<ProtectedRoute><AdminWaitlists /></ProtectedRoute>} />
-              <Route path="/admin/transactions" element={<ProtectedRoute><AdminTransactions /></ProtectedRoute>} />
-              <Route path="/admin/settings" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <BottomNav />
-          </BrowserRouter>
+          <ComparisonProvider>
+            <Toaster />
+            <Sonner />
+            <NetworkStatus />
+            <PWAInstallPrompt />
+            <UpdatePrompt />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+                <Route path="/assets" element={<ProtectedRoute><Assets /></ProtectedRoute>} />
+                <Route path="/assets/explore" element={<ProtectedRoute><AssetsExplore /></ProtectedRoute>} />
+                <Route path="/predict" element={<ProtectedRoute><Predict /></ProtectedRoute>} />
+                <Route path="/wallet" element={<ProtectedRoute><Wallet /></ProtectedRoute>} />
+                <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                <Route path="/property/:id" element={<ProtectedRoute><PropertyDetail /></ProtectedRoute>} />
+                <Route path="/loan/:id" element={<ProtectedRoute><LoanDetail /></ProtectedRoute>} />
+                <Route path="/kyc" element={<ProtectedRoute><KYCVerification /></ProtectedRoute>} />
+                <Route path="/referrals" element={<ProtectedRoute><Referrals /></ProtectedRoute>} />
+                <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
+                <Route path="/settings/notifications" element={<ProtectedRoute><NotificationSettings /></ProtectedRoute>} />
+                <Route path="/settings/security" element={<ProtectedRoute><SecuritySettings /></ProtectedRoute>} />
+                <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+                <Route path="/user/:userId" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
+                <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
+                <Route path="/portfolio/analytics" element={<ProtectedRoute><PortfolioAnalytics /></ProtectedRoute>} />
+                <Route path="/documents" element={<ProtectedRoute><Documents /></ProtectedRoute>} />
+                <Route path="/search" element={<ProtectedRoute><Search /></ProtectedRoute>} />
+                <Route path="/compare/properties" element={<ProtectedRoute><CompareProperties /></ProtectedRoute>} />
+                <Route path="/compare/loans" element={<ProtectedRoute><CompareLoans /></ProtectedRoute>} />
+                <Route path="/compare/predictions" element={<ProtectedRoute><ComparePredictions /></ProtectedRoute>} />
+                <Route path="/r/:code" element={<ReferralLanding />} />
+                <Route path="/install" element={<InstallPage />} />
+                <Route path="/coming-soon/:assetClass" element={<ComingSoon />} />
+                {/* Admin Routes */}
+                <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+                <Route path="/admin/properties" element={<ProtectedRoute><AdminProperties /></ProtectedRoute>} />
+                <Route path="/admin/loans" element={<ProtectedRoute><AdminLoans /></ProtectedRoute>} />
+                <Route path="/admin/predictions" element={<ProtectedRoute><AdminPredictions /></ProtectedRoute>} />
+                <Route path="/admin/users" element={<ProtectedRoute><AdminUsers /></ProtectedRoute>} />
+                <Route path="/admin/kyc" element={<ProtectedRoute><AdminKYC /></ProtectedRoute>} />
+                <Route path="/admin/referrals" element={<ProtectedRoute><AdminReferrals /></ProtectedRoute>} />
+                <Route path="/admin/waitlists" element={<ProtectedRoute><AdminWaitlists /></ProtectedRoute>} />
+                <Route path="/admin/transactions" element={<ProtectedRoute><AdminTransactions /></ProtectedRoute>} />
+                <Route path="/admin/settings" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+              <ComparisonTray />
+              <BottomNav />
+            </BrowserRouter>
+          </ComparisonProvider>
         </AuthProvider>
       </TooltipProvider>
     </ThemeProvider>
