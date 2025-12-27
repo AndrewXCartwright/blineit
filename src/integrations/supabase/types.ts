@@ -530,6 +530,34 @@ export type Database = {
         Args: { p_max_per_minute?: number; p_user_id: string }
         Returns: Json
       }
+      create_system_notification: {
+        Args: {
+          p_data?: Json
+          p_message: string
+          p_title: string
+          p_type: string
+          p_user_id: string
+        }
+        Returns: string
+      }
+      notify_bet_result: {
+        Args: {
+          p_amount: number
+          p_market_title: string
+          p_user_id: string
+          p_won: boolean
+        }
+        Returns: string
+      }
+      notify_token_transaction: {
+        Args: {
+          p_is_buy: boolean
+          p_property_name: string
+          p_tokens: number
+          p_user_id: string
+        }
+        Returns: string
+      }
       place_bet: {
         Args: {
           p_amount: number
