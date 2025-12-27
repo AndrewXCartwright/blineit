@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { Mail, Lock, User, Eye, EyeOff, AlertCircle } from "lucide-react";
+import { Mail, Lock, User, Eye, EyeOff, AlertCircle, Gift } from "lucide-react";
 import { z } from "zod";
 import logo from "@/assets/logo.png";
+import { toast } from "sonner";
 
 const emailSchema = z.string().email("Please enter a valid email address");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
@@ -21,12 +22,30 @@ export default function Auth() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [referralCode, setReferralCode] = useState<string | null>(null);
   
   const { signIn, signUp, user } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    // Check for referral code in URL or localStorage
+    const refFromUrl = searchParams.get("ref");
+    const refFromStorage = localStorage.getItem("referral_code");
+    
+    if (refFromUrl) {
+      setReferralCode(refFromUrl.toUpperCase());
+      localStorage.setItem("referral_code", refFromUrl.toUpperCase());
+      setIsLogin(false); // Switch to signup mode for referred users
+    } else if (refFromStorage) {
+      setReferralCode(refFromStorage);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (user) {
+      // Clear referral code after successful signup
+      localStorage.removeItem("referral_code");
       navigate("/");
     }
   }, [user, navigate]);
@@ -103,6 +122,19 @@ export default function Auth() {
             {isLogin ? "Welcome back! Sign in to continue." : "Create an account to get started."}
           </p>
         </div>
+
+        {/* Referral Banner */}
+        {referralCode && !isLogin && (
+          <div className="glass-card rounded-xl p-4 flex items-center gap-3 bg-success/10 border border-success/20">
+            <div className="p-2 rounded-full bg-success/20">
+              <Gift className="w-5 h-5 text-success" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-foreground">Welcome bonus unlocked!</p>
+              <p className="text-xs text-muted-foreground">Get $50 when you invest $500+</p>
+            </div>
+          </div>
+        )}
 
         {/* Form */}
         <div className="glass-card rounded-2xl p-6 space-y-6">
