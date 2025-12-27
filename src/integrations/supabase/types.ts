@@ -208,6 +208,63 @@ export type Database = {
         }
         Relationships: []
       }
+      linked_accounts: {
+        Row: {
+          account_id: string | null
+          account_mask: string | null
+          account_name: string
+          account_type: string
+          created_at: string
+          id: string
+          institution_id: string | null
+          institution_logo: string | null
+          institution_name: string
+          is_primary: boolean | null
+          is_verified: boolean | null
+          plaid_access_token: string | null
+          plaid_item_id: string | null
+          updated_at: string
+          user_id: string
+          verification_status: string | null
+        }
+        Insert: {
+          account_id?: string | null
+          account_mask?: string | null
+          account_name: string
+          account_type?: string
+          created_at?: string
+          id?: string
+          institution_id?: string | null
+          institution_logo?: string | null
+          institution_name: string
+          is_primary?: boolean | null
+          is_verified?: boolean | null
+          plaid_access_token?: string | null
+          plaid_item_id?: string | null
+          updated_at?: string
+          user_id: string
+          verification_status?: string | null
+        }
+        Update: {
+          account_id?: string | null
+          account_mask?: string | null
+          account_name?: string
+          account_type?: string
+          created_at?: string
+          id?: string
+          institution_id?: string | null
+          institution_logo?: string | null
+          institution_name?: string
+          is_primary?: boolean | null
+          is_verified?: boolean | null
+          plaid_access_token?: string | null
+          plaid_item_id?: string | null
+          updated_at?: string
+          user_id?: string
+          verification_status?: string | null
+        }
+        Relationships: []
+      }
       loan_payments: {
         Row: {
           amount: number
@@ -416,6 +473,42 @@ export type Database = {
           title?: string
           type?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      plaid_identity_verification: {
+        Row: {
+          created_at: string
+          id: string
+          plaid_idv_id: string | null
+          risk_level: string | null
+          status: string
+          user_id: string
+          verified_address: string | null
+          verified_dob: string | null
+          verified_name: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          plaid_idv_id?: string | null
+          risk_level?: string | null
+          status?: string
+          user_id: string
+          verified_address?: string | null
+          verified_dob?: string | null
+          verified_name?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          plaid_idv_id?: string | null
+          risk_level?: string | null
+          status?: string
+          user_id?: string
+          verified_address?: string | null
+          verified_dob?: string | null
+          verified_name?: string | null
         }
         Relationships: []
       }
@@ -872,6 +965,62 @@ export type Database = {
           },
         ]
       }
+      transfers: {
+        Row: {
+          amount: number
+          completed_at: string | null
+          confirmation_number: string | null
+          created_at: string
+          currency: string | null
+          failure_reason: string | null
+          id: string
+          initiated_at: string
+          linked_account_id: string | null
+          plaid_transfer_id: string | null
+          status: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          completed_at?: string | null
+          confirmation_number?: string | null
+          created_at?: string
+          currency?: string | null
+          failure_reason?: string | null
+          id?: string
+          initiated_at?: string
+          linked_account_id?: string | null
+          plaid_transfer_id?: string | null
+          status?: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          completed_at?: string | null
+          confirmation_number?: string | null
+          created_at?: string
+          currency?: string | null
+          failure_reason?: string | null
+          id?: string
+          initiated_at?: string
+          linked_account_id?: string | null
+          plaid_transfer_id?: string | null
+          status?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transfers_linked_account_id_fkey"
+            columns: ["linked_account_id"]
+            isOneToOne: false
+            referencedRelation: "linked_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       trusted_devices: {
         Row: {
           created_at: string
@@ -1264,6 +1413,7 @@ export type Database = {
         Args: { p_max_per_minute?: number; p_user_id: string }
         Returns: Json
       }
+      complete_transfer: { Args: { p_transfer_id: string }; Returns: Json }
       create_system_notification: {
         Args: {
           p_data?: Json
@@ -1330,11 +1480,19 @@ export type Database = {
         Returns: Json
       }
       process_all_interest_payments: { Args: never; Returns: Json }
+      process_deposit: {
+        Args: { p_amount: number; p_linked_account_id: string }
+        Returns: Json
+      }
       process_interest_payment: {
         Args: { p_investment_id: string }
         Returns: Json
       }
       process_loan_payoff: { Args: { p_investment_id: string }; Returns: Json }
+      process_withdrawal: {
+        Args: { p_amount: number; p_linked_account_id: string }
+        Returns: Json
+      }
       sell_tokens: {
         Args: { p_property_id: string; p_token_price: number; p_tokens: number }
         Returns: Json

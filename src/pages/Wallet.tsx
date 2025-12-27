@@ -7,6 +7,8 @@ import { FlashBorder } from "@/components/LiveIndicator";
 import { CountUp } from "@/components/CountUp";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { LinkedAccountsSection } from "@/components/LinkedAccountsSection";
+import { TransferHistory } from "@/components/TransferHistory";
 
 export default function Wallet() {
   const { 
@@ -478,6 +480,16 @@ export default function Wallet() {
               </div>
             )}
           </div>
+        </section>
+
+        {/* Linked Bank Accounts Section */}
+        <section className="space-y-4">
+          <LinkedAccountsSection />
+        </section>
+
+        {/* Transfer History Section */}
+        <section className="space-y-4">
+          <TransferHistory />
         </section>
       </main>
     </div>
