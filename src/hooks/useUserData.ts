@@ -262,77 +262,34 @@ export function useBuyTokens() {
     const tokens = subtotal / tokenPrice;
 
     try {
-      // Get current wallet balance
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("wallet_balance")
-        .eq("user_id", user.id)
-        .maybeSingle();
+      // Use secure RPC function for atomic transaction
+      const { data, error } = await supabase.rpc("buy_tokens", {
+        p_property_id: propertyId,
+        p_tokens: tokens,
+        p_token_price: tokenPrice,
+      });
 
-      if (!profile || profile.wallet_balance < totalCost) {
+      if (error) throw error;
+
+      const result = data as { success: boolean; error?: string; tokens?: number };
+
+      if (!result.success) {
+        const errorMessages: Record<string, string> = {
+          not_authenticated: "Please log in to buy tokens",
+          invalid_input: "Invalid token amount or price",
+          profile_not_found: "Profile not found",
+          insufficient_balance: "You don't have enough funds for this purchase",
+        };
+
         toast({
-          title: "Insufficient balance",
-          description: "You don't have enough funds for this purchase",
+          title: "Error",
+          description: errorMessages[result.error || ""] || "Failed to buy tokens",
           variant: "destructive",
         });
         return { success: false };
       }
 
-      // Check if user already has holdings for this property
-      const { data: existingHolding } = await supabase
-        .from("user_holdings")
-        .select("*")
-        .eq("user_id", user.id)
-        .eq("property_id", propertyId)
-        .maybeSingle();
-
-      if (existingHolding) {
-        // Update existing holding
-        const newTokens = existingHolding.tokens + tokens;
-        const newAvgPrice = 
-          ((existingHolding.tokens * existingHolding.average_buy_price) + subtotal) / newTokens;
-
-        const { error } = await supabase
-          .from("user_holdings")
-          .update({
-            tokens: newTokens,
-            average_buy_price: newAvgPrice,
-          })
-          .eq("id", existingHolding.id);
-
-        if (error) throw error;
-      } else {
-        // Create new holding
-        const { error } = await supabase.from("user_holdings").insert({
-          user_id: user.id,
-          property_id: propertyId,
-          tokens,
-          average_buy_price: tokenPrice,
-        });
-
-        if (error) throw error;
-      }
-
-      // Deduct from wallet balance
-      const { error: balanceError } = await supabase
-        .from("profiles")
-        .update({ wallet_balance: profile.wallet_balance - totalCost })
-        .eq("user_id", user.id);
-
-      if (balanceError) throw balanceError;
-
-      // Insert transaction
-      const { error: txError } = await supabase.from("transactions").insert({
-        user_id: user.id,
-        type: "buy_tokens",
-        amount: -totalCost,
-        description: `Purchased ${tokens.toFixed(2)} tokens`,
-        property_id: propertyId,
-      });
-
-      if (txError) throw txError;
-
-      return { success: true, tokens };
+      return { success: true, tokens: result.tokens };
     } catch (error) {
       console.error("Error buying tokens:", error);
       toast({
@@ -364,77 +321,34 @@ export function useSellTokens() {
       return { success: false };
     }
 
-    const subtotal = tokens * tokenPrice;
-    const fee = subtotal * 0.01;
-    const proceeds = subtotal - fee;
-
     try {
-      // Get current holding
-      const { data: holding } = await supabase
-        .from("user_holdings")
-        .select("*")
-        .eq("user_id", user.id)
-        .eq("property_id", propertyId)
-        .maybeSingle();
+      // Use secure RPC function for atomic transaction
+      const { data, error } = await supabase.rpc("sell_tokens", {
+        p_property_id: propertyId,
+        p_tokens: tokens,
+        p_token_price: tokenPrice,
+      });
 
-      if (!holding || holding.tokens < tokens) {
+      if (error) throw error;
+
+      const result = data as { success: boolean; error?: string; proceeds?: number };
+
+      if (!result.success) {
+        const errorMessages: Record<string, string> = {
+          not_authenticated: "Please log in to sell tokens",
+          invalid_input: "Invalid token amount or price",
+          insufficient_tokens: "You don't have enough tokens to sell",
+        };
+
         toast({
-          title: "Insufficient tokens",
-          description: "You don't have enough tokens to sell",
+          title: "Error",
+          description: errorMessages[result.error || ""] || "Failed to sell tokens",
           variant: "destructive",
         });
         return { success: false };
       }
 
-      const newTokens = holding.tokens - tokens;
-
-      if (newTokens <= 0) {
-        // Delete the holding
-        const { error } = await supabase
-          .from("user_holdings")
-          .delete()
-          .eq("id", holding.id);
-
-        if (error) throw error;
-      } else {
-        // Update the holding
-        const { error } = await supabase
-          .from("user_holdings")
-          .update({ tokens: newTokens })
-          .eq("id", holding.id);
-
-        if (error) throw error;
-      }
-
-      // Get current wallet balance
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("wallet_balance")
-        .eq("user_id", user.id)
-        .maybeSingle();
-
-      if (!profile) throw new Error("Profile not found");
-
-      // Add to wallet balance
-      const { error: balanceError } = await supabase
-        .from("profiles")
-        .update({ wallet_balance: profile.wallet_balance + proceeds })
-        .eq("user_id", user.id);
-
-      if (balanceError) throw balanceError;
-
-      // Insert transaction
-      const { error: txError } = await supabase.from("transactions").insert({
-        user_id: user.id,
-        type: "sell_tokens",
-        amount: proceeds,
-        description: `Sold ${tokens.toFixed(2)} tokens`,
-        property_id: propertyId,
-      });
-
-      if (txError) throw txError;
-
-      return { success: true, proceeds };
+      return { success: true, proceeds: result.proceeds };
     } catch (error) {
       console.error("Error selling tokens:", error);
       toast({

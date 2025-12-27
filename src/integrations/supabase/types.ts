@@ -501,7 +501,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      buy_tokens: {
+        Args: { p_property_id: string; p_token_price: number; p_tokens: number }
+        Returns: Json
+      }
+      sell_tokens: {
+        Args: { p_property_id: string; p_token_price: number; p_tokens: number }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never
