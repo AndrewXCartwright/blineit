@@ -32,6 +32,7 @@ import Leaderboard from "./pages/Leaderboard";
 import PortfolioAnalytics from "./pages/PortfolioAnalytics";
 import InstallPage from "./pages/InstallPage";
 import SecuritySettings from "./pages/SecuritySettings";
+import Documents from "./pages/Documents";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProperties from "./pages/admin/AdminProperties";
 import AdminLoans from "./pages/admin/AdminLoans";
@@ -75,6 +76,7 @@ const App = () => (
               <Route path="/user/:userId" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
               <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
               <Route path="/portfolio/analytics" element={<ProtectedRoute><PortfolioAnalytics /></ProtectedRoute>} />
+              <Route path="/documents" element={<ProtectedRoute><Documents /></ProtectedRoute>} />
               <Route path="/r/:code" element={<ReferralLanding />} />
               <Route path="/install" element={<InstallPage />} />
               <Route path="/coming-soon/:assetClass" element={<ComingSoon />} />
