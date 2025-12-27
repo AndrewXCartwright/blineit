@@ -4,6 +4,7 @@ import { useUserData } from "@/hooks/useUserData";
 import { useNavigate, Link } from "react-router-dom";
 import { CountUp } from "@/components/CountUp";
 import { EmptyState } from "@/components/EmptyState";
+import { ReferralCard } from "@/components/ReferralCard";
 
 const menuItems = [
   { icon: Settings, label: "Account Settings", action: () => {} },
@@ -108,6 +109,9 @@ export default function Profile() {
             <p className="text-xs text-muted-foreground">Win Rate</p>
           </div>
         </div>
+
+        {/* Referral Section */}
+        <ReferralCard />
 
         {/* Quick Links */}
         <div className="glass-card rounded-2xl overflow-hidden animate-fade-in stagger-4">
