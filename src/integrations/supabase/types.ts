@@ -143,6 +143,7 @@ export type Database = {
           email: string | null
           id: string
           name: string | null
+          referral_code: string | null
           updated_at: string
           user_id: string
           wallet_balance: number | null
@@ -154,6 +155,7 @@ export type Database = {
           email?: string | null
           id?: string
           name?: string | null
+          referral_code?: string | null
           updated_at?: string
           user_id: string
           wallet_balance?: number | null
@@ -165,6 +167,7 @@ export type Database = {
           email?: string | null
           id?: string
           name?: string | null
+          referral_code?: string | null
           updated_at?: string
           user_id?: string
           wallet_balance?: number | null
@@ -234,6 +237,45 @@ export type Database = {
           updated_at?: string
           value?: number
           year_built?: number | null
+        }
+        Relationships: []
+      }
+      referrals: {
+        Row: {
+          created_at: string
+          id: string
+          qualified_at: string | null
+          referred_email: string
+          referred_user_id: string | null
+          referrer_id: string
+          reward_paid: boolean | null
+          status: string
+          total_invested: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          qualified_at?: string | null
+          referred_email: string
+          referred_user_id?: string | null
+          referrer_id: string
+          reward_paid?: boolean | null
+          status?: string
+          total_invested?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          qualified_at?: string | null
+          referred_email?: string
+          referred_user_id?: string | null
+          referrer_id?: string
+          reward_paid?: boolean | null
+          status?: string
+          total_invested?: number | null
+          updated_at?: string
         }
         Relationships: []
       }
