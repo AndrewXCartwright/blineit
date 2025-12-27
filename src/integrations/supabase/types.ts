@@ -14,7 +14,269 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      market_price_history: {
+        Row: {
+          id: string
+          market_id: string
+          recorded_at: string
+          yes_price: number
+        }
+        Insert: {
+          id?: string
+          market_id: string
+          recorded_at?: string
+          yes_price: number
+        }
+        Update: {
+          id?: string
+          market_id?: string
+          recorded_at?: string
+          yes_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_price_history_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "prediction_markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      prediction_markets: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          is_resolved: boolean | null
+          no_price: number
+          property_id: string | null
+          question: string
+          resolution: string | null
+          traders_count: number
+          updated_at: string
+          volume: number
+          yes_price: number
+        }
+        Insert: {
+          created_at?: string
+          expires_at: string
+          id?: string
+          is_resolved?: boolean | null
+          no_price?: number
+          property_id?: string | null
+          question: string
+          resolution?: string | null
+          traders_count?: number
+          updated_at?: string
+          volume?: number
+          yes_price?: number
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          is_resolved?: boolean | null
+          no_price?: number
+          property_id?: string | null
+          question?: string
+          resolution?: string | null
+          traders_count?: number
+          updated_at?: string
+          volume?: number
+          yes_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prediction_markets_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string | null
+          id: string
+          name: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      properties: {
+        Row: {
+          address: string
+          apy: number
+          category: string
+          city: string
+          created_at: string
+          description: string | null
+          holders: number
+          id: string
+          image_url: string | null
+          is_hot: boolean | null
+          name: string
+          occupancy: number
+          state: string
+          token_price: number
+          total_tokens: number
+          units: number
+          updated_at: string
+          value: number
+          year_built: number | null
+        }
+        Insert: {
+          address: string
+          apy?: number
+          category?: string
+          city: string
+          created_at?: string
+          description?: string | null
+          holders?: number
+          id?: string
+          image_url?: string | null
+          is_hot?: boolean | null
+          name: string
+          occupancy?: number
+          state: string
+          token_price?: number
+          total_tokens?: number
+          units?: number
+          updated_at?: string
+          value?: number
+          year_built?: number | null
+        }
+        Update: {
+          address?: string
+          apy?: number
+          category?: string
+          city?: string
+          created_at?: string
+          description?: string | null
+          holders?: number
+          id?: string
+          image_url?: string | null
+          is_hot?: boolean | null
+          name?: string
+          occupancy?: number
+          state?: string
+          token_price?: number
+          total_tokens?: number
+          units?: number
+          updated_at?: string
+          value?: number
+          year_built?: number | null
+        }
+        Relationships: []
+      }
+      user_bets: {
+        Row: {
+          amount: number
+          created_at: string
+          entry_price: number
+          id: string
+          is_settled: boolean | null
+          market_id: string
+          payout: number | null
+          position: string
+          shares: number
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          entry_price: number
+          id?: string
+          is_settled?: boolean | null
+          market_id: string
+          payout?: number | null
+          position: string
+          shares: number
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          entry_price?: number
+          id?: string
+          is_settled?: boolean | null
+          market_id?: string
+          payout?: number | null
+          position?: string
+          shares?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_bets_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "prediction_markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_holdings: {
+        Row: {
+          average_buy_price: number
+          created_at: string
+          id: string
+          property_id: string
+          tokens: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          average_buy_price?: number
+          created_at?: string
+          id?: string
+          property_id: string
+          tokens?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          average_buy_price?: number
+          created_at?: string
+          id?: string
+          property_id?: string
+          tokens?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_holdings_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
