@@ -119,7 +119,7 @@ export default function KYCVerification() {
 
   const handlePersonalInfoSubmit = async () => {
     // Validate required fields
-    const required = ["full_legal_name", "date_of_birth", "address_line1", "city", "state", "postal_code", "phone_number"];
+    const required = ["full_legal_name", "date_of_birth", "address_line1", "city", "state", "postal_code", "phone_number", "ssn_last4", "country"];
     const missing = required.filter(field => !personalInfo[field as keyof typeof personalInfo]);
     
     if (missing.length > 0) {
@@ -128,10 +128,10 @@ export default function KYCVerification() {
     }
 
     setLoading(true);
-    const success = await savePersonalInfo(personalInfo);
+    const result = await savePersonalInfo(personalInfo);
     setLoading(false);
     
-    if (success) {
+    if (result.success) {
       setCurrentStep(2);
     }
   };
