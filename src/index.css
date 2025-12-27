@@ -39,7 +39,8 @@
     --bear: 0 84% 60%;
     --bear-foreground: 0 0% 100%;
 
-    --border: 240 20% 20%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 10%;
     --input: 240 20% 20%;
     --ring: 288 52% 36%;
 

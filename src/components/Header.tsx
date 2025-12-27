@@ -1,6 +1,6 @@
-import { Bell } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserData } from "@/hooks/useUserData";
+import { NotificationBell } from "./NotificationBell";
 
 export function Header() {
   const { user } = useAuth();
@@ -22,10 +22,7 @@ export function Header() {
             <p className="text-xs text-muted-foreground">Real Estate Tokenization</p>
           </div>
         </div>
-        <button className="relative p-2 rounded-xl bg-secondary hover:bg-secondary/80 transition-colors">
-          <Bell className="w-5 h-5 text-foreground" />
-          <span className="absolute top-1 right-1 w-2 h-2 bg-accent rounded-full" />
-        </button>
+        <NotificationBell />
       </div>
     </header>
   );
