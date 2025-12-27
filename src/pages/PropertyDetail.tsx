@@ -1,5 +1,5 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   ArrowLeft, MapPin, TrendingUp, TrendingDown, Users, Building2, Calendar, 
@@ -11,6 +11,7 @@ import { CountUp } from "@/components/CountUp";
 import { Sparkline } from "@/components/Sparkline";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
+import { TokenTradeModal } from "@/components/TokenTradeModal";
 
 interface Property {
   id: string;
@@ -66,6 +67,8 @@ export default function PropertyDetail() {
   const [activeTab, setActiveTab] = useState<TabType>("overview");
   const [isFavorite, setIsFavorite] = useState(false);
   const [markets, setMarkets] = useState<PredictionMarket[]>([]);
+  const [isTradeModalOpen, setIsTradeModalOpen] = useState(false);
+  const [tradeModalMode, setTradeModalMode] = useState<"buy" | "sell">("buy");
 
   // Mock price history data
   const priceHistory = [118, 119, 120, 119.5, 121, 122, 120.5, 123, 124, 124.5, 123.8, 124.5];
@@ -79,52 +82,64 @@ export default function PropertyDetail() {
     { id: "5", type: "sell", amount: 1240, tokens: 10, price: 124, time: "4 hours ago" },
   ];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!id) return;
+  const fetchData = useCallback(async () => {
+    if (!id) return;
 
-      // Fetch property
-      const { data, error } = await supabase
-        .from("properties")
-        .select("*")
-        .eq("id", id)
+    // Fetch property
+    const { data, error } = await supabase
+      .from("properties")
+      .select("*")
+      .eq("id", id)
+      .maybeSingle();
+
+    if (!error && data) {
+      setProperty(data);
+    }
+
+    // Fetch user holdings
+    if (user) {
+      const { data: holdingData } = await supabase
+        .from("user_holdings")
+        .select("tokens, average_buy_price")
+        .eq("property_id", id)
+        .eq("user_id", user.id)
         .maybeSingle();
 
-      if (!error && data) {
-        setProperty(data);
+      if (holdingData) {
+        setHolding(holdingData);
+      } else {
+        setHolding(null);
       }
+    }
 
-      // Fetch user holdings
-      if (user) {
-        const { data: holdingData } = await supabase
-          .from("user_holdings")
-          .select("tokens, average_buy_price")
-          .eq("property_id", id)
-          .eq("user_id", user.id)
-          .maybeSingle();
+    // Fetch related prediction markets
+    const { data: marketsData } = await supabase
+      .from("prediction_markets")
+      .select("*")
+      .eq("property_id", id)
+      .eq("is_resolved", false)
+      .limit(3);
 
-        if (holdingData) {
-          setHolding(holdingData);
-        }
-      }
+    if (marketsData) {
+      setMarkets(marketsData);
+    }
 
-      // Fetch related prediction markets
-      const { data: marketsData } = await supabase
-        .from("prediction_markets")
-        .select("*")
-        .eq("property_id", id)
-        .eq("is_resolved", false)
-        .limit(3);
-
-      if (marketsData) {
-        setMarkets(marketsData);
-      }
-
-      setLoading(false);
-    };
-
-    fetchData();
+    setLoading(false);
   }, [id, user]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const handleOpenBuyModal = () => {
+    setTradeModalMode("buy");
+    setIsTradeModalOpen(true);
+  };
+
+  const handleOpenSellModal = () => {
+    setTradeModalMode("sell");
+    setIsTradeModalOpen(true);
+  };
 
   const handleShare = async () => {
     try {
@@ -337,10 +352,16 @@ export default function PropertyDetail() {
 
         {/* Action Buttons */}
         <div className="flex gap-3">
-          <button className="flex-1 py-4 rounded-xl gradient-primary text-primary-foreground font-display font-bold text-lg transition-all hover:opacity-90 glow-primary">
+          <button 
+            onClick={handleOpenBuyModal}
+            className="flex-1 py-4 rounded-xl gradient-primary text-primary-foreground font-display font-bold text-lg transition-all hover:opacity-90 glow-primary"
+          >
             Buy Tokens
           </button>
-          <button className="flex-1 py-4 rounded-xl bg-secondary border-2 border-border text-foreground font-display font-bold text-lg transition-all hover:bg-muted">
+          <button 
+            onClick={handleOpenSellModal}
+            className="flex-1 py-4 rounded-xl bg-secondary border-2 border-border text-foreground font-display font-bold text-lg transition-all hover:bg-muted"
+          >
             Sell
           </button>
         </div>
@@ -515,6 +536,20 @@ export default function PropertyDetail() {
           </div>
         )}
       </main>
+
+      {/* Trade Modal */}
+      {property && (
+        <TokenTradeModal
+          isOpen={isTradeModalOpen}
+          onClose={() => setIsTradeModalOpen(false)}
+          propertyId={property.id}
+          propertyName={property.name}
+          tokenPrice={property.token_price}
+          initialMode={tradeModalMode}
+          userTokens={holding?.tokens || 0}
+          onSuccess={fetchData}
+        />
+      )}
     </div>
   );
 }
