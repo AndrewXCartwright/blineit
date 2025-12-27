@@ -11,12 +11,15 @@ export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   
   const { signIn, signUp, user } = useAuth();
   const navigate = useNavigate();
@@ -31,6 +34,7 @@ export default function Auth() {
     let isValid = true;
     setEmailError("");
     setPasswordError("");
+    setConfirmPasswordError("");
 
     const emailResult = emailSchema.safeParse(email);
     if (!emailResult.success) {
@@ -41,6 +45,11 @@ export default function Auth() {
     const passwordResult = passwordSchema.safeParse(password);
     if (!passwordResult.success) {
       setPasswordError(passwordResult.error.errors[0].message);
+      isValid = false;
+    }
+
+    if (!isLogin && password !== confirmPassword) {
+      setConfirmPasswordError("Passwords do not match");
       isValid = false;
     }
 
@@ -173,6 +182,37 @@ export default function Auth() {
               )}
             </div>
 
+            {!isLogin && (
+              <div>
+                <label className="text-sm text-muted-foreground mb-2 block">Confirm Password</label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    value={confirmPassword}
+                    onChange={(e) => {
+                      setConfirmPassword(e.target.value);
+                      setConfirmPasswordError("");
+                    }}
+                    placeholder="••••••••"
+                    className={`w-full bg-secondary border rounded-xl pl-12 pr-12 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent ${
+                      confirmPasswordError ? "border-destructive" : "border-border"
+                    }`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  >
+                    {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
+                {confirmPasswordError && (
+                  <p className="text-destructive text-xs mt-1">{confirmPasswordError}</p>
+                )}
+              </div>
+            )}
+
             <button
               type="submit"
               disabled={loading}
@@ -189,6 +229,8 @@ export default function Auth() {
                 setError("");
                 setEmailError("");
                 setPasswordError("");
+                setConfirmPasswordError("");
+                setConfirmPassword("");
               }}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >

@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { BottomNav } from "@/components/BottomNav";
 import { AuthProvider } from "@/hooks/useAuth";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Explore from "./pages/Explore";
 import Predict from "./pages/Predict";
@@ -25,13 +26,13 @@ const App = () => (
         <BrowserRouter>
           <div className="dark">
             <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/explore" element={<Explore />} />
-              <Route path="/predict" element={<Predict />} />
-              <Route path="/wallet" element={<Wallet />} />
-              <Route path="/profile" element={<Profile />} />
               <Route path="/auth" element={<Auth />} />
-              <Route path="/property/:id" element={<PropertyDetail />} />
+              <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+              <Route path="/explore" element={<ProtectedRoute><Explore /></ProtectedRoute>} />
+              <Route path="/predict" element={<ProtectedRoute><Predict /></ProtectedRoute>} />
+              <Route path="/wallet" element={<ProtectedRoute><Wallet /></ProtectedRoute>} />
+              <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              <Route path="/property/:id" element={<ProtectedRoute><PropertyDetail /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />
