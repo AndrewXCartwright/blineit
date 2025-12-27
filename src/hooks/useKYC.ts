@@ -88,11 +88,27 @@ export function useKYC() {
       return null;
     }
 
-    const { data: { publicUrl } } = supabase.storage
-      .from("kyc-documents")
-      .getPublicUrl(fileName);
+    // Store the file path instead of public URL for private bucket
+    // Signed URLs will be generated on-demand when viewing
+    return fileName;
+  };
 
-    return publicUrl;
+  const getSignedUrl = async (filePath: string): Promise<string | null> => {
+    if (!filePath) return null;
+    
+    // If it's already a full URL (legacy data), return as-is
+    if (filePath.startsWith("http")) return filePath;
+    
+    const { data, error } = await supabase.storage
+      .from("kyc-documents")
+      .createSignedUrl(filePath, 3600); // 1 hour expiry
+
+    if (error) {
+      console.error("Error creating signed URL:", error);
+      return null;
+    }
+
+    return data.signedUrl;
   };
 
   const savePersonalInfo = async (data: Partial<KYCData>): Promise<boolean> => {
@@ -207,6 +223,7 @@ export function useKYC() {
     isVerified,
     isPending,
     uploadDocument,
+    getSignedUrl,
     savePersonalInfo,
     saveDocuments,
     saveSelfie,
