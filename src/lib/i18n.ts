@@ -6,12 +6,14 @@ import en from '@/locales/en.json';
 import es from '@/locales/es.json';
 import zh from '@/locales/zh.json';
 import ar from '@/locales/ar.json';
+import pl from '@/locales/pl.json';
 
 export const resources = {
   en: { translation: en },
   es: { translation: es },
   zh: { translation: zh },
   ar: { translation: ar },
+  pl: { translation: pl },
 };
 
 export const supportedLanguages = [
@@ -19,12 +21,7 @@ export const supportedLanguages = [
   { code: 'es', name: 'Spanish', nativeName: 'Español', flag: '🇪🇸', direction: 'ltr' as const },
   { code: 'zh', name: 'Chinese', nativeName: '中文', flag: '🇨🇳', direction: 'ltr' as const },
   { code: 'ar', name: 'Arabic', nativeName: 'العربية', flag: '🇸🇦', direction: 'rtl' as const },
-  { code: 'pt', name: 'Portuguese', nativeName: 'Português', flag: '🇧🇷', direction: 'ltr' as const },
-  { code: 'fr', name: 'French', nativeName: 'Français', flag: '🇫🇷', direction: 'ltr' as const },
-  { code: 'de', name: 'German', nativeName: 'Deutsch', flag: '🇩🇪', direction: 'ltr' as const },
-  { code: 'ja', name: 'Japanese', nativeName: '日本語', flag: '🇯🇵', direction: 'ltr' as const },
-  { code: 'ko', name: 'Korean', nativeName: '한국어', flag: '🇰🇷', direction: 'ltr' as const },
-  { code: 'hi', name: 'Hindi', nativeName: 'हिन्दी', flag: '🇮🇳', direction: 'ltr' as const },
+  { code: 'pl', name: 'Polish', nativeName: 'Polski', flag: '🇵🇱', direction: 'ltr' as const },
 ];
 
 i18n
@@ -33,7 +30,7 @@ i18n
   .init({
     resources,
     fallbackLng: 'en',
-    supportedLngs: ['en', 'es', 'zh', 'ar'],
+    supportedLngs: ['en', 'es', 'zh', 'ar', 'pl'],
     interpolation: {
       escapeValue: false,
     },
