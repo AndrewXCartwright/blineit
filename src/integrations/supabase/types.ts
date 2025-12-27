@@ -719,6 +719,39 @@ export type Database = {
         }
         Relationships: []
       }
+      waitlist: {
+        Row: {
+          asset_class: string
+          created_at: string
+          email: string
+          id: string
+          notified: boolean
+          referral_code: string | null
+          referred_by: string | null
+          user_id: string | null
+        }
+        Insert: {
+          asset_class: string
+          created_at?: string
+          email: string
+          id?: string
+          notified?: boolean
+          referral_code?: string | null
+          referred_by?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          asset_class?: string
+          created_at?: string
+          email?: string
+          id?: string
+          notified?: boolean
+          referral_code?: string | null
+          referred_by?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
