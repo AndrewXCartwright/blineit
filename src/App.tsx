@@ -21,6 +21,8 @@ import ComingSoon from "./pages/ComingSoon";
 import NotFound from "./pages/NotFound";
 import Referrals from "./pages/Referrals";
 import ReferralLanding from "./pages/ReferralLanding";
+import Notifications from "./pages/Notifications";
+import NotificationSettings from "./pages/NotificationSettings";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProperties from "./pages/admin/AdminProperties";
 import AdminLoans from "./pages/admin/AdminLoans";
@@ -54,6 +56,8 @@ const App = () => (
               <Route path="/loan/:id" element={<ProtectedRoute><LoanDetail /></ProtectedRoute>} />
               <Route path="/kyc" element={<ProtectedRoute><KYCVerification /></ProtectedRoute>} />
               <Route path="/referrals" element={<ProtectedRoute><Referrals /></ProtectedRoute>} />
+              <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
+              <Route path="/settings/notifications" element={<ProtectedRoute><NotificationSettings /></ProtectedRoute>} />
               <Route path="/r/:code" element={<ReferralLanding />} />
               <Route path="/coming-soon/:assetClass" element={<ComingSoon />} />
               {/* Admin Routes */}
