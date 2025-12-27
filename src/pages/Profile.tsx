@@ -1,10 +1,13 @@
-import { User, Settings, Bell, Shield, HelpCircle, LogOut, ChevronRight, Trophy, Target, Building2, Wallet } from "lucide-react";
+import { User, Settings, Bell, Shield, HelpCircle, LogOut, ChevronRight, Trophy, Target, Building2, Wallet, ShieldCheck, AlertCircle } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserData } from "@/hooks/useUserData";
+import { useKYC } from "@/hooks/useKYC";
 import { useNavigate, Link } from "react-router-dom";
 import { CountUp } from "@/components/CountUp";
 import { EmptyState } from "@/components/EmptyState";
 import { ReferralCard } from "@/components/ReferralCard";
+import { KYCStatusBadge } from "@/components/KYCStatusBadge";
+import { Button } from "@/components/ui/button";
 
 const menuItems = [
   { icon: Settings, label: "Account Settings", action: () => {} },
@@ -16,6 +19,7 @@ const menuItems = [
 export default function Profile() {
   const { user, signOut } = useAuth();
   const { profile, holdings, bets, loading } = useUserData();
+  const { kycStatus, isVerified } = useKYC();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -71,7 +75,8 @@ export default function Profile() {
           <p className="text-muted-foreground text-sm mb-4">
             {email}
           </p>
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex items-center justify-center gap-2 flex-wrap">
+            <KYCStatusBadge status={kycStatus} />
             <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full gradient-gold text-accent-foreground text-sm font-medium">
               <Wallet className="w-4 h-4" />
               $<CountUp end={profile?.wallet_balance || 0} decimals={0} />
@@ -84,6 +89,27 @@ export default function Profile() {
             )}
           </div>
         </div>
+
+        {/* KYC Verification Prompt */}
+        {!isVerified && kycStatus !== "in_review" && (
+          <div className="glass-card rounded-2xl p-5 animate-fade-in border border-warning/30 bg-warning/5">
+            <div className="flex items-start gap-4">
+              <div className="p-3 rounded-xl bg-warning/20">
+                <AlertCircle className="w-6 h-6 text-warning" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-display font-bold text-foreground mb-1">Complete Verification</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Verify your identity to unlock full access to investing and higher limits.
+                </p>
+                <Button onClick={() => navigate("/kyc")} size="sm" className="gap-2">
+                  <ShieldCheck className="w-4 h-4" />
+                  Start Verification
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-3">

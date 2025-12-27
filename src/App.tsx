@@ -13,6 +13,7 @@ import Wallet from "./pages/Wallet";
 import Profile from "./pages/Profile";
 import Auth from "./pages/Auth";
 import PropertyDetail from "./pages/PropertyDetail";
+import KYCVerification from "./pages/KYCVerification";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
               <Route path="/wallet" element={<ProtectedRoute><Wallet /></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
               <Route path="/property/:id" element={<ProtectedRoute><PropertyDetail /></ProtectedRoute>} />
+              <Route path="/kyc" element={<ProtectedRoute><KYCVerification /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />
