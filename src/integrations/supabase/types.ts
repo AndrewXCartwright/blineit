@@ -990,6 +990,33 @@ export type Database = {
         }
         Relationships: []
       }
+      recent_searches: {
+        Row: {
+          created_at: string
+          filters: Json | null
+          id: string
+          query: string
+          search_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          filters?: Json | null
+          id?: string
+          query: string
+          search_type?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          filters?: Json | null
+          id?: string
+          query?: string
+          search_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       referral_rewards: {
         Row: {
           amount: number
@@ -1106,6 +1133,81 @@ export type Database = {
           reviewed_at?: string | null
           reviewed_by?: string | null
           status?: string | null
+        }
+        Relationships: []
+      }
+      saved_searches: {
+        Row: {
+          created_at: string
+          filters: Json
+          id: string
+          last_run_at: string | null
+          name: string
+          notify_new_matches: boolean | null
+          results_count: number | null
+          search_type: string
+          sort_by: string | null
+          sort_order: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          filters?: Json
+          id?: string
+          last_run_at?: string | null
+          name: string
+          notify_new_matches?: boolean | null
+          results_count?: number | null
+          search_type?: string
+          sort_by?: string | null
+          sort_order?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          filters?: Json
+          id?: string
+          last_run_at?: string | null
+          name?: string
+          notify_new_matches?: boolean | null
+          results_count?: number | null
+          search_type?: string
+          sort_by?: string | null
+          sort_order?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      search_analytics: {
+        Row: {
+          created_at: string
+          filters: Json | null
+          id: string
+          query: string | null
+          results_count: number | null
+          search_type: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          filters?: Json | null
+          id?: string
+          query?: string | null
+          results_count?: number | null
+          search_type?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          filters?: Json | null
+          id?: string
+          query?: string | null
+          results_count?: number | null
+          search_type?: string
+          user_id?: string | null
         }
         Relationships: []
       }
