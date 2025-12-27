@@ -14,6 +14,78 @@ export type Database = {
   }
   public: {
     Tables: {
+      kyc_verifications: {
+        Row: {
+          address_line1: string | null
+          address_line2: string | null
+          city: string | null
+          country: string | null
+          created_at: string
+          date_of_birth: string | null
+          full_legal_name: string | null
+          id: string
+          id_back_url: string | null
+          id_front_url: string | null
+          id_type: string | null
+          phone_number: string | null
+          postal_code: string | null
+          rejection_reason: string | null
+          reviewed_at: string | null
+          selfie_url: string | null
+          ssn_last4: string | null
+          state: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address_line1?: string | null
+          address_line2?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          full_legal_name?: string | null
+          id?: string
+          id_back_url?: string | null
+          id_front_url?: string | null
+          id_type?: string | null
+          phone_number?: string | null
+          postal_code?: string | null
+          rejection_reason?: string | null
+          reviewed_at?: string | null
+          selfie_url?: string | null
+          ssn_last4?: string | null
+          state?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address_line1?: string | null
+          address_line2?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          full_legal_name?: string | null
+          id?: string
+          id_back_url?: string | null
+          id_front_url?: string | null
+          id_type?: string | null
+          phone_number?: string | null
+          postal_code?: string | null
+          rejection_reason?: string | null
+          reviewed_at?: string | null
+          selfie_url?: string | null
+          ssn_last4?: string | null
+          state?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       market_price_history: {
         Row: {
           id: string
@@ -142,6 +214,9 @@ export type Database = {
           display_name: string | null
           email: string | null
           id: string
+          kyc_status: string | null
+          kyc_submitted_at: string | null
+          kyc_verified_at: string | null
           name: string | null
           referral_code: string | null
           updated_at: string
@@ -154,6 +229,9 @@ export type Database = {
           display_name?: string | null
           email?: string | null
           id?: string
+          kyc_status?: string | null
+          kyc_submitted_at?: string | null
+          kyc_verified_at?: string | null
           name?: string | null
           referral_code?: string | null
           updated_at?: string
@@ -166,6 +244,9 @@ export type Database = {
           display_name?: string | null
           email?: string | null
           id?: string
+          kyc_status?: string | null
+          kyc_submitted_at?: string | null
+          kyc_verified_at?: string | null
           name?: string | null
           referral_code?: string | null
           updated_at?: string
