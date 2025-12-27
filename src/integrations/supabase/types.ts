@@ -346,6 +346,182 @@ export type Database = {
         }
         Relationships: []
       }
+      drip_property_settings: {
+        Row: {
+          created_at: string
+          custom_property_id: string | null
+          id: string
+          is_enabled: boolean
+          property_id: string
+          reinvest_to: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          custom_property_id?: string | null
+          id?: string
+          is_enabled?: boolean
+          property_id: string
+          reinvest_to?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          custom_property_id?: string | null
+          id?: string
+          is_enabled?: boolean
+          property_id?: string
+          reinvest_to?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drip_property_settings_custom_property_id_fkey"
+            columns: ["custom_property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "drip_property_settings_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      drip_settings: {
+        Row: {
+          created_at: string
+          drip_balance: number
+          drip_type: string
+          id: string
+          is_enabled: boolean
+          minimum_reinvest_amount: number
+          reinvest_debt_interest: boolean
+          reinvest_equity_dividends: boolean
+          reinvest_prediction_winnings: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          drip_balance?: number
+          drip_type?: string
+          id?: string
+          is_enabled?: boolean
+          minimum_reinvest_amount?: number
+          reinvest_debt_interest?: boolean
+          reinvest_equity_dividends?: boolean
+          reinvest_prediction_winnings?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          drip_balance?: number
+          drip_type?: string
+          id?: string
+          is_enabled?: boolean
+          minimum_reinvest_amount?: number
+          reinvest_debt_interest?: boolean
+          reinvest_equity_dividends?: boolean
+          reinvest_prediction_winnings?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      drip_summary: {
+        Row: {
+          created_at: string
+          estimated_extra_value: number
+          id: string
+          period: string
+          period_start: string
+          tokens_acquired: number
+          total_reinvested: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          estimated_extra_value?: number
+          id?: string
+          period: string
+          period_start: string
+          tokens_acquired?: number
+          total_reinvested?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          estimated_extra_value?: number
+          id?: string
+          period?: string
+          period_start?: string
+          tokens_acquired?: number
+          total_reinvested?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      drip_transactions: {
+        Row: {
+          created_at: string
+          executed_at: string | null
+          id: string
+          reinvest_amount: number
+          reinvest_property_id: string
+          remainder_to_balance: number
+          source_amount: number
+          source_id: string
+          source_type: string
+          status: string
+          token_price: number
+          tokens_purchased: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          executed_at?: string | null
+          id?: string
+          reinvest_amount: number
+          reinvest_property_id: string
+          remainder_to_balance?: number
+          source_amount: number
+          source_id: string
+          source_type: string
+          status?: string
+          token_price: number
+          tokens_purchased: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          executed_at?: string | null
+          id?: string
+          reinvest_amount?: number
+          reinvest_property_id?: string
+          remainder_to_balance?: number
+          source_amount?: number
+          source_id?: string
+          source_type?: string
+          status?: string
+          token_price?: number
+          tokens_purchased?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drip_transactions_reinvest_property_id_fkey"
+            columns: ["reinvest_property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       follows: {
         Row: {
           created_at: string
