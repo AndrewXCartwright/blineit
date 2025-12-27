@@ -7,6 +7,9 @@ import { BottomNav } from "@/components/BottomNav";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ThemeProvider } from "@/hooks/useTheme";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
+import { NetworkStatus } from "@/components/NetworkStatus";
+import { UpdatePrompt } from "@/components/UpdatePrompt";
 import Index from "./pages/Index";
 import Assets from "./pages/Assets";
 import AssetsExplore from "./pages/AssetsExplore";
@@ -27,6 +30,7 @@ import Community from "./pages/Community";
 import UserProfile from "./pages/UserProfile";
 import Leaderboard from "./pages/Leaderboard";
 import PortfolioAnalytics from "./pages/PortfolioAnalytics";
+import InstallPage from "./pages/InstallPage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProperties from "./pages/admin/AdminProperties";
 import AdminLoans from "./pages/admin/AdminLoans";
@@ -47,6 +51,9 @@ const App = () => (
         <AuthProvider>
           <Toaster />
           <Sonner />
+          <NetworkStatus />
+          <PWAInstallPrompt />
+          <UpdatePrompt />
           <BrowserRouter>
             <Routes>
               <Route path="/auth" element={<Auth />} />
@@ -67,6 +74,7 @@ const App = () => (
               <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
               <Route path="/portfolio/analytics" element={<ProtectedRoute><PortfolioAnalytics /></ProtectedRoute>} />
               <Route path="/r/:code" element={<ReferralLanding />} />
+              <Route path="/install" element={<InstallPage />} />
               <Route path="/coming-soon/:assetClass" element={<ComingSoon />} />
               {/* Admin Routes */}
               <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
