@@ -1,7 +1,8 @@
-import { User, Settings, Bell, Shield, HelpCircle, LogOut, ChevronRight, Trophy, Target, Building2, Wallet, ShieldCheck, AlertCircle } from "lucide-react";
+import { User, Settings, Bell, Shield, HelpCircle, LogOut, ChevronRight, Trophy, Target, Building2, Wallet, ShieldCheck, AlertCircle, Crown } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserData } from "@/hooks/useUserData";
 import { useKYC } from "@/hooks/useKYC";
+import { useIsAdmin } from "@/hooks/useAdmin";
 import { useNavigate, Link } from "react-router-dom";
 import { CountUp } from "@/components/CountUp";
 import { EmptyState } from "@/components/EmptyState";
@@ -20,6 +21,7 @@ export default function Profile() {
   const { user, signOut } = useAuth();
   const { profile, holdings, bets, loading } = useUserData();
   const { kycStatus, isVerified } = useKYC();
+  const { isAdmin } = useIsAdmin();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -138,6 +140,25 @@ export default function Profile() {
 
         {/* Referral Section */}
         <ReferralCard />
+
+        {/* Admin Link */}
+        {isAdmin && (
+          <Link
+            to="/admin"
+            className="glass-card rounded-2xl p-4 flex items-center justify-between hover:bg-secondary/50 transition-colors animate-fade-in border border-amber-500/30"
+          >
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-amber-500/20">
+                <Crown className="w-5 h-5 text-amber-500" />
+              </div>
+              <div>
+                <span className="font-medium text-foreground">Admin Dashboard</span>
+                <p className="text-xs text-muted-foreground">Manage platform settings</p>
+              </div>
+            </div>
+            <ChevronRight className="w-5 h-5 text-muted-foreground" />
+          </Link>
+        )}
 
         {/* Quick Links */}
         <div className="glass-card rounded-2xl overflow-hidden animate-fade-in stagger-4">

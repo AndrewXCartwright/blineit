@@ -466,3 +466,128 @@ export function useAdminTransactions() {
 
   return { transactions, loading, refetch: fetchTransactions };
 }
+
+export function useAdminKYC() {
+  const [verifications, setVerifications] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchVerifications = useCallback(async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("kyc_verifications")
+      .select(`
+        *,
+        profile:profiles!kyc_verifications_user_id_fkey1(email, display_name, name)
+      `)
+      .order("created_at", { ascending: false });
+
+    if (!error && data) {
+      setVerifications(data);
+    }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    fetchVerifications();
+  }, [fetchVerifications]);
+
+  const approveKYC = async (userId: string) => {
+    // Update kyc_verifications
+    const { error: kycError } = await supabase
+      .from("kyc_verifications")
+      .update({ 
+        status: "verified",
+        reviewed_at: new Date().toISOString()
+      })
+      .eq("user_id", userId);
+
+    if (kycError) {
+      toast({ title: "Error", description: kycError.message, variant: "destructive" });
+      return false;
+    }
+
+    // Update profile
+    const { error: profileError } = await supabase
+      .from("profiles")
+      .update({ 
+        kyc_status: "verified",
+        kyc_verified_at: new Date().toISOString()
+      })
+      .eq("user_id", userId);
+
+    if (profileError) {
+      toast({ title: "Error", description: profileError.message, variant: "destructive" });
+      return false;
+    }
+
+    // Create notification
+    await supabase.rpc("create_system_notification", {
+      p_user_id: userId,
+      p_type: "kyc_approved",
+      p_title: "Identity Verified",
+      p_message: "Your identity has been verified. You now have full access to all features.",
+    });
+
+    toast({ title: "Success", description: "KYC approved successfully" });
+    fetchVerifications();
+    return true;
+  };
+
+  const rejectKYC = async (userId: string, reason: string) => {
+    // Update kyc_verifications
+    const { error: kycError } = await supabase
+      .from("kyc_verifications")
+      .update({ 
+        status: "rejected",
+        rejection_reason: reason,
+        reviewed_at: new Date().toISOString()
+      })
+      .eq("user_id", userId);
+
+    if (kycError) {
+      toast({ title: "Error", description: kycError.message, variant: "destructive" });
+      return false;
+    }
+
+    // Update profile
+    const { error: profileError } = await supabase
+      .from("profiles")
+      .update({ kyc_status: "rejected" })
+      .eq("user_id", userId);
+
+    if (profileError) {
+      toast({ title: "Error", description: profileError.message, variant: "destructive" });
+      return false;
+    }
+
+    // Create notification
+    await supabase.rpc("create_system_notification", {
+      p_user_id: userId,
+      p_type: "kyc_rejected",
+      p_title: "Verification Unsuccessful",
+      p_message: `Your identity verification was unsuccessful. Reason: ${reason}. Please resubmit your documents.`,
+    });
+
+    toast({ title: "Success", description: "KYC rejected" });
+    fetchVerifications();
+    return true;
+  };
+
+  const getSignedUrl = async (filePath: string): Promise<string | null> => {
+    if (!filePath) return null;
+    if (filePath.startsWith("http")) return filePath;
+    
+    const { data, error } = await supabase.storage
+      .from("kyc-documents")
+      .createSignedUrl(filePath, 3600);
+
+    if (error) {
+      console.error("Error creating signed URL:", error);
+      return null;
+    }
+
+    return data.signedUrl;
+  };
+
+  return { verifications, loading, refetch: fetchVerifications, approveKYC, rejectKYC, getSignedUrl };
+}
