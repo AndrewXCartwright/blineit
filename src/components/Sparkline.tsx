@@ -6,6 +6,7 @@ interface SparklineProps {
   height?: number;
   strokeColor?: string;
   fillColor?: string;
+  showArea?: boolean;
 }
 
 export function Sparkline({ 
@@ -13,7 +14,8 @@ export function Sparkline({
   width = 80, 
   height = 24,
   strokeColor = "hsl(var(--success))",
-  fillColor = "hsla(160, 84%, 39%, 0.2)"
+  fillColor = "hsla(160, 84%, 39%, 0.2)",
+  showArea = true
 }: SparklineProps) {
   const path = useMemo(() => {
     if (data.length < 2) return "";

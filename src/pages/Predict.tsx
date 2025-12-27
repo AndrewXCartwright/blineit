@@ -136,7 +136,10 @@ export default function Predict() {
           expiresAt={new Date(selectedMarket.expires_at)}
           bullPrice={Number(selectedMarket.yes_price)}
           bearPrice={Number(selectedMarket.no_price)}
-          priceHistory={priceHistories[selectedMarket.id] || [50, 55, 52, 58]}
+          priceHistory={(priceHistories[selectedMarket.id] || [50, 55, 52, 58]).map((price, i) => ({
+            time: new Date(Date.now() - (24 - i) * 3600000).toISOString(),
+            yesPrice: price
+          }))}
           initialSide={selectedSide}
         />
       )}
