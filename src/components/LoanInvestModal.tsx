@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 import { X, Wallet, ShieldCheck, Loader2, Calendar, Percent, Clock, Landmark, CheckCircle2 } from "lucide-react";
 import { Confetti } from "./Confetti";
-import { CountUp } from "./CountUp";
 import { useUserData } from "@/hooks/useUserData";
+import { useInvestInLoan } from "@/hooks/useLoanData";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { LoanData } from "./LoanCard";
-import { toast } from "@/hooks/use-toast";
 
 interface LoanInvestModalProps {
   isOpen: boolean;
@@ -30,17 +29,16 @@ export function LoanInvestModal({
   const [investAmount, setInvestAmount] = useState("");
   const [showConfetti, setShowConfetti] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [processing, setProcessing] = useState(false);
   const [riskAcknowledged, setRiskAcknowledged] = useState(false);
 
-  const { walletBalance, refetch } = useUserData();
+  const { walletBalance, refetch: refetchUserData } = useUserData();
+  const { investInLoan, loading: processing } = useInvestInLoan();
 
   // Reset state when modal opens
   useEffect(() => {
     if (isOpen) {
       setInvestAmount("");
       setSuccess(false);
-      setProcessing(false);
       setRiskAcknowledged(false);
     }
   }, [isOpen]);
@@ -63,29 +61,14 @@ export function LoanInvestModal({
 
   const handleConfirm = async () => {
     if (isDisabled) return;
-    setProcessing(true);
 
-    try {
-      // Simulate API call - in production this would call a Supabase function
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+    const result = await investInLoan(loan.id, amount);
+    
+    if (result.success) {
       setShowConfetti(true);
       setSuccess(true);
-      await refetch();
+      await refetchUserData();
       onSuccess?.();
-      
-      toast({
-        title: "Investment Successful!",
-        description: `You've invested $${amount.toLocaleString()} in ${loan.propertyName}`,
-      });
-    } catch (error) {
-      toast({
-        title: "Investment Failed",
-        description: "Please try again later",
-        variant: "destructive",
-      });
-    } finally {
-      setProcessing(false);
     }
   };
 
