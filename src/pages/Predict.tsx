@@ -10,6 +10,7 @@ import { SuccessCheck } from "@/components/SuccessCheck";
 import { supabase } from "@/integrations/supabase/client";
 import { useUserData, usePlaceBet } from "@/hooks/useUserData";
 import { useAuth } from "@/hooks/useAuth";
+import { useRealtimeMarkets } from "@/hooks/useRealtimeSubscriptions";
 import confetti from "canvas-confetti";
 
 interface Market {
@@ -29,6 +30,7 @@ export default function Predict() {
   const { user } = useAuth();
   const { bets, activeBetsValue, bettingWinnings, refetch } = useUserData();
   const { placeBet } = usePlaceBet();
+  const { getPriceChange } = useRealtimeMarkets();
   
   const [markets, setMarkets] = useState<Market[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,6 +70,31 @@ export default function Predict() {
   useEffect(() => {
     fetchMarkets();
   }, [fetchMarkets]);
+
+  // Subscribe to real-time market updates
+  useEffect(() => {
+    const channel = supabase
+      .channel('markets-updates')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'prediction_markets'
+        },
+        (payload) => {
+          const updatedMarket = payload.new as Market;
+          setMarkets(prev => 
+            prev.map(m => m.id === updatedMarket.id ? { ...m, ...updatedMarket } : m)
+          );
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   const handleRefresh = async () => {
     await fetchMarkets();

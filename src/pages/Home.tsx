@@ -1,9 +1,12 @@
+import { useState, useCallback, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { StatCard } from "@/components/StatCard";
 import { PropertyCard } from "@/components/PropertyCard";
 import { CountUp } from "@/components/CountUp";
 import { useUserData } from "@/hooks/useUserData";
 import { useAuth } from "@/hooks/useAuth";
+import { useRealtimeTransactions, useRealtimeWalletBalance, useRealtimePortfolio } from "@/hooks/useRealtimeSubscriptions";
+import { FlashBorder } from "@/components/LiveIndicator";
 import { DollarSign, Building2, Target, TrendingUp, ArrowUpRight, ArrowDownRight, Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -18,8 +21,38 @@ export default function Home() {
     totalEarnings, 
     activeBetsValue,
     bettingWinnings,
-    walletBalance 
+    walletBalance,
+    refetch 
   } = useUserData();
+
+  const [portfolioFlash, setPortfolioFlash] = useState(false);
+  const [walletFlash, setWalletFlash] = useState(false);
+  const [flashDirection, setFlashDirection] = useState<"up" | "down">("up");
+  const [newTransactions, setNewTransactions] = useState<string[]>([]);
+
+  // Real-time subscriptions
+  useRealtimeTransactions(useCallback((tx: any) => {
+    setNewTransactions(prev => [tx.id, ...prev]);
+    refetch();
+    // Clear new transaction highlight after animation
+    setTimeout(() => {
+      setNewTransactions(prev => prev.filter(id => id !== tx.id));
+    }, 2000);
+  }, [refetch]));
+
+  useRealtimeWalletBalance(useCallback((direction: "up" | "down") => {
+    setFlashDirection(direction);
+    setWalletFlash(true);
+    refetch();
+    setTimeout(() => setWalletFlash(false), 1000);
+  }, [refetch]));
+
+  useRealtimePortfolio(useCallback((direction: "up" | "down") => {
+    setFlashDirection(direction);
+    setPortfolioFlash(true);
+    refetch();
+    setTimeout(() => setPortfolioFlash(false), 1000);
+  }, [refetch]));
 
   const activeBets = bets.filter(b => b.status === "active");
   const avgYield = holdings.length > 0 
@@ -34,41 +67,45 @@ export default function Home() {
       
       <main className="px-4 py-6 space-y-6">
         {/* Portfolio Value Card */}
-        <div className="gradient-primary rounded-2xl p-6 glow-primary animate-fade-in">
-          <p className="text-primary-foreground/80 text-sm mb-1">Total Portfolio Value</p>
-          <h2 className="font-display text-3xl font-bold text-primary-foreground mb-2">
-            {loading ? (
-              <span className="animate-pulse">Loading...</span>
-            ) : (
-              <>$<CountUp end={portfolioValue + walletBalance} decimals={2} duration={2000} /></>
-            )}
-          </h2>
-          <div className="flex items-center gap-2">
-            {totalEarnings >= 0 ? (
-              <span className="bg-success/20 text-success px-2 py-1 rounded-full text-sm font-medium flex items-center gap-1">
-                <TrendingUp className="w-3 h-3" />
-                +${totalEarnings.toFixed(0)} gains
-              </span>
-            ) : (
-              <span className="bg-destructive/20 text-destructive px-2 py-1 rounded-full text-sm font-medium flex items-center gap-1">
-                <TrendingUp className="w-3 h-3" />
-                ${totalEarnings.toFixed(0)}
-              </span>
-            )}
-            <span className="text-primary-foreground/60 text-sm">all time</span>
+        <FlashBorder flash={portfolioFlash} direction={flashDirection} className="rounded-2xl">
+          <div className="gradient-primary rounded-2xl p-6 glow-primary animate-fade-in">
+            <p className="text-primary-foreground/80 text-sm mb-1">Total Portfolio Value</p>
+            <h2 className="font-display text-3xl font-bold text-primary-foreground mb-2">
+              {loading ? (
+                <span className="animate-pulse">Loading...</span>
+              ) : (
+                <>$<CountUp end={portfolioValue + walletBalance} decimals={2} duration={2000} /></>
+              )}
+            </h2>
+            <div className="flex items-center gap-2">
+              {totalEarnings >= 0 ? (
+                <span className="bg-success/20 text-success px-2 py-1 rounded-full text-sm font-medium flex items-center gap-1">
+                  <TrendingUp className="w-3 h-3" />
+                  +${totalEarnings.toFixed(0)} gains
+                </span>
+              ) : (
+                <span className="bg-destructive/20 text-destructive px-2 py-1 rounded-full text-sm font-medium flex items-center gap-1">
+                  <TrendingUp className="w-3 h-3" />
+                  ${totalEarnings.toFixed(0)}
+                </span>
+              )}
+              <span className="text-primary-foreground/60 text-sm">all time</span>
+            </div>
           </div>
-        </div>
+        </FlashBorder>
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-3">
           <div className="stagger-1 animate-fade-in">
-            <StatCard
-              icon={<Wallet className="w-5 h-5" />}
-              label="Cash Balance"
-              value={`$${walletBalance.toLocaleString()}`}
-              subValue="Available"
-              trend="up"
-            />
+            <FlashBorder flash={walletFlash} direction={flashDirection} className="rounded-2xl h-full">
+              <StatCard
+                icon={<Wallet className="w-5 h-5" />}
+                label="Cash Balance"
+                value={`$${walletBalance.toLocaleString()}`}
+                subValue="Available"
+                trend="up"
+              />
+            </FlashBorder>
           </div>
           <div className="stagger-2 animate-fade-in">
             <StatCard
@@ -146,11 +183,14 @@ export default function Home() {
             {recentTransactions.length > 0 ? (
               recentTransactions.map((tx, index) => {
                 const isPositive = tx.amount > 0;
+                const isNew = newTransactions.includes(tx.id);
                 return (
                   <div
                     key={tx.id}
-                    className="glass-card rounded-xl p-4 flex items-center justify-between animate-fade-in interactive-card"
-                    style={{ animationDelay: `${(index + 6) * 0.05}s` }}
+                    className={`glass-card rounded-xl p-4 flex items-center justify-between interactive-card transition-all duration-300 ${
+                      isNew ? "animate-slide-in-right ring-2 ring-primary/50" : "animate-fade-in"
+                    }`}
+                    style={{ animationDelay: isNew ? "0s" : `${(index + 6) * 0.05}s` }}
                   >
                     <div className="flex items-center gap-3">
                       <div className={`p-2 rounded-xl ${
