@@ -1,94 +1,33 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState, useCallback } from "react";
+import { useState } from "react";
 import { 
   ArrowLeft, MapPin, Calendar, Landmark, ShieldCheck, Users, 
   Building2, DollarSign, Percent, FileText, Clock, BarChart3,
-  Download, TrendingUp, Home, Calculator, Share2, Heart
+  Download, Calculator, Share2, Heart
 } from "lucide-react";
 import { Skeleton } from "@/components/Skeleton";
 import { CountUp } from "@/components/CountUp";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { LoanInvestModal } from "@/components/LoanInvestModal";
-import type { LoanData } from "@/components/LoanCard";
+import { useLoanById } from "@/hooks/useLoanData";
+import { format, differenceInDays } from "date-fns";
 
 type TabType = "overview" | "property" | "borrower" | "documents" | "activity";
-
-// Mock loan data - in production this would come from Supabase
-const getMockLoan = (id: string): LoanData & {
-  description: string;
-  useOfFunds: string;
-  propertyValue: number;
-  propertyType: string;
-  propertyUnits: number;
-  propertyOccupancy: number;
-  dscr: number;
-  borrowerType: string;
-  hasPersonalGuarantee: boolean;
-  insuranceCoverage: number;
-  liquidationValue: number;
-  paymentFrequency: string;
-  maturityDate: string;
-  investors: number;
-  fundingDeadline: string;
-  maxInvestment: number;
-} => ({
-  id,
-  name: `Loan-${id.slice(0, 4)}`,
-  propertyName: "Sunset Apartments",
-  loanType: "Bridge Loan",
-  city: "Austin",
-  state: "TX",
-  loanAmount: 2400000,
-  apy: 10.5,
-  termMonths: 18,
-  ltv: 65,
-  fundedAmount: 1872000,
-  minInvestment: 1000,
-  maxInvestment: 100000,
-  isSecured: true,
-  lienPosition: "1st",
-  description: "This bridge loan is secured by a 24-unit multifamily property in Austin, TX. The borrower is refinancing an existing loan to complete renovations and stabilize occupancy before permanent financing.",
-  useOfFunds: "Refinance existing debt, complete unit renovations, and fund operating reserves.",
-  propertyValue: 3700000,
-  propertyType: "Multifamily",
-  propertyUnits: 24,
-  propertyOccupancy: 92,
-  dscr: 1.45,
-  borrowerType: "LLC",
-  hasPersonalGuarantee: true,
-  insuranceCoverage: 4000000,
-  liquidationValue: 3200000,
-  paymentFrequency: "Monthly",
-  maturityDate: "June 2026",
-  investors: 47,
-  fundingDeadline: "12 days",
-});
 
 export default function LoanDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [loan, setLoan] = useState<ReturnType<typeof getMockLoan> | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { loan, loading, refetch } = useLoanById(id);
   const [activeTab, setActiveTab] = useState<TabType>("overview");
   const [isFavorite, setIsFavorite] = useState(false);
   const [investAmount, setInvestAmount] = useState<string>("10000");
   const [isInvestModalOpen, setIsInvestModalOpen] = useState(false);
 
-  useEffect(() => {
-    if (id) {
-      // Simulate API call
-      setTimeout(() => {
-        setLoan(getMockLoan(id));
-        setLoading(false);
-      }, 500);
-    }
-  }, [id]);
-
   const handleShare = async () => {
     try {
       await navigator.share({
-        title: loan?.propertyName,
+        title: loan?.name,
         text: `Check out this debt investment opportunity`,
         url: window.location.href,
       });
@@ -141,11 +80,34 @@ export default function LoanDetail() {
     );
   }
 
-  const fundedPercent = Math.round((loan.fundedAmount / loan.loanAmount) * 100);
+  const fundedPercent = Math.round((Number(loan.amount_funded) / Number(loan.loan_amount)) * 100);
+  const isFullyFunded = fundedPercent >= 100;
   const investmentValue = parseFloat(investAmount) || 0;
-  const monthlyPayment = (investmentValue * (loan.apy / 100)) / 12;
-  const totalInterest = monthlyPayment * loan.termMonths;
+  const monthlyPayment = (investmentValue * (Number(loan.apy) / 100)) / 12;
+  const totalInterest = monthlyPayment * loan.term_months;
   const totalReturn = investmentValue + totalInterest;
+  
+  const daysUntilMaturity = loan.maturity_date 
+    ? differenceInDays(new Date(loan.maturity_date), new Date())
+    : null;
+  
+  const maturityDateFormatted = loan.maturity_date 
+    ? format(new Date(loan.maturity_date), "MMMM yyyy")
+    : "TBD";
+
+  const loanTypeLabels: Record<string, string> = {
+    bridge: "Bridge Loan",
+    construction: "Construction",
+    stabilized: "Stabilized",
+    mezzanine: "Mezzanine",
+    preferred_equity: "Preferred Equity",
+  };
+
+  const loanPositionLabels: Record<string, string> = {
+    "1st_lien": "1st Lien",
+    "2nd_lien": "2nd Lien",
+    mezzanine: "Mezzanine",
+  };
 
   return (
     <div className="min-h-screen pb-24">
@@ -182,11 +144,18 @@ export default function LoanDetail() {
           </div>
         </div>
 
-        {/* Investment Type Badge */}
-        <span className="absolute bottom-20 right-4 flex items-center gap-1.5 bg-blue-500/90 text-white px-3 py-1.5 rounded-full text-sm font-semibold z-10">
-          <Landmark className="w-4 h-4" />
-          DEBT INVESTMENT
-        </span>
+        {/* Badges */}
+        <div className="absolute bottom-20 right-4 flex gap-2 z-10">
+          {isFullyFunded && (
+            <span className="flex items-center gap-1.5 bg-amber-500/90 text-white px-3 py-1.5 rounded-full text-sm font-semibold">
+              FULLY FUNDED
+            </span>
+          )}
+          <span className="flex items-center gap-1.5 bg-blue-500/90 text-white px-3 py-1.5 rounded-full text-sm font-semibold">
+            <Landmark className="w-4 h-4" />
+            DEBT INVESTMENT
+          </span>
+        </div>
       </div>
 
       <main className="px-4 -mt-12 relative z-10 space-y-5">
@@ -194,7 +163,7 @@ export default function LoanDetail() {
         <div className="glass-card rounded-2xl p-5 animate-fade-in">
           <div className="flex items-start justify-between gap-3 mb-2">
             <h1 className="font-display text-2xl font-bold text-foreground leading-tight">
-              {loan.propertyName} - {loan.loanType}
+              {loan.name}
             </h1>
           </div>
           <div className="flex items-center gap-1.5 text-muted-foreground">
@@ -211,15 +180,17 @@ export default function LoanDetail() {
                 <p className="text-xs text-muted-foreground mb-1">Fixed APY</p>
                 <div className="flex items-baseline gap-2">
                   <span className="font-display text-4xl font-bold text-blue-400">
-                    <CountUp end={loan.apy} decimals={1} />%
+                    <CountUp end={Number(loan.apy)} decimals={1} />%
                   </span>
                 </div>
-                <p className="text-sm text-muted-foreground mt-1">Paid monthly</p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Paid {loan.payment_frequency || "monthly"}
+                </p>
               </div>
               <div className="text-right">
                 <p className="text-xs text-muted-foreground mb-1">Term</p>
-                <p className="font-display text-xl font-bold text-foreground">{loan.termMonths} months</p>
-                <p className="text-sm text-muted-foreground">Maturity: {loan.maturityDate}</p>
+                <p className="font-display text-xl font-bold text-foreground">{loan.term_months} months</p>
+                <p className="text-sm text-muted-foreground">Maturity: {maturityDateFormatted}</p>
               </div>
             </div>
           </div>
@@ -227,12 +198,12 @@ export default function LoanDetail() {
 
         {/* Key Metrics Grid */}
         <div className="grid grid-cols-3 gap-3">
-          <MetricCard icon={<DollarSign className="w-4 h-4" />} label="Loan Amount" value={`$${(loan.loanAmount / 1000000).toFixed(1)}M`} />
-          <MetricCard icon={<Percent className="w-4 h-4" />} label="LTV Ratio" value={`${loan.ltv}%`} />
-          <MetricCard icon={<Building2 className="w-4 h-4" />} label="Property Value" value={`$${(loan.propertyValue / 1000000).toFixed(1)}M`} />
-          <MetricCard icon={<ShieldCheck className="w-4 h-4" />} label="Loan Position" value="1st Lien" highlight="success" />
-          <MetricCard icon={<BarChart3 className="w-4 h-4" />} label="DSCR" value={`${loan.dscr}x`} />
-          <MetricCard icon={<FileText className="w-4 h-4" />} label="Borrower Type" value={loan.borrowerType} />
+          <MetricCard icon={<DollarSign className="w-4 h-4" />} label="Loan Amount" value={`$${(Number(loan.loan_amount) / 1000000).toFixed(1)}M`} />
+          <MetricCard icon={<Percent className="w-4 h-4" />} label="LTV Ratio" value={`${loan.ltv_ratio}%`} />
+          <MetricCard icon={<Building2 className="w-4 h-4" />} label="Property Value" value={loan.property_value ? `$${(Number(loan.property_value) / 1000000).toFixed(1)}M` : "N/A"} />
+          <MetricCard icon={<ShieldCheck className="w-4 h-4" />} label="Loan Position" value={loanPositionLabels[loan.loan_position] || loan.loan_position} highlight="success" />
+          <MetricCard icon={<BarChart3 className="w-4 h-4" />} label="DSCR" value={loan.dscr ? `${loan.dscr}x` : "N/A"} />
+          <MetricCard icon={<FileText className="w-4 h-4" />} label="Borrower Type" value={loan.borrower_type || "N/A"} />
         </div>
 
         {/* Security Info Card */}
@@ -243,28 +214,22 @@ export default function LoanDetail() {
           </h3>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <p className="text-muted-foreground">Property Type</p>
-              <p className="font-semibold text-foreground">{loan.propertyType}</p>
+              <p className="text-muted-foreground">Loan Type</p>
+              <p className="font-semibold text-foreground">{loanTypeLabels[loan.loan_type] || loan.loan_type}</p>
             </div>
             <div>
-              <p className="text-muted-foreground">Units</p>
-              <p className="font-semibold text-foreground">{loan.propertyUnits}</p>
+              <p className="text-muted-foreground">Lien Position</p>
+              <p className="font-semibold text-foreground">{loanPositionLabels[loan.loan_position] || loan.loan_position}</p>
             </div>
             <div>
-              <p className="text-muted-foreground">Occupancy</p>
-              <p className="font-semibold text-foreground">{loan.propertyOccupancy}%</p>
+              <p className="text-muted-foreground">Property Value</p>
+              <p className="font-semibold text-foreground">
+                {loan.property_value ? `$${(Number(loan.property_value) / 1000000).toFixed(2)}M` : "N/A"}
+              </p>
             </div>
             <div>
               <p className="text-muted-foreground">Personal Guarantee</p>
-              <p className="font-semibold text-foreground">{loan.hasPersonalGuarantee ? "Yes" : "No"}</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Insurance Coverage</p>
-              <p className="font-semibold text-foreground">${(loan.insuranceCoverage / 1000000).toFixed(1)}M</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Est. Liquidation Value</p>
-              <p className="font-semibold text-foreground">${(loan.liquidationValue / 1000000).toFixed(1)}M</p>
+              <p className="font-semibold text-foreground">{loan.personal_guarantee ? "Yes" : "No"}</p>
             </div>
           </div>
         </div>
@@ -275,24 +240,28 @@ export default function LoanDetail() {
           <div className="space-y-3">
             <div className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">
-                ${(loan.fundedAmount / 1000000).toFixed(2)}M of ${(loan.loanAmount / 1000000).toFixed(1)}M raised
+                ${(Number(loan.amount_funded) / 1000000).toFixed(2)}M of ${(Number(loan.loan_amount) / 1000000).toFixed(1)}M raised
               </span>
-              <span className="font-bold text-blue-400">{fundedPercent}%</span>
+              <span className={`font-bold ${isFullyFunded ? "text-amber-400" : "text-blue-400"}`}>{fundedPercent}%</span>
             </div>
             <div className="h-3 bg-secondary rounded-full overflow-hidden">
               <div 
-                className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full transition-all duration-500"
-                style={{ width: `${fundedPercent}%` }}
+                className={`h-full rounded-full transition-all duration-500 ${
+                  isFullyFunded 
+                    ? "bg-gradient-to-r from-amber-500 to-amber-400" 
+                    : "bg-gradient-to-r from-blue-500 to-blue-400"
+                }`}
+                style={{ width: `${Math.min(fundedPercent, 100)}%` }}
               />
             </div>
             <div className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground flex items-center gap-1">
                 <Clock className="w-4 h-4" />
-                Funding closes in {loan.fundingDeadline}
+                {daysUntilMaturity !== null ? `${daysUntilMaturity} days to maturity` : "Date TBD"}
               </span>
               <span className="text-muted-foreground flex items-center gap-1">
                 <Users className="w-4 h-4" />
-                {loan.investors} investors
+                {loan.investor_count} investors
               </span>
             </div>
           </div>
@@ -307,7 +276,7 @@ export default function LoanDetail() {
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
               <p className="text-muted-foreground">Payment Frequency</p>
-              <p className="font-semibold text-foreground">{loan.paymentFrequency}</p>
+              <p className="font-semibold text-foreground capitalize">{loan.payment_frequency || "Monthly"}</p>
             </div>
             <div>
               <p className="text-muted-foreground">First Payment</p>
@@ -315,7 +284,7 @@ export default function LoanDetail() {
             </div>
             <div className="col-span-2">
               <p className="text-muted-foreground">Expected Monthly Payment per $1,000</p>
-              <p className="font-semibold text-foreground">${((1000 * loan.apy / 100) / 12).toFixed(2)}</p>
+              <p className="font-semibold text-foreground">${((1000 * Number(loan.apy) / 100) / 12).toFixed(2)}</p>
             </div>
           </div>
         </div>
@@ -335,13 +304,13 @@ export default function LoanDetail() {
                   type="number"
                   value={investAmount}
                   onChange={(e) => setInvestAmount(e.target.value)}
-                  min={loan.minInvestment}
-                  max={loan.maxInvestment}
+                  min={Number(loan.min_investment)}
+                  max={Number(loan.max_investment)}
                   className="w-full bg-secondary border border-border rounded-xl py-3 pl-8 pr-4 text-lg font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <p className="text-xs text-muted-foreground mt-2">
-                Min: ${loan.minInvestment.toLocaleString()} | Max: ${loan.maxInvestment.toLocaleString()}
+                Min: ${Number(loan.min_investment).toLocaleString()} | Max: ${Number(loan.max_investment).toLocaleString()}
               </p>
             </div>
             
@@ -363,7 +332,7 @@ export default function LoanDetail() {
                 <span className="font-semibold text-foreground">${monthlyPayment.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Total Interest ({loan.termMonths}mo):</span>
+                <span className="text-muted-foreground">Total Interest ({loan.term_months}mo):</span>
                 <span className="font-semibold text-foreground">${totalInterest.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-sm">
@@ -379,21 +348,29 @@ export default function LoanDetail() {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-3">
-          <Button 
-            onClick={() => setIsInvestModalOpen(true)}
-            className="flex-1 py-6 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-display font-bold text-lg"
-          >
-            Invest in This Loan
-          </Button>
-          <Button 
-            variant="outline"
-            className="py-6 rounded-xl font-display font-bold"
-          >
-            <Download className="w-5 h-5 mr-2" />
-            Documents
-          </Button>
-        </div>
+        {!isFullyFunded && loan.status === "funding" && (
+          <div className="flex gap-3">
+            <Button 
+              onClick={() => setIsInvestModalOpen(true)}
+              className="flex-1 py-6 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-display font-bold text-lg"
+            >
+              Invest in This Loan
+            </Button>
+            <Button 
+              variant="outline"
+              className="py-6 rounded-xl font-display font-bold"
+            >
+              <Download className="w-5 h-5 mr-2" />
+              Documents
+            </Button>
+          </div>
+        )}
+
+        {isFullyFunded && (
+          <div className="glass-card rounded-2xl p-5 text-center border-2 border-amber-500/30">
+            <p className="text-amber-400 font-semibold">This loan is fully funded and no longer accepting investments.</p>
+          </div>
+        )}
 
         {/* Tabs */}
         <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-hide">
@@ -417,11 +394,9 @@ export default function LoanDetail() {
           {activeTab === "overview" && (
             <div className="space-y-4">
               <h3 className="font-display font-semibold text-foreground">About this Loan</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">{loan.description}</p>
-              <div className="pt-4 border-t border-border">
-                <h4 className="font-semibold text-foreground mb-3">Use of Funds</h4>
-                <p className="text-muted-foreground text-sm">{loan.useOfFunds}</p>
-              </div>
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                {loan.description || `This ${loanTypeLabels[loan.loan_type] || loan.loan_type} is secured by property in ${loan.city}, ${loan.state}. The loan offers a fixed ${loan.apy}% APY with ${loan.payment_frequency || "monthly"} interest payments over a ${loan.term_months}-month term.`}
+              </p>
             </div>
           )}
 
@@ -430,28 +405,22 @@ export default function LoanDetail() {
               <h3 className="font-display font-semibold text-foreground">Collateral Details</h3>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <p className="text-muted-foreground">Property Type</p>
-                  <p className="font-semibold text-foreground">{loan.propertyType}</p>
+                  <p className="text-muted-foreground">Loan Type</p>
+                  <p className="font-semibold text-foreground">{loanTypeLabels[loan.loan_type] || loan.loan_type}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground">Units</p>
-                  <p className="font-semibold text-foreground">{loan.propertyUnits}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Current Occupancy</p>
-                  <p className="font-semibold text-foreground">{loan.propertyOccupancy}%</p>
+                  <p className="text-muted-foreground">LTV Ratio</p>
+                  <p className="font-semibold text-foreground">{loan.ltv_ratio}%</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground">Appraised Value</p>
-                  <p className="font-semibold text-foreground">${(loan.propertyValue / 1000000).toFixed(2)}M</p>
+                  <p className="font-semibold text-foreground">
+                    {loan.property_value ? `$${(Number(loan.property_value) / 1000000).toFixed(2)}M` : "N/A"}
+                  </p>
                 </div>
                 <div>
                   <p className="text-muted-foreground">Location</p>
                   <p className="font-semibold text-foreground">{loan.city}, {loan.state}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Insurance</p>
-                  <p className="font-semibold text-foreground">${(loan.insuranceCoverage / 1000000).toFixed(1)}M coverage</p>
                 </div>
               </div>
             </div>
@@ -463,15 +432,15 @@ export default function LoanDetail() {
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <p className="text-muted-foreground">Entity Type</p>
-                  <p className="font-semibold text-foreground">{loan.borrowerType}</p>
+                  <p className="font-semibold text-foreground">{loan.borrower_type || "N/A"}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground">Personal Guarantee</p>
-                  <p className="font-semibold text-foreground">{loan.hasPersonalGuarantee ? "Yes" : "No"}</p>
+                  <p className="font-semibold text-foreground">{loan.personal_guarantee ? "Yes" : "No"}</p>
                 </div>
                 <div className="col-span-2">
-                  <p className="text-muted-foreground">Track Record</p>
-                  <p className="font-semibold text-foreground">5+ successful projects, no defaults</p>
+                  <p className="text-muted-foreground">DSCR (Debt Service Coverage Ratio)</p>
+                  <p className="font-semibold text-foreground">{loan.dscr ? `${loan.dscr}x` : "N/A"}</p>
                 </div>
               </div>
             </div>
@@ -498,22 +467,22 @@ export default function LoanDetail() {
             <div className="space-y-4">
               <h3 className="font-display font-semibold text-foreground">Funding Activity</h3>
               <div className="space-y-3">
-                {[
-                  { action: "Investment received", amount: "$25,000", time: "2 hours ago" },
-                  { action: "Investment received", amount: "$10,000", time: "5 hours ago" },
-                  { action: "Investment received", amount: "$50,000", time: "1 day ago" },
-                  { action: "Loan listed", amount: "", time: "5 days ago" },
-                ].map((activity, i) => (
-                  <div key={i} className="flex items-center justify-between p-3 bg-secondary/50 rounded-xl">
-                    <div>
-                      <p className="text-foreground text-sm">{activity.action}</p>
-                      <p className="text-muted-foreground text-xs">{activity.time}</p>
-                    </div>
-                    {activity.amount && (
-                      <span className="font-semibold text-blue-400">{activity.amount}</span>
-                    )}
+                <div className="flex items-center justify-between p-3 bg-secondary/50 rounded-xl">
+                  <div>
+                    <p className="text-foreground text-sm">Current investors</p>
+                    <p className="text-muted-foreground text-xs">{loan.investor_count} total</p>
                   </div>
-                ))}
+                  <span className="font-semibold text-blue-400">{fundedPercent}% funded</span>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-secondary/50 rounded-xl">
+                  <div>
+                    <p className="text-foreground text-sm">Amount funded</p>
+                    <p className="text-muted-foreground text-xs">of ${(Number(loan.loan_amount) / 1000000).toFixed(1)}M target</p>
+                  </div>
+                  <span className="font-semibold text-blue-400">
+                    ${(Number(loan.amount_funded) / 1000000).toFixed(2)}M
+                  </span>
+                </div>
               </div>
             </div>
           )}
@@ -524,7 +493,29 @@ export default function LoanDetail() {
       <LoanInvestModal
         isOpen={isInvestModalOpen}
         onClose={() => setIsInvestModalOpen(false)}
-        loan={loan}
+        loan={{
+          id: loan.id,
+          name: loan.name,
+          propertyName: loan.name.split(" - ")[0],
+          loanType: loanTypeLabels[loan.loan_type] || loan.loan_type,
+          city: loan.city,
+          state: loan.state,
+          loanAmount: Number(loan.loan_amount),
+          apy: Number(loan.apy),
+          termMonths: loan.term_months,
+          ltv: Number(loan.ltv_ratio),
+          fundedAmount: Number(loan.amount_funded),
+          minInvestment: Number(loan.min_investment),
+          maxInvestment: Number(loan.max_investment),
+          isSecured: loan.loan_position !== "mezzanine",
+          lienPosition: loan.loan_position === "1st_lien" ? "1st" : 
+                        loan.loan_position === "2nd_lien" ? "2nd" : "mezzanine",
+          paymentFrequency: loan.payment_frequency || "Monthly",
+        }}
+        onSuccess={() => {
+          refetch();
+          setIsInvestModalOpen(false);
+        }}
       />
     </div>
   );

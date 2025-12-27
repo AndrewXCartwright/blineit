@@ -86,6 +86,155 @@ export type Database = {
         }
         Relationships: []
       }
+      loan_payments: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          loan_id: string
+          payment_date: string
+          payment_type: string
+          status: string
+          user_id: string
+          user_investment_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          loan_id: string
+          payment_date?: string
+          payment_type: string
+          status?: string
+          user_id: string
+          user_investment_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          loan_id?: string
+          payment_date?: string
+          payment_type?: string
+          status?: string
+          user_id?: string
+          user_investment_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "loan_payments_loan_id_fkey"
+            columns: ["loan_id"]
+            isOneToOne: false
+            referencedRelation: "loans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "loan_payments_user_investment_id_fkey"
+            columns: ["user_investment_id"]
+            isOneToOne: false
+            referencedRelation: "user_loan_investments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      loans: {
+        Row: {
+          amount_funded: number
+          apy: number
+          borrower_type: string | null
+          city: string
+          created_at: string
+          description: string | null
+          dscr: number | null
+          id: string
+          image_url: string | null
+          investor_count: number
+          loan_amount: number
+          loan_position: string
+          loan_type: string
+          ltv_ratio: number
+          maturity_date: string | null
+          max_investment: number | null
+          min_investment: number
+          name: string
+          payment_frequency: string | null
+          personal_guarantee: boolean | null
+          property_id: string | null
+          property_value: number | null
+          start_date: string | null
+          state: string
+          status: string
+          term_months: number
+          updated_at: string
+        }
+        Insert: {
+          amount_funded?: number
+          apy: number
+          borrower_type?: string | null
+          city: string
+          created_at?: string
+          description?: string | null
+          dscr?: number | null
+          id?: string
+          image_url?: string | null
+          investor_count?: number
+          loan_amount: number
+          loan_position: string
+          loan_type: string
+          ltv_ratio: number
+          maturity_date?: string | null
+          max_investment?: number | null
+          min_investment?: number
+          name: string
+          payment_frequency?: string | null
+          personal_guarantee?: boolean | null
+          property_id?: string | null
+          property_value?: number | null
+          start_date?: string | null
+          state: string
+          status?: string
+          term_months: number
+          updated_at?: string
+        }
+        Update: {
+          amount_funded?: number
+          apy?: number
+          borrower_type?: string | null
+          city?: string
+          created_at?: string
+          description?: string | null
+          dscr?: number | null
+          id?: string
+          image_url?: string | null
+          investor_count?: number
+          loan_amount?: number
+          loan_position?: string
+          loan_type?: string
+          ltv_ratio?: number
+          maturity_date?: string | null
+          max_investment?: number | null
+          min_investment?: number
+          name?: string
+          payment_frequency?: string | null
+          personal_guarantee?: boolean | null
+          property_id?: string | null
+          property_value?: number | null
+          start_date?: string | null
+          state?: string
+          status?: string
+          term_months?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "loans_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       market_price_history: {
         Row: {
           id: string
@@ -496,6 +645,59 @@ export type Database = {
           },
         ]
       }
+      user_loan_investments: {
+        Row: {
+          created_at: string
+          expected_monthly_payment: number
+          id: string
+          investment_date: string
+          loan_id: string
+          next_payment_date: string | null
+          principal_invested: number
+          status: string
+          total_interest_earned: number
+          total_principal_returned: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expected_monthly_payment: number
+          id?: string
+          investment_date?: string
+          loan_id: string
+          next_payment_date?: string | null
+          principal_invested: number
+          status?: string
+          total_interest_earned?: number
+          total_principal_returned?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expected_monthly_payment?: number
+          id?: string
+          investment_date?: string
+          loan_id?: string
+          next_payment_date?: string | null
+          principal_invested?: number
+          status?: string
+          total_interest_earned?: number
+          total_principal_returned?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_loan_investments_loan_id_fkey"
+            columns: ["loan_id"]
+            isOneToOne: false
+            referencedRelation: "loans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_rate_limits: {
         Row: {
           last_trade_at: string | null
@@ -539,6 +741,10 @@ export type Database = {
           p_user_id: string
         }
         Returns: string
+      }
+      invest_in_loan: {
+        Args: { p_amount: number; p_loan_id: string }
+        Returns: Json
       }
       notify_bet_result: {
         Args: {
