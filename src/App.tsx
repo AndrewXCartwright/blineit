@@ -18,6 +18,14 @@ import LoanDetail from "./pages/LoanDetail";
 import KYCVerification from "./pages/KYCVerification";
 import ComingSoon from "./pages/ComingSoon";
 import NotFound from "./pages/NotFound";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminProperties from "./pages/admin/AdminProperties";
+import AdminLoans from "./pages/admin/AdminLoans";
+import AdminPredictions from "./pages/admin/AdminPredictions";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminWaitlists from "./pages/admin/AdminWaitlists";
+import AdminTransactions from "./pages/admin/AdminTransactions";
+import AdminSettings from "./pages/admin/AdminSettings";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +49,15 @@ const App = () => (
               <Route path="/loan/:id" element={<ProtectedRoute><LoanDetail /></ProtectedRoute>} />
               <Route path="/kyc" element={<ProtectedRoute><KYCVerification /></ProtectedRoute>} />
               <Route path="/coming-soon/:assetClass" element={<ComingSoon />} />
+              {/* Admin Routes */}
+              <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+              <Route path="/admin/properties" element={<ProtectedRoute><AdminProperties /></ProtectedRoute>} />
+              <Route path="/admin/loans" element={<ProtectedRoute><AdminLoans /></ProtectedRoute>} />
+              <Route path="/admin/predictions" element={<ProtectedRoute><AdminPredictions /></ProtectedRoute>} />
+              <Route path="/admin/users" element={<ProtectedRoute><AdminUsers /></ProtectedRoute>} />
+              <Route path="/admin/waitlists" element={<ProtectedRoute><AdminWaitlists /></ProtectedRoute>} />
+              <Route path="/admin/transactions" element={<ProtectedRoute><AdminTransactions /></ProtectedRoute>} />
+              <Route path="/admin/settings" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />

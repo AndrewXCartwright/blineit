@@ -363,6 +363,7 @@ export type Database = {
           display_name: string | null
           email: string | null
           id: string
+          is_admin: boolean
           kyc_status: string | null
           kyc_submitted_at: string | null
           kyc_verified_at: string | null
@@ -378,6 +379,7 @@ export type Database = {
           display_name?: string | null
           email?: string | null
           id?: string
+          is_admin?: boolean
           kyc_status?: string | null
           kyc_submitted_at?: string | null
           kyc_verified_at?: string | null
@@ -393,6 +395,7 @@ export type Database = {
           display_name?: string | null
           email?: string | null
           id?: string
+          is_admin?: boolean
           kyc_status?: string | null
           kyc_submitted_at?: string | null
           kyc_verified_at?: string | null
@@ -779,6 +782,7 @@ export type Database = {
         Args: { p_amount: number; p_loan_id: string }
         Returns: Json
       }
+      is_admin: { Args: never; Returns: boolean }
       notify_bet_result: {
         Args: {
           p_amount: number
