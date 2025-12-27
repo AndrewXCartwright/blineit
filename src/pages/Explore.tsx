@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { Search, Filter, MapPin, TrendingUp, Flame } from "lucide-react";
-import { useState, useEffect } from "react";
+import { Search, Filter, MapPin, TrendingUp, Flame, Building2 } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/Skeleton";
+import { PullToRefresh } from "@/components/PullToRefresh";
+import { EmptyState } from "@/components/EmptyState";
 
 interface Property {
   id: string;
@@ -25,14 +27,19 @@ export default function Explore() {
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchProperties = async () => {
-      const { data, error } = await supabase.from("properties").select("*");
-      if (!error && data) setProperties(data);
-      setLoading(false);
-    };
-    fetchProperties();
+  const fetchProperties = useCallback(async () => {
+    const { data, error } = await supabase.from("properties").select("*");
+    if (!error && data) setProperties(data);
+    setLoading(false);
   }, []);
+
+  useEffect(() => {
+    fetchProperties();
+  }, [fetchProperties]);
+
+  const handleRefresh = async () => {
+    await fetchProperties();
+  };
 
   const filteredProperties = properties.filter((property) => {
     const matchesFilter = activeFilter === "All" || property.category === activeFilter;
@@ -53,9 +60,9 @@ export default function Explore() {
             placeholder="Search properties..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-secondary border border-border rounded-xl pl-12 pr-12 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full bg-secondary border border-border rounded-xl pl-12 pr-12 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
           />
-          <button className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-primary/20 text-primary">
+          <button className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-primary/20 text-primary btn-interactive">
             <Filter className="w-4 h-4" />
           </button>
         </div>
@@ -65,7 +72,7 @@ export default function Explore() {
             <button
               key={filter}
               onClick={() => setActiveFilter(filter)}
-              className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+              className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all btn-interactive ${
                 activeFilter === filter
                   ? "gradient-primary text-primary-foreground glow-primary"
                   : "bg-secondary text-muted-foreground hover:text-foreground"
@@ -77,57 +84,76 @@ export default function Explore() {
         </div>
       </header>
 
-      <main className="px-4 py-6">
-        <div className="grid grid-cols-2 gap-4">
+      <PullToRefresh onRefresh={handleRefresh} className="h-[calc(100vh-200px)]">
+        <main className="px-4 py-6">
           {loading ? (
-            Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="glass-card rounded-2xl overflow-hidden">
-                <Skeleton className="h-28" />
-                <div className="p-3 space-y-2">
-                  <Skeleton className="h-4 w-3/4" />
-                  <Skeleton className="h-3 w-1/2" />
+            <div className="grid grid-cols-2 gap-4">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="glass-card rounded-2xl overflow-hidden">
+                  <Skeleton className="h-28" />
+                  <div className="p-3 space-y-2">
+                    <Skeleton className="h-4 w-3/4" />
+                    <Skeleton className="h-3 w-1/2" />
+                  </div>
                 </div>
-              </div>
-            ))
+              ))}
+            </div>
+          ) : filteredProperties.length === 0 ? (
+            <EmptyState
+              icon={<Building2 className="w-12 h-12" />}
+              title="No properties found"
+              description="Try adjusting your search or filters to find what you're looking for."
+              actionLabel="Clear Filters"
+              onAction={() => {
+                setActiveFilter("All");
+                setSearchQuery("");
+              }}
+            />
           ) : (
-            filteredProperties.map((property) => (
-              <div
-                key={property.id}
-                onClick={() => navigate(`/property/${property.id}`)}
-                className="glass-card rounded-2xl overflow-hidden animate-fade-in hover:border-primary/30 transition-all cursor-pointer"
-              >
-                <div className="h-28 gradient-primary relative">
-                  <div className="absolute inset-0 bg-gradient-to-t from-card/90 to-transparent" />
-                  {property.is_hot && (
-                    <span className="absolute top-2 right-2 flex items-center gap-1 bg-accent/90 text-accent-foreground px-2 py-1 rounded-full text-xs font-medium">
-                      <Flame className="w-3 h-3" />Hot
-                    </span>
-                  )}
-                </div>
-                <div className="p-3 space-y-2">
-                  <h3 className="font-display font-semibold text-sm text-foreground truncate">{property.name}</h3>
-                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                    <MapPin className="w-3 h-3" />
-                    <span className="truncate">{property.city}, {property.state}</span>
-                  </div>
-                  <div className="space-y-1 pt-2 border-t border-border/50">
-                    <div className="flex justify-between text-xs">
-                      <span className="text-muted-foreground">Value</span>
-                      <span className="font-semibold text-foreground">${(property.value / 1000000).toFixed(1)}M</span>
+            <div className="grid grid-cols-2 gap-4">
+              {filteredProperties.map((property, index) => (
+                <div
+                  key={property.id}
+                  onClick={() => navigate(`/property/${property.id}`)}
+                  className="glass-card rounded-2xl overflow-hidden animate-fade-in interactive-card"
+                  style={{ animationDelay: `${index * 0.05}s` }}
+                >
+                  <div className="h-28 gradient-primary relative">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Building2 className="w-10 h-10 text-primary-foreground/20" />
                     </div>
-                    <div className="flex justify-between text-xs">
-                      <span className="text-muted-foreground">APY</span>
-                      <span className="font-semibold text-success flex items-center gap-1">
-                        <TrendingUp className="w-3 h-3" />{property.apy}%
+                    <div className="absolute inset-0 bg-gradient-to-t from-card/90 to-transparent" />
+                    {property.is_hot && (
+                      <span className="absolute top-2 right-2 flex items-center gap-1 bg-accent/90 text-accent-foreground px-2 py-1 rounded-full text-xs font-medium animate-pulse-glow-gold">
+                        <Flame className="w-3 h-3" />Hot
                       </span>
+                    )}
+                  </div>
+                  <div className="p-3 space-y-2">
+                    <h3 className="font-display font-semibold text-sm text-foreground truncate">{property.name}</h3>
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                      <MapPin className="w-3 h-3" />
+                      <span className="truncate">{property.city}, {property.state}</span>
+                    </div>
+                    <div className="space-y-1 pt-2 border-t border-border/50">
+                      <div className="flex justify-between text-xs">
+                        <span className="text-muted-foreground">Value</span>
+                        <span className="font-semibold text-foreground">${(property.value / 1000000).toFixed(1)}M</span>
+                      </div>
+                      <div className="flex justify-between text-xs">
+                        <span className="text-muted-foreground">APY</span>
+                        <span className="font-semibold text-success flex items-center gap-1">
+                          <TrendingUp className="w-3 h-3" />{property.apy}%
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))
+              ))}
+            </div>
           )}
-        </div>
-      </main>
+        </main>
+      </PullToRefresh>
     </div>
   );
 }
