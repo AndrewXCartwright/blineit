@@ -802,6 +802,10 @@ export type Database = {
           location: string | null
           name: string | null
           prediction_win_rate: number | null
+          preferred_currency: string | null
+          preferred_date_format: string | null
+          preferred_language: string | null
+          preferred_number_format: string | null
           profile_visibility: string | null
           referral_code: string | null
           referral_earnings: number | null
@@ -842,6 +846,10 @@ export type Database = {
           location?: string | null
           name?: string | null
           prediction_win_rate?: number | null
+          preferred_currency?: string | null
+          preferred_date_format?: string | null
+          preferred_language?: string | null
+          preferred_number_format?: string | null
           profile_visibility?: string | null
           referral_code?: string | null
           referral_earnings?: number | null
@@ -882,6 +890,10 @@ export type Database = {
           location?: string | null
           name?: string | null
           prediction_win_rate?: number | null
+          preferred_currency?: string | null
+          preferred_date_format?: string | null
+          preferred_language?: string | null
+          preferred_number_format?: string | null
           profile_visibility?: string | null
           referral_code?: string | null
           referral_earnings?: number | null
@@ -1097,6 +1109,39 @@ export type Database = {
         }
         Relationships: []
       }
+      supported_languages: {
+        Row: {
+          code: string
+          completion_percentage: number | null
+          created_at: string
+          direction: string
+          flag_emoji: string
+          is_active: boolean | null
+          name: string
+          native_name: string
+        }
+        Insert: {
+          code: string
+          completion_percentage?: number | null
+          created_at?: string
+          direction?: string
+          flag_emoji: string
+          is_active?: boolean | null
+          name: string
+          native_name: string
+        }
+        Update: {
+          code?: string
+          completion_percentage?: number | null
+          created_at?: string
+          direction?: string
+          flag_emoji?: string
+          is_active?: boolean | null
+          name?: string
+          native_name?: string
+        }
+        Relationships: []
+      }
       transactions: {
         Row: {
           amount: number
@@ -1198,6 +1243,44 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "linked_accounts"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      translations: {
+        Row: {
+          context: string | null
+          created_at: string
+          id: string
+          key: string
+          language: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          context?: string | null
+          created_at?: string
+          id?: string
+          key: string
+          language: string
+          updated_at?: string
+          value: string
+        }
+        Update: {
+          context?: string | null
+          created_at?: string
+          id?: string
+          key?: string
+          language?: string
+          updated_at?: string
+          value?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "translations_language_fkey"
+            columns: ["language"]
+            isOneToOne: false
+            referencedRelation: "supported_languages"
+            referencedColumns: ["code"]
           },
         ]
       }
