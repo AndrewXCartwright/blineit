@@ -91,6 +91,180 @@ export type Database = {
           },
         ]
       }
+      document_envelopes: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          decline_reason: string | null
+          declined_at: string | null
+          expires_at: string | null
+          id: string
+          investment_amount: number | null
+          loan_id: string | null
+          property_id: string | null
+          provider: string | null
+          provider_envelope_id: string | null
+          sent_at: string | null
+          signed_at: string | null
+          signed_document_url: string | null
+          status: string
+          template_id: string | null
+          user_id: string
+          viewed_at: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          decline_reason?: string | null
+          declined_at?: string | null
+          expires_at?: string | null
+          id?: string
+          investment_amount?: number | null
+          loan_id?: string | null
+          property_id?: string | null
+          provider?: string | null
+          provider_envelope_id?: string | null
+          sent_at?: string | null
+          signed_at?: string | null
+          signed_document_url?: string | null
+          status?: string
+          template_id?: string | null
+          user_id: string
+          viewed_at?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          decline_reason?: string | null
+          declined_at?: string | null
+          expires_at?: string | null
+          id?: string
+          investment_amount?: number | null
+          loan_id?: string | null
+          property_id?: string | null
+          provider?: string | null
+          provider_envelope_id?: string | null
+          sent_at?: string | null
+          signed_at?: string | null
+          signed_document_url?: string | null
+          status?: string
+          template_id?: string | null
+          user_id?: string
+          viewed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_envelopes_loan_id_fkey"
+            columns: ["loan_id"]
+            isOneToOne: false
+            referencedRelation: "loans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "document_envelopes_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "document_envelopes_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "document_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_fields: {
+        Row: {
+          created_at: string
+          envelope_id: string
+          field_name: string
+          field_type: string
+          field_value: string | null
+          id: string
+          is_required: boolean | null
+          signed_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          envelope_id: string
+          field_name: string
+          field_type?: string
+          field_value?: string | null
+          id?: string
+          is_required?: boolean | null
+          signed_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          envelope_id?: string
+          field_name?: string
+          field_type?: string
+          field_value?: string | null
+          id?: string
+          is_required?: boolean | null
+          signed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_fields_envelope_id_fkey"
+            columns: ["envelope_id"]
+            isOneToOne: false
+            referencedRelation: "document_envelopes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_templates: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          document_type: string
+          id: string
+          is_active: boolean | null
+          name: string
+          provider_template_id: string | null
+          required_for: string[] | null
+          signing_order: number | null
+          template_url: string | null
+          updated_at: string
+          version: string | null
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          document_type: string
+          id?: string
+          is_active?: boolean | null
+          name: string
+          provider_template_id?: string | null
+          required_for?: string[] | null
+          signing_order?: number | null
+          template_url?: string | null
+          updated_at?: string
+          version?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          document_type?: string
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          provider_template_id?: string | null
+          required_for?: string[] | null
+          signing_order?: number | null
+          template_url?: string | null
+          updated_at?: string
+          version?: string | null
+        }
+        Relationships: []
+      }
       follows: {
         Row: {
           created_at: string
@@ -614,6 +788,7 @@ export type Database = {
           bio: string | null
           created_at: string
           display_name: string | null
+          documents_signed: number | null
           email: string | null
           followers_count: number | null
           following_count: number | null
@@ -623,6 +798,7 @@ export type Database = {
           kyc_status: string | null
           kyc_submitted_at: string | null
           kyc_verified_at: string | null
+          last_document_signed_at: string | null
           location: string | null
           name: string | null
           prediction_win_rate: number | null
@@ -652,6 +828,7 @@ export type Database = {
           bio?: string | null
           created_at?: string
           display_name?: string | null
+          documents_signed?: number | null
           email?: string | null
           followers_count?: number | null
           following_count?: number | null
@@ -661,6 +838,7 @@ export type Database = {
           kyc_status?: string | null
           kyc_submitted_at?: string | null
           kyc_verified_at?: string | null
+          last_document_signed_at?: string | null
           location?: string | null
           name?: string | null
           prediction_win_rate?: number | null
@@ -690,6 +868,7 @@ export type Database = {
           bio?: string | null
           created_at?: string
           display_name?: string | null
+          documents_signed?: number | null
           email?: string | null
           followers_count?: number | null
           following_count?: number | null
@@ -699,6 +878,7 @@ export type Database = {
           kyc_status?: string | null
           kyc_submitted_at?: string | null
           kyc_verified_at?: string | null
+          last_document_signed_at?: string | null
           location?: string | null
           name?: string | null
           prediction_win_rate?: number | null
@@ -1357,6 +1537,36 @@ export type Database = {
         }
         Relationships: []
       }
+      user_signatures: {
+        Row: {
+          created_at: string
+          font_style: string | null
+          id: string
+          is_default: boolean | null
+          signature_data: string
+          signature_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          font_style?: string | null
+          id?: string
+          is_default?: boolean | null
+          signature_data: string
+          signature_type?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          font_style?: string | null
+          id?: string
+          is_default?: boolean | null
+          signature_data?: string
+          signature_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       waitlist: {
         Row: {
           asset_class: string
@@ -1414,6 +1624,15 @@ export type Database = {
         Returns: Json
       }
       complete_transfer: { Args: { p_transfer_id: string }; Returns: Json }
+      create_document_envelope: {
+        Args: {
+          p_investment_amount?: number
+          p_loan_id?: string
+          p_property_id?: string
+          p_template_id: string
+        }
+        Returns: Json
+      }
       create_system_notification: {
         Args: {
           p_data?: Json
@@ -1495,6 +1714,14 @@ export type Database = {
       }
       sell_tokens: {
         Args: { p_property_id: string; p_token_price: number; p_tokens: number }
+        Returns: Json
+      }
+      sign_document: {
+        Args: {
+          p_envelope_id: string
+          p_fields?: Json
+          p_signature_data: string
+        }
         Returns: Json
       }
       toggle_follow: { Args: { p_following_id: string }; Returns: Json }
