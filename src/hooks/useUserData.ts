@@ -190,42 +190,44 @@ export function usePlaceBet() {
       return { success: false };
     }
 
-    const shares = amount / (entryPrice / 100);
-
     try {
-      // Insert bet
-      const { error: betError } = await supabase.from("user_bets").insert({
-        user_id: user.id,
-        market_id: marketId,
-        position: position === "bull" ? "YES" : "NO",
-        shares,
-        entry_price: entryPrice,
-        amount,
-        status: "active",
+      // Use secure RPC function for atomic transaction with balance validation
+      const { data, error } = await supabase.rpc("place_bet", {
+        p_market_id: marketId,
+        p_position: position === "bull" ? "YES" : "NO",
+        p_amount: amount,
+        p_entry_price: entryPrice,
       });
 
-      if (betError) throw betError;
+      if (error) throw error;
 
-      // Insert transaction
-      const { error: txError } = await supabase.from("transactions").insert({
-        user_id: user.id,
-        type: "bet_placed",
-        amount: -amount,
-        description: `Placed ${position.toUpperCase()} bet`,
-        market_id: marketId,
-      });
+      const result = data as { success: boolean; error?: string; shares?: number };
 
-      if (txError) throw txError;
+      if (!result.success) {
+        const errorMessages: Record<string, string> = {
+          not_authenticated: "Please log in to place a bet",
+          invalid_amount: "Invalid bet amount or price",
+          invalid_position: "Invalid bet position",
+          market_not_found: "Market not found",
+          market_closed: "This market is no longer accepting bets",
+          profile_not_found: "Profile not found",
+          insufficient_balance: "You don't have enough funds for this bet",
+        };
 
-      // Update wallet balance - would need RPC function for atomic update
-      // For now, we'll handle this on the backend
+        toast({
+          title: "Error",
+          description: errorMessages[result.error || ""] || "Failed to place bet",
+          variant: "destructive",
+        });
+        return { success: false };
+      }
 
       toast({
         title: "Bet placed!",
         description: `Your ${position.toUpperCase()} bet of $${amount} has been placed`,
       });
 
-      return { success: true };
+      return { success: true, shares: result.shares };
     } catch (error) {
       console.error("Error placing bet:", error);
       toast({
