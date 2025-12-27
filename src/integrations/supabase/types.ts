@@ -91,6 +91,60 @@ export type Database = {
           },
         ]
       }
+      comparison_history: {
+        Row: {
+          comparison_type: string
+          created_at: string
+          id: string
+          item_ids: string[]
+          user_id: string
+        }
+        Insert: {
+          comparison_type: string
+          created_at?: string
+          id?: string
+          item_ids: string[]
+          user_id: string
+        }
+        Update: {
+          comparison_type?: string
+          created_at?: string
+          id?: string
+          item_ids?: string[]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      comparisons: {
+        Row: {
+          comparison_type: string
+          created_at: string
+          id: string
+          item_ids: string[]
+          name: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          comparison_type: string
+          created_at?: string
+          id?: string
+          item_ids?: string[]
+          name?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          comparison_type?: string
+          created_at?: string
+          id?: string
+          item_ids?: string[]
+          name?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       document_envelopes: {
         Row: {
           completed_at: string | null
