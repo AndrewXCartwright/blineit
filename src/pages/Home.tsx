@@ -5,13 +5,16 @@ import { PropertyCard } from "@/components/PropertyCard";
 import { CountUp } from "@/components/CountUp";
 import { useUserData } from "@/hooks/useUserData";
 import { useAuth } from "@/hooks/useAuth";
+import { useKYC } from "@/hooks/useKYC";
 import { useRealtimeTransactions, useRealtimeWalletBalance, useRealtimePortfolio } from "@/hooks/useRealtimeSubscriptions";
 import { FlashBorder } from "@/components/LiveIndicator";
-import { DollarSign, Building2, Target, TrendingUp, ArrowUpRight, ArrowDownRight, Wallet } from "lucide-react";
+import { DollarSign, Building2, Target, TrendingUp, ArrowUpRight, ArrowDownRight, Wallet, ShieldAlert, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const { user } = useAuth();
+  const { kycStatus, isVerified, isPending } = useKYC();
   const { 
     holdings, 
     bets, 
@@ -66,6 +69,29 @@ export default function Home() {
       <Header />
       
       <main className="px-4 py-6 space-y-6">
+        {/* KYC Verification Banner */}
+        {user && !isVerified && !isPending && (
+          <div className="glass-card rounded-2xl p-5 animate-fade-in border border-warning/30 bg-warning/5">
+            <div className="flex items-start gap-4">
+              <div className="p-3 rounded-xl bg-warning/20">
+                <ShieldAlert className="w-6 h-6 text-warning" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-display font-bold text-foreground mb-1">Verification Required</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Complete identity verification to start investing. Takes about 5 minutes.
+                </p>
+                <Link to="/kyc">
+                  <Button size="sm" className="gap-2">
+                    <ShieldCheck className="w-4 h-4" />
+                    Verify Now
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Portfolio Value Card */}
         <FlashBorder flash={portfolioFlash} direction={flashDirection} className="rounded-2xl">
           <div className="gradient-primary rounded-2xl p-6 glow-primary animate-fade-in">
