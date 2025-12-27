@@ -1,8 +1,9 @@
-import { User, Settings, Bell, Shield, HelpCircle, LogOut, ChevronRight, Trophy, Target, Building2, Wallet, ShieldCheck, AlertCircle, Crown } from "lucide-react";
+import { User, Settings, Bell, Shield, HelpCircle, LogOut, ChevronRight, Trophy, Target, Building2, Wallet, ShieldCheck, AlertCircle, Crown, Gift } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserData } from "@/hooks/useUserData";
 import { useKYC } from "@/hooks/useKYC";
 import { useIsAdmin } from "@/hooks/useAdmin";
+import { useReferrals } from "@/hooks/useReferrals";
 import { useNavigate, Link } from "react-router-dom";
 import { CountUp } from "@/components/CountUp";
 import { EmptyState } from "@/components/EmptyState";
@@ -139,7 +140,15 @@ export default function Profile() {
         </div>
 
         {/* Referral Section */}
-        <ReferralCard />
+        <div className="space-y-2">
+          <ReferralCard />
+          <Link
+            to="/referrals"
+            className="block text-center text-sm text-primary hover:underline"
+          >
+            View all referrals & leaderboard →
+          </Link>
+        </div>
 
         {/* Admin Link */}
         {isAdmin && (

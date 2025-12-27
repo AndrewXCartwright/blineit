@@ -18,6 +18,8 @@ import LoanDetail from "./pages/LoanDetail";
 import KYCVerification from "./pages/KYCVerification";
 import ComingSoon from "./pages/ComingSoon";
 import NotFound from "./pages/NotFound";
+import Referrals from "./pages/Referrals";
+import ReferralLanding from "./pages/ReferralLanding";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProperties from "./pages/admin/AdminProperties";
 import AdminLoans from "./pages/admin/AdminLoans";
@@ -27,6 +29,7 @@ import AdminWaitlists from "./pages/admin/AdminWaitlists";
 import AdminTransactions from "./pages/admin/AdminTransactions";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AdminKYC from "./pages/admin/AdminKYC";
+import AdminReferrals from "./pages/admin/AdminReferrals";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +52,8 @@ const App = () => (
               <Route path="/property/:id" element={<ProtectedRoute><PropertyDetail /></ProtectedRoute>} />
               <Route path="/loan/:id" element={<ProtectedRoute><LoanDetail /></ProtectedRoute>} />
               <Route path="/kyc" element={<ProtectedRoute><KYCVerification /></ProtectedRoute>} />
+              <Route path="/referrals" element={<ProtectedRoute><Referrals /></ProtectedRoute>} />
+              <Route path="/r/:code" element={<ReferralLanding />} />
               <Route path="/coming-soon/:assetClass" element={<ComingSoon />} />
               {/* Admin Routes */}
               <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
@@ -57,8 +62,10 @@ const App = () => (
               <Route path="/admin/predictions" element={<ProtectedRoute><AdminPredictions /></ProtectedRoute>} />
               <Route path="/admin/users" element={<ProtectedRoute><AdminUsers /></ProtectedRoute>} />
               <Route path="/admin/kyc" element={<ProtectedRoute><AdminKYC /></ProtectedRoute>} />
+              <Route path="/admin/referrals" element={<ProtectedRoute><AdminReferrals /></ProtectedRoute>} />
               <Route path="/admin/waitlists" element={<ProtectedRoute><AdminWaitlists /></ProtectedRoute>} />
               <Route path="/admin/transactions" element={<ProtectedRoute><AdminTransactions /></ProtectedRoute>} />
+              <Route path="/admin/settings" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
               <Route path="/admin/settings" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>

@@ -369,6 +369,8 @@ export type Database = {
           kyc_verified_at: string | null
           name: string | null
           referral_code: string | null
+          referral_earnings: number | null
+          referred_by: string | null
           updated_at: string
           user_id: string
           wallet_balance: number | null
@@ -385,6 +387,8 @@ export type Database = {
           kyc_verified_at?: string | null
           name?: string | null
           referral_code?: string | null
+          referral_earnings?: number | null
+          referred_by?: string | null
           updated_at?: string
           user_id: string
           wallet_balance?: number | null
@@ -401,11 +405,21 @@ export type Database = {
           kyc_verified_at?: string | null
           name?: string | null
           referral_code?: string | null
+          referral_earnings?: number | null
+          referred_by?: string | null
           updated_at?: string
           user_id?: string
           wallet_balance?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_referred_by_fkey"
+            columns: ["referred_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       properties: {
         Row: {
@@ -472,6 +486,47 @@ export type Database = {
           year_built?: number | null
         }
         Relationships: []
+      }
+      referral_rewards: {
+        Row: {
+          amount: number
+          created_at: string
+          credited_at: string | null
+          id: string
+          referral_id: string
+          reward_type: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          credited_at?: string | null
+          id?: string
+          referral_id: string
+          reward_type: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          credited_at?: string | null
+          id?: string
+          referral_id?: string
+          reward_type?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_rewards_referral_id_fkey"
+            columns: ["referral_id"]
+            isOneToOne: false
+            referencedRelation: "referrals"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       referrals: {
         Row: {
@@ -774,6 +829,15 @@ export type Database = {
           p_message: string
           p_title: string
           p_type: string
+          p_user_id: string
+        }
+        Returns: string
+      }
+      credit_referral_reward: {
+        Args: {
+          p_amount: number
+          p_referral_id: string
+          p_reward_type: string
           p_user_id: string
         }
         Returns: string
