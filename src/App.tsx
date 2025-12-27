@@ -23,6 +23,9 @@ import Referrals from "./pages/Referrals";
 import ReferralLanding from "./pages/ReferralLanding";
 import Notifications from "./pages/Notifications";
 import NotificationSettings from "./pages/NotificationSettings";
+import Community from "./pages/Community";
+import UserProfile from "./pages/UserProfile";
+import Leaderboard from "./pages/Leaderboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProperties from "./pages/admin/AdminProperties";
 import AdminLoans from "./pages/admin/AdminLoans";
@@ -58,6 +61,9 @@ const App = () => (
               <Route path="/referrals" element={<ProtectedRoute><Referrals /></ProtectedRoute>} />
               <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
               <Route path="/settings/notifications" element={<ProtectedRoute><NotificationSettings /></ProtectedRoute>} />
+              <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+              <Route path="/user/:userId" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
+              <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
               <Route path="/r/:code" element={<ReferralLanding />} />
               <Route path="/coming-soon/:assetClass" element={<ComingSoon />} />
               {/* Admin Routes */}

@@ -14,6 +14,80 @@ export type Database = {
   }
   public: {
     Tables: {
+      comments: {
+        Row: {
+          content: string
+          created_at: string
+          entity_id: string
+          entity_type: string
+          id: string
+          is_hidden: boolean | null
+          is_pinned: boolean | null
+          likes_count: number | null
+          parent_id: string | null
+          replies_count: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          entity_id: string
+          entity_type: string
+          id?: string
+          is_hidden?: boolean | null
+          is_pinned?: boolean | null
+          likes_count?: number | null
+          parent_id?: string | null
+          replies_count?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          is_hidden?: boolean | null
+          is_pinned?: boolean | null
+          likes_count?: number | null
+          parent_id?: string | null
+          replies_count?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      follows: {
+        Row: {
+          created_at: string
+          follower_id: string
+          following_id: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          follower_id: string
+          following_id: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          follower_id?: string
+          following_id?: string
+          id?: string
+        }
+        Relationships: []
+      }
       kyc_verifications: {
         Row: {
           address_line1: string | null
@@ -82,6 +156,30 @@ export type Database = {
           state?: string | null
           status?: string
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      likes: {
+        Row: {
+          created_at: string
+          entity_id: string
+          entity_type: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          entity_id: string
+          entity_type: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          entity_id?: string
+          entity_type?: string
+          id?: string
           user_id?: string
         }
         Relationships: []
@@ -358,58 +456,100 @@ export type Database = {
       }
       profiles: {
         Row: {
+          allow_mentions: boolean | null
           avatar_url: string | null
+          bio: string | null
           created_at: string
           display_name: string | null
           email: string | null
+          followers_count: number | null
+          following_count: number | null
           id: string
           is_admin: boolean
+          is_verified_investor: boolean | null
           kyc_status: string | null
           kyc_submitted_at: string | null
           kyc_verified_at: string | null
+          location: string | null
           name: string | null
+          prediction_win_rate: number | null
+          profile_visibility: string | null
           referral_code: string | null
           referral_earnings: number | null
           referred_by: string | null
+          show_investments: boolean | null
+          show_on_leaderboard: boolean | null
+          show_predictions: boolean | null
+          total_invested: number | null
+          twitter_handle: string | null
           updated_at: string
           user_id: string
           wallet_balance: number | null
+          website_url: string | null
         }
         Insert: {
+          allow_mentions?: boolean | null
           avatar_url?: string | null
+          bio?: string | null
           created_at?: string
           display_name?: string | null
           email?: string | null
+          followers_count?: number | null
+          following_count?: number | null
           id?: string
           is_admin?: boolean
+          is_verified_investor?: boolean | null
           kyc_status?: string | null
           kyc_submitted_at?: string | null
           kyc_verified_at?: string | null
+          location?: string | null
           name?: string | null
+          prediction_win_rate?: number | null
+          profile_visibility?: string | null
           referral_code?: string | null
           referral_earnings?: number | null
           referred_by?: string | null
+          show_investments?: boolean | null
+          show_on_leaderboard?: boolean | null
+          show_predictions?: boolean | null
+          total_invested?: number | null
+          twitter_handle?: string | null
           updated_at?: string
           user_id: string
           wallet_balance?: number | null
+          website_url?: string | null
         }
         Update: {
+          allow_mentions?: boolean | null
           avatar_url?: string | null
+          bio?: string | null
           created_at?: string
           display_name?: string | null
           email?: string | null
+          followers_count?: number | null
+          following_count?: number | null
           id?: string
           is_admin?: boolean
+          is_verified_investor?: boolean | null
           kyc_status?: string | null
           kyc_submitted_at?: string | null
           kyc_verified_at?: string | null
+          location?: string | null
           name?: string | null
+          prediction_win_rate?: number | null
+          profile_visibility?: string | null
           referral_code?: string | null
           referral_earnings?: number | null
           referred_by?: string | null
+          show_investments?: boolean | null
+          show_on_leaderboard?: boolean | null
+          show_predictions?: boolean | null
+          total_invested?: number | null
+          twitter_handle?: string | null
           updated_at?: string
           user_id?: string
           wallet_balance?: number | null
+          website_url?: string | null
         }
         Relationships: [
           {
@@ -567,6 +707,45 @@ export type Database = {
         }
         Relationships: []
       }
+      reports: {
+        Row: {
+          created_at: string
+          details: string | null
+          entity_id: string
+          entity_type: string
+          id: string
+          reason: string
+          reporter_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string | null
+        }
+        Insert: {
+          created_at?: string
+          details?: string | null
+          entity_id: string
+          entity_type: string
+          id?: string
+          reason: string
+          reporter_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+        }
+        Update: {
+          created_at?: string
+          details?: string | null
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          reason?: string
+          reporter_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+        }
+        Relationships: []
+      }
       transactions: {
         Row: {
           amount: number
@@ -614,6 +793,27 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_badges: {
+        Row: {
+          awarded_at: string
+          badge_type: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          awarded_at?: string
+          badge_type: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          awarded_at?: string
+          badge_type?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       user_bets: {
         Row: {
@@ -756,6 +956,48 @@ export type Database = {
           },
         ]
       }
+      user_posts: {
+        Row: {
+          comments_count: number | null
+          content: string
+          created_at: string
+          id: string
+          image_url: string | null
+          is_hidden: boolean | null
+          is_pinned: boolean | null
+          likes_count: number | null
+          prediction_id: string | null
+          property_id: string | null
+          user_id: string
+        }
+        Insert: {
+          comments_count?: number | null
+          content: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          is_hidden?: boolean | null
+          is_pinned?: boolean | null
+          likes_count?: number | null
+          prediction_id?: string | null
+          property_id?: string | null
+          user_id: string
+        }
+        Update: {
+          comments_count?: number | null
+          content?: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          is_hidden?: boolean | null
+          is_pinned?: boolean | null
+          likes_count?: number | null
+          prediction_id?: string | null
+          property_id?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_rate_limits: {
         Row: {
           last_trade_at: string | null
@@ -815,6 +1057,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      add_comment: {
+        Args: {
+          p_content: string
+          p_entity_id: string
+          p_entity_type: string
+          p_parent_id?: string
+        }
+        Returns: Json
+      }
       buy_tokens: {
         Args: { p_property_id: string; p_token_price: number; p_tokens: number }
         Returns: Json
@@ -882,6 +1133,11 @@ export type Database = {
       process_loan_payoff: { Args: { p_investment_id: string }; Returns: Json }
       sell_tokens: {
         Args: { p_property_id: string; p_token_price: number; p_tokens: number }
+        Returns: Json
+      }
+      toggle_follow: { Args: { p_following_id: string }; Returns: Json }
+      toggle_like: {
+        Args: { p_entity_id: string; p_entity_type: string }
         Returns: Json
       }
     }
