@@ -206,6 +206,18 @@ export function useUserLoanInvestments() {
         }, 0)
       : 0;
 
+  // Calculate total interest earned
+  const totalInterestEarned = investments.reduce(
+    (sum, inv) => sum + Number(inv.total_interest_earned),
+    0
+  );
+
+  // Find next payment date
+  const nextPaymentDate = investments
+    .filter((inv) => inv.status === "active" && inv.next_payment_date)
+    .map((inv) => new Date(inv.next_payment_date!))
+    .sort((a, b) => a.getTime() - b.getTime())[0] || null;
+
   return {
     investments,
     loading,
@@ -214,6 +226,8 @@ export function useUserLoanInvestments() {
     monthlyIncome,
     activeLoans,
     avgApy,
+    totalInterestEarned,
+    nextPaymentDate,
   };
 }
 
@@ -266,4 +280,197 @@ export function useInvestInLoan() {
   };
 
   return { investInLoan, loading };
+}
+
+export function useSimulateInterestPayment() {
+  const [loading, setLoading] = useState(false);
+
+  const simulateAllPayments = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.rpc("process_all_interest_payments");
+
+      if (error) throw error;
+
+      const result = data as { success: boolean; error?: string; total_amount?: number; payment_count?: number };
+
+      if (!result.success) {
+        throw new Error(result.error || "Payment simulation failed");
+      }
+
+      if (result.payment_count === 0) {
+        toast({
+          title: "No Active Investments",
+          description: "You don't have any active loan investments to receive payments from.",
+        });
+        return { success: false };
+      }
+
+      toast({
+        title: "💰 Interest Payments Received!",
+        description: `+$${result.total_amount?.toFixed(2)} from ${result.payment_count} investment${result.payment_count > 1 ? 's' : ''}`,
+      });
+
+      return { success: true, totalAmount: result.total_amount, paymentCount: result.payment_count };
+    } catch (error: any) {
+      toast({
+        title: "Payment Failed",
+        description: error.message || "Please try again later",
+        variant: "destructive",
+      });
+      return { success: false };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const simulateSinglePayment = async (investmentId: string) => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.rpc("process_interest_payment", {
+        p_investment_id: investmentId,
+      });
+
+      if (error) throw error;
+
+      const result = data as { success: boolean; error?: string; amount?: number; loan_name?: string };
+
+      if (!result.success) {
+        const errorMessages: Record<string, string> = {
+          not_authenticated: "Please log in",
+          investment_not_found: "Investment not found",
+          investment_not_active: "This investment is no longer active",
+          loan_not_found: "Loan not found",
+        };
+        throw new Error(errorMessages[result.error || ""] || "Payment simulation failed");
+      }
+
+      toast({
+        title: "💰 Interest Payment Received!",
+        description: `+$${result.amount?.toFixed(2)} from ${result.loan_name}`,
+      });
+
+      return { success: true, amount: result.amount, loanName: result.loan_name };
+    } catch (error: any) {
+      toast({
+        title: "Payment Failed",
+        description: error.message || "Please try again later",
+        variant: "destructive",
+      });
+      return { success: false };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { simulateAllPayments, simulateSinglePayment, loading };
+}
+
+export function useSimulateLoanPayoff() {
+  const [loading, setLoading] = useState(false);
+
+  const simulatePayoff = async (investmentId: string) => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.rpc("process_loan_payoff", {
+        p_investment_id: investmentId,
+      });
+
+      if (error) throw error;
+
+      const result = data as { 
+        success: boolean; 
+        error?: string; 
+        principal_amount?: number; 
+        loan_name?: string;
+        total_interest_earned?: number;
+      };
+
+      if (!result.success) {
+        const errorMessages: Record<string, string> = {
+          not_authenticated: "Please log in",
+          investment_not_found: "Investment not found",
+          investment_already_paid_off: "This investment has already been paid off",
+        };
+        throw new Error(errorMessages[result.error || ""] || "Payoff simulation failed");
+      }
+
+      toast({
+        title: "🎉 Loan Paid Off!",
+        description: `Principal returned: $${result.principal_amount?.toFixed(2)}. Total interest earned: $${result.total_interest_earned?.toFixed(2)}`,
+      });
+
+      return { 
+        success: true, 
+        principalAmount: result.principal_amount, 
+        loanName: result.loan_name,
+        totalInterestEarned: result.total_interest_earned,
+      };
+    } catch (error: any) {
+      toast({
+        title: "Payoff Failed",
+        description: error.message || "Please try again later",
+        variant: "destructive",
+      });
+      return { success: false };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { simulatePayoff, loading };
+}
+
+export interface LoanPayment {
+  id: string;
+  loan_id: string;
+  user_investment_id: string;
+  payment_type: string;
+  amount: number;
+  payment_date: string;
+  status: string;
+  created_at: string;
+}
+
+export function useLoanPayments(investmentId: string | undefined) {
+  const { user } = useAuth();
+  const [payments, setPayments] = useState<LoanPayment[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchPayments = useCallback(async () => {
+    if (!user || !investmentId) {
+      setPayments([]);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("loan_payments")
+      .select("*")
+      .eq("user_investment_id", investmentId)
+      .eq("user_id", user.id)
+      .order("payment_date", { ascending: false });
+
+    if (error) {
+      console.error("Error fetching loan payments:", error);
+    } else {
+      setPayments(data || []);
+    }
+    setLoading(false);
+  }, [user, investmentId]);
+
+  useEffect(() => {
+    fetchPayments();
+  }, [fetchPayments]);
+
+  const totalInterest = payments
+    .filter(p => p.payment_type === "interest")
+    .reduce((sum, p) => sum + Number(p.amount), 0);
+
+  const totalPrincipal = payments
+    .filter(p => p.payment_type === "principal")
+    .reduce((sum, p) => sum + Number(p.amount), 0);
+
+  return { payments, loading, refetch: fetchPayments, totalInterest, totalPrincipal };
 }

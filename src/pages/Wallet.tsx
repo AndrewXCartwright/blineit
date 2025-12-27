@@ -1,11 +1,12 @@
 import { useState, useCallback } from "react";
-import { ArrowDownLeft, ArrowUpRight, RefreshCw, Building2, Coins, Target, TrendingUp, TrendingDown, Wallet as WalletIcon, Landmark } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, RefreshCw, Building2, Target, TrendingUp, TrendingDown, Wallet as WalletIcon, Landmark, Zap, Calendar, CheckCircle2, Clock } from "lucide-react";
 import { useUserData } from "@/hooks/useUserData";
 import { useRealtimeWalletBalance, useRealtimeTransactions, useRealtimePortfolio } from "@/hooks/useRealtimeSubscriptions";
-import { useUserLoanInvestments } from "@/hooks/useLoanData";
+import { useUserLoanInvestments, useSimulateInterestPayment, useSimulateLoanPayoff } from "@/hooks/useLoanData";
 import { FlashBorder } from "@/components/LiveIndicator";
 import { CountUp } from "@/components/CountUp";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 export default function Wallet() {
   const { 
@@ -19,7 +20,18 @@ export default function Wallet() {
     refetch 
   } = useUserData();
 
-  const { investments: debtInvestments, totalDebtInvested, monthlyIncome, loading: debtLoading } = useUserLoanInvestments();
+  const { 
+    investments: debtInvestments, 
+    totalDebtInvested, 
+    monthlyIncome, 
+    totalInterestEarned,
+    nextPaymentDate,
+    refetch: refetchDebt,
+    loading: debtLoading 
+  } = useUserLoanInvestments();
+
+  const { simulateAllPayments, loading: simulatingPayment } = useSimulateInterestPayment();
+  const { simulatePayoff, loading: simulatingPayoff } = useSimulateLoanPayoff();
 
   const [walletFlash, setWalletFlash] = useState(false);
   const [portfolioFlash, setPortfolioFlash] = useState(false);
@@ -30,8 +42,9 @@ export default function Wallet() {
     setFlashDirection(direction);
     setWalletFlash(true);
     refetch();
+    refetchDebt();
     setTimeout(() => setWalletFlash(false), 1000);
-  }, [refetch]));
+  }, [refetch, refetchDebt]));
 
   useRealtimePortfolio(useCallback((direction: "up" | "down") => {
     setFlashDirection(direction);
@@ -43,13 +56,36 @@ export default function Wallet() {
   useRealtimeTransactions(useCallback((tx: any) => {
     setNewTransactions(prev => [tx.id, ...prev]);
     refetch();
+    refetchDebt();
     setTimeout(() => {
       setNewTransactions(prev => prev.filter(id => id !== tx.id));
     }, 2000);
-  }, [refetch]));
+  }, [refetch, refetchDebt]));
+
+  const handleSimulatePayments = async () => {
+    const result = await simulateAllPayments();
+    if (result.success) {
+      refetch();
+      refetchDebt();
+    }
+  };
+
+  const handleSimulatePayoff = async (investmentId: string) => {
+    const result = await simulatePayoff(investmentId);
+    if (result.success) {
+      refetch();
+      refetchDebt();
+    }
+  };
 
   const totalBalance = walletBalance + portfolioValue + activeBetsValue + totalDebtInvested;
   const activeBets = bets.filter(b => b.status === "active");
+  const activeDebtInvestments = debtInvestments.filter(inv => inv.status === "active");
+
+  // Days until next payment
+  const daysUntilPayment = nextPaymentDate 
+    ? Math.max(0, Math.ceil((nextPaymentDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
+    : null;
 
   // Build holdings display - Equity (Properties)
   const equityHoldings = holdings.map(h => ({
@@ -61,17 +97,6 @@ export default function Wallet() {
       ? ((h.property.token_price - h.average_buy_price) / h.average_buy_price) * 100 
       : 0,
     propertyId: h.property_id,
-  }));
-
-  // Debt investments
-  const debtHoldings = debtInvestments.map(inv => ({
-    type: "debt" as const,
-    name: inv.loan?.name || "Loan Investment",
-    amount: `${inv.loan?.apy || 0}% APY`,
-    value: inv.principal_invested,
-    monthlyPayment: inv.expected_monthly_payment,
-    loanId: inv.loan_id,
-    status: inv.status,
   }));
 
   // Active predictions
@@ -216,44 +241,142 @@ export default function Wallet() {
             <h2 className="font-display text-lg font-bold text-foreground">Debt Investments</h2>
             <span className="ml-auto text-sm text-muted-foreground">${totalDebtInvested.toLocaleString()}</span>
           </div>
-          {monthlyIncome > 0 && (
-            <div className="glass-card rounded-xl p-3 mb-3 bg-amber-500/10 border-amber-500/20">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-amber-600 dark:text-amber-400">Expected Monthly Income</span>
-                <span className="font-semibold text-amber-600 dark:text-amber-400">${monthlyIncome.toFixed(2)}/mo</span>
+
+          {/* Debt Stats Summary */}
+          {activeDebtInvestments.length > 0 && (
+            <div className="glass-card rounded-xl p-4 mb-4 bg-gradient-to-r from-amber-500/10 to-amber-600/5 border-amber-500/20">
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                  <p className="text-xs text-muted-foreground">Monthly Income</p>
+                  <p className="font-bold text-amber-500">${monthlyIncome.toFixed(2)}/mo</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Total Interest Earned</p>
+                  <p className="font-bold text-success">${totalInterestEarned.toFixed(2)}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Active Investments</p>
+                  <p className="font-bold text-foreground">{activeDebtInvestments.length}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Next Payment</p>
+                  <p className="font-bold text-foreground flex items-center gap-1">
+                    <Calendar className="w-3 h-3" />
+                    {daysUntilPayment !== null ? `${daysUntilPayment} days` : "—"}
+                  </p>
+                </div>
               </div>
+              <Button
+                onClick={handleSimulatePayments}
+                disabled={simulatingPayment || activeDebtInvestments.length === 0}
+                className="w-full bg-amber-500 hover:bg-amber-600 text-white"
+                size="sm"
+              >
+                <Zap className="w-4 h-4 mr-2" />
+                {simulatingPayment ? "Processing..." : "⚡ Simulate Monthly Payment"}
+              </Button>
             </div>
           )}
-          <div className="space-y-3">
-            {debtHoldings.length > 0 ? (
-              debtHoldings.map((holding, index) => (
-                <Link
-                  key={index}
-                  to={`/loan/${holding.loanId}`}
-                  className="glass-card rounded-xl p-4 animate-fade-in hover:border-amber-500/30 transition-all block"
-                  style={{ animationDelay: `${index * 0.05}s` }}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-xl bg-amber-500/20">
-                        <Landmark className="w-5 h-5 text-amber-500" />
+
+          <div className="space-y-4">
+            {debtInvestments.length > 0 ? (
+              debtInvestments.map((inv, index) => {
+                const loan = inv.loan;
+                const paymentsReceived = inv.total_interest_earned > 0 
+                  ? Math.round(inv.total_interest_earned / inv.expected_monthly_payment)
+                  : 0;
+
+                return (
+                  <div
+                    key={inv.id}
+                    className="glass-card rounded-xl p-4 animate-fade-in border-amber-500/10"
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-xl bg-amber-500/20">
+                          <Landmark className="w-5 h-5 text-amber-500" />
+                        </div>
+                        <div>
+                          <p className="font-semibold text-foreground">{loan?.name || "Loan Investment"}</p>
+                          <div className="flex items-center gap-2 mt-0.5">
+                            {inv.status === "active" ? (
+                              <span className="flex items-center gap-1 text-xs text-success">
+                                <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+                                Active
+                              </span>
+                            ) : (
+                              <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                                <CheckCircle2 className="w-3 h-3" />
+                                Paid Off
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3 text-sm mb-3">
+                      <div>
+                        <p className="text-muted-foreground text-xs">Principal</p>
+                        <p className="font-semibold">${inv.principal_invested.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
                       </div>
                       <div>
-                        <p className="font-semibold text-foreground">{holding.name}</p>
-                        <p className="text-xs text-muted-foreground">{holding.amount}</p>
+                        <p className="text-muted-foreground text-xs">APY</p>
+                        <p className="font-semibold text-amber-500">{loan?.apy || 0}%</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground text-xs">Monthly Payment</p>
+                        <p className="font-semibold text-success">+${inv.expected_monthly_payment.toFixed(2)}</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground text-xs">Next Payment</p>
+                        <p className="font-semibold flex items-center gap-1">
+                          <Clock className="w-3 h-3 text-muted-foreground" />
+                          {inv.next_payment_date 
+                            ? new Date(inv.next_payment_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+                            : "—"
+                          }
+                        </p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="font-semibold text-foreground">
-                        ${holding.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                      </p>
-                      <p className="text-xs text-success">
-                        +${holding.monthlyPayment.toFixed(2)}/mo
-                      </p>
+
+                    {/* Interest Earned Box */}
+                    <div className="bg-success/10 rounded-lg p-3 mb-3">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-xs text-success/80">Interest Earned</p>
+                          <p className="font-bold text-success">${inv.total_interest_earned.toFixed(2)}</p>
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          ({paymentsReceived} payment{paymentsReceived !== 1 ? 's' : ''} received)
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <Link 
+                        to={`/loan/${inv.loan_id}`}
+                        className="flex-1 text-center py-2 px-3 rounded-lg bg-muted/50 hover:bg-muted text-sm font-medium transition-colors"
+                      >
+                        View Details
+                      </Link>
+                      {inv.status === "active" && (
+                        <Button
+                          onClick={() => handleSimulatePayoff(inv.id)}
+                          disabled={simulatingPayoff}
+                          variant="outline"
+                          size="sm"
+                          className="text-xs border-amber-500/30 text-amber-600 hover:bg-amber-500/10"
+                        >
+                          <Zap className="w-3 h-3 mr-1" />
+                          Simulate Payoff
+                        </Button>
+                      )}
                     </div>
                   </div>
-                </Link>
-              ))
+                );
+              })
             ) : (
               <div className="glass-card rounded-xl p-4 text-center">
                 <p className="text-muted-foreground text-sm mb-2">No debt investments yet</p>
