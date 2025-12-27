@@ -212,6 +212,8 @@ export function usePlaceBet() {
           market_closed: "This market is no longer accepting bets",
           profile_not_found: "Profile not found",
           insufficient_balance: "You don't have enough funds for this bet",
+          rate_limit_exceeded: "Too many trades. Please wait a minute.",
+          too_fast: "Please wait a moment between trades.",
         };
 
         toast({
@@ -281,6 +283,8 @@ export function useBuyTokens() {
           invalid_input: "Invalid token amount or price",
           profile_not_found: "Profile not found",
           insufficient_balance: "You don't have enough funds for this purchase",
+          rate_limit_exceeded: "Too many trades. Please wait a minute.",
+          too_fast: "Please wait a moment between trades.",
         };
 
         toast({
@@ -340,6 +344,8 @@ export function useSellTokens() {
           not_authenticated: "Please log in to sell tokens",
           invalid_input: "Invalid token amount or price",
           insufficient_tokens: "You don't have enough tokens to sell",
+          rate_limit_exceeded: "Too many trades. Please wait a minute.",
+          too_fast: "Please wait a moment between trades.",
         };
 
         toast({

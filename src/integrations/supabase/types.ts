@@ -496,6 +496,27 @@ export type Database = {
           },
         ]
       }
+      user_rate_limits: {
+        Row: {
+          last_trade_at: string | null
+          trades_last_minute: number | null
+          user_id: string
+          window_start: string | null
+        }
+        Insert: {
+          last_trade_at?: string | null
+          trades_last_minute?: number | null
+          user_id: string
+          window_start?: string | null
+        }
+        Update: {
+          last_trade_at?: string | null
+          trades_last_minute?: number | null
+          user_id?: string
+          window_start?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -503,6 +524,10 @@ export type Database = {
     Functions: {
       buy_tokens: {
         Args: { p_property_id: string; p_token_price: number; p_tokens: number }
+        Returns: Json
+      }
+      check_rate_limit: {
+        Args: { p_max_per_minute?: number; p_user_id: string }
         Returns: Json
       }
       place_bet: {
