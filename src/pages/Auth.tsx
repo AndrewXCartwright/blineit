@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Mail, Lock, User, Eye, EyeOff, AlertCircle } from "lucide-react";
 import { z } from "zod";
+import logo from "@/assets/logo.png";
 
 const emailSchema = z.string().email("Please enter a valid email address");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
@@ -96,9 +97,7 @@ export default function Auth() {
       <div className="w-full max-w-md space-y-8 animate-fade-in">
         {/* Logo */}
         <div className="text-center">
-          <div className="w-16 h-16 mx-auto gradient-primary rounded-2xl flex items-center justify-center glow-primary mb-4">
-            <span className="text-3xl">🐝</span>
-          </div>
+          <img src={logo} alt="B-LINE-IT" className="w-20 h-20 mx-auto mb-4 object-contain" />
           <h1 className="font-display text-3xl font-bold text-foreground">B-LINE-IT</h1>
           <p className="text-muted-foreground mt-2">
             {isLogin ? "Welcome back! Sign in to continue." : "Create an account to get started."}
