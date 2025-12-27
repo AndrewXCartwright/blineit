@@ -773,6 +773,12 @@ export type Database = {
         }
         Returns: Json
       }
+      process_all_interest_payments: { Args: never; Returns: Json }
+      process_interest_payment: {
+        Args: { p_investment_id: string }
+        Returns: Json
+      }
+      process_loan_payoff: { Args: { p_investment_id: string }; Returns: Json }
       sell_tokens: {
         Args: { p_property_id: string; p_token_price: number; p_tokens: number }
         Returns: Json

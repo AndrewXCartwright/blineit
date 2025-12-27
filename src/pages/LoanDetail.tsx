@@ -3,26 +3,56 @@ import { useState } from "react";
 import { 
   ArrowLeft, MapPin, Calendar, Landmark, ShieldCheck, Users, 
   Building2, DollarSign, Percent, FileText, Clock, BarChart3,
-  Download, Calculator, Share2, Heart
+  Download, Calculator, Share2, Heart, Zap, CheckCircle2, Banknote
 } from "lucide-react";
 import { Skeleton } from "@/components/Skeleton";
 import { CountUp } from "@/components/CountUp";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { LoanInvestModal } from "@/components/LoanInvestModal";
-import { useLoanById } from "@/hooks/useLoanData";
+import { useLoanById, useUserLoanInvestments, useLoanPayments, useSimulateInterestPayment, useSimulateLoanPayoff } from "@/hooks/useLoanData";
+import { useAuth } from "@/hooks/useAuth";
 import { format, differenceInDays } from "date-fns";
 
-type TabType = "overview" | "property" | "borrower" | "documents" | "activity";
+type TabType = "overview" | "property" | "borrower" | "documents" | "activity" | "payments";
 
 export default function LoanDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { loan, loading, refetch } = useLoanById(id);
+  const { investments, refetch: refetchInvestments } = useUserLoanInvestments();
+  const { simulateSinglePayment, loading: simulatingPayment } = useSimulateInterestPayment();
+  const { simulatePayoff, loading: simulatingPayoff } = useSimulateLoanPayoff();
+  
+  // Find user's investment in this loan
+  const userInvestment = investments.find(inv => inv.loan_id === id);
+  const { payments, totalInterest, totalPrincipal, refetch: refetchPayments } = useLoanPayments(userInvestment?.id);
+  
   const [activeTab, setActiveTab] = useState<TabType>("overview");
   const [isFavorite, setIsFavorite] = useState(false);
   const [investAmount, setInvestAmount] = useState<string>("10000");
   const [isInvestModalOpen, setIsInvestModalOpen] = useState(false);
+
+  const handleSimulatePayment = async () => {
+    if (!userInvestment) return;
+    const result = await simulateSinglePayment(userInvestment.id);
+    if (result.success) {
+      refetch();
+      refetchInvestments();
+      refetchPayments();
+    }
+  };
+
+  const handleSimulatePayoff = async () => {
+    if (!userInvestment) return;
+    const result = await simulatePayoff(userInvestment.id);
+    if (result.success) {
+      refetch();
+      refetchInvestments();
+      refetchPayments();
+    }
+  };
 
   const handleShare = async () => {
     try {
@@ -83,9 +113,9 @@ export default function LoanDetail() {
   const fundedPercent = Math.round((Number(loan.amount_funded) / Number(loan.loan_amount)) * 100);
   const isFullyFunded = fundedPercent >= 100;
   const investmentValue = parseFloat(investAmount) || 0;
-  const monthlyPayment = (investmentValue * (Number(loan.apy) / 100)) / 12;
-  const totalInterest = monthlyPayment * loan.term_months;
-  const totalReturn = investmentValue + totalInterest;
+  const monthlyPaymentCalc = (investmentValue * (Number(loan.apy) / 100)) / 12;
+  const totalInterestCalc = monthlyPaymentCalc * loan.term_months;
+  const totalReturnCalc = investmentValue + totalInterestCalc;
   
   const daysUntilMaturity = loan.maturity_date 
     ? differenceInDays(new Date(loan.maturity_date), new Date())
@@ -329,11 +359,11 @@ export default function LoanDetail() {
             <div className="bg-secondary/50 rounded-xl p-4 space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Monthly Payment:</span>
-                <span className="font-semibold text-foreground">${monthlyPayment.toFixed(2)}</span>
+                <span className="font-semibold text-foreground">${monthlyPaymentCalc.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Total Interest ({loan.term_months}mo):</span>
-                <span className="font-semibold text-foreground">${totalInterest.toFixed(2)}</span>
+                <span className="font-semibold text-foreground">${totalInterestCalc.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Principal Return:</span>
@@ -341,7 +371,7 @@ export default function LoanDetail() {
               </div>
               <div className="border-t border-border pt-2 flex justify-between">
                 <span className="font-semibold text-foreground">Total Return:</span>
-                <span className="font-bold text-lg text-blue-400">${totalReturn.toFixed(2)}</span>
+                <span className="font-bold text-lg text-blue-400">${totalReturnCalc.toFixed(2)}</span>
               </div>
             </div>
           </div>
@@ -366,15 +396,68 @@ export default function LoanDetail() {
           </div>
         )}
 
-        {isFullyFunded && (
+        {isFullyFunded && !userInvestment && (
           <div className="glass-card rounded-2xl p-5 text-center border-2 border-amber-500/30">
             <p className="text-amber-400 font-semibold">This loan is fully funded and no longer accepting investments.</p>
           </div>
         )}
 
+        {/* User Investment Card */}
+        {userInvestment && (
+          <div className="glass-card rounded-2xl p-5 border-2 border-blue-500/30 animate-fade-in">
+            <h3 className="font-display font-semibold text-foreground mb-4 flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5 text-blue-400" />
+              Your Investment
+            </h3>
+            <div className="grid grid-cols-2 gap-4 text-sm mb-4">
+              <div>
+                <p className="text-muted-foreground">Principal Invested</p>
+                <p className="font-semibold text-foreground">${userInvestment.principal_invested.toLocaleString()}</p>
+              </div>
+              <div>
+                <p className="text-muted-foreground">Expected Monthly</p>
+                <p className="font-semibold text-success">+${userInvestment.expected_monthly_payment.toFixed(2)}</p>
+              </div>
+              <div>
+                <p className="text-muted-foreground">Total Interest Earned</p>
+                <p className="font-semibold text-success">${userInvestment.total_interest_earned.toFixed(2)}</p>
+              </div>
+              <div>
+                <p className="text-muted-foreground">Status</p>
+                <p className={`font-semibold ${userInvestment.status === 'active' ? 'text-blue-400' : 'text-muted-foreground'}`}>
+                  {userInvestment.status === 'active' ? '● Active' : 'Paid Off'}
+                </p>
+              </div>
+            </div>
+            {userInvestment.status === 'active' && (
+              <div className="flex gap-2">
+                <Button
+                  onClick={handleSimulatePayment}
+                  disabled={simulatingPayment}
+                  size="sm"
+                  className="flex-1 bg-blue-500 hover:bg-blue-600"
+                >
+                  <Zap className="w-4 h-4 mr-2" />
+                  {simulatingPayment ? "Processing..." : "Simulate Payment"}
+                </Button>
+                <Button
+                  onClick={handleSimulatePayoff}
+                  disabled={simulatingPayoff}
+                  size="sm"
+                  variant="outline"
+                  className="border-amber-500/30 text-amber-600 hover:bg-amber-500/10"
+                >
+                  <Banknote className="w-4 h-4 mr-2" />
+                  Payoff
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Tabs */}
         <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-hide">
-          {(["overview", "property", "borrower", "documents", "activity"] as TabType[]).map((tab) => (
+          {(["overview", "property", "borrower", "documents", "activity", ...(userInvestment ? ["payments" as TabType] : [])] as TabType[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -483,6 +566,69 @@ export default function LoanDetail() {
                     ${(Number(loan.amount_funded) / 1000000).toFixed(2)}M
                   </span>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "payments" && userInvestment && (
+            <div className="space-y-4">
+              <h3 className="font-display font-semibold text-foreground">Payment History</h3>
+              
+              {/* Payment Summary */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-success/10 rounded-xl p-3">
+                  <p className="text-xs text-muted-foreground">Total Interest Received</p>
+                  <p className="font-bold text-success">${totalInterest.toFixed(2)}</p>
+                </div>
+                <div className="bg-blue-500/10 rounded-xl p-3">
+                  <p className="text-xs text-muted-foreground">Principal Returned</p>
+                  <p className="font-bold text-blue-400">${totalPrincipal.toFixed(2)}</p>
+                </div>
+              </div>
+
+              {/* Payment Timeline */}
+              <div className="space-y-3">
+                {payments.length > 0 ? (
+                  payments.map((payment, index) => (
+                    <div
+                      key={payment.id}
+                      className="flex items-center gap-3 p-3 bg-secondary/50 rounded-xl"
+                    >
+                      <div className={`p-2 rounded-lg ${
+                        payment.payment_type === 'interest' 
+                          ? 'bg-success/20' 
+                          : 'bg-blue-500/20'
+                      }`}>
+                        {payment.payment_type === 'interest' ? (
+                          <DollarSign className={`w-4 h-4 text-success`} />
+                        ) : (
+                          <Banknote className={`w-4 h-4 text-blue-400`} />
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-foreground text-sm font-medium">
+                          {payment.payment_type === 'interest' ? 'Interest Payment' : 'Principal Return'}
+                        </p>
+                        <p className="text-muted-foreground text-xs">
+                          {format(new Date(payment.payment_date), "MMM d, yyyy 'at' h:mm a")}
+                        </p>
+                      </div>
+                      <span className={`font-semibold ${
+                        payment.payment_type === 'interest' ? 'text-success' : 'text-blue-400'
+                      }`}>
+                        +${Number(payment.amount).toFixed(2)}
+                      </span>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-8">
+                    <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+                    <p className="text-muted-foreground text-sm">No payments received yet</p>
+                    <p className="text-muted-foreground text-xs mt-1">
+                      Use the "Simulate Payment" button to receive your first interest payment
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           )}
