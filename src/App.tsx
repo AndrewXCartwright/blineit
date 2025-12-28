@@ -120,6 +120,12 @@ import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import ComparisonTool from "./pages/ComparisonTool";
 import DataExport from "./pages/DataExport";
 import ReportView from "./pages/ReportView";
+import NewsFeed from "./pages/NewsFeed";
+import UpdateDetail from "./pages/UpdateDetail";
+import Announcements from "./pages/Announcements";
+import MarketNews from "./pages/MarketNews";
+import NewsArticle from "./pages/NewsArticle";
+import FeedPreferences from "./pages/FeedPreferences";
 
 const queryClient = new QueryClient();
 
@@ -220,6 +226,13 @@ const App = () => (
                 <Route path="/reports/compare" element={<ProtectedRoute><ComparisonTool /></ProtectedRoute>} />
                 <Route path="/reports/export" element={<ProtectedRoute><DataExport /></ProtectedRoute>} />
                 <Route path="/reports/view/:id" element={<ProtectedRoute><ReportView /></ProtectedRoute>} />
+                {/* News Feed Routes */}
+                <Route path="/feed" element={<ProtectedRoute><NewsFeed /></ProtectedRoute>} />
+                <Route path="/feed/update/:id" element={<ProtectedRoute><UpdateDetail /></ProtectedRoute>} />
+                <Route path="/announcements" element={<ProtectedRoute><Announcements /></ProtectedRoute>} />
+                <Route path="/news" element={<ProtectedRoute><MarketNews /></ProtectedRoute>} />
+                <Route path="/news/:id" element={<ProtectedRoute><NewsArticle /></ProtectedRoute>} />
+                <Route path="/settings/feed" element={<ProtectedRoute><FeedPreferences /></ProtectedRoute>} />
                 {/* Governance Routes */}
                 <Route path="/governance" element={<ProtectedRoute><GovernanceHub /></ProtectedRoute>} />
                 <Route path="/governance/proposal/:id" element={<ProtectedRoute><ProposalDetail /></ProtectedRoute>} />

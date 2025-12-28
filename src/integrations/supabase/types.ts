@@ -1869,6 +1869,51 @@ export type Database = {
           },
         ]
       }
+      market_news: {
+        Row: {
+          category: string
+          content: string
+          created_at: string
+          id: string
+          image_url: string | null
+          published_at: string
+          source: string
+          source_name: string | null
+          source_url: string | null
+          summary: string | null
+          tags: Json | null
+          title: string
+        }
+        Insert: {
+          category?: string
+          content: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          published_at?: string
+          source?: string
+          source_name?: string | null
+          source_url?: string | null
+          summary?: string | null
+          tags?: Json | null
+          title: string
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          published_at?: string
+          source?: string
+          source_name?: string | null
+          source_url?: string | null
+          summary?: string | null
+          tags?: Json | null
+          title?: string
+        }
+        Relationships: []
+      }
       market_price_history: {
         Row: {
           id: string
@@ -1964,6 +2009,54 @@ export type Database = {
           verified_address?: string | null
           verified_dob?: string | null
           verified_name?: string | null
+        }
+        Relationships: []
+      }
+      platform_announcements: {
+        Row: {
+          action_text: string | null
+          action_url: string | null
+          announcement_type: string
+          banner_image: string | null
+          content: string
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_dismissible: boolean
+          priority: string
+          starts_at: string
+          target_audience: string
+          title: string
+        }
+        Insert: {
+          action_text?: string | null
+          action_url?: string | null
+          announcement_type?: string
+          banner_image?: string | null
+          content: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_dismissible?: boolean
+          priority?: string
+          starts_at?: string
+          target_audience?: string
+          title: string
+        }
+        Update: {
+          action_text?: string | null
+          action_url?: string | null
+          announcement_type?: string
+          banner_image?: string | null
+          content?: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_dismissible?: boolean
+          priority?: string
+          starts_at?: string
+          target_audience?: string
+          title?: string
         }
         Relationships: []
       }
@@ -2325,6 +2418,60 @@ export type Database = {
           updated_at?: string
           value?: number
           year_built?: number | null
+        }
+        Relationships: []
+      }
+      property_updates: {
+        Row: {
+          content: string
+          created_at: string
+          created_by: string
+          documents: Json | null
+          id: string
+          images: Json | null
+          is_major: boolean
+          item_id: string
+          item_type: string
+          published_at: string
+          summary: string | null
+          title: string
+          update_type: string
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          created_by: string
+          documents?: Json | null
+          id?: string
+          images?: Json | null
+          is_major?: boolean
+          item_id: string
+          item_type?: string
+          published_at?: string
+          summary?: string | null
+          title: string
+          update_type?: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          created_by?: string
+          documents?: Json | null
+          id?: string
+          images?: Json | null
+          is_major?: boolean
+          item_id?: string
+          item_type?: string
+          published_at?: string
+          summary?: string | null
+          title?: string
+          update_type?: string
+          updated_at?: string
+          video_url?: string | null
         }
         Relationships: []
       }
@@ -3448,6 +3595,33 @@ export type Database = {
         }
         Relationships: []
       }
+      update_reads: {
+        Row: {
+          created_at: string
+          id: string
+          read_at: string
+          update_id: string
+          update_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          read_at?: string
+          update_id: string
+          update_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          read_at?: string
+          update_id?: string
+          update_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_badges: {
         Row: {
           awarded_at: string
@@ -3518,6 +3692,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_feed_preferences: {
+        Row: {
+          categories_filter: Json | null
+          created_at: string
+          email_digest: string
+          id: string
+          properties_filter: Json | null
+          show_announcements: boolean
+          show_market_news: boolean
+          show_property_updates: boolean
+          show_social_activity: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          categories_filter?: Json | null
+          created_at?: string
+          email_digest?: string
+          id?: string
+          properties_filter?: Json | null
+          show_announcements?: boolean
+          show_market_news?: boolean
+          show_property_updates?: boolean
+          show_social_activity?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          categories_filter?: Json | null
+          created_at?: string
+          email_digest?: string
+          id?: string
+          properties_filter?: Json | null
+          show_announcements?: boolean
+          show_market_news?: boolean
+          show_property_updates?: boolean
+          show_social_activity?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       user_holdings: {
         Row: {
