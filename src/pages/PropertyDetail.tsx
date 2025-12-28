@@ -1,5 +1,6 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   ArrowLeft, MapPin, TrendingUp, TrendingDown, Users, Building2, Calendar, 
@@ -59,6 +60,7 @@ interface RecentTrade {
 type TabType = "overview" | "financials" | "documents" | "activity";
 
 export default function PropertyDetail() {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -191,12 +193,12 @@ export default function PropertyDetail() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <Building2 className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-          <p className="text-muted-foreground mb-4">Property not found</p>
+          <p className="text-muted-foreground mb-4">{t('property.notFound')}</p>
           <button
             onClick={() => navigate("/explore")}
             className="text-primary hover:underline"
           >
-            Back to Explore
+            {t('property.backToExplore')}
           </button>
         </div>
       </div>
@@ -262,7 +264,7 @@ export default function PropertyDetail() {
 
         {property.is_hot && (
           <span className="absolute bottom-20 right-4 flex items-center gap-1 bg-accent/90 text-accent-foreground px-3 py-1.5 rounded-full text-sm font-semibold z-10">
-            🔥 Hot Property
+            🔥 {t('property.hotProperty')}
           </span>
         )}
       </div>
@@ -288,7 +290,7 @@ export default function PropertyDetail() {
         <div className="glass-card rounded-2xl p-5 border-2 border-primary/40 animate-fade-in">
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-xs text-muted-foreground mb-1">Token Price</p>
+              <p className="text-xs text-muted-foreground mb-1">{t('property.tokenPrice')}</p>
               <div className="flex items-baseline gap-3">
                 <span className="font-display text-4xl font-bold text-foreground">
                   $<CountUp end={property.token_price} decimals={2} />
@@ -297,7 +299,7 @@ export default function PropertyDetail() {
                   priceChange >= 0 ? "text-success" : "text-destructive"
                 }`}>
                   {priceChange >= 0 ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
-                  {priceChange >= 0 ? "+" : ""}{priceChange}% (30d)
+                  {priceChange >= 0 ? "+" : ""}{priceChange}% {t('property.priceChange30d')}
                 </span>
               </div>
             </div>
@@ -309,12 +311,12 @@ export default function PropertyDetail() {
 
         {/* Key Metrics Grid */}
         <div className="grid grid-cols-3 gap-3">
-          <MetricCard icon={<DollarSign className="w-4 h-4" />} label="Total Value" value={`$${(property.value / 1000000).toFixed(1)}M`} />
-          <MetricCard icon={<Percent className="w-4 h-4" />} label="APY" value={`${property.apy}%`} highlight="success" />
-          <MetricCard icon={<Users className="w-4 h-4" />} label="Token Holders" value={property.holders.toLocaleString()} />
-          <MetricCard icon={<BarChart3 className="w-4 h-4" />} label="Occupancy" value={`${property.occupancy}%`} />
-          <MetricCard icon={<Building2 className="w-4 h-4" />} label="Units" value={property.units.toString()} />
-          <MetricCard icon={<Calendar className="w-4 h-4" />} label="Year Built" value={property.year_built?.toString() || "N/A"} />
+          <MetricCard icon={<DollarSign className="w-4 h-4" />} label={t('property.totalValue')} value={`$${(property.value / 1000000).toFixed(1)}M`} />
+          <MetricCard icon={<Percent className="w-4 h-4" />} label={t('property.apy')} value={`${property.apy}%`} highlight="success" />
+          <MetricCard icon={<Users className="w-4 h-4" />} label={t('property.tokenHolders')} value={property.holders.toLocaleString()} />
+          <MetricCard icon={<BarChart3 className="w-4 h-4" />} label={t('property.occupancy')} value={`${property.occupancy}%`} />
+          <MetricCard icon={<Building2 className="w-4 h-4" />} label={t('property.units')} value={property.units.toString()} />
+          <MetricCard icon={<Calendar className="w-4 h-4" />} label={t('property.yearBuilt')} value={property.year_built?.toString() || "N/A"} />
         </div>
 
         {/* Your Position Card */}
@@ -322,29 +324,29 @@ export default function PropertyDetail() {
           <div className="glass-card rounded-2xl p-5 border-2 border-accent/40 animate-fade-in">
             <h3 className="font-display font-semibold text-foreground mb-4 flex items-center gap-2">
               <Home className="w-5 h-5 text-accent" />
-              Your Position
+              {t('property.yourPosition')}
             </h3>
             <div className="grid grid-cols-2 gap-x-6 gap-y-4">
               <div>
-                <p className="text-xs text-muted-foreground mb-0.5">Tokens Owned</p>
+                <p className="text-xs text-muted-foreground mb-0.5">{t('property.tokensOwned')}</p>
                 <p className="font-display font-bold text-xl text-foreground">
                   <CountUp end={holding.tokens} />
                 </p>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground mb-0.5">Avg Cost</p>
+                <p className="text-xs text-muted-foreground mb-0.5">{t('property.avgCost')}</p>
                 <p className="font-display font-bold text-xl text-foreground">
                   ${holding.average_buy_price.toFixed(2)}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground mb-0.5">Current Value</p>
+                <p className="text-xs text-muted-foreground mb-0.5">{t('property.currentValue')}</p>
                 <p className="font-display font-bold text-xl text-foreground">
                   ${holdingValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground mb-0.5">Profit</p>
+                <p className="text-xs text-muted-foreground mb-0.5">{t('property.profit')}</p>
                 <p className={`font-display font-bold text-xl flex items-center gap-1 ${
                   holdingPnL >= 0 ? "text-success" : "text-destructive"
                 }`}>
@@ -364,13 +366,13 @@ export default function PropertyDetail() {
             onClick={handleOpenBuyModal}
             className="flex-1 py-4 rounded-xl gradient-primary text-primary-foreground font-display font-bold text-lg transition-all hover:opacity-90 glow-primary"
           >
-            Buy Tokens
+            {t('property.buyTokens')}
           </button>
           <button 
             onClick={handleOpenSellModal}
             className="flex-1 py-4 rounded-xl bg-secondary border-2 border-border text-foreground font-display font-bold text-lg transition-all hover:bg-muted"
           >
-            Sell
+            {t('property.sell')}
           </button>
         </div>
 
@@ -386,7 +388,7 @@ export default function PropertyDetail() {
                   : "bg-secondary text-muted-foreground hover:text-foreground"
               }`}
             >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              {t(`property.${tab}`)}
             </button>
           ))}
         </div>
@@ -395,29 +397,29 @@ export default function PropertyDetail() {
         <div className="glass-card rounded-2xl p-5 animate-fade-in">
           {activeTab === "overview" && (
             <div className="space-y-4">
-              <h3 className="font-display font-semibold text-foreground">About this Property</h3>
+              <h3 className="font-display font-semibold text-foreground">{t('property.aboutProperty')}</h3>
               <p className="text-muted-foreground text-sm leading-relaxed">
                 {property.description || 
                   `${property.name} is a premium ${property.category.toLowerCase()} property located in the heart of ${property.city}, ${property.state}. Built in ${property.year_built || "N/A"}, this property features ${property.units} units with an exceptional occupancy rate of ${property.occupancy}%. The property offers an attractive ${property.apy}% APY for token holders, making it an ideal investment opportunity for those seeking steady rental income and long-term appreciation.`}
               </p>
               <div className="pt-4 border-t border-border">
-                <h4 className="font-semibold text-foreground mb-3">Key Highlights</h4>
+                <h4 className="font-semibold text-foreground mb-3">{t('property.keyHighlights')}</h4>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                    Total market value: ${property.value.toLocaleString()}
+                    {t('property.totalMarketValue')}: ${property.value.toLocaleString()}
                   </li>
                   <li className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                    Total tokens: {property.total_tokens.toLocaleString()}
+                    {t('property.totalTokens')}: {property.total_tokens.toLocaleString()}
                   </li>
                   <li className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                    Current token holders: {property.holders.toLocaleString()}
+                    {t('property.currentTokenHolders')}: {property.holders.toLocaleString()}
                   </li>
                   <li className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                    Property managed by professional REIT operator
+                    {t('property.professionallyManaged')}
                   </li>
                 </ul>
               </div>
@@ -426,19 +428,19 @@ export default function PropertyDetail() {
 
           {activeTab === "financials" && (
             <div className="space-y-4">
-              <h3 className="font-display font-semibold text-foreground">Financial Overview</h3>
+              <h3 className="font-display font-semibold text-foreground">{t('property.financialOverview')}</h3>
               <div className="space-y-3">
-                <FinancialRow label="Annual Rental Income" value={`$${annualIncome.toLocaleString()}`} />
-                <FinancialRow label="Operating Expenses" value={`-$${annualExpenses.toLocaleString()}`} negative />
+                <FinancialRow label={t('property.annualRentalIncome')} value={`$${annualIncome.toLocaleString()}`} />
+                <FinancialRow label={t('property.operatingExpenses')} value={`-$${annualExpenses.toLocaleString()}`} negative />
                 <div className="border-t border-border pt-3">
-                  <FinancialRow label="Net Operating Income (NOI)" value={`$${noi.toLocaleString()}`} highlight />
+                  <FinancialRow label={t('property.netOperatingIncome')} value={`$${noi.toLocaleString()}`} highlight />
                 </div>
                 <div className="border-t border-border pt-3 space-y-3">
-                  <FinancialRow label="Property Value" value={`$${property.value.toLocaleString()}`} />
-                  <FinancialRow label="Token Price" value={`$${property.token_price.toFixed(2)}`} />
-                  <FinancialRow label="Market Cap" value={`$${(property.token_price * property.total_tokens).toLocaleString()}`} />
-                  <FinancialRow label="Annual Yield (APY)" value={`${property.apy}%`} success />
-                  <FinancialRow label="Occupancy Rate" value={`${property.occupancy}%`} />
+                  <FinancialRow label={t('property.propertyValue')} value={`$${property.value.toLocaleString()}`} />
+                  <FinancialRow label={t('property.tokenPrice')} value={`$${property.token_price.toFixed(2)}`} />
+                  <FinancialRow label={t('property.marketCap')} value={`$${(property.token_price * property.total_tokens).toLocaleString()}`} />
+                  <FinancialRow label={t('property.annualYield')} value={`${property.apy}%`} success />
+                  <FinancialRow label={t('property.occupancyRate')} value={`${property.occupancy}%`} />
                 </div>
               </div>
             </div>
@@ -446,14 +448,14 @@ export default function PropertyDetail() {
 
           {activeTab === "documents" && (
             <div className="space-y-4">
-              <h3 className="font-display font-semibold text-foreground">Documents</h3>
+              <h3 className="font-display font-semibold text-foreground">{t('common.documents')}</h3>
               <div className="space-y-2">
                 {[
-                  { name: "Property Deed", type: "PDF" },
-                  { name: "Q4 2024 Financial Statements", type: "PDF" },
-                  { name: "Property Inspection Report", type: "PDF" },
-                  { name: "Insurance Certificate", type: "PDF" },
-                  { name: "Token Offering Memorandum", type: "PDF" },
+                  { name: t('property.propertyDeed'), type: "PDF" },
+                  { name: t('property.financialStatements'), type: "PDF" },
+                  { name: t('property.inspectionReport'), type: "PDF" },
+                  { name: t('property.insuranceCertificate'), type: "PDF" },
+                  { name: t('property.offeringMemorandum'), type: "PDF" },
                 ].map((doc) => (
                   <button
                     key={doc.name}
@@ -475,7 +477,7 @@ export default function PropertyDetail() {
 
           {activeTab === "activity" && (
             <div className="space-y-4">
-              <h3 className="font-display font-semibold text-foreground">Recent Trades</h3>
+              <h3 className="font-display font-semibold text-foreground">{t('property.recentTrades')}</h3>
               <div className="space-y-2">
                 {recentTrades.map((trade) => (
                   <div
@@ -493,7 +495,7 @@ export default function PropertyDetail() {
                     </div>
                     <div className="flex-1">
                       <p className="text-sm font-medium text-foreground">
-                        {trade.type === "buy" ? "Bought" : "Sold"} {trade.tokens} tokens
+                        {trade.type === "buy" ? t('property.bought') : t('property.sold')} {trade.tokens} {t('property.tokens')}
                       </p>
                       <p className="text-xs text-muted-foreground">{trade.time}</p>
                     </div>
@@ -516,9 +518,9 @@ export default function PropertyDetail() {
         {markets.length > 0 && (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="font-display font-semibold text-foreground">🎯 Related Predictions</h3>
+              <h3 className="font-display font-semibold text-foreground">🎯 {t('property.relatedPredictions')}</h3>
               <Link to="/predict" className="text-sm text-primary font-medium flex items-center gap-1">
-                View All <ChevronRight className="w-4 h-4" />
+                {t('common.viewAll')} <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
             <div className="space-y-3">
@@ -531,12 +533,12 @@ export default function PropertyDetail() {
                   <div className="flex-1 pr-4">
                     <p className="text-sm font-medium text-foreground line-clamp-2">{market.question}</p>
                     <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
-                      <span className="text-bull font-semibold">YES: {market.yes_price}¢</span>
-                      <span className="text-bear font-semibold">NO: {market.no_price}¢</span>
+                      <span className="text-bull font-semibold">{t('predictions.yes')}: {market.yes_price}¢</span>
+                      <span className="text-bear font-semibold">{t('predictions.no')}: {market.no_price}¢</span>
                     </div>
                   </div>
                   <button className="px-4 py-2 rounded-lg gradient-gold text-accent-foreground text-sm font-semibold whitespace-nowrap">
-                    Bet Now →
+                    {t('property.betNow')} →
                   </button>
                 </Link>
               ))}
