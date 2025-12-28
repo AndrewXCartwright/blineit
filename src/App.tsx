@@ -94,6 +94,8 @@ import AdminTransactions from "./pages/admin/AdminTransactions";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AdminKYC from "./pages/admin/AdminKYC";
 import AdminReferrals from "./pages/admin/AdminReferrals";
+import Accreditation from "./pages/Accreditation";
+import ExclusiveOfferings from "./pages/ExclusiveOfferings";
 
 const queryClient = new QueryClient();
 
@@ -167,6 +169,9 @@ const App = () => (
                 <Route path="/tax/cost-basis" element={<ProtectedRoute><TaxCostBasis /></ProtectedRoute>} />
                 <Route path="/r/:code" element={<ReferralLanding />} />
                 <Route path="/install" element={<InstallPage />} />
+                {/* Accredited Investor Routes */}
+                <Route path="/accreditation" element={<ProtectedRoute><Accreditation /></ProtectedRoute>} />
+                <Route path="/exclusive-offerings" element={<ProtectedRoute><ExclusiveOfferings /></ProtectedRoute>} />
                 <Route path="/coming-soon/:assetClass" element={<ComingSoon />} />
                 {/* Developer Portal Routes */}
                 <Route path="/developers" element={<ProtectedRoute><DeveloperPortal /></ProtectedRoute>} />

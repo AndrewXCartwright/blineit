@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      accredited_investors: {
+        Row: {
+          accreditation_type: string
+          annual_income: number | null
+          created_at: string
+          documents: Json | null
+          expires_at: string | null
+          id: string
+          investor_type: string
+          net_worth: number | null
+          reviewer_notes: string | null
+          updated_at: string
+          user_id: string
+          verification_method: string | null
+          verification_status: string
+          verified_at: string | null
+        }
+        Insert: {
+          accreditation_type: string
+          annual_income?: number | null
+          created_at?: string
+          documents?: Json | null
+          expires_at?: string | null
+          id?: string
+          investor_type: string
+          net_worth?: number | null
+          reviewer_notes?: string | null
+          updated_at?: string
+          user_id: string
+          verification_method?: string | null
+          verification_status?: string
+          verified_at?: string | null
+        }
+        Update: {
+          accreditation_type?: string
+          annual_income?: number | null
+          created_at?: string
+          documents?: Json | null
+          expires_at?: string | null
+          id?: string
+          investor_type?: string
+          net_worth?: number | null
+          reviewer_notes?: string | null
+          updated_at?: string
+          user_id?: string
+          verification_method?: string | null
+          verification_status?: string
+          verified_at?: string | null
+        }
+        Relationships: []
+      }
       alert_history: {
         Row: {
           actual_value: number
@@ -1023,6 +1074,63 @@ export type Database = {
           },
         ]
       }
+      exclusive_offerings: {
+        Row: {
+          closes_at: string | null
+          created_at: string
+          current_raised: number
+          description: string
+          documents: Json | null
+          hold_period_years: number | null
+          id: string
+          investor_requirements: Json | null
+          minimum_investment: number
+          name: string
+          offering_type: string
+          opens_at: string | null
+          status: string
+          target_irr: number | null
+          target_multiple: number | null
+          target_raise: number
+        }
+        Insert: {
+          closes_at?: string | null
+          created_at?: string
+          current_raised?: number
+          description: string
+          documents?: Json | null
+          hold_period_years?: number | null
+          id?: string
+          investor_requirements?: Json | null
+          minimum_investment: number
+          name: string
+          offering_type: string
+          opens_at?: string | null
+          status?: string
+          target_irr?: number | null
+          target_multiple?: number | null
+          target_raise: number
+        }
+        Update: {
+          closes_at?: string | null
+          created_at?: string
+          current_raised?: number
+          description?: string
+          documents?: Json | null
+          hold_period_years?: number | null
+          id?: string
+          investor_requirements?: Json | null
+          minimum_investment?: number
+          name?: string
+          offering_type?: string
+          opens_at?: string | null
+          status?: string
+          target_irr?: number | null
+          target_multiple?: number | null
+          target_raise?: number
+        }
+        Relationships: []
+      }
       follows: {
         Row: {
           created_at: string
@@ -1043,6 +1151,111 @@ export type Database = {
           id?: string
         }
         Relationships: []
+      }
+      institutional_accounts: {
+        Row: {
+          aum: number | null
+          authorized_signers: Json | null
+          compliance_contact: Json | null
+          created_at: string
+          ein: string | null
+          entity_name: string
+          entity_type: string
+          formation_date: string | null
+          formation_state: string | null
+          id: string
+          status: string
+          tier: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          aum?: number | null
+          authorized_signers?: Json | null
+          compliance_contact?: Json | null
+          created_at?: string
+          ein?: string | null
+          entity_name: string
+          entity_type: string
+          formation_date?: string | null
+          formation_state?: string | null
+          id?: string
+          status?: string
+          tier?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          aum?: number | null
+          authorized_signers?: Json | null
+          compliance_contact?: Json | null
+          created_at?: string
+          ein?: string | null
+          entity_name?: string
+          entity_type?: string
+          formation_date?: string | null
+          formation_state?: string | null
+          id?: string
+          status?: string
+          tier?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      institutional_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          documents_signed: Json | null
+          id: string
+          institutional_account_id: string
+          offering_id: string
+          shares_units: number
+          status: string
+          transaction_type: string
+          wire_reference: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          documents_signed?: Json | null
+          id?: string
+          institutional_account_id: string
+          offering_id: string
+          shares_units: number
+          status?: string
+          transaction_type: string
+          wire_reference?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          documents_signed?: Json | null
+          id?: string
+          institutional_account_id?: string
+          offering_id?: string
+          shares_units?: number
+          status?: string
+          transaction_type?: string
+          wire_reference?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "institutional_transactions_institutional_account_id_fkey"
+            columns: ["institutional_account_id"]
+            isOneToOne: false
+            referencedRelation: "institutional_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "institutional_transactions_offering_id_fkey"
+            columns: ["offering_id"]
+            isOneToOne: false
+            referencedRelation: "exclusive_offerings"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       kyc_verifications: {
         Row: {
@@ -2131,6 +2344,39 @@ export type Database = {
           tier_at_referral?: string | null
           total_invested?: number | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      relationship_managers: {
+        Row: {
+          assigned_accounts: Json | null
+          calendar_link: string | null
+          created_at: string
+          email: string
+          id: string
+          name: string
+          phone: string | null
+          photo_url: string | null
+        }
+        Insert: {
+          assigned_accounts?: Json | null
+          calendar_link?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          phone?: string | null
+          photo_url?: string | null
+        }
+        Update: {
+          assigned_accounts?: Json | null
+          calendar_link?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          phone?: string | null
+          photo_url?: string | null
         }
         Relationships: []
       }
