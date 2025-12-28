@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Header } from "@/components/Header";
 import { StatCard } from "@/components/StatCard";
 import { PropertyCard } from "@/components/PropertyCard";
@@ -13,6 +14,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { kycStatus, isVerified, isPending } = useKYC();
   const { 
@@ -77,14 +79,14 @@ export default function Home() {
                 <ShieldAlert className="w-6 h-6 text-warning" />
               </div>
               <div className="flex-1">
-                <h3 className="font-display font-bold text-foreground mb-1">Verification Required</h3>
+                <h3 className="font-display font-bold text-foreground mb-1">{t('dashboard.verificationRequired')}</h3>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Complete identity verification to start investing. Takes about 5 minutes.
+                  {t('dashboard.verificationMessage')}
                 </p>
                 <Link to="/kyc">
                   <Button size="sm" className="gap-2">
                     <ShieldCheck className="w-4 h-4" />
-                    Verify Now
+                    {t('dashboard.verifyNow')}
                   </Button>
                 </Link>
               </div>
@@ -95,10 +97,10 @@ export default function Home() {
         {/* Portfolio Value Card */}
         <FlashBorder flash={portfolioFlash} direction={flashDirection} className="rounded-2xl">
           <div className="gradient-primary rounded-2xl p-6 glow-primary animate-fade-in">
-            <p className="text-primary-foreground/80 text-sm mb-1">Total Portfolio Value</p>
+            <p className="text-primary-foreground/80 text-sm mb-1">{t('dashboard.portfolioValue')}</p>
             <h2 className="font-display text-3xl font-bold text-primary-foreground mb-2">
               {loading ? (
-                <span className="animate-pulse">Loading...</span>
+                <span className="animate-pulse">{t('common.loading')}</span>
               ) : (
                 <>$<CountUp end={portfolioValue + walletBalance} decimals={2} duration={2000} /></>
               )}
@@ -107,7 +109,7 @@ export default function Home() {
               {totalEarnings >= 0 ? (
                 <span className="bg-success/20 text-success px-2 py-1 rounded-full text-sm font-medium flex items-center gap-1">
                   <TrendingUp className="w-3 h-3" />
-                  +${totalEarnings.toFixed(0)} gains
+                  +${totalEarnings.toFixed(0)} {t('dashboard.gains')}
                 </span>
               ) : (
                 <span className="bg-destructive/20 text-destructive px-2 py-1 rounded-full text-sm font-medium flex items-center gap-1">
@@ -115,7 +117,7 @@ export default function Home() {
                   ${totalEarnings.toFixed(0)}
                 </span>
               )}
-              <span className="text-primary-foreground/60 text-sm">all time</span>
+              <span className="text-primary-foreground/60 text-sm">{t('dashboard.allTime')}</span>
             </div>
           </div>
         </FlashBorder>
@@ -126,9 +128,9 @@ export default function Home() {
             <FlashBorder flash={walletFlash} direction={flashDirection} className="rounded-2xl h-full">
               <StatCard
                 icon={<Wallet className="w-5 h-5" />}
-                label="Cash Balance"
+                label={t('dashboard.cashBalance')}
                 value={`$${walletBalance.toLocaleString()}`}
-                subValue="Available"
+                subValue={t('dashboard.available')}
                 trend="up"
               />
             </FlashBorder>
@@ -136,26 +138,26 @@ export default function Home() {
           <div className="stagger-2 animate-fade-in">
             <StatCard
               icon={<Building2 className="w-5 h-5" />}
-              label="Properties"
+              label={t('dashboard.properties')}
               value={holdings.length.toString()}
-              subValue={`$${portfolioValue.toLocaleString()} value`}
+              subValue={`$${portfolioValue.toLocaleString()} ${t('dashboard.value')}`}
               trend="up"
             />
           </div>
           <div className="stagger-3 animate-fade-in">
             <StatCard
               icon={<Target className="w-5 h-5" />}
-              label="Active Bets"
+              label={t('dashboard.activeBets')}
               value={activeBets.length.toString()}
-              subValue={`$${activeBetsValue.toLocaleString()} wagered`}
+              subValue={`$${activeBetsValue.toLocaleString()} ${t('dashboard.wagered')}`}
             />
           </div>
           <div className="stagger-4 animate-fade-in">
             <StatCard
               icon={<TrendingUp className="w-5 h-5" />}
-              label="Avg. Yield"
+              label={t('dashboard.avgYield')}
               value={`${avgYield.toFixed(1)}%`}
-              subValue={bettingWinnings > 0 ? `+$${bettingWinnings.toFixed(0)} won` : "From properties"}
+              subValue={bettingWinnings > 0 ? `+$${bettingWinnings.toFixed(0)} ${t('dashboard.won')}` : t('dashboard.fromProperties')}
               trend="up"
             />
           </div>
@@ -164,9 +166,9 @@ export default function Home() {
         {/* Your Properties */}
         <section className="animate-fade-in stagger-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-display text-lg font-bold text-foreground">Your Properties</h2>
+            <h2 className="font-display text-lg font-bold text-foreground">{t('dashboard.yourProperties')}</h2>
             <Link to="/explore" className="text-sm text-primary hover:text-primary/80 transition-colors btn-interactive">
-              Explore More
+              {t('dashboard.exploreMore')}
             </Link>
           </div>
           {holdings.length > 0 ? (
@@ -186,12 +188,12 @@ export default function Home() {
           ) : (
             <div className="glass-card rounded-2xl p-6 text-center">
               <Building2 className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
-              <p className="text-muted-foreground mb-3">No properties yet</p>
+              <p className="text-muted-foreground mb-3">{t('dashboard.noPropertiesYet')}</p>
               <Link 
                 to="/explore" 
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl gradient-primary text-primary-foreground font-semibold pulse-button"
               >
-                Explore Properties →
+                {t('dashboard.exploreProperties')} →
               </Link>
             </div>
           )}
@@ -200,9 +202,9 @@ export default function Home() {
         {/* Recent Activity */}
         <section className="animate-fade-in stagger-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-display text-lg font-bold text-foreground">Recent Activity</h2>
+            <h2 className="font-display text-lg font-bold text-foreground">{t('dashboard.recentActivity')}</h2>
             <Link to="/wallet" className="text-sm text-primary hover:text-primary/80 transition-colors">
-              View All
+              {t('common.viewAll')}
             </Link>
           </div>
           <div className="space-y-3">
@@ -245,13 +247,13 @@ export default function Home() {
               })
             ) : (
               <div className="glass-card rounded-xl p-6 text-center">
-                <p className="text-muted-foreground">No recent activity</p>
+                <p className="text-muted-foreground">{t('dashboard.noRecentActivity')}</p>
                 {!user && (
                   <Link 
                     to="/auth" 
                     className="text-primary hover:underline mt-2 inline-block"
                   >
-                    Sign in to get started
+                    {t('dashboard.signInToStart')}
                   </Link>
                 )}
               </div>
