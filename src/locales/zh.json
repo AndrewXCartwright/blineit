@@ -26,7 +26,9 @@
     "more": "更多",
     "less": "更少",
     "settings": "设置",
-    "documents": "文档"
+    "documents": "文档",
+    "user": "用户",
+    "tagline": "房地产代币化"
   },
   "auth": {
     "login": "登录",
@@ -71,6 +73,14 @@
     "verificationRequired": "需要验证",
     "verificationMessage": "完成身份验证以开始投资。大约需要5分钟。",
     "verifyNow": "立即验证"
+  },
+  "quickStats": {
+    "avgReturn": "平均回报",
+    "properties": "房产",
+    "investors": "投资者",
+    "avgApy": "平均年化",
+    "loans": "贷款",
+    "defaultRate": "违约率"
   },
   "investments": {
     "equity": "股权",

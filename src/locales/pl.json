@@ -26,7 +26,9 @@
     "more": "Więcej",
     "less": "Mniej",
     "settings": "Ustawienia",
-    "documents": "Dokumenty"
+    "documents": "Dokumenty",
+    "user": "Użytkownik",
+    "tagline": "Tokenizacja nieruchomości"
   },
   "auth": {
     "login": "Zaloguj się",
@@ -71,6 +73,14 @@
     "verificationRequired": "Wymagana Weryfikacja",
     "verificationMessage": "Ukończ weryfikację tożsamości, aby zacząć inwestować. Zajmie to około 5 minut.",
     "verifyNow": "Zweryfikuj Teraz"
+  },
+  "quickStats": {
+    "avgReturn": "Śr. zwrot",
+    "properties": "Nieruchomości",
+    "investors": "Inwestorzy",
+    "avgApy": "Śr. APY",
+    "loans": "Pożyczki",
+    "defaultRate": "Wskaźnik niewypłacalności"
   },
   "investments": {
     "equity": "Kapitał",

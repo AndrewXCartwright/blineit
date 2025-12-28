@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { InvestmentType } from "./InvestmentTypeToggle";
 
 interface QuickStatsBarProps {
@@ -5,31 +6,37 @@ interface QuickStatsBarProps {
 }
 
 export function QuickStatsBar({ investmentType }: QuickStatsBarProps) {
+  const { t } = useTranslation();
+
   const equityStats = [
-    { label: "Avg Return", value: "14.2%" },
-    { label: "Properties", value: "73" },
-    { label: "Investors", value: "12,400" },
+    { key: "avgReturn", label: t("quickStats.avgReturn"), value: "14.2%" },
+    { key: "properties", label: t("quickStats.properties"), value: "73" },
+    { key: "investors", label: t("quickStats.investors"), value: "12,400" },
   ];
 
   const debtStats = [
-    { label: "Avg APY", value: "10.8%" },
-    { label: "Loans", value: "45" },
-    { label: "Default Rate", value: "0.3%" },
+    { key: "avgApy", label: t("quickStats.avgApy"), value: "10.8%" },
+    { key: "loans", label: t("quickStats.loans"), value: "45" },
+    { key: "defaultRate", label: t("quickStats.defaultRate"), value: "0.3%" },
   ];
 
   const stats = investmentType === "equity" ? equityStats : debtStats;
 
   return (
-    <div className={`flex items-center justify-between p-3 rounded-xl ${
-      investmentType === "equity" 
-        ? "bg-purple-500/10 border border-purple-500/20" 
-        : "bg-blue-500/10 border border-blue-500/20"
-    }`}>
+    <div
+      className={`flex items-center justify-between p-3 rounded-xl ${
+        investmentType === "equity"
+          ? "bg-purple-500/10 border border-purple-500/20"
+          : "bg-blue-500/10 border border-blue-500/20"
+      }`}
+    >
       {stats.map((stat, index) => (
-        <div key={stat.label} className="flex-1 text-center">
-          <p className={`text-sm font-bold ${
-            investmentType === "equity" ? "text-purple-400" : "text-blue-400"
-          }`}>
+        <div key={stat.key} className="flex-1 text-center">
+          <p
+            className={`text-sm font-bold ${
+              investmentType === "equity" ? "text-purple-400" : "text-blue-400"
+            }`}
+          >
             {stat.value}
           </p>
           <p className="text-xs text-muted-foreground">{stat.label}</p>
