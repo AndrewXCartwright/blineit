@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Building2, MapPin, TrendingUp, Flame, Search, SlidersHorizontal, Grid3X3, List, ChevronLeft } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,7 @@ interface Property {
 
 export default function PropertiesListing() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [properties, setProperties] = useState<Property[]>([]);
@@ -86,8 +88,8 @@ export default function PropertiesListing() {
               <ChevronLeft className="w-5 h-5" />
             </Button>
             <div className="flex-1">
-              <h1 className="text-xl font-display font-bold text-foreground">Properties</h1>
-              <p className="text-xs text-muted-foreground">{filteredProperties.length} available investments</p>
+              <h1 className="text-xl font-display font-bold text-foreground">{t('propertiesListing.title')}</h1>
+              <p className="text-xs text-muted-foreground">{t('propertiesListing.availableInvestments', { count: filteredProperties.length })}</p>
             </div>
           </div>
 
@@ -96,7 +98,7 @@ export default function PropertiesListing() {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
-                placeholder="Search properties..."
+                placeholder={t('propertiesListing.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
@@ -106,10 +108,10 @@ export default function PropertiesListing() {
             <div className="flex items-center gap-2">
               <Select value={categoryFilter} onValueChange={setCategoryFilter}>
                 <SelectTrigger className="flex-1">
-                  <SelectValue placeholder="Category" />
+                  <SelectValue placeholder={t('propertiesListing.category')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Categories</SelectItem>
+                  <SelectItem value="all">{t('propertiesListing.allCategories')}</SelectItem>
                   {categories.map((cat) => (
                     <SelectItem key={cat} value={cat}>{cat}</SelectItem>
                   ))}
@@ -118,16 +120,16 @@ export default function PropertiesListing() {
 
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="flex-1">
-                  <SelectValue placeholder="Sort by" />
+                  <SelectValue placeholder={t('propertiesListing.sortBy')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="newest">Newest</SelectItem>
-                  <SelectItem value="apy-high">Highest APY</SelectItem>
-                  <SelectItem value="apy-low">Lowest APY</SelectItem>
-                  <SelectItem value="value-high">Highest Value</SelectItem>
-                  <SelectItem value="value-low">Lowest Value</SelectItem>
-                  <SelectItem value="price-high">Highest Token Price</SelectItem>
-                  <SelectItem value="price-low">Lowest Token Price</SelectItem>
+                  <SelectItem value="newest">{t('propertiesListing.sortNewest')}</SelectItem>
+                  <SelectItem value="apy-high">{t('propertiesListing.sortApyHigh')}</SelectItem>
+                  <SelectItem value="apy-low">{t('propertiesListing.sortApyLow')}</SelectItem>
+                  <SelectItem value="value-high">{t('propertiesListing.sortValueHigh')}</SelectItem>
+                  <SelectItem value="value-low">{t('propertiesListing.sortValueLow')}</SelectItem>
+                  <SelectItem value="price-high">{t('propertiesListing.sortPriceHigh')}</SelectItem>
+                  <SelectItem value="price-low">{t('propertiesListing.sortPriceLow')}</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -170,8 +172,8 @@ export default function PropertiesListing() {
           ) : filteredProperties.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center">
               <Building2 className="w-12 h-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-semibold text-foreground mb-2">No properties found</h3>
-              <p className="text-sm text-muted-foreground">Try adjusting your search or filters</p>
+              <h3 className="text-lg font-semibold text-foreground mb-2">{t('propertiesListing.noProperties')}</h3>
+              <p className="text-sm text-muted-foreground">{t('propertiesListing.adjustFilters')}</p>
             </div>
           ) : viewMode === "grid" ? (
             <div className="grid grid-cols-2 gap-3">
@@ -196,7 +198,7 @@ export default function PropertiesListing() {
                     )}
                     {property.is_hot && (
                       <span className="absolute top-2 left-2 flex items-center gap-1 bg-accent/90 text-accent-foreground px-2 py-0.5 rounded-full text-[10px] font-medium">
-                        <Flame className="w-3 h-3" />Hot
+                        <Flame className="w-3 h-3" />{t('propertiesListing.hot')}
                       </span>
                     )}
                   </div>
@@ -243,7 +245,7 @@ export default function PropertiesListing() {
                       )}
                       {property.is_hot && (
                         <span className="absolute top-2 left-2 flex items-center gap-1 bg-accent/90 text-accent-foreground px-2 py-0.5 rounded-full text-[10px] font-medium">
-                          <Flame className="w-3 h-3" />Hot
+                          <Flame className="w-3 h-3" />{t('propertiesListing.hot')}
                         </span>
                       )}
                     </div>
@@ -262,15 +264,15 @@ export default function PropertiesListing() {
                       </div>
                       <div className="grid grid-cols-2 gap-2">
                         <div className="flex items-center gap-1 text-xs">
-                          <span className="text-muted-foreground">Token:</span>
+                          <span className="text-muted-foreground">{t('propertiesListing.token')}:</span>
                           <span className="font-semibold text-foreground">${property.token_price}</span>
                         </div>
                         <div className="flex items-center gap-1 text-xs">
                           <TrendingUp className="w-3 h-3 text-success" />
-                          <span className="font-semibold text-success">{property.apy}% APY</span>
+                          <span className="font-semibold text-success">{property.apy}% {t('investments.apy')}</span>
                         </div>
                         <div className="flex items-center gap-1 text-xs col-span-2">
-                          <span className="text-muted-foreground">Value:</span>
+                          <span className="text-muted-foreground">{t('propertiesListing.value')}:</span>
                           <span className="font-semibold text-foreground">${(property.value / 1000000).toFixed(1)}M</span>
                         </div>
                       </div>

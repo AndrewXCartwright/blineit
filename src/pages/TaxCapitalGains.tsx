@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ArrowLeft, TrendingUp, TrendingDown, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,6 +17,7 @@ const taxYears = [currentYear - 1, currentYear - 2, currentYear - 3];
 
 export default function TaxCapitalGains() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [selectedYear, setSelectedYear] = useState(currentYear - 1);
   
   const { data: gainEvents } = useTaxableEvents(selectedYear, 'capital_gain');
@@ -49,12 +51,12 @@ export default function TaxCapitalGains() {
           <div className="flex-1">
             <h1 className="text-xl font-bold flex items-center gap-2">
               <TrendingUp className="h-5 w-5 text-primary" />
-              Capital Gains & Losses - {selectedYear}
+              {t('tax.capitalGainsLosses')} - {selectedYear}
             </h1>
           </div>
           <Button variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />
-            Export CSV
+            {t('tax.exportCsv')}
           </Button>
         </div>
       </header>
@@ -73,7 +75,7 @@ export default function TaxCapitalGains() {
             </SelectContent>
           </Select>
           <div className="text-right">
-            <p className="text-sm text-muted-foreground">Net Gain/Loss</p>
+            <p className="text-sm text-muted-foreground">{t('tax.netGainLoss')}</p>
             <p className={`text-2xl font-bold ${netGainLoss >= 0 ? 'text-green-500' : 'text-red-500'}`}>
               {netGainLoss >= 0 ? '+' : ''}{formatCurrency(netGainLoss)}
             </p>
@@ -83,21 +85,21 @@ export default function TaxCapitalGains() {
         {/* Summary Table */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Summary</CardTitle>
+            <CardTitle className="text-base">{t('tax.summary')}</CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead></TableHead>
-                  <TableHead className="text-right">Gains</TableHead>
-                  <TableHead className="text-right">Losses</TableHead>
-                  <TableHead className="text-right">Net</TableHead>
+                  <TableHead className="text-right">{t('tax.gains')}</TableHead>
+                  <TableHead className="text-right">{t('tax.losses')}</TableHead>
+                  <TableHead className="text-right">{t('tax.net')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 <TableRow>
-                  <TableCell className="font-medium">Short-Term</TableCell>
+                  <TableCell className="font-medium">{t('tax.shortTerm')}</TableCell>
                   <TableCell className="text-right text-green-500">{formatCurrency(shortTermGains)}</TableCell>
                   <TableCell className="text-right text-red-500">{formatCurrency(shortTermLosses)}</TableCell>
                   <TableCell className={`text-right font-medium ${shortTermGains - shortTermLosses >= 0 ? 'text-green-500' : 'text-red-500'}`}>
@@ -105,7 +107,7 @@ export default function TaxCapitalGains() {
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell className="font-medium">Long-Term</TableCell>
+                  <TableCell className="font-medium">{t('tax.longTerm')}</TableCell>
                   <TableCell className="text-right text-green-500">{formatCurrency(longTermGains)}</TableCell>
                   <TableCell className="text-right text-red-500">{formatCurrency(longTermLosses)}</TableCell>
                   <TableCell className={`text-right font-medium ${longTermGains - longTermLosses >= 0 ? 'text-green-500' : 'text-red-500'}`}>
@@ -113,7 +115,7 @@ export default function TaxCapitalGains() {
                   </TableCell>
                 </TableRow>
                 <TableRow className="border-t-2">
-                  <TableCell className="font-bold">Total</TableCell>
+                  <TableCell className="font-bold">{t('tax.total')}</TableCell>
                   <TableCell className="text-right font-bold text-green-500">{formatCurrency(totalGains)}</TableCell>
                   <TableCell className="text-right font-bold text-red-500">{formatCurrency(totalLosses)}</TableCell>
                   <TableCell className={`text-right font-bold ${netGainLoss >= 0 ? 'text-green-500' : 'text-red-500'}`}>
@@ -128,12 +130,12 @@ export default function TaxCapitalGains() {
         {/* Transactions */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Transactions</CardTitle>
+            <CardTitle className="text-base">{t('tax.transactions')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {allEvents.length === 0 ? (
               <p className="text-center text-muted-foreground py-8">
-                No capital gains or losses recorded for {selectedYear}
+                {t('tax.noCapitalGains', { year: selectedYear })}
               </p>
             ) : (
               allEvents.map(event => {
@@ -150,7 +152,7 @@ export default function TaxCapitalGains() {
                             <TrendingDown className="h-5 w-5 text-red-500" />
                           )}
                           <span className={`font-semibold ${isGain ? 'text-green-500' : 'text-red-500'}`}>
-                            {isGain ? 'GAIN' : 'LOSS'}: {event.item_name}
+                            {isGain ? t('tax.gain') : t('tax.loss')}: {event.item_name}
                           </span>
                         </div>
                         <span className={`text-lg font-bold ${isGain ? 'text-green-500' : 'text-red-500'}`}>
@@ -160,22 +162,22 @@ export default function TaxCapitalGains() {
                       
                       <div className="space-y-1 text-sm">
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Sold:</span>
+                          <span className="text-muted-foreground">{t('tax.sold')}:</span>
                           <span>{format(new Date(event.event_date), 'MMM d, yyyy')}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Proceeds:</span>
+                          <span className="text-muted-foreground">{t('tax.proceeds')}:</span>
                           <span>{formatCurrency(event.gross_amount)}</span>
                         </div>
                         {event.cost_basis && (
                           <div className="flex justify-between">
-                            <span className="text-muted-foreground">Cost Basis:</span>
+                            <span className="text-muted-foreground">{t('tax.costBasis')}:</span>
                             <span>{formatCurrency(event.cost_basis)}</span>
                           </div>
                         )}
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Holding Period:</span>
-                          <span>{event.holding_period === 'short_term' ? 'Short-Term' : 'Long-Term'}</span>
+                          <span className="text-muted-foreground">{t('tax.holdingPeriod')}:</span>
+                          <span>{event.holding_period === 'short_term' ? t('tax.shortTerm') : t('tax.longTerm')}</span>
                         </div>
                       </div>
                     </CardContent>

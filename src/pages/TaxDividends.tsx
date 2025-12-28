@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ArrowLeft, DollarSign, Download, ChevronDown, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,6 +17,7 @@ const taxYears = [currentYear - 1, currentYear - 2, currentYear - 3];
 
 export default function TaxDividends() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [selectedYear, setSelectedYear] = useState(currentYear - 1);
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
   
@@ -54,12 +56,12 @@ export default function TaxDividends() {
           <div className="flex-1">
             <h1 className="text-xl font-bold flex items-center gap-2">
               <DollarSign className="h-5 w-5 text-primary" />
-              Dividend Income - {selectedYear}
+              {t('tax.dividendIncome')} - {selectedYear}
             </h1>
           </div>
           <Button variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />
-            Export CSV
+            {t('tax.exportCsv')}
           </Button>
         </div>
       </header>
@@ -78,7 +80,7 @@ export default function TaxDividends() {
             </SelectContent>
           </Select>
           <div className="text-right">
-            <p className="text-sm text-muted-foreground">Total</p>
+            <p className="text-sm text-muted-foreground">{t('tax.total')}</p>
             <p className="text-2xl font-bold text-primary">{formatCurrency(total)}</p>
           </div>
         </div>
@@ -86,12 +88,12 @@ export default function TaxDividends() {
         {/* By Property */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">By Property</CardTitle>
+            <CardTitle className="text-base">{t('tax.byProperty')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {!events || events.length === 0 ? (
               <p className="text-center text-muted-foreground py-8">
-                No dividend income recorded for {selectedYear}
+                {t('tax.noDividendIncome', { year: selectedYear })}
               </p>
             ) : (
               Object.entries(groupedByProperty || {}).map(([id, data]) => (
@@ -112,7 +114,7 @@ export default function TaxDividends() {
                             <div>
                               <p className="font-semibold">🏢 {data.name}</p>
                               <p className="text-sm text-muted-foreground">
-                                {data.events.length} payments • {formatCurrency(data.total)}
+                                {data.events.length} {t('tax.payments')} • {formatCurrency(data.total)}
                               </p>
                             </div>
                           </div>
@@ -124,9 +126,9 @@ export default function TaxDividends() {
                         <Table>
                           <TableHeader>
                             <TableRow>
-                              <TableHead>Date</TableHead>
-                              <TableHead className="text-right">Amount</TableHead>
-                              <TableHead>Type</TableHead>
+                              <TableHead>{t('tax.date')}</TableHead>
+                              <TableHead className="text-right">{t('tax.amount')}</TableHead>
+                              <TableHead>{t('tax.type')}</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
@@ -136,7 +138,7 @@ export default function TaxDividends() {
                                 <TableCell className="text-right font-medium">
                                   {formatCurrency(event.net_amount)}
                                 </TableCell>
-                                <TableCell className="text-muted-foreground">Qualified</TableCell>
+                                <TableCell className="text-muted-foreground">{t('tax.qualified')}</TableCell>
                               </TableRow>
                             ))}
                           </TableBody>

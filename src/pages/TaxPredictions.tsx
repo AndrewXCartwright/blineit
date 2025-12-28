@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Target, Download, TrendingUp, TrendingDown, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,6 +16,7 @@ const taxYears = [currentYear - 1, currentYear - 2, currentYear - 3];
 
 export default function TaxPredictions() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [selectedYear, setSelectedYear] = useState(currentYear - 1);
   
   const { data: events, isLoading } = useTaxableEvents(selectedYear, 'prediction_winnings');
@@ -36,12 +38,12 @@ export default function TaxPredictions() {
           <div className="flex-1">
             <h1 className="text-xl font-bold flex items-center gap-2">
               <Target className="h-5 w-5 text-primary" />
-              Prediction Market Income - {selectedYear}
+              {t('tax.predictionMarketIncome')} - {selectedYear}
             </h1>
           </div>
           <Button variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />
-            Export CSV
+            {t('tax.exportCsv')}
           </Button>
         </div>
       </header>
@@ -60,7 +62,7 @@ export default function TaxPredictions() {
             </SelectContent>
           </Select>
           <div className="text-right">
-            <p className="text-sm text-muted-foreground">Net Winnings</p>
+            <p className="text-sm text-muted-foreground">{t('tax.netWinnings')}</p>
             <p className={`text-2xl font-bold ${netWinnings >= 0 ? 'text-green-500' : 'text-red-500'}`}>
               {formatCurrency(netWinnings)}
             </p>
@@ -70,36 +72,36 @@ export default function TaxPredictions() {
         {/* Summary */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Summary</CardTitle>
+            <CardTitle className="text-base">{t('tax.summary')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div className="space-y-1">
-                <p className="text-sm text-muted-foreground">Total Bets Placed</p>
+                <p className="text-sm text-muted-foreground">{t('tax.totalBetsPlaced')}</p>
                 <p className="text-lg font-semibold">{formatCurrency(totalBets)}</p>
               </div>
               <div className="space-y-1">
-                <p className="text-sm text-muted-foreground">Total Winnings</p>
+                <p className="text-sm text-muted-foreground">{t('tax.totalWinnings')}</p>
                 <p className="text-lg font-semibold text-green-500">{formatCurrency(totalBets + netWinnings)}</p>
               </div>
               <div className="space-y-1">
-                <p className="text-sm text-muted-foreground">Net Profit</p>
+                <p className="text-sm text-muted-foreground">{t('tax.netProfit')}</p>
                 <p className={`text-lg font-semibold ${netWinnings >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                   {formatCurrency(netWinnings)}
                 </p>
               </div>
               <div className="space-y-1">
-                <p className="text-sm text-muted-foreground">Win Rate</p>
+                <p className="text-sm text-muted-foreground">{t('tax.winRate')}</p>
                 <p className="text-lg font-semibold">{winRate.toFixed(0)}%</p>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4 pt-4 border-t">
               <div className="space-y-1">
-                <p className="text-sm text-muted-foreground">Markets Won</p>
+                <p className="text-sm text-muted-foreground">{t('tax.marketsWon')}</p>
                 <p className="text-lg font-semibold text-green-500">{wins.length}</p>
               </div>
               <div className="space-y-1">
-                <p className="text-sm text-muted-foreground">Markets Lost</p>
+                <p className="text-sm text-muted-foreground">{t('tax.marketsLost')}</p>
                 <p className="text-lg font-semibold text-red-500">{losses.length}</p>
               </div>
             </div>
@@ -110,7 +112,7 @@ export default function TaxPredictions() {
         <Alert>
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription>
-            <strong>Note:</strong> Only net winnings are taxable income. Losses can offset winnings within the same year.
+            <strong>{t('tax.note')}:</strong> {t('tax.predictionTaxNote')}
           </AlertDescription>
         </Alert>
 
@@ -120,7 +122,7 @@ export default function TaxPredictions() {
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
                 <TrendingUp className="h-4 w-4 text-green-500" />
-                Winning Positions
+                {t('tax.winningPositions')}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -137,15 +139,15 @@ export default function TaxPredictions() {
                       </span>
                     </div>
                     <div className="text-sm text-muted-foreground space-y-1">
-                      <p>Resolved: {format(new Date(event.event_date), 'MMM d, yyyy')}</p>
-                      <p>Bet Amount: {formatCurrency(event.gross_amount)}</p>
+                      <p>{t('tax.resolved')}: {format(new Date(event.event_date), 'MMM d, yyyy')}</p>
+                      <p>{t('tax.betAmount')}: {formatCurrency(event.gross_amount)}</p>
                     </div>
                   </CardContent>
                 </Card>
               ))}
               {wins.length > 5 && (
                 <Button variant="outline" className="w-full">
-                  View All {wins.length} Winning Positions
+                  {t('tax.viewAllWinning', { count: wins.length })}
                 </Button>
               )}
             </CardContent>
@@ -158,18 +160,18 @@ export default function TaxPredictions() {
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
                 <TrendingDown className="h-4 w-4 text-red-500" />
-                Losing Positions
+                {t('tax.losingPositions')}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground mb-4">
-                Total Lost: {formatCurrency(Math.abs(losses.reduce((sum, e) => sum + Number(e.net_amount), 0)))} across {losses.length} markets
+                {t('tax.totalLost')}: {formatCurrency(Math.abs(losses.reduce((sum, e) => sum + Number(e.net_amount), 0)))} {t('tax.acrossMarkets', { count: losses.length })}
               </p>
               <p className="text-xs text-muted-foreground">
-                (Offsets winnings for tax purposes)
+                ({t('tax.offsetsWinnings')})
               </p>
               <Button variant="outline" className="w-full mt-4">
-                View All {losses.length} Losing Positions
+                {t('tax.viewAllLosing', { count: losses.length })}
               </Button>
             </CardContent>
           </Card>
@@ -181,7 +183,7 @@ export default function TaxPredictions() {
             <CardContent className="py-12 text-center">
               <Target className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
               <p className="text-muted-foreground">
-                No prediction market activity recorded for {selectedYear}
+                {t('tax.noPredictionActivity', { year: selectedYear })}
               </p>
             </CardContent>
           </Card>

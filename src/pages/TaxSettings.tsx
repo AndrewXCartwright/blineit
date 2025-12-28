@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Settings, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -14,6 +15,7 @@ import { toast } from 'sonner';
 
 export default function TaxSettings() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { data: settings, isLoading } = useTaxSettings();
   const updateSettings = useUpdateTaxSettings();
 
@@ -54,9 +56,9 @@ export default function TaxSettings() {
           <div>
             <h1 className="text-xl font-bold flex items-center gap-2">
               <Settings className="h-5 w-5 text-primary" />
-              Tax Settings
+              {t('tax.taxSettings')}
             </h1>
-            <p className="text-sm text-muted-foreground">Configure your tax preferences</p>
+            <p className="text-sm text-muted-foreground">{t('tax.configureTaxPreferences')}</p>
           </div>
         </div>
       </header>
@@ -65,19 +67,19 @@ export default function TaxSettings() {
         {/* Tax Information */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Tax Information</CardTitle>
+            <CardTitle className="text-base">{t('tax.taxInformation')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-3">
-              <Label>Tax ID Type</Label>
+              <Label>{t('tax.taxIdType')}</Label>
               <RadioGroup value={taxIdType} onValueChange={(v) => setTaxIdType(v as 'ssn' | 'ein')}>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="ssn" id="ssn" />
-                  <Label htmlFor="ssn" className="cursor-pointer">SSN (Social Security Number)</Label>
+                  <Label htmlFor="ssn" className="cursor-pointer">{t('tax.ssnLabel')}</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="ein" id="ein" />
-                  <Label htmlFor="ein" className="cursor-pointer">EIN (Employer Identification Number)</Label>
+                  <Label htmlFor="ein" className="cursor-pointer">{t('tax.einLabel')}</Label>
                 </div>
               </RadioGroup>
             </div>
@@ -87,13 +89,13 @@ export default function TaxSettings() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium">Tax ID</p>
+                  <p className="font-medium">{t('tax.taxId')}</p>
                   <p className="text-sm text-muted-foreground">
-                    {settings?.tax_id_last_four ? `XXX-XX-${settings.tax_id_last_four} ✓ Verified` : 'Not provided'}
+                    {settings?.tax_id_last_four ? `XXX-XX-${settings.tax_id_last_four} ✓ ${t('tax.verified')}` : t('tax.notProvided')}
                   </p>
                 </div>
                 <Button variant="outline" size="sm">
-                  Update Tax ID
+                  {t('tax.updateTaxId')}
                 </Button>
               </div>
             </div>
@@ -103,9 +105,9 @@ export default function TaxSettings() {
         {/* Cost Basis Method */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Cost Basis Method</CardTitle>
+            <CardTitle className="text-base">{t('tax.costBasisMethod')}</CardTitle>
             <CardDescription>
-              Choose how to calculate cost basis for token sales
+              {t('tax.costBasisDescription')}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -114,29 +116,29 @@ export default function TaxSettings() {
                 <div className="flex items-start space-x-2">
                   <RadioGroupItem value="fifo" id="fifo" className="mt-1" />
                   <div>
-                    <Label htmlFor="fifo" className="cursor-pointer font-medium">FIFO (First In, First Out)</Label>
-                    <p className="text-sm text-muted-foreground">Oldest tokens sold first - Default</p>
+                    <Label htmlFor="fifo" className="cursor-pointer font-medium">{t('tax.fifoLabel')}</Label>
+                    <p className="text-sm text-muted-foreground">{t('tax.fifoDescription')}</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-2">
                   <RadioGroupItem value="lifo" id="lifo" className="mt-1" />
                   <div>
-                    <Label htmlFor="lifo" className="cursor-pointer font-medium">LIFO (Last In, First Out)</Label>
-                    <p className="text-sm text-muted-foreground">Newest tokens sold first</p>
+                    <Label htmlFor="lifo" className="cursor-pointer font-medium">{t('tax.lifoLabel')}</Label>
+                    <p className="text-sm text-muted-foreground">{t('tax.lifoDescription')}</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-2">
                   <RadioGroupItem value="specific_id" id="specific_id" className="mt-1" />
                   <div>
-                    <Label htmlFor="specific_id" className="cursor-pointer font-medium">Specific Identification</Label>
-                    <p className="text-sm text-muted-foreground">Choose which tokens to sell</p>
+                    <Label htmlFor="specific_id" className="cursor-pointer font-medium">{t('tax.specificIdLabel')}</Label>
+                    <p className="text-sm text-muted-foreground">{t('tax.specificIdDescription')}</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-2">
                   <RadioGroupItem value="average" id="average" className="mt-1" />
                   <div>
-                    <Label htmlFor="average" className="cursor-pointer font-medium">Average Cost</Label>
-                    <p className="text-sm text-muted-foreground">Average price of all tokens held</p>
+                    <Label htmlFor="average" className="cursor-pointer font-medium">{t('tax.averageCostLabel')}</Label>
+                    <p className="text-sm text-muted-foreground">{t('tax.averageCostDescription')}</p>
                   </div>
                 </div>
               </div>
@@ -144,7 +146,7 @@ export default function TaxSettings() {
 
             <Alert className="mt-4">
               <AlertDescription>
-                ⚠️ Changing this will affect future sales only.
+                ⚠️ {t('tax.costBasisWarning')}
               </AlertDescription>
             </Alert>
           </CardContent>
@@ -153,16 +155,16 @@ export default function TaxSettings() {
         {/* Document Delivery */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Document Delivery</CardTitle>
+            <CardTitle className="text-base">{t('tax.documentDelivery')}</CardTitle>
             <CardDescription>
-              How would you like to receive tax documents?
+              {t('tax.documentDeliveryDescription')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium">Electronic delivery</p>
-                <p className="text-sm text-muted-foreground">Documents available in Tax Center (recommended)</p>
+                <p className="font-medium">{t('tax.electronicDelivery')}</p>
+                <p className="text-sm text-muted-foreground">{t('tax.electronicDeliveryDesc')}</p>
               </div>
               <Switch
                 checked={electronicDelivery}
@@ -172,8 +174,8 @@ export default function TaxSettings() {
 
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium">Mail paper copies</p>
-                <p className="text-sm text-muted-foreground">Sent to address on file</p>
+                <p className="font-medium">{t('tax.mailPaperCopies')}</p>
+                <p className="text-sm text-muted-foreground">{t('tax.mailPaperCopiesDesc')}</p>
               </div>
               <Switch
                 checked={mailPaperCopies}
@@ -183,8 +185,8 @@ export default function TaxSettings() {
 
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium">Email notifications</p>
-                <p className="text-sm text-muted-foreground">Get notified when documents are ready</p>
+                <p className="font-medium">{t('tax.emailNotifications')}</p>
+                <p className="text-sm text-muted-foreground">{t('tax.emailNotificationsDesc')}</p>
               </div>
               <Switch
                 checked={emailNotifications}
@@ -201,7 +203,7 @@ export default function TaxSettings() {
           disabled={updateSettings.isPending}
         >
           <Save className="h-4 w-4 mr-2" />
-          {updateSettings.isPending ? 'Saving...' : 'Save Settings'}
+          {updateSettings.isPending ? t('common.loading') : t('tax.saveSettings')}
         </Button>
       </main>
 
