@@ -182,10 +182,18 @@ export default function PropertiesListing() {
                   className="glass-card rounded-2xl overflow-hidden animate-fade-in interactive-card cursor-pointer"
                   style={{ animationDelay: `${index * 0.05}s` }}
                 >
-                  <div className="h-24 gradient-primary relative">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <Building2 className="w-8 h-8 text-primary-foreground/20" />
-                    </div>
+                  <div className="h-24 relative overflow-hidden">
+                    {property.image_url ? (
+                      <img 
+                        src={property.image_url} 
+                        alt={property.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full gradient-primary flex items-center justify-center">
+                        <Building2 className="w-8 h-8 text-primary-foreground/20" />
+                      </div>
+                    )}
                     {property.is_hot && (
                       <span className="absolute top-2 left-2 flex items-center gap-1 bg-accent/90 text-accent-foreground px-2 py-0.5 rounded-full text-[10px] font-medium">
                         <Flame className="w-3 h-3" />Hot
@@ -221,10 +229,18 @@ export default function PropertiesListing() {
                   style={{ animationDelay: `${index * 0.05}s` }}
                 >
                   <div className="flex">
-                    <div className="w-28 h-28 gradient-primary relative flex-shrink-0">
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <Building2 className="w-8 h-8 text-primary-foreground/20" />
-                      </div>
+                    <div className="w-28 h-28 relative flex-shrink-0 overflow-hidden">
+                      {property.image_url ? (
+                        <img 
+                          src={property.image_url} 
+                          alt={property.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full gradient-primary flex items-center justify-center">
+                          <Building2 className="w-8 h-8 text-primary-foreground/20" />
+                        </div>
+                      )}
                       {property.is_hot && (
                         <span className="absolute top-2 left-2 flex items-center gap-1 bg-accent/90 text-accent-foreground px-2 py-0.5 rounded-full text-[10px] font-medium">
                           <Flame className="w-3 h-3" />Hot
