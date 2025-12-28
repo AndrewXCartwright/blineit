@@ -47,6 +47,7 @@ import Discover from "./pages/Discover";
 import Trending from "./pages/Trending";
 import CategoryBrowse from "./pages/CategoryBrowse";
 import LocationBrowse from "./pages/LocationBrowse";
+import PropertiesListing from "./pages/PropertiesListing";
 import CompareProperties from "./pages/CompareProperties";
 import CompareLoans from "./pages/CompareLoans";
 import ComparePredictions from "./pages/ComparePredictions";
@@ -168,6 +169,8 @@ const App = () => (
                 <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
                 <Route path="/assets" element={<ProtectedRoute><Assets /></ProtectedRoute>} />
                 <Route path="/assets/explore" element={<ProtectedRoute><AssetsExplore /></ProtectedRoute>} />
+                <Route path="/properties" element={<ProtectedRoute><PropertiesListing /></ProtectedRoute>} />
+                <Route path="/explore" element={<ProtectedRoute><PropertiesListing /></ProtectedRoute>} />
                 <Route path="/predict" element={<ProtectedRoute><Predict /></ProtectedRoute>} />
                 <Route path="/wallet" element={<ProtectedRoute><Wallet /></ProtectedRoute>} />
                 <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
