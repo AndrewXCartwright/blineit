@@ -14,6 +14,56 @@ export type Database = {
   }
   public: {
     Tables: {
+      alert_history: {
+        Row: {
+          actual_value: number
+          alert_id: string
+          alert_type: string
+          created_at: string
+          id: string
+          is_read: boolean
+          item_id: string
+          item_type: string
+          message: string
+          threshold_value: number
+          user_id: string
+        }
+        Insert: {
+          actual_value: number
+          alert_id: string
+          alert_type: string
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          item_id: string
+          item_type: string
+          message: string
+          threshold_value: number
+          user_id: string
+        }
+        Update: {
+          actual_value?: number
+          alert_id?: string
+          alert_type?: string
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          item_id?: string
+          item_type?: string
+          message?: string
+          threshold_value?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alert_history_alert_id_fkey"
+            columns: ["alert_id"]
+            isOneToOne: false
+            referencedRelation: "price_alerts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       asset_price_history: {
         Row: {
           entity_id: string
@@ -1250,6 +1300,48 @@ export type Database = {
           },
         ]
       }
+      price_alerts: {
+        Row: {
+          alert_type: string
+          created_at: string
+          id: string
+          is_active: boolean
+          is_recurring: boolean
+          item_id: string
+          item_type: string
+          last_triggered_at: string | null
+          threshold_value: number
+          trigger_count: number
+          user_id: string
+        }
+        Insert: {
+          alert_type: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          is_recurring?: boolean
+          item_id: string
+          item_type: string
+          last_triggered_at?: string | null
+          threshold_value: number
+          trigger_count?: number
+          user_id: string
+        }
+        Update: {
+          alert_type?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          is_recurring?: boolean
+          item_id?: string
+          item_type?: string
+          last_triggered_at?: string | null
+          threshold_value?: number
+          trigger_count?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           allow_mentions: boolean | null
@@ -2308,6 +2400,86 @@ export type Database = {
         }
         Relationships: []
       }
+      watchlist_items: {
+        Row: {
+          added_price: number
+          created_at: string
+          id: string
+          item_id: string
+          item_type: string
+          notes: string | null
+          position: number
+          target_price: number | null
+          user_id: string
+          watchlist_id: string
+        }
+        Insert: {
+          added_price: number
+          created_at?: string
+          id?: string
+          item_id: string
+          item_type: string
+          notes?: string | null
+          position?: number
+          target_price?: number | null
+          user_id: string
+          watchlist_id: string
+        }
+        Update: {
+          added_price?: number
+          created_at?: string
+          id?: string
+          item_id?: string
+          item_type?: string
+          notes?: string | null
+          position?: number
+          target_price?: number | null
+          user_id?: string
+          watchlist_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "watchlist_items_watchlist_id_fkey"
+            columns: ["watchlist_id"]
+            isOneToOne: false
+            referencedRelation: "watchlists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      watchlists: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_default: boolean
+          item_count: number
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_default?: boolean
+          item_count?: number
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_default?: boolean
+          item_count?: number
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -2360,6 +2532,7 @@ export type Database = {
         }
         Returns: string
       }
+      ensure_default_watchlist: { Args: { p_user_id: string }; Returns: string }
       invest_in_loan: {
         Args: { p_amount: number; p_loan_id: string }
         Returns: Json
