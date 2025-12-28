@@ -147,7 +147,7 @@ export default function Notifications() {
                     >
                       <div className="flex items-start gap-3">
                         <div className={`p-2 rounded-xl ${style.bg} flex-shrink-0`}>
-                          <span className="text-lg">{style.icon}</span>
+                          <style.icon className={`h-5 w-5 ${style.color}`} />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2">

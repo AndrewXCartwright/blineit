@@ -1,15 +1,49 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import {
+  DollarSign,
+  TrendingUp,
+  TrendingDown,
+  Trophy,
+  Heart,
+  UserPlus,
+  Bell,
+  Shield,
+  FileText,
+  Vote,
+  Zap,
+  Home,
+  Clock,
+  MessageCircle,
+  AlertTriangle,
+  LucideIcon,
+} from "lucide-react";
+
+export type NotificationType =
+  | "bet_won"
+  | "bet_lost"
+  | "dividend_received"
+  | "market_expiring"
+  | "new_property"
+  | "investment"
+  | "dividend"
+  | "prediction"
+  | "social"
+  | "governance"
+  | "security"
+  | "system"
+  | "achievement";
 
 export interface Notification {
   id: string;
   user_id: string;
-  type: "bet_won" | "bet_lost" | "dividend_received" | "market_expiring" | "new_property";
+  type: NotificationType;
   title: string;
   message: string;
   is_read: boolean;
-  data: Record<string, any>;
+  is_archived?: boolean;
+  data: Record<string, any> | null;
   created_at: string;
 }
 
@@ -31,11 +65,12 @@ export function useNotifications() {
       .from("notifications")
       .select("*")
       .eq("user_id", user.id)
+      .eq("is_archived", false)
       .order("created_at", { ascending: false })
       .limit(50);
 
     if (!error && data) {
-      setNotifications(data as Notification[]);
+      setNotifications(data as unknown as Notification[]);
       setUnreadCount(data.filter(n => !n.is_read).length);
     }
     setLoading(false);
@@ -97,7 +132,7 @@ export function useNotifications() {
 
     const { error } = await supabase
       .from("notifications")
-      .update({ is_read: true })
+      .update({ is_read: true, read_at: new Date().toISOString() })
       .eq("id", notificationId)
       .eq("user_id", user.id);
 
@@ -114,7 +149,7 @@ export function useNotifications() {
 
     const { error } = await supabase
       .from("notifications")
-      .update({ is_read: true })
+      .update({ is_read: true, read_at: new Date().toISOString() })
       .eq("user_id", user.id)
       .eq("is_read", false);
 
@@ -124,30 +159,59 @@ export function useNotifications() {
     }
   };
 
+  const archiveNotification = async (notificationId: string) => {
+    if (!user) return;
+
+    const { error } = await supabase
+      .from("notifications")
+      .update({ is_archived: true, archived_at: new Date().toISOString() })
+      .eq("id", notificationId)
+      .eq("user_id", user.id);
+
+    if (!error) {
+      setNotifications(prev => prev.filter(n => n.id !== notificationId));
+    }
+  };
+
   return {
     notifications,
     unreadCount,
     loading,
     markAsRead,
     markAllAsRead,
+    archiveNotification,
     refetch: fetchNotifications,
   };
 }
 
 // Helper to get icon and color for notification type
-export function getNotificationStyle(type: Notification["type"]) {
+export function getNotificationStyle(type: string): { icon: LucideIcon; color: string; bg: string } {
   switch (type) {
     case "bet_won":
-      return { icon: "🎉", color: "text-success", bg: "bg-success/20" };
+    case "achievement":
+      return { icon: Trophy, color: "text-yellow-500", bg: "bg-yellow-500/20" };
     case "bet_lost":
-      return { icon: "😔", color: "text-destructive", bg: "bg-destructive/20" };
+      return { icon: TrendingDown, color: "text-destructive", bg: "bg-destructive/20" };
     case "dividend_received":
-      return { icon: "💰", color: "text-accent", bg: "bg-accent/20" };
+    case "dividend":
+      return { icon: DollarSign, color: "text-green-500", bg: "bg-green-500/20" };
     case "market_expiring":
-      return { icon: "⏰", color: "text-warning", bg: "bg-warning/20" };
+      return { icon: Clock, color: "text-orange-500", bg: "bg-orange-500/20" };
     case "new_property":
-      return { icon: "🏠", color: "text-primary", bg: "bg-primary/20" };
+      return { icon: Home, color: "text-blue-500", bg: "bg-blue-500/20" };
+    case "investment":
+      return { icon: TrendingUp, color: "text-primary", bg: "bg-primary/20" };
+    case "prediction":
+      return { icon: Zap, color: "text-purple-500", bg: "bg-purple-500/20" };
+    case "social":
+      return { icon: UserPlus, color: "text-pink-500", bg: "bg-pink-500/20" };
+    case "governance":
+      return { icon: Vote, color: "text-indigo-500", bg: "bg-indigo-500/20" };
+    case "security":
+      return { icon: Shield, color: "text-red-500", bg: "bg-red-500/20" };
+    case "system":
+      return { icon: FileText, color: "text-muted-foreground", bg: "bg-muted" };
     default:
-      return { icon: "🔔", color: "text-foreground", bg: "bg-secondary" };
+      return { icon: Bell, color: "text-foreground", bg: "bg-secondary" };
   }
 }

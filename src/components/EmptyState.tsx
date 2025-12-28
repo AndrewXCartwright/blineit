@@ -1,14 +1,15 @@
-import { ReactNode } from "react";
+import { ReactNode, ComponentType } from "react";
 import { Link } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, LucideIcon } from "lucide-react";
 
 interface EmptyStateProps {
-  icon: ReactNode;
+  icon: ReactNode | LucideIcon;
   title: string;
   description: string;
   actionLabel?: string;
   actionLink?: string;
   onAction?: () => void;
+  action?: ReactNode;
 }
 
 export function EmptyState({
@@ -18,6 +19,7 @@ export function EmptyState({
   actionLabel,
   actionLink,
   onAction,
+  action,
 }: EmptyStateProps) {
   const ActionButton = () => (
     <button
@@ -39,11 +41,20 @@ export function EmptyState({
     </Link>
   );
 
+  // Check if icon is a component (LucideIcon) or ReactNode
+  const renderIcon = () => {
+    if (typeof icon === 'function') {
+      const IconComponent = icon as LucideIcon;
+      return <IconComponent className="h-8 w-8" />;
+    }
+    return icon;
+  };
+
   return (
     <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
       <div className="float-gentle mb-6 p-6 rounded-full bg-secondary/50">
         <div className="text-muted-foreground">
-          {icon}
+          {renderIcon()}
         </div>
       </div>
       
@@ -55,7 +66,7 @@ export function EmptyState({
         {description}
       </p>
       
-      {actionLabel && (
+      {action ? action : actionLabel && (
         actionLink ? <ActionLink /> : onAction ? <ActionButton /> : null
       )}
     </div>

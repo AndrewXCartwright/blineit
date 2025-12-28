@@ -101,7 +101,7 @@ export function NotificationBell() {
                     }`}
                   >
                     <div className={`p-2 rounded-xl ${style.bg} flex-shrink-0`}>
-                      <span className="text-lg">{style.icon}</span>
+                      <style.icon className={`h-4 w-4 ${style.color}`} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
