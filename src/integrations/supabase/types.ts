@@ -300,6 +300,48 @@ export type Database = {
           },
         ]
       }
+      buy_orders: {
+        Row: {
+          buyer_id: string
+          created_at: string
+          expires_at: string | null
+          filled_quantity: number
+          id: string
+          item_id: string
+          item_type: string
+          max_price_per_token: number
+          status: string
+          token_quantity: number
+          updated_at: string
+        }
+        Insert: {
+          buyer_id: string
+          created_at?: string
+          expires_at?: string | null
+          filled_quantity?: number
+          id?: string
+          item_id: string
+          item_type: string
+          max_price_per_token: number
+          status?: string
+          token_quantity: number
+          updated_at?: string
+        }
+        Update: {
+          buyer_id?: string
+          created_at?: string
+          expires_at?: string | null
+          filled_quantity?: number
+          id?: string
+          item_id?: string
+          item_type?: string
+          max_price_per_token?: number
+          status?: string
+          token_quantity?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       calculation_history: {
         Row: {
           calculator_type: string
@@ -955,6 +997,54 @@ export type Database = {
           updated_at?: string
           user_id?: string
           verification_status?: string | null
+        }
+        Relationships: []
+      }
+      listings: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          filled_quantity: number
+          id: string
+          item_id: string
+          item_type: string
+          min_purchase_quantity: number
+          price_per_token: number
+          seller_id: string
+          status: string
+          token_quantity: number
+          total_price: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          filled_quantity?: number
+          id?: string
+          item_id: string
+          item_type: string
+          min_purchase_quantity?: number
+          price_per_token: number
+          seller_id: string
+          status?: string
+          token_quantity: number
+          total_price?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          filled_quantity?: number
+          id?: string
+          item_id?: string
+          item_type?: string
+          min_purchase_quantity?: number
+          price_per_token?: number
+          seller_id?: string
+          status?: string
+          token_quantity?: number
+          total_price?: number | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -1859,6 +1949,117 @@ export type Database = {
         }
         Relationships: []
       }
+      token_price_history: {
+        Row: {
+          created_at: string
+          high: number | null
+          id: string
+          item_id: string
+          item_type: string
+          low: number | null
+          period: string
+          period_start: string
+          price: number
+          trade_count: number
+          volume: number
+        }
+        Insert: {
+          created_at?: string
+          high?: number | null
+          id?: string
+          item_id: string
+          item_type: string
+          low?: number | null
+          period: string
+          period_start: string
+          price: number
+          trade_count?: number
+          volume?: number
+        }
+        Update: {
+          created_at?: string
+          high?: number | null
+          id?: string
+          item_id?: string
+          item_type?: string
+          low?: number | null
+          period?: string
+          period_start?: string
+          price?: number
+          trade_count?: number
+          volume?: number
+        }
+        Relationships: []
+      }
+      trades: {
+        Row: {
+          buy_order_id: string | null
+          buyer_id: string
+          created_at: string
+          executed_at: string | null
+          id: string
+          item_id: string
+          item_type: string
+          listing_id: string | null
+          platform_fee: number
+          price_per_token: number
+          seller_id: string
+          seller_receives: number
+          status: string
+          token_quantity: number
+          total_price: number
+        }
+        Insert: {
+          buy_order_id?: string | null
+          buyer_id: string
+          created_at?: string
+          executed_at?: string | null
+          id?: string
+          item_id: string
+          item_type: string
+          listing_id?: string | null
+          platform_fee?: number
+          price_per_token: number
+          seller_id: string
+          seller_receives: number
+          status?: string
+          token_quantity: number
+          total_price: number
+        }
+        Update: {
+          buy_order_id?: string | null
+          buyer_id?: string
+          created_at?: string
+          executed_at?: string | null
+          id?: string
+          item_id?: string
+          item_type?: string
+          listing_id?: string | null
+          platform_fee?: number
+          price_per_token?: number
+          seller_id?: string
+          seller_receives?: number
+          status?: string
+          token_quantity?: number
+          total_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trades_buy_order_id_fkey"
+            columns: ["buy_order_id"]
+            isOneToOne: false
+            referencedRelation: "buy_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "trades_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       transactions: {
         Row: {
           amount: number
@@ -2498,6 +2699,7 @@ export type Database = {
         Args: { p_property_id: string; p_token_price: number; p_tokens: number }
         Returns: Json
       }
+      cancel_listing: { Args: { p_listing_id: string }; Returns: Json }
       check_2fa_rate_limit: { Args: { p_user_id: string }; Returns: Json }
       check_rate_limit: {
         Args: { p_max_per_minute?: number; p_user_id: string }
@@ -2510,6 +2712,17 @@ export type Database = {
           p_loan_id?: string
           p_property_id?: string
           p_template_id: string
+        }
+        Returns: Json
+      }
+      create_listing: {
+        Args: {
+          p_expires_at?: string
+          p_item_id: string
+          p_item_type: string
+          p_min_purchase?: number
+          p_price_per_token: number
+          p_quantity: number
         }
         Returns: Json
       }
@@ -2533,6 +2746,10 @@ export type Database = {
         Returns: string
       }
       ensure_default_watchlist: { Args: { p_user_id: string }; Returns: string }
+      execute_market_trade: {
+        Args: { p_buyer_id: string; p_listing_id: string; p_quantity: number }
+        Returns: Json
+      }
       invest_in_loan: {
         Args: { p_amount: number; p_loan_id: string }
         Returns: Json
