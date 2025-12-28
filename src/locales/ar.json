@@ -26,7 +26,9 @@
     "more": "المزيد",
     "less": "أقل",
     "settings": "الإعدادات",
-    "documents": "المستندات"
+    "documents": "المستندات",
+    "user": "مستخدم",
+    "tagline": "ترميز العقارات"
   },
   "auth": {
     "login": "تسجيل الدخول",
@@ -71,6 +73,14 @@
     "verificationRequired": "التحقق مطلوب",
     "verificationMessage": "أكمل التحقق من الهوية لبدء الاستثمار. يستغرق حوالي 5 دقائق.",
     "verifyNow": "تحقق الآن"
+  },
+  "quickStats": {
+    "avgReturn": "متوسط العائد",
+    "properties": "العقارات",
+    "investors": "المستثمرون",
+    "avgApy": "متوسط العائد السنوي",
+    "loans": "القروض",
+    "defaultRate": "معدل التعثر"
   },
   "investments": {
     "equity": "حقوق الملكية",

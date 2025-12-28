@@ -15,7 +15,7 @@ export function Header() {
   const { user } = useAuth();
   const { profile } = useUserData();
   
-  const displayName = profile?.display_name || profile?.name || user?.email?.split("@")[0] || "User";
+  const displayName = profile?.display_name || profile?.name || user?.email?.split("@")[0] || t('common.user');
 
   return (
     <header className="sticky top-0 z-40 glass-card border-b border-border/50 px-4 py-3">
@@ -26,7 +26,7 @@ export function Header() {
             <h1 className="font-display font-bold text-lg text-foreground">
               {user ? `${t('dashboard.welcome')}, ${displayName}` : "B-LINE-IT"}
             </h1>
-            <p className="text-xs text-muted-foreground">Real Estate Tokenization</p>
+            <p className="text-xs text-muted-foreground">{t('common.tagline')}</p>
           </div>
         </div>
         <div className="flex items-center gap-1">

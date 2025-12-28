@@ -26,7 +26,9 @@
     "more": "Más",
     "less": "Menos",
     "settings": "Configuración",
-    "documents": "Documentos"
+    "documents": "Documentos",
+    "user": "Usuario",
+    "tagline": "Tokenización inmobiliaria"
   },
   "auth": {
     "login": "Iniciar Sesión",
@@ -71,6 +73,14 @@
     "verificationRequired": "Verificación Requerida",
     "verificationMessage": "Completa la verificación de identidad para comenzar a invertir. Toma unos 5 minutos.",
     "verifyNow": "Verificar Ahora"
+  },
+  "quickStats": {
+    "avgReturn": "Rend. prom.",
+    "properties": "Propiedades",
+    "investors": "Inversores",
+    "avgApy": "APY prom.",
+    "loans": "Préstamos",
+    "defaultRate": "Tasa de morosidad"
   },
   "investments": {
     "equity": "Capital",

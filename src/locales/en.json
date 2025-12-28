@@ -37,7 +37,9 @@
     "status": "Status",
     "ready": "Ready",
     "pending": "Pending",
-    "total": "Total"
+    "total": "Total",
+    "user": "User",
+    "tagline": "Real Estate Tokenization"
   },
   "auth": {
     "login": "Log In",
@@ -82,6 +84,14 @@
     "verificationRequired": "Verification Required",
     "verificationMessage": "Complete identity verification to start investing. Takes about 5 minutes.",
     "verifyNow": "Verify Now"
+  },
+  "quickStats": {
+    "avgReturn": "Avg Return",
+    "properties": "Properties",
+    "investors": "Investors",
+    "avgApy": "Avg APY",
+    "loans": "Loans",
+    "defaultRate": "Default Rate"
   },
   "property": {
     "title": "Properties",
