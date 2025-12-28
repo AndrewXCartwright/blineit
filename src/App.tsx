@@ -62,6 +62,14 @@ import AllMarkets from "./pages/AllMarkets";
 import MyOrders from "./pages/MyOrders";
 import TradeHistory from "./pages/TradeHistory";
 import TokenMarket from "./pages/TokenMarket";
+import TaxCenter from "./pages/TaxCenter";
+import TaxSummary from "./pages/TaxSummary";
+import TaxDividends from "./pages/TaxDividends";
+import TaxInterest from "./pages/TaxInterest";
+import TaxCapitalGains from "./pages/TaxCapitalGains";
+import TaxPredictions from "./pages/TaxPredictions";
+import TaxSettings from "./pages/TaxSettings";
+import TaxCostBasis from "./pages/TaxCostBasis";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProperties from "./pages/admin/AdminProperties";
 import AdminLoans from "./pages/admin/AdminLoans";
@@ -134,6 +142,15 @@ const App = () => (
                 <Route path="/market/orders" element={<ProtectedRoute><MyOrders /></ProtectedRoute>} />
                 <Route path="/market/history" element={<ProtectedRoute><TradeHistory /></ProtectedRoute>} />
                 <Route path="/market/:itemId" element={<ProtectedRoute><TokenMarket /></ProtectedRoute>} />
+                {/* Tax Center Routes */}
+                <Route path="/tax" element={<ProtectedRoute><TaxCenter /></ProtectedRoute>} />
+                <Route path="/tax/summary" element={<ProtectedRoute><TaxSummary /></ProtectedRoute>} />
+                <Route path="/tax/dividends" element={<ProtectedRoute><TaxDividends /></ProtectedRoute>} />
+                <Route path="/tax/interest" element={<ProtectedRoute><TaxInterest /></ProtectedRoute>} />
+                <Route path="/tax/capital-gains" element={<ProtectedRoute><TaxCapitalGains /></ProtectedRoute>} />
+                <Route path="/tax/predictions" element={<ProtectedRoute><TaxPredictions /></ProtectedRoute>} />
+                <Route path="/tax/settings" element={<ProtectedRoute><TaxSettings /></ProtectedRoute>} />
+                <Route path="/tax/cost-basis" element={<ProtectedRoute><TaxCostBasis /></ProtectedRoute>} />
                 <Route path="/r/:code" element={<ReferralLanding />} />
                 <Route path="/install" element={<InstallPage />} />
                 <Route path="/coming-soon/:assetClass" element={<ComingSoon />} />
