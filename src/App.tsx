@@ -37,6 +37,13 @@ import InstallPage from "./pages/InstallPage";
 import SecuritySettings from "./pages/SecuritySettings";
 import Documents from "./pages/Documents";
 import Search from "./pages/Search";
+import AdvancedSearch from "./pages/AdvancedSearch";
+import SavedSearches from "./pages/SavedSearches";
+import BrowseHistory from "./pages/BrowseHistory";
+import Discover from "./pages/Discover";
+import Trending from "./pages/Trending";
+import CategoryBrowse from "./pages/CategoryBrowse";
+import LocationBrowse from "./pages/LocationBrowse";
 import CompareProperties from "./pages/CompareProperties";
 import CompareLoans from "./pages/CompareLoans";
 import ComparePredictions from "./pages/ComparePredictions";
@@ -178,6 +185,13 @@ const App = () => (
                 <Route path="/portfolio/analytics" element={<ProtectedRoute><PortfolioAnalytics /></ProtectedRoute>} />
                 <Route path="/documents" element={<ProtectedRoute><Documents /></ProtectedRoute>} />
                 <Route path="/search" element={<ProtectedRoute><Search /></ProtectedRoute>} />
+                <Route path="/search/advanced" element={<ProtectedRoute><AdvancedSearch /></ProtectedRoute>} />
+                <Route path="/search/saved" element={<ProtectedRoute><SavedSearches /></ProtectedRoute>} />
+                <Route path="/search/history" element={<ProtectedRoute><BrowseHistory /></ProtectedRoute>} />
+                <Route path="/discover" element={<ProtectedRoute><Discover /></ProtectedRoute>} />
+                <Route path="/discover/trending" element={<ProtectedRoute><Trending /></ProtectedRoute>} />
+                <Route path="/discover/category/:slug" element={<ProtectedRoute><CategoryBrowse /></ProtectedRoute>} />
+                <Route path="/discover/location/:slug" element={<ProtectedRoute><LocationBrowse /></ProtectedRoute>} />
                 <Route path="/compare/properties" element={<ProtectedRoute><CompareProperties /></ProtectedRoute>} />
                 <Route path="/compare/loans" element={<ProtectedRoute><CompareLoans /></ProtectedRoute>} />
                 <Route path="/compare/predictions" element={<ProtectedRoute><ComparePredictions /></ProtectedRoute>} />
