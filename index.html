@@ -79,8 +79,10 @@
       }
       
       #splash-screen .logo {
-        font-size: 48px;
+        width: 80px;
+        height: 80px;
         margin-bottom: 16px;
+        object-fit: contain;
       }
       
       #splash-screen .title {
@@ -118,7 +120,7 @@
   <body>
     <!-- Splash Screen -->
     <div id="splash-screen">
-      <div class="logo">🐝</div>
+      <img src="/src/assets/logo.png" alt="B-LINE-IT" class="logo" onerror="this.style.display='none'" />
       <div class="title">B-LINE-IT</div>
       <div class="spinner"></div>
       <div class="tagline">Tokenized Real Estate Investing</div>
