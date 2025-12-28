@@ -113,6 +113,13 @@ import BiometricSetup from "./pages/BiometricSetup";
 import PinSetup from "./pages/PinSetup";
 import TrustedDevices from "./pages/TrustedDevices";
 import SecurityActivity from "./pages/SecurityActivity";
+import ReportsHub from "./pages/ReportsHub";
+import ReportBuilder from "./pages/ReportBuilder";
+import ScheduledReports from "./pages/ScheduledReports";
+import AnalyticsDashboard from "./pages/AnalyticsDashboard";
+import ComparisonTool from "./pages/ComparisonTool";
+import DataExport from "./pages/DataExport";
+import ReportView from "./pages/ReportView";
 
 const queryClient = new QueryClient();
 
@@ -205,6 +212,14 @@ const App = () => (
                 <Route path="/institutional/entity" element={<ProtectedRoute><InstitutionalEntitySetup /></ProtectedRoute>} />
                 <Route path="/institutional/contact" element={<ProtectedRoute><InstitutionalContact /></ProtectedRoute>} />
                 <Route path="/coming-soon/:assetClass" element={<ComingSoon />} />
+                {/* Reports Routes */}
+                <Route path="/reports" element={<ProtectedRoute><ReportsHub /></ProtectedRoute>} />
+                <Route path="/reports/builder" element={<ProtectedRoute><ReportBuilder /></ProtectedRoute>} />
+                <Route path="/reports/scheduled" element={<ProtectedRoute><ScheduledReports /></ProtectedRoute>} />
+                <Route path="/reports/analytics" element={<ProtectedRoute><AnalyticsDashboard /></ProtectedRoute>} />
+                <Route path="/reports/compare" element={<ProtectedRoute><ComparisonTool /></ProtectedRoute>} />
+                <Route path="/reports/export" element={<ProtectedRoute><DataExport /></ProtectedRoute>} />
+                <Route path="/reports/view/:id" element={<ProtectedRoute><ReportView /></ProtectedRoute>} />
                 {/* Governance Routes */}
                 <Route path="/governance" element={<ProtectedRoute><GovernanceHub /></ProtectedRoute>} />
                 <Route path="/governance/proposal/:id" element={<ProtectedRoute><ProposalDetail /></ProtectedRoute>} />
