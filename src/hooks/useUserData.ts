@@ -11,6 +11,13 @@ interface Profile {
   display_name: string | null;
   avatar_url: string | null;
   wallet_balance: number;
+  referral_code: string | null;
+  referral_tier: string | null;
+  referral_tier_level: number | null;
+  total_referrals: number | null;
+  qualified_referrals: number | null;
+  referral_earnings: number | null;
+  referral_commission_earned: number | null;
 }
 
 interface Holding {
