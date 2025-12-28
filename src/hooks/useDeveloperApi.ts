@@ -223,6 +223,32 @@ export const useDeleteApiKey = () => {
   });
 };
 
+export const useUpdateApiKey = () => {
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
+
+  return useMutation({
+    mutationFn: async ({ id, updates }: { id: string; updates: Partial<ApiKey> }) => {
+      if (!user?.id) throw new Error("Not authenticated");
+
+      const { error } = await supabase
+        .from("api_keys")
+        .update(updates)
+        .eq("id", id)
+        .eq("user_id", user.id);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["api-keys"] });
+      toast({ title: "API Key Updated", description: "The API key has been updated." });
+    },
+    onError: () => {
+      toast({ title: "Error", description: "Failed to update API key.", variant: "destructive" });
+    },
+  });
+};
+
 export const useWebhooks = () => {
   const { user } = useAuth();
 
@@ -286,6 +312,32 @@ export const useCreateWebhook = () => {
     },
     onError: () => {
       toast({ title: "Error", description: "Failed to create webhook.", variant: "destructive" });
+    },
+  });
+};
+
+export const useUpdateWebhook = () => {
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
+
+  return useMutation({
+    mutationFn: async ({ id, updates }: { id: string; updates: Partial<ApiWebhook> }) => {
+      if (!user?.id) throw new Error("Not authenticated");
+
+      const { error } = await supabase
+        .from("api_webhooks")
+        .update(updates)
+        .eq("id", id)
+        .eq("user_id", user.id);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["api-webhooks"] });
+      toast({ title: "Webhook Updated", description: "The webhook has been updated." });
+    },
+    onError: () => {
+      toast({ title: "Error", description: "Failed to update webhook.", variant: "destructive" });
     },
   });
 };
