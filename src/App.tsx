@@ -95,13 +95,16 @@ import AdminSettings from "./pages/admin/AdminSettings";
 import AdminKYC from "./pages/admin/AdminKYC";
 import AdminReferrals from "./pages/admin/AdminReferrals";
 import Accreditation from "./pages/Accreditation";
+import AccreditationStatus from "./pages/AccreditationStatus";
 import ExclusiveOfferings from "./pages/ExclusiveOfferings";
 import InstitutionalDashboard from "./pages/InstitutionalDashboard";
 import InstitutionalOfferingDetail from "./pages/InstitutionalOfferingDetail";
 import InstitutionalSubscriptionFlow from "./pages/InstitutionalSubscriptionFlow";
 import InstitutionalInvestments from "./pages/InstitutionalInvestments";
+import InstitutionalInvestmentDetail from "./pages/InstitutionalInvestmentDetail";
 import InstitutionalReports from "./pages/InstitutionalReports";
 import InstitutionalEntitySetup from "./pages/InstitutionalEntitySetup";
+import InstitutionalContact from "./pages/InstitutionalContact";
 
 const queryClient = new QueryClient();
 
@@ -177,6 +180,7 @@ const App = () => (
                 <Route path="/install" element={<InstallPage />} />
                 {/* Accredited Investor Routes */}
                 <Route path="/accreditation" element={<ProtectedRoute><Accreditation /></ProtectedRoute>} />
+                <Route path="/accreditation/status" element={<ProtectedRoute><AccreditationStatus /></ProtectedRoute>} />
                 <Route path="/exclusive-offerings" element={<ProtectedRoute><ExclusiveOfferings /></ProtectedRoute>} />
                 {/* Institutional Investor Routes */}
                 <Route path="/institutional" element={<ProtectedRoute><InstitutionalDashboard /></ProtectedRoute>} />
@@ -184,8 +188,10 @@ const App = () => (
                 <Route path="/institutional/offering/:id" element={<ProtectedRoute><InstitutionalOfferingDetail /></ProtectedRoute>} />
                 <Route path="/institutional/subscribe/:id" element={<ProtectedRoute><InstitutionalSubscriptionFlow /></ProtectedRoute>} />
                 <Route path="/institutional/investments" element={<ProtectedRoute><InstitutionalInvestments /></ProtectedRoute>} />
+                <Route path="/institutional/investment/:id" element={<ProtectedRoute><InstitutionalInvestmentDetail /></ProtectedRoute>} />
                 <Route path="/institutional/reports" element={<ProtectedRoute><InstitutionalReports /></ProtectedRoute>} />
                 <Route path="/institutional/entity" element={<ProtectedRoute><InstitutionalEntitySetup /></ProtectedRoute>} />
+                <Route path="/institutional/contact" element={<ProtectedRoute><InstitutionalContact /></ProtectedRoute>} />
                 <Route path="/coming-soon/:assetClass" element={<ComingSoon />} />
                 {/* Developer Portal Routes */}
                 <Route path="/developers" element={<ProtectedRoute><DeveloperPortal /></ProtectedRoute>} />
