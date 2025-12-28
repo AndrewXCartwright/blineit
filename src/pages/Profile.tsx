@@ -1,4 +1,4 @@
-import { User, Settings, Bell, Shield, HelpCircle, LogOut, ChevronRight, Trophy, Target, Building2, Wallet, ShieldCheck, AlertCircle, Crown, Gift, Palette } from "lucide-react";
+import { User, Settings, Bell, Shield, HelpCircle, LogOut, ChevronRight, Trophy, Target, Building2, Wallet, ShieldCheck, AlertCircle, Crown, Gift, Palette, Users, MessageCircle } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserData } from "@/hooks/useUserData";
 import { useKYC } from "@/hooks/useKYC";
@@ -92,6 +92,28 @@ export default function Profile() {
                 {t('profile.investor')}
               </span>
             )}
+          </div>
+          
+          {/* Social Stats */}
+          <div className="flex items-center justify-center gap-6 mt-4 pt-4 border-t border-border/50">
+            <Link to="/community" className="text-center hover:opacity-80 transition-opacity">
+              <p className="font-display font-bold text-lg text-foreground">
+                <CountUp end={profile?.followers_count || 0} />
+              </p>
+              <p className="text-xs text-muted-foreground">{t('profile.followers')}</p>
+            </Link>
+            <Link to="/community" className="text-center hover:opacity-80 transition-opacity">
+              <p className="font-display font-bold text-lg text-foreground">
+                <CountUp end={profile?.following_count || 0} />
+              </p>
+              <p className="text-xs text-muted-foreground">{t('profile.following')}</p>
+            </Link>
+            <Link to="/community" className="text-center hover:opacity-80 transition-opacity">
+              <p className="font-display font-bold text-lg text-foreground">
+                <CountUp end={profile?.posts_count || 0} />
+              </p>
+              <p className="text-xs text-muted-foreground">{t('profile.posts')}</p>
+            </Link>
           </div>
         </div>
 
@@ -199,13 +221,25 @@ export default function Profile() {
           </Link>
           <Link
             to="/predict"
-            className="w-full flex items-center justify-between p-4 hover:bg-secondary/50 transition-colors"
+            className="w-full flex items-center justify-between p-4 hover:bg-secondary/50 transition-colors border-b border-border/50"
           >
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-xl bg-accent/20">
                 <Target className="w-5 h-5 text-accent" />
               </div>
               <span className="font-medium text-foreground">{t('profile.predictionMarkets')}</span>
+            </div>
+            <ChevronRight className="w-5 h-5 text-muted-foreground" />
+          </Link>
+          <Link
+            to="/community"
+            className="w-full flex items-center justify-between p-4 hover:bg-secondary/50 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-primary/20">
+                <Users className="w-5 h-5 text-primary" />
+              </div>
+              <span className="font-medium text-foreground">{t('profile.community')}</span>
             </div>
             <ChevronRight className="w-5 h-5 text-muted-foreground" />
           </Link>

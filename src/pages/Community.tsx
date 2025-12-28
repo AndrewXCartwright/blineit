@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Heart, MessageCircle, Share2, Send, Image, Building2, Target, TrendingUp, Users, Sparkles } from "lucide-react";
+import { Heart, MessageCircle, Share2, Send, Image, Building2, Target, TrendingUp, Users, Sparkles, Plus } from "lucide-react";
 import { usePosts, UserPost } from "@/hooks/useSocial";
 import { useAuth } from "@/hooks/useAuth";
 import { formatDistanceToNow } from "date-fns";
@@ -9,13 +9,22 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/Skeleton";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 export default function Community() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [feedType, setFeedType] = useState<"following" | "trending" | "new">("new");
   const { posts, loading, createPost, toggleLike } = usePosts(feedType);
   const [newPostContent, setNewPostContent] = useState("");
   const [isPosting, setIsPosting] = useState(false);
+  const [showCreatePost, setShowCreatePost] = useState(false);
+
+  const scrollToCreatePost = () => {
+    setShowCreatePost(true);
+    // Scroll to top where the create post area is
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const handleCreatePost = async () => {
     if (!newPostContent.trim()) return;
@@ -41,11 +50,11 @@ export default function Community() {
     <div className="min-h-screen pb-24">
       <header className="sticky top-0 z-40 glass-card border-b border-border/50 px-4 py-4">
         <div className="flex items-center justify-between">
-          <h1 className="font-display text-2xl font-bold text-foreground">Community</h1>
+          <h1 className="font-display text-2xl font-bold text-foreground">{t('community.title')}</h1>
           <Link to="/leaderboard">
             <Button variant="outline" size="sm" className="gap-2">
               <TrendingUp className="w-4 h-4" />
-              Leaderboard
+              {t('community.leaderboard')}
             </Button>
           </Link>
         </div>
@@ -55,9 +64,9 @@ export default function Community() {
         {/* Feed Tabs */}
         <div className="flex gap-2">
           {[
-            { key: "new", label: "New", icon: Sparkles },
-            { key: "trending", label: "Trending", icon: TrendingUp },
-            { key: "following", label: "Following", icon: Users },
+            { key: "new", label: t('community.new'), icon: Sparkles },
+            { key: "trending", label: t('community.trending'), icon: TrendingUp },
+            { key: "following", label: t('community.following'), icon: Users },
           ].map(({ key, label, icon: Icon }) => (
             <button
               key={key}
@@ -76,7 +85,7 @@ export default function Community() {
 
         {/* Create Post */}
         {user ? (
-          <div className="glass-card rounded-2xl p-5">
+          <div className={`glass-card rounded-2xl p-5 ${showCreatePost ? 'ring-2 ring-primary' : ''}`}>
             <div className="flex items-start gap-3">
               <Avatar className="w-10 h-10">
                 <AvatarFallback className="bg-primary/20 text-primary">
@@ -85,25 +94,26 @@ export default function Community() {
               </Avatar>
               <div className="flex-1">
                 <Textarea
-                  placeholder="What's on your mind?"
+                  placeholder={t('community.whatsOnYourMind')}
                   value={newPostContent}
                   onChange={(e) => setNewPostContent(e.target.value)}
                   className="min-h-[80px] resize-none mb-3"
                   maxLength={1000}
+                  autoFocus={showCreatePost}
                 />
-                <div className="flex items-center justify-between">
-                  <div className="flex gap-2">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <div className="flex gap-2 flex-wrap">
                     <Button variant="outline" size="sm" className="gap-2" disabled>
                       <Image className="w-4 h-4" />
-                      Image
+                      {t('community.image')}
                     </Button>
                     <Button variant="outline" size="sm" className="gap-2" disabled>
                       <Building2 className="w-4 h-4" />
-                      Tag Property
+                      {t('community.tagProperty')}
                     </Button>
                     <Button variant="outline" size="sm" className="gap-2" disabled>
                       <Target className="w-4 h-4" />
-                      Tag Prediction
+                      {t('community.tagPrediction')}
                     </Button>
                   </div>
                   <Button
@@ -112,7 +122,7 @@ export default function Community() {
                     className="gap-2"
                   >
                     <Send className="w-4 h-4" />
-                    {isPosting ? "Posting..." : "Post"}
+                    {isPosting ? t('community.posting') : t('community.post')}
                   </Button>
                 </div>
               </div>
@@ -122,9 +132,9 @@ export default function Community() {
           <div className="glass-card rounded-2xl p-5 text-center">
             <p className="text-muted-foreground">
               <Link to="/auth" className="text-primary hover:underline">
-                Sign in
+                {t('auth.signIn')}
               </Link>{" "}
-              to join the community
+              {t('community.toJoin')}
             </p>
           </div>
         )}
@@ -140,10 +150,10 @@ export default function Community() {
           <div className="text-center py-12">
             <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-50" />
             <h3 className="font-display font-semibold text-foreground mb-2">
-              No posts yet
+              {t('community.noPostsYet')}
             </h3>
             <p className="text-muted-foreground text-sm">
-              Be the first to share your thoughts!
+              {t('community.beFirst')}
             </p>
           </div>
         ) : (
@@ -159,6 +169,17 @@ export default function Community() {
           </div>
         )}
       </main>
+
+      {/* Floating Create Post Button */}
+      {user && (
+        <button
+          onClick={scrollToCreatePost}
+          className="fixed bottom-24 right-4 z-50 w-14 h-14 rounded-full gradient-primary glow-primary flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
+          aria-label={t('community.createPost')}
+        >
+          <Plus className="w-6 h-6 text-primary-foreground" />
+        </button>
+      )}
     </div>
   );
 }

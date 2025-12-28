@@ -329,6 +329,28 @@
     "notifications": "الإشعارات",
     "security": "الأمان",
     "helpSupport": "المساعدة والدعم",
-    "logOut": "تسجيل الخروج"
+    "logOut": "تسجيل الخروج",
+    "followers": "المتابعون",
+    "following": "متابَع",
+    "posts": "المنشورات",
+    "community": "المجتمع"
+  },
+  "community": {
+    "title": "المجتمع",
+    "leaderboard": "لوحة المتصدرين",
+    "new": "جديد",
+    "trending": "رائج",
+    "following": "متابَع",
+    "whatsOnYourMind": "ما الذي يدور في ذهنك؟",
+    "image": "صورة",
+    "tagProperty": "وسم عقار",
+    "tagPrediction": "وسم تنبؤ",
+    "posting": "جاري النشر...",
+    "post": "نشر",
+    "toJoin": "للانضمام إلى المجتمع",
+    "noPostsYet": "لا توجد منشورات بعد",
+    "beFirst": "كن أول من يشارك أفكاره!",
+    "createPost": "إنشاء منشور",
+    "share": "مشاركة"
   }
 }

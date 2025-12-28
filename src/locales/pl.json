@@ -72,7 +72,11 @@
     "gains": "zyski",
     "verificationRequired": "Wymagana Weryfikacja",
     "verificationMessage": "Ukończ weryfikację tożsamości, aby zacząć inwestować. Zajmie to około 5 minut.",
-    "verifyNow": "Zweryfikuj Teraz"
+    "verifyNow": "Zweryfikuj Teraz",
+    "community": "Społeczność",
+    "calculators": "Kalkulatory",
+    "alerts": "Powiadomienia",
+    "documents": "Dokumenty"
   },
   "quickStats": {
     "avgReturn": "Śr. zwrot",
@@ -353,6 +357,28 @@
     "notifications": "Powiadomienia",
     "security": "Bezpieczeństwo",
     "helpSupport": "Pomoc i wsparcie",
-    "logOut": "Wyloguj się"
+    "logOut": "Wyloguj się",
+    "followers": "Obserwujący",
+    "following": "Obserwowani",
+    "posts": "Posty",
+    "community": "Społeczność"
+  },
+  "community": {
+    "title": "Społeczność",
+    "leaderboard": "Ranking",
+    "new": "Nowe",
+    "trending": "Popularne",
+    "following": "Obserwowani",
+    "whatsOnYourMind": "Co masz na myśli?",
+    "image": "Zdjęcie",
+    "tagProperty": "Oznacz nieruchomość",
+    "tagPrediction": "Oznacz prognozę",
+    "posting": "Publikowanie...",
+    "post": "Opublikuj",
+    "toJoin": "aby dołączyć do społeczności",
+    "noPostsYet": "Brak postów",
+    "beFirst": "Bądź pierwszy i podziel się swoimi przemyśleniami!",
+    "createPost": "Utwórz post",
+    "share": "Udostępnij"
   }
 }

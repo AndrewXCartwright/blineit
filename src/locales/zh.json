@@ -329,6 +329,28 @@
     "notifications": "通知",
     "security": "安全",
     "helpSupport": "帮助与支持",
-    "logOut": "退出登录"
+    "logOut": "退出登录",
+    "followers": "粉丝",
+    "following": "关注",
+    "posts": "帖子",
+    "community": "社区"
+  },
+  "community": {
+    "title": "社区",
+    "leaderboard": "排行榜",
+    "new": "最新",
+    "trending": "热门",
+    "following": "关注",
+    "whatsOnYourMind": "有什么想法？",
+    "image": "图片",
+    "tagProperty": "标记房产",
+    "tagPrediction": "标记预测",
+    "posting": "发布中...",
+    "post": "发布",
+    "toJoin": "加入社区",
+    "noPostsYet": "暂无帖子",
+    "beFirst": "成为第一个分享想法的人！",
+    "createPost": "创建帖子",
+    "share": "分享"
   }
 }
