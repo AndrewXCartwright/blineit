@@ -29,6 +29,7 @@ interface Property {
   year_built: number | null;
   category: string;
   description: string | null;
+  image_url?: string;
   is_hot: boolean;
 }
 
@@ -219,10 +220,17 @@ export default function PropertyDetail() {
     <div className="min-h-screen pb-24">
       {/* Hero Image */}
       <div className="h-64 relative overflow-hidden">
-        {/* Gradient background with building icon */}
-        <div className="absolute inset-0 gradient-primary flex items-center justify-center">
-          <Building2 className="w-24 h-24 text-primary-foreground/30" />
-        </div>
+        {property.image_url ? (
+          <img
+            src={property.image_url}
+            alt={`${property.name} property photo`}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 gradient-primary flex items-center justify-center">
+            <Building2 className="w-24 h-24 text-primary-foreground/30" />
+          </div>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
         
         {/* Top controls */}
