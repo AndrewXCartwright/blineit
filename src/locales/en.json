@@ -605,5 +605,28 @@
     "inviteFriends": "Invite Friends",
     "yourCode": "Your Referral Code",
     "earnings": "Referral Earnings"
+  },
+  "profile": {
+    "title": "Profile",
+    "signInToView": "Sign in to view your profile",
+    "trackInvestments": "Track your investments and manage your account",
+    "investor": "Investor",
+    "completeVerification": "Complete Verification",
+    "verifyIdentity": "Verify your identity to unlock full access to investing and higher limits.",
+    "startVerification": "Start Verification",
+    "properties": "Properties",
+    "totalBets": "Total Bets",
+    "winRate": "Win Rate",
+    "viewAllReferrals": "View all referrals & leaderboard",
+    "adminDashboard": "Admin Dashboard",
+    "managePlatform": "Manage platform settings",
+    "viewWallet": "View Wallet",
+    "exploreProperties": "Explore Properties",
+    "predictionMarkets": "Prediction Markets",
+    "appearance": "Appearance",
+    "notifications": "Notifications",
+    "security": "Security",
+    "helpSupport": "Help & Support",
+    "logOut": "Log Out"
   }
 }

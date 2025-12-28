@@ -307,5 +307,28 @@
     "inviteFriends": "Invitar Amigos",
     "yourCode": "Tu Código de Referido",
     "earnings": "Ganancias por Referencias"
+  },
+  "profile": {
+    "title": "Perfil",
+    "signInToView": "Inicia sesión para ver tu perfil",
+    "trackInvestments": "Sigue tus inversiones y gestiona tu cuenta",
+    "investor": "Inversor",
+    "completeVerification": "Completar Verificación",
+    "verifyIdentity": "Verifica tu identidad para desbloquear el acceso completo a inversiones y límites más altos.",
+    "startVerification": "Iniciar Verificación",
+    "properties": "Propiedades",
+    "totalBets": "Total de Apuestas",
+    "winRate": "Tasa de Victorias",
+    "viewAllReferrals": "Ver todas las referencias y clasificación",
+    "adminDashboard": "Panel de Administración",
+    "managePlatform": "Gestionar configuración de la plataforma",
+    "viewWallet": "Ver Billetera",
+    "exploreProperties": "Explorar Propiedades",
+    "predictionMarkets": "Mercados de Predicción",
+    "appearance": "Apariencia",
+    "notifications": "Notificaciones",
+    "security": "Seguridad",
+    "helpSupport": "Ayuda y Soporte",
+    "logOut": "Cerrar Sesión"
   }
 }

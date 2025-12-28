@@ -307,5 +307,28 @@
     "inviteFriends": "دعوة الأصدقاء",
     "yourCode": "رمز الإحالة الخاص بك",
     "earnings": "أرباح الإحالة"
+  },
+  "profile": {
+    "title": "الملف الشخصي",
+    "signInToView": "سجّل الدخول لعرض ملفك الشخصي",
+    "trackInvestments": "تتبع استثماراتك وإدارة حسابك",
+    "investor": "مستثمر",
+    "completeVerification": "إكمال التحقق",
+    "verifyIdentity": "تحقق من هويتك لفتح الوصول الكامل للاستثمار وحدود أعلى.",
+    "startVerification": "بدء التحقق",
+    "properties": "العقارات",
+    "totalBets": "إجمالي الرهانات",
+    "winRate": "معدل الفوز",
+    "viewAllReferrals": "عرض جميع الإحالات ولوحة المتصدرين",
+    "adminDashboard": "لوحة التحكم",
+    "managePlatform": "إدارة إعدادات المنصة",
+    "viewWallet": "عرض المحفظة",
+    "exploreProperties": "استكشاف العقارات",
+    "predictionMarkets": "أسواق التنبؤ",
+    "appearance": "المظهر",
+    "notifications": "الإشعارات",
+    "security": "الأمان",
+    "helpSupport": "المساعدة والدعم",
+    "logOut": "تسجيل الخروج"
   }
 }

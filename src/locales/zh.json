@@ -307,5 +307,28 @@
     "inviteFriends": "邀请好友",
     "yourCode": "您的推荐码",
     "earnings": "推荐收益"
+  },
+  "profile": {
+    "title": "个人资料",
+    "signInToView": "登录以查看您的个人资料",
+    "trackInvestments": "跟踪您的投资并管理您的账户",
+    "investor": "投资者",
+    "completeVerification": "完成验证",
+    "verifyIdentity": "验证您的身份以解锁完整的投资访问权限和更高的限额。",
+    "startVerification": "开始验证",
+    "properties": "房产",
+    "totalBets": "总投注数",
+    "winRate": "胜率",
+    "viewAllReferrals": "查看所有推荐和排行榜",
+    "adminDashboard": "管理仪表板",
+    "managePlatform": "管理平台设置",
+    "viewWallet": "查看钱包",
+    "exploreProperties": "探索房产",
+    "predictionMarkets": "预测市场",
+    "appearance": "外观",
+    "notifications": "通知",
+    "security": "安全",
+    "helpSupport": "帮助与支持",
+    "logOut": "退出登录"
   }
 }
