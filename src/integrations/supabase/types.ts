@@ -1458,13 +1458,18 @@ export type Database = {
           preferred_language: string | null
           preferred_number_format: string | null
           profile_visibility: string | null
+          qualified_referrals: number | null
           referral_code: string | null
+          referral_commission_earned: number | null
           referral_earnings: number | null
+          referral_tier: string | null
+          referral_tier_level: number | null
           referred_by: string | null
           show_investments: boolean | null
           show_on_leaderboard: boolean | null
           show_predictions: boolean | null
           total_invested: number | null
+          total_referrals: number | null
           twitter_handle: string | null
           two_factor_backup_codes: string[] | null
           two_factor_enabled: boolean | null
@@ -1502,13 +1507,18 @@ export type Database = {
           preferred_language?: string | null
           preferred_number_format?: string | null
           profile_visibility?: string | null
+          qualified_referrals?: number | null
           referral_code?: string | null
+          referral_commission_earned?: number | null
           referral_earnings?: number | null
+          referral_tier?: string | null
+          referral_tier_level?: number | null
           referred_by?: string | null
           show_investments?: boolean | null
           show_on_leaderboard?: boolean | null
           show_predictions?: boolean | null
           total_invested?: number | null
+          total_referrals?: number | null
           twitter_handle?: string | null
           two_factor_backup_codes?: string[] | null
           two_factor_enabled?: boolean | null
@@ -1546,13 +1556,18 @@ export type Database = {
           preferred_language?: string | null
           preferred_number_format?: string | null
           profile_visibility?: string | null
+          qualified_referrals?: number | null
           referral_code?: string | null
+          referral_commission_earned?: number | null
           referral_earnings?: number | null
+          referral_tier?: string | null
+          referral_tier_level?: number | null
           referred_by?: string | null
           show_investments?: boolean | null
           show_on_leaderboard?: boolean | null
           show_predictions?: boolean | null
           total_invested?: number | null
+          total_referrals?: number | null
           twitter_handle?: string | null
           two_factor_backup_codes?: string[] | null
           two_factor_enabled?: boolean | null
@@ -1668,6 +1683,132 @@ export type Database = {
         }
         Relationships: []
       }
+      referral_contests: {
+        Row: {
+          created_at: string
+          description: string | null
+          end_date: string
+          id: string
+          name: string
+          prize_pool: number
+          prizes: Json | null
+          rules: Json | null
+          start_date: string
+          status: string
+          winner_ids: Json | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          end_date: string
+          id?: string
+          name: string
+          prize_pool?: number
+          prizes?: Json | null
+          rules?: Json | null
+          start_date: string
+          status?: string
+          winner_ids?: Json | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          end_date?: string
+          id?: string
+          name?: string
+          prize_pool?: number
+          prizes?: Json | null
+          rules?: Json | null
+          start_date?: string
+          status?: string
+          winner_ids?: Json | null
+        }
+        Relationships: []
+      }
+      referral_leaderboard: {
+        Row: {
+          commission_earned: number
+          created_at: string
+          id: string
+          period: string
+          period_end: string
+          period_start: string
+          rank: number | null
+          referral_count: number
+          total_invested_by_referrals: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          commission_earned?: number
+          created_at?: string
+          id?: string
+          period?: string
+          period_end: string
+          period_start: string
+          rank?: number | null
+          referral_count?: number
+          total_invested_by_referrals?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          commission_earned?: number
+          created_at?: string
+          id?: string
+          period?: string
+          period_end?: string
+          period_start?: string
+          rank?: number | null
+          referral_count?: number
+          total_invested_by_referrals?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      referral_milestones: {
+        Row: {
+          achieved_at: string | null
+          claimed_at: string | null
+          created_at: string
+          id: string
+          milestone_name: string
+          milestone_type: string
+          milestone_value: number
+          reward_description: string | null
+          reward_type: string
+          reward_value: number
+          user_id: string
+        }
+        Insert: {
+          achieved_at?: string | null
+          claimed_at?: string | null
+          created_at?: string
+          id?: string
+          milestone_name: string
+          milestone_type: string
+          milestone_value: number
+          reward_description?: string | null
+          reward_type: string
+          reward_value?: number
+          user_id: string
+        }
+        Update: {
+          achieved_at?: string | null
+          claimed_at?: string | null
+          created_at?: string
+          id?: string
+          milestone_name?: string
+          milestone_type?: string
+          milestone_value?: number
+          reward_description?: string | null
+          reward_type?: string
+          reward_value?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       referral_rewards: {
         Row: {
           amount: number
@@ -1709,8 +1850,49 @@ export type Database = {
           },
         ]
       }
+      referral_tiers: {
+        Row: {
+          badge_color: string
+          badge_icon: string
+          bonus_per_referral: number
+          commission_rate: number
+          created_at: string
+          id: string
+          min_referrals: number
+          perks: Json | null
+          tier_level: number
+          tier_name: string
+        }
+        Insert: {
+          badge_color: string
+          badge_icon: string
+          bonus_per_referral?: number
+          commission_rate?: number
+          created_at?: string
+          id?: string
+          min_referrals?: number
+          perks?: Json | null
+          tier_level: number
+          tier_name: string
+        }
+        Update: {
+          badge_color?: string
+          badge_icon?: string
+          bonus_per_referral?: number
+          commission_rate?: number
+          created_at?: string
+          id?: string
+          min_referrals?: number
+          perks?: Json | null
+          tier_level?: number
+          tier_name?: string
+        }
+        Relationships: []
+      }
       referrals: {
         Row: {
+          bonus_earned: number | null
+          commission_rate_applied: number | null
           created_at: string
           id: string
           qualified_at: string | null
@@ -1719,10 +1901,13 @@ export type Database = {
           referrer_id: string
           reward_paid: boolean | null
           status: string
+          tier_at_referral: string | null
           total_invested: number | null
           updated_at: string
         }
         Insert: {
+          bonus_earned?: number | null
+          commission_rate_applied?: number | null
           created_at?: string
           id?: string
           qualified_at?: string | null
@@ -1731,10 +1916,13 @@ export type Database = {
           referrer_id: string
           reward_paid?: boolean | null
           status?: string
+          tier_at_referral?: string | null
           total_invested?: number | null
           updated_at?: string
         }
         Update: {
+          bonus_earned?: number | null
+          commission_rate_applied?: number | null
           created_at?: string
           id?: string
           qualified_at?: string | null
@@ -1743,6 +1931,7 @@ export type Database = {
           referrer_id?: string
           reward_paid?: boolean | null
           status?: string
+          tier_at_referral?: string | null
           total_invested?: number | null
           updated_at?: string
         }
