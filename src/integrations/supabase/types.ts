@@ -38,6 +38,218 @@ export type Database = {
         }
         Relationships: []
       }
+      auto_invest_allocations: {
+        Row: {
+          allocation_percent: number
+          category: string | null
+          created_at: string
+          id: string
+          plan_id: string
+          target_id: string | null
+          target_type: string
+        }
+        Insert: {
+          allocation_percent: number
+          category?: string | null
+          created_at?: string
+          id?: string
+          plan_id: string
+          target_id?: string | null
+          target_type: string
+        }
+        Update: {
+          allocation_percent?: number
+          category?: string | null
+          created_at?: string
+          id?: string
+          plan_id?: string
+          target_id?: string | null
+          target_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "auto_invest_allocations_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "auto_invest_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      auto_invest_execution_details: {
+        Row: {
+          actual_amount: number
+          created_at: string
+          execution_id: string
+          failure_reason: string | null
+          id: string
+          intended_amount: number
+          status: string
+          target_id: string
+          target_name: string
+          target_type: string
+          token_price: number
+          tokens_purchased: number
+          transaction_id: string | null
+        }
+        Insert: {
+          actual_amount?: number
+          created_at?: string
+          execution_id: string
+          failure_reason?: string | null
+          id?: string
+          intended_amount: number
+          status?: string
+          target_id: string
+          target_name: string
+          target_type: string
+          token_price?: number
+          tokens_purchased?: number
+          transaction_id?: string | null
+        }
+        Update: {
+          actual_amount?: number
+          created_at?: string
+          execution_id?: string
+          failure_reason?: string | null
+          id?: string
+          intended_amount?: number
+          status?: string
+          target_id?: string
+          target_name?: string
+          target_type?: string
+          token_price?: number
+          tokens_purchased?: number
+          transaction_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "auto_invest_execution_details_execution_id_fkey"
+            columns: ["execution_id"]
+            isOneToOne: false
+            referencedRelation: "auto_invest_executions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      auto_invest_executions: {
+        Row: {
+          actual_amount: number
+          completed_at: string | null
+          created_at: string
+          execution_date: string
+          failure_reason: string | null
+          id: string
+          plan_id: string
+          status: string
+          total_amount: number
+          user_id: string
+        }
+        Insert: {
+          actual_amount?: number
+          completed_at?: string | null
+          created_at?: string
+          execution_date: string
+          failure_reason?: string | null
+          id?: string
+          plan_id: string
+          status?: string
+          total_amount: number
+          user_id: string
+        }
+        Update: {
+          actual_amount?: number
+          completed_at?: string | null
+          created_at?: string
+          execution_date?: string
+          failure_reason?: string | null
+          id?: string
+          plan_id?: string
+          status?: string
+          total_amount?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "auto_invest_executions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "auto_invest_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      auto_invest_plans: {
+        Row: {
+          amount: number
+          created_at: string
+          frequency: string
+          funding_source: string
+          id: string
+          insufficient_funds_action: string
+          last_execution_date: string | null
+          linked_account_id: string | null
+          name: string
+          next_execution_date: string
+          pause_until: string | null
+          paused_at: string | null
+          start_date: string
+          status: string
+          total_executions: number
+          total_invested: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          frequency?: string
+          funding_source?: string
+          id?: string
+          insufficient_funds_action?: string
+          last_execution_date?: string | null
+          linked_account_id?: string | null
+          name: string
+          next_execution_date: string
+          pause_until?: string | null
+          paused_at?: string | null
+          start_date: string
+          status?: string
+          total_executions?: number
+          total_invested?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          frequency?: string
+          funding_source?: string
+          id?: string
+          insufficient_funds_action?: string
+          last_execution_date?: string | null
+          linked_account_id?: string | null
+          name?: string
+          next_execution_date?: string
+          pause_until?: string | null
+          paused_at?: string | null
+          start_date?: string
+          status?: string
+          total_executions?: number
+          total_invested?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "auto_invest_plans_linked_account_id_fkey"
+            columns: ["linked_account_id"]
+            isOneToOne: false
+            referencedRelation: "linked_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       calculation_history: {
         Row: {
           calculator_type: string
