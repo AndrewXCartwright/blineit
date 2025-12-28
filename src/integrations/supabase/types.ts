@@ -2642,6 +2642,56 @@ export type Database = {
         }
         Relationships: []
       }
+      report_exports: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          file_format: string
+          file_size: number | null
+          file_url: string | null
+          id: string
+          parameters: Json | null
+          report_type: string
+          saved_report_id: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          file_format: string
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          parameters?: Json | null
+          report_type: string
+          saved_report_id?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          file_format?: string
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          parameters?: Json | null
+          report_type?: string
+          saved_report_id?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "report_exports_saved_report_id_fkey"
+            columns: ["saved_report_id"]
+            isOneToOne: false
+            referencedRelation: "saved_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reports: {
         Row: {
           created_at: string
@@ -2735,6 +2785,51 @@ export type Database = {
           },
         ]
       }
+      saved_reports: {
+        Row: {
+          columns: Json | null
+          created_at: string
+          description: string | null
+          filters: Json | null
+          format: string
+          id: string
+          last_generated_at: string | null
+          name: string
+          report_type: string
+          schedule: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          columns?: Json | null
+          created_at?: string
+          description?: string | null
+          filters?: Json | null
+          format?: string
+          id?: string
+          last_generated_at?: string | null
+          name: string
+          report_type: string
+          schedule?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          columns?: Json | null
+          created_at?: string
+          description?: string | null
+          filters?: Json | null
+          format?: string
+          id?: string
+          last_generated_at?: string | null
+          name?: string
+          report_type?: string
+          schedule?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       saved_searches: {
         Row: {
           created_at: string
@@ -2779,6 +2874,59 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      scheduled_reports: {
+        Row: {
+          created_at: string
+          day_of_month: number | null
+          day_of_week: number | null
+          email_delivery: boolean
+          frequency: string
+          id: string
+          is_active: boolean
+          last_sent_at: string | null
+          next_send_at: string
+          saved_report_id: string
+          time_of_day: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          day_of_month?: number | null
+          day_of_week?: number | null
+          email_delivery?: boolean
+          frequency: string
+          id?: string
+          is_active?: boolean
+          last_sent_at?: string | null
+          next_send_at: string
+          saved_report_id: string
+          time_of_day?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          day_of_month?: number | null
+          day_of_week?: number | null
+          email_delivery?: boolean
+          frequency?: string
+          id?: string
+          is_active?: boolean
+          last_sent_at?: string | null
+          next_send_at?: string
+          saved_report_id?: string
+          time_of_day?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scheduled_reports_saved_report_id_fkey"
+            columns: ["saved_report_id"]
+            isOneToOne: false
+            referencedRelation: "saved_reports"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       search_analytics: {
         Row: {
