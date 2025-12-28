@@ -1,5 +1,6 @@
 import { Gem, Landmark, Info } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { InvestmentInfoModal } from "./InvestmentInfoModal";
 
 export type InvestmentType = "equity" | "debt";
@@ -10,6 +11,7 @@ interface InvestmentTypeToggleProps {
 }
 
 export function InvestmentTypeToggle({ value, onChange }: InvestmentTypeToggleProps) {
+  const { t } = useTranslation();
   const [showInfoModal, setShowInfoModal] = useState(false);
 
   return (
@@ -18,7 +20,7 @@ export function InvestmentTypeToggle({ value, onChange }: InvestmentTypeTogglePr
         <button
           onClick={() => setShowInfoModal(true)}
           className="absolute -top-1 -right-1 z-10 p-1.5 rounded-full bg-secondary/80 text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
-          aria-label="Learn about investment types"
+          aria-label={t('investmentType.learnAbout')}
         >
           <Info className="w-4 h-4" />
         </button>
@@ -37,11 +39,11 @@ export function InvestmentTypeToggle({ value, onChange }: InvestmentTypeTogglePr
               <div className={`p-2 rounded-xl ${value === "equity" ? "bg-purple-500" : "bg-purple-500/30"}`}>
                 <Gem className={`w-5 h-5 ${value === "equity" ? "text-white" : "text-purple-400"}`} />
               </div>
-              <span className="font-display font-bold text-foreground">EQUITY</span>
+              <span className="font-display font-bold text-foreground">{t('investmentType.equity')}</span>
             </div>
-            <p className="text-sm font-semibold text-purple-400 mb-1">Own It</p>
+            <p className="text-sm font-semibold text-purple-400 mb-1">{t('investmentType.ownIt')}</p>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Buy ownership shares in assets. Higher returns, share in upside.
+              {t('investmentType.equityDescription')}
             </p>
           </button>
 
@@ -58,11 +60,11 @@ export function InvestmentTypeToggle({ value, onChange }: InvestmentTypeTogglePr
               <div className={`p-2 rounded-xl ${value === "debt" ? "bg-blue-500" : "bg-blue-500/30"}`}>
                 <Landmark className={`w-5 h-5 ${value === "debt" ? "text-white" : "text-blue-400"}`} />
               </div>
-              <span className="font-display font-bold text-foreground">DEBT</span>
+              <span className="font-display font-bold text-foreground">{t('investmentType.debt')}</span>
             </div>
-            <p className="text-sm font-semibold text-blue-400 mb-1">Lend It</p>
+            <p className="text-sm font-semibold text-blue-400 mb-1">{t('investmentType.lendIt')}</p>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Earn fixed interest, secured by assets. Lower risk, predictable income.
+              {t('investmentType.debtDescription')}
             </p>
           </button>
         </div>

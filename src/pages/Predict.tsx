@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Target, Trophy, Percent } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { PredictionCardEnhanced } from "@/components/PredictionCardEnhanced";
 import { BettingModalEnhanced } from "@/components/BettingModalEnhanced";
 import { PredictionCardSkeleton } from "@/components/Skeleton";
@@ -27,6 +28,7 @@ interface Market {
 }
 
 export default function Predict() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { bets, activeBetsValue, bettingWinnings, refetch } = useUserData();
   const { placeBet } = usePlaceBet();
@@ -156,28 +158,28 @@ export default function Predict() {
             <Target className="w-6 h-6 text-accent-foreground" />
           </div>
           <div>
-            <h1 className="font-display text-2xl font-bold text-foreground">🎯 Predictions</h1>
-            <p className="text-sm text-muted-foreground">Bet on real estate outcomes</p>
+            <h1 className="font-display text-2xl font-bold text-foreground">🎯 {t('predictions.title')}</h1>
+            <p className="text-sm text-muted-foreground">{t('predictions.subtitle')}</p>
           </div>
         </div>
 
         <div className="gradient-gold rounded-xl p-4 glow-gold">
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
-              <p className="text-accent-foreground/70 text-xs mb-1">Active Bets</p>
+              <p className="text-accent-foreground/70 text-xs mb-1">{t('predictions.activeBets')}</p>
               <p className="font-display font-bold text-lg text-accent-foreground">
                 $<CountUp end={activeBetsValue} decimals={0} duration={1500} />
               </p>
             </div>
             <div className="border-x border-accent-foreground/20">
-              <p className="text-accent-foreground/70 text-xs mb-1">Winnings</p>
+              <p className="text-accent-foreground/70 text-xs mb-1">{t('predictions.winnings')}</p>
               <p className="font-display font-bold text-lg text-accent-foreground flex items-center justify-center gap-1">
                 <Trophy className="w-4 h-4" />
                 $<CountUp end={bettingWinnings} decimals={0} duration={1500} />
               </p>
             </div>
             <div>
-              <p className="text-accent-foreground/70 text-xs mb-1">Win Rate</p>
+              <p className="text-accent-foreground/70 text-xs mb-1">{t('predictions.winRate')}</p>
               <p className="font-display font-bold text-lg text-accent-foreground flex items-center justify-center gap-1">
                 <Percent className="w-4 h-4" />
                 <CountUp end={winRate} decimals={0} duration={1500} />%
@@ -189,7 +191,7 @@ export default function Predict() {
 
       <PullToRefresh onRefresh={handleRefresh} className="h-[calc(100vh-220px)]">
         <main className="px-4 py-6 space-y-4">
-          <h2 className="font-display font-bold text-foreground">Active Markets</h2>
+          <h2 className="font-display font-bold text-foreground">{t('predictions.activeMarkets')}</h2>
 
           {loading ? (
             Array.from({ length: 3 }).map((_, i) => <PredictionCardSkeleton key={i} />)
@@ -218,8 +220,8 @@ export default function Predict() {
           ) : (
             <EmptyState
               icon={<Target className="w-12 h-12" />}
-              title="No active markets"
-              description="Check back soon for new prediction markets"
+              title={t('predictions.noActiveMarkets')}
+              description={t('predictions.checkBackSoon')}
             />
           )}
         </main>
