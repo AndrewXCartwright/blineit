@@ -13,6 +13,7 @@ import { LoanInvestModal } from "@/components/LoanInvestModal";
 import { useLoanById, useUserLoanInvestments, useLoanPayments, useSimulateInterestPayment, useSimulateLoanPayoff } from "@/hooks/useLoanData";
 import { useAuth } from "@/hooks/useAuth";
 import { format, differenceInDays } from "date-fns";
+import { getLoanFallbackImage } from "@/lib/loanImages";
 
 type TabType = "overview" | "property" | "borrower" | "documents" | "activity" | "payments";
 
@@ -143,9 +144,11 @@ export default function LoanDetail() {
     <div className="min-h-screen pb-24">
       {/* Hero Image */}
       <div className="h-64 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center">
-          <Building2 className="w-24 h-24 text-white/30" />
-        </div>
+        <img 
+          src={loan.image_url || getLoanFallbackImage(loan.loan_type, loan.id)} 
+          alt={loan.name}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
         
         {/* Top controls */}
