@@ -13,6 +13,8 @@ import { NetworkStatus } from "@/components/NetworkStatus";
 import { UpdatePrompt } from "@/components/UpdatePrompt";
 import { ComparisonProvider } from "@/hooks/useComparison";
 import { ComparisonTray } from "@/components/comparison/ComparisonTray";
+import ErrorBoundary from "@/components/ErrorBoundary";
+import Footer from "@/components/Footer";
 import Index from "./pages/Index";
 import Assets from "./pages/Assets";
 import AssetsExplore from "./pages/AssetsExplore";
@@ -149,15 +151,17 @@ import AchievementsHub from "./pages/AchievementsHub";
 import XPHistory from "./pages/XPHistory";
 import Challenges from "./pages/Challenges";
 import Leaderboards from "./pages/Leaderboards";
+import LaunchChecklist from "./pages/admin/LaunchChecklist";
 
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider>
-      <TooltipProvider>
-        <AuthProvider>
-          <ComparisonProvider>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <TooltipProvider>
+          <AuthProvider>
+            <ComparisonProvider>
             <Toaster />
             <Sonner />
             <NetworkStatus />
@@ -311,6 +315,7 @@ const App = () => (
                 <Route path="/admin/waitlists" element={<ProtectedRoute><AdminWaitlists /></ProtectedRoute>} />
                 <Route path="/admin/transactions" element={<ProtectedRoute><AdminTransactions /></ProtectedRoute>} />
                 <Route path="/admin/settings" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
+                <Route path="/admin/launch-checklist" element={<ProtectedRoute><LaunchChecklist /></ProtectedRoute>} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <ComparisonTray />
@@ -321,6 +326,7 @@ const App = () => (
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;
