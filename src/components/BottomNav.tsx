@@ -15,7 +15,11 @@ export function BottomNav() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 glass-card border-t border-border/50 pb-safe">
+    <nav 
+      className="fixed bottom-0 left-0 right-0 z-50 glass-card border-t border-border/50 pb-safe"
+      role="navigation"
+      aria-label={t("nav.mainNavigation", "Main navigation")}
+    >
       <div className="flex items-center justify-around py-2">
         {navItems.map((item) => {
           const isActive = location.pathname === item.path || 
@@ -26,7 +30,9 @@ export function BottomNav() {
             <Link
               key={item.path}
               to={item.path}
-              className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all duration-300 ${
+              aria-label={item.label}
+              aria-current={isActive ? "page" : undefined}
+              className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all duration-300 min-w-[44px] min-h-[44px] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                 isActive
                   ? "text-primary glow-primary"
                   : "text-muted-foreground hover:text-foreground"
@@ -37,7 +43,7 @@ export function BottomNav() {
                   isActive ? "gradient-primary" : ""
                 }`}
               >
-                <Icon className={`w-5 h-5 ${isActive ? "text-primary-foreground" : ""}`} />
+                <Icon className={`w-5 h-5 ${isActive ? "text-primary-foreground" : ""}`} aria-hidden="true" />
               </div>
               <span className="text-xs font-medium">{item.label}</span>
             </Link>

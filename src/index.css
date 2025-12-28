@@ -452,4 +452,43 @@
   .progress-animate {
     transition: width 0.5s ease-out;
   }
+
+  /* Accessibility - Focus visible styles */
+  *:focus-visible {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 2px;
+  }
+
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    :root {
+      --border: 0 0% 0%;
+    }
+    .dark {
+      --border: 0 0% 100%;
+    }
+  }
+
+  /* Ensure minimum touch target size on mobile */
+  @media (pointer: coarse) {
+    button,
+    a,
+    input,
+    select,
+    [role="button"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
 }
