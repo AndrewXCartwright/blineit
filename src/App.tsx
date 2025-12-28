@@ -105,6 +105,10 @@ import InstitutionalInvestmentDetail from "./pages/InstitutionalInvestmentDetail
 import InstitutionalReports from "./pages/InstitutionalReports";
 import InstitutionalEntitySetup from "./pages/InstitutionalEntitySetup";
 import InstitutionalContact from "./pages/InstitutionalContact";
+import GovernanceHub from "./pages/GovernanceHub";
+import ProposalDetail from "./pages/ProposalDetail";
+import MyGovernance from "./pages/MyGovernance";
+import Delegations from "./pages/Delegations";
 
 const queryClient = new QueryClient();
 
@@ -193,6 +197,11 @@ const App = () => (
                 <Route path="/institutional/entity" element={<ProtectedRoute><InstitutionalEntitySetup /></ProtectedRoute>} />
                 <Route path="/institutional/contact" element={<ProtectedRoute><InstitutionalContact /></ProtectedRoute>} />
                 <Route path="/coming-soon/:assetClass" element={<ComingSoon />} />
+                {/* Governance Routes */}
+                <Route path="/governance" element={<ProtectedRoute><GovernanceHub /></ProtectedRoute>} />
+                <Route path="/governance/proposal/:id" element={<ProtectedRoute><ProposalDetail /></ProtectedRoute>} />
+                <Route path="/governance/my-votes" element={<ProtectedRoute><MyGovernance /></ProtectedRoute>} />
+                <Route path="/governance/delegations" element={<ProtectedRoute><Delegations /></ProtectedRoute>} />
                 {/* Developer Portal Routes */}
                 <Route path="/developers" element={<ProtectedRoute><DeveloperPortal /></ProtectedRoute>} />
                 <Route path="/developers/keys" element={<ProtectedRoute><DeveloperApiKeys /></ProtectedRoute>} />
