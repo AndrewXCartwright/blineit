@@ -126,6 +126,14 @@ import Announcements from "./pages/Announcements";
 import MarketNews from "./pages/MarketNews";
 import NewsArticle from "./pages/NewsArticle";
 import FeedPreferences from "./pages/FeedPreferences";
+import HelpCenter from "./pages/HelpCenter";
+import FAQCategory from "./pages/FAQCategory";
+import FAQArticle from "./pages/FAQArticle";
+import ContactSupport from "./pages/ContactSupport";
+import NewTicket from "./pages/NewTicket";
+import MyTickets from "./pages/MyTickets";
+import TicketDetail from "./pages/TicketDetail";
+import LiveChat from "./pages/LiveChat";
 
 const queryClient = new QueryClient();
 
@@ -238,9 +246,17 @@ const App = () => (
                 <Route path="/governance/proposal/:id" element={<ProtectedRoute><ProposalDetail /></ProtectedRoute>} />
                 <Route path="/governance/my-votes" element={<ProtectedRoute><MyGovernance /></ProtectedRoute>} />
                 <Route path="/governance/delegations" element={<ProtectedRoute><Delegations /></ProtectedRoute>} />
+                {/* Help Center Routes */}
+                <Route path="/help" element={<ProtectedRoute><HelpCenter /></ProtectedRoute>} />
+                <Route path="/help/category/:slug" element={<ProtectedRoute><FAQCategory /></ProtectedRoute>} />
+                <Route path="/help/article/:id" element={<ProtectedRoute><FAQArticle /></ProtectedRoute>} />
+                <Route path="/help/contact" element={<ProtectedRoute><ContactSupport /></ProtectedRoute>} />
+                <Route path="/help/ticket/new" element={<ProtectedRoute><NewTicket /></ProtectedRoute>} />
+                <Route path="/help/tickets" element={<ProtectedRoute><MyTickets /></ProtectedRoute>} />
+                <Route path="/help/ticket/:id" element={<ProtectedRoute><TicketDetail /></ProtectedRoute>} />
+                <Route path="/help/chat" element={<ProtectedRoute><LiveChat /></ProtectedRoute>} />
                 {/* Developer Portal Routes */}
                 <Route path="/developers" element={<ProtectedRoute><DeveloperPortal /></ProtectedRoute>} />
-                <Route path="/developers/keys" element={<ProtectedRoute><DeveloperApiKeys /></ProtectedRoute>} />
                 <Route path="/developers/keys/create" element={<ProtectedRoute><DeveloperApiKeyCreate /></ProtectedRoute>} />
                 <Route path="/developers/keys/:id" element={<ProtectedRoute><DeveloperApiKeyDetail /></ProtectedRoute>} />
                 <Route path="/developers/webhooks" element={<ProtectedRoute><DeveloperWebhooks /></ProtectedRoute>} />
