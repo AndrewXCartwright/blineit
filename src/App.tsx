@@ -71,11 +71,19 @@ import TaxPredictions from "./pages/TaxPredictions";
 import TaxSettings from "./pages/TaxSettings";
 import TaxCostBasis from "./pages/TaxCostBasis";
 import DeveloperPortal from "./pages/DeveloperPortal";
+import DeveloperApiKeys from "./pages/DeveloperApiKeys";
 import DeveloperApiKeyCreate from "./pages/DeveloperApiKeyCreate";
+import DeveloperApiKeyDetail from "./pages/DeveloperApiKeyDetail";
 import DeveloperWebhooks from "./pages/DeveloperWebhooks";
+import DeveloperWebhookCreate from "./pages/DeveloperWebhookCreate";
+import DeveloperWebhookDetail from "./pages/DeveloperWebhookDetail";
 import DeveloperDocs from "./pages/DeveloperDocs";
+import DeveloperEndpointDoc from "./pages/DeveloperEndpointDoc";
 import DeveloperUsage from "./pages/DeveloperUsage";
 import DeveloperSandbox from "./pages/DeveloperSandbox";
+import DeveloperPlans from "./pages/DeveloperPlans";
+import DeveloperSdks from "./pages/DeveloperSdks";
+import DeveloperChangelog from "./pages/DeveloperChangelog";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProperties from "./pages/admin/AdminProperties";
 import AdminLoans from "./pages/admin/AdminLoans";
@@ -162,11 +170,19 @@ const App = () => (
                 <Route path="/coming-soon/:assetClass" element={<ComingSoon />} />
                 {/* Developer Portal Routes */}
                 <Route path="/developers" element={<ProtectedRoute><DeveloperPortal /></ProtectedRoute>} />
+                <Route path="/developers/keys" element={<ProtectedRoute><DeveloperApiKeys /></ProtectedRoute>} />
                 <Route path="/developers/keys/create" element={<ProtectedRoute><DeveloperApiKeyCreate /></ProtectedRoute>} />
+                <Route path="/developers/keys/:id" element={<ProtectedRoute><DeveloperApiKeyDetail /></ProtectedRoute>} />
                 <Route path="/developers/webhooks" element={<ProtectedRoute><DeveloperWebhooks /></ProtectedRoute>} />
+                <Route path="/developers/webhooks/create" element={<ProtectedRoute><DeveloperWebhookCreate /></ProtectedRoute>} />
+                <Route path="/developers/webhooks/:id" element={<ProtectedRoute><DeveloperWebhookDetail /></ProtectedRoute>} />
                 <Route path="/developers/docs" element={<ProtectedRoute><DeveloperDocs /></ProtectedRoute>} />
+                <Route path="/developers/docs/:endpoint" element={<ProtectedRoute><DeveloperEndpointDoc /></ProtectedRoute>} />
                 <Route path="/developers/usage" element={<ProtectedRoute><DeveloperUsage /></ProtectedRoute>} />
                 <Route path="/developers/sandbox" element={<ProtectedRoute><DeveloperSandbox /></ProtectedRoute>} />
+                <Route path="/developers/plans" element={<ProtectedRoute><DeveloperPlans /></ProtectedRoute>} />
+                <Route path="/developers/sdks" element={<ProtectedRoute><DeveloperSdks /></ProtectedRoute>} />
+                <Route path="/developers/changelog" element={<ProtectedRoute><DeveloperChangelog /></ProtectedRoute>} />
                 {/* Admin Routes */}
                 <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
                 <Route path="/admin/properties" element={<ProtectedRoute><AdminProperties /></ProtectedRoute>} />
