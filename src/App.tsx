@@ -57,10 +57,11 @@ import WatchlistLists from "./pages/WatchlistLists";
 import WatchlistDetail from "./pages/WatchlistDetail";
 import PriceAlerts from "./pages/Alerts";
 import AlertSettings from "./pages/AlertSettings";
-import Market from "./pages/Market";
-import MarketDetail from "./pages/MarketDetail";
-import MarketOrders from "./pages/MarketOrders";
-import MarketHistory from "./pages/MarketHistory";
+import SecondaryMarketHub from "./pages/SecondaryMarketHub";
+import AllMarkets from "./pages/AllMarkets";
+import MyOrders from "./pages/MyOrders";
+import TradeHistory from "./pages/TradeHistory";
+import TokenMarket from "./pages/TokenMarket";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProperties from "./pages/admin/AdminProperties";
 import AdminLoans from "./pages/admin/AdminLoans";
@@ -127,6 +128,12 @@ const App = () => (
                 <Route path="/watchlist/:id" element={<ProtectedRoute><WatchlistDetail /></ProtectedRoute>} />
                 <Route path="/alerts" element={<ProtectedRoute><PriceAlerts /></ProtectedRoute>} />
                 <Route path="/settings/alerts" element={<ProtectedRoute><AlertSettings /></ProtectedRoute>} />
+                {/* Secondary Market Routes */}
+                <Route path="/market" element={<ProtectedRoute><SecondaryMarketHub /></ProtectedRoute>} />
+                <Route path="/market/all" element={<ProtectedRoute><AllMarkets /></ProtectedRoute>} />
+                <Route path="/market/orders" element={<ProtectedRoute><MyOrders /></ProtectedRoute>} />
+                <Route path="/market/history" element={<ProtectedRoute><TradeHistory /></ProtectedRoute>} />
+                <Route path="/market/:itemId" element={<ProtectedRoute><TokenMarket /></ProtectedRoute>} />
                 <Route path="/r/:code" element={<ReferralLanding />} />
                 <Route path="/install" element={<InstallPage />} />
                 <Route path="/coming-soon/:assetClass" element={<ComingSoon />} />
