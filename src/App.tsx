@@ -28,7 +28,10 @@ import NotFound from "./pages/NotFound";
 import Referrals from "./pages/Referrals";
 import ReferralLanding from "./pages/ReferralLanding";
 import Notifications from "./pages/Notifications";
+import NotificationCenter from "./pages/NotificationCenter";
+import ArchivedNotifications from "./pages/ArchivedNotifications";
 import NotificationSettings from "./pages/NotificationSettings";
+import RegisteredDevices from "./pages/RegisteredDevices";
 import Community from "./pages/Community";
 import UserProfile from "./pages/UserProfile";
 import Leaderboard from "./pages/Leaderboard";
@@ -172,8 +175,10 @@ const App = () => (
                 <Route path="/loan/:id" element={<ProtectedRoute><LoanDetail /></ProtectedRoute>} />
                 <Route path="/kyc" element={<ProtectedRoute><KYCVerification /></ProtectedRoute>} />
                 <Route path="/referrals" element={<ProtectedRoute><Referrals /></ProtectedRoute>} />
-                <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
+                <Route path="/notifications" element={<ProtectedRoute><NotificationCenter /></ProtectedRoute>} />
+                <Route path="/notifications/archived" element={<ProtectedRoute><ArchivedNotifications /></ProtectedRoute>} />
                 <Route path="/settings/notifications" element={<ProtectedRoute><NotificationSettings /></ProtectedRoute>} />
+                <Route path="/settings/notifications/devices" element={<ProtectedRoute><RegisteredDevices /></ProtectedRoute>} />
                 <Route path="/settings/security" element={<ProtectedRoute><SecuritySettings /></ProtectedRoute>} />
                 <Route path="/settings/security/biometric" element={<ProtectedRoute><BiometricSetup /></ProtectedRoute>} />
                 <Route path="/settings/security/pin" element={<ProtectedRoute><PinSetup /></ProtectedRoute>} />

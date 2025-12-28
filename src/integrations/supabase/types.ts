@@ -2158,33 +2158,105 @@ export type Database = {
           },
         ]
       }
-      notifications: {
+      notification_schedules: {
         Row: {
           created_at: string
-          data: Json | null
+          digest_day: number
+          digest_time: string
           id: string
+          quiet_end: string
+          quiet_hours_enabled: boolean
+          quiet_start: string
+          timezone: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          digest_day?: number
+          digest_time?: string
+          id?: string
+          quiet_end?: string
+          quiet_hours_enabled?: boolean
+          quiet_start?: string
+          timezone?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          digest_day?: number
+          digest_time?: string
+          id?: string
+          quiet_end?: string
+          quiet_hours_enabled?: boolean
+          quiet_start?: string
+          timezone?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          action_text: string | null
+          action_url: string | null
+          archived_at: string | null
+          category: string | null
+          created_at: string
+          data: Json | null
+          expires_at: string | null
+          icon: string | null
+          id: string
+          is_archived: boolean | null
           is_read: boolean
           message: string
+          priority: string | null
+          read_at: string | null
+          related_item_id: string | null
+          related_item_type: string | null
           title: string
           type: string
           user_id: string
         }
         Insert: {
+          action_text?: string | null
+          action_url?: string | null
+          archived_at?: string | null
+          category?: string | null
           created_at?: string
           data?: Json | null
+          expires_at?: string | null
+          icon?: string | null
           id?: string
+          is_archived?: boolean | null
           is_read?: boolean
           message: string
+          priority?: string | null
+          read_at?: string | null
+          related_item_id?: string | null
+          related_item_type?: string | null
           title: string
           type: string
           user_id: string
         }
         Update: {
+          action_text?: string | null
+          action_url?: string | null
+          archived_at?: string | null
+          category?: string | null
           created_at?: string
           data?: Json | null
+          expires_at?: string | null
+          icon?: string | null
           id?: string
+          is_archived?: boolean | null
           is_read?: boolean
           message?: string
+          priority?: string | null
+          read_at?: string | null
+          related_item_id?: string | null
+          related_item_type?: string | null
           title?: string
           type?: string
           user_id?: string
@@ -2687,6 +2759,45 @@ export type Database = {
           update_type?: string
           updated_at?: string
           video_url?: string | null
+        }
+        Relationships: []
+      }
+      push_subscriptions: {
+        Row: {
+          auth_key: string | null
+          created_at: string
+          device_name: string | null
+          device_type: string
+          endpoint: string
+          id: string
+          is_active: boolean
+          last_used_at: string | null
+          p256dh_key: string | null
+          user_id: string
+        }
+        Insert: {
+          auth_key?: string | null
+          created_at?: string
+          device_name?: string | null
+          device_type?: string
+          endpoint: string
+          id?: string
+          is_active?: boolean
+          last_used_at?: string | null
+          p256dh_key?: string | null
+          user_id: string
+        }
+        Update: {
+          auth_key?: string | null
+          created_at?: string
+          device_name?: string | null
+          device_type?: string
+          endpoint?: string
+          id?: string
+          is_active?: boolean
+          last_used_at?: string | null
+          p256dh_key?: string | null
+          user_id?: string
         }
         Relationships: []
       }
