@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -18,13 +18,20 @@ import {
   Copy,
   Download,
   RefreshCw,
-  Loader2
+  Loader2,
+  Fingerprint,
+  ScanFace,
+  Lock,
+  ChevronRight,
+  History
 } from "lucide-react";
 import { useTwoFactor } from "@/hooks/useTwoFactor";
+import { useBiometric } from "@/hooks/useBiometric";
 import { TwoFactorSetup } from "@/components/TwoFactorSetup";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
+import { Badge } from "@/components/ui/badge";
 
 export default function SecuritySettings() {
   const navigate = useNavigate();
@@ -39,6 +46,16 @@ export default function SecuritySettings() {
     regenerateBackupCodes,
     fetchSettings
   } = useTwoFactor();
+
+  const {
+    settings: biometricSettings,
+    biometricAvailable,
+    biometricType,
+    allDeviceSettings,
+    loadingSettings: loadingBiometric,
+    disableBiometric,
+    updateSettings: updateBiometricSettings,
+  } = useBiometric();
 
   const [showSetup, setShowSetup] = useState(false);
   const [showDisable, setShowDisable] = useState(false);
@@ -115,7 +132,15 @@ export default function SecuritySettings() {
     return <Monitor className="h-5 w-5" />;
   };
 
-  if (loading) {
+  const biometricName = biometricType === "face_id" 
+    ? "Face ID" 
+    : biometricType === "touch_id" 
+    ? "Touch ID" 
+    : "Fingerprint";
+
+  const BiometricIcon = biometricType === "face_id" ? ScanFace : Fingerprint;
+
+  if (loading || loadingBiometric) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -153,6 +178,111 @@ export default function SecuritySettings() {
         </div>
 
         <div className="space-y-6">
+          {/* Biometric Authentication Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <BiometricIcon className="h-5 w-5" />
+                Biometric Authentication
+              </CardTitle>
+              <CardDescription>
+                Use {biometricName} for faster, more secure access
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {biometricSettings?.biometric_enabled ? (
+                <>
+                  <div className="flex items-center gap-3 p-3 bg-green-500/10 rounded-lg border border-green-500/20">
+                    <Check className="h-5 w-5 text-green-500" />
+                    <div className="flex-1">
+                      <p className="font-medium text-green-600 dark:text-green-400">{biometricName} Enabled</p>
+                      <p className="text-sm text-muted-foreground">{biometricSettings.device_name}</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">App Login</span>
+                      <Switch 
+                        checked={biometricSettings.require_biometric_for_login}
+                        onCheckedChange={(checked) => updateBiometricSettings({ require_biometric_for_login: checked })}
+                      />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Transaction Approval</span>
+                      <Switch 
+                        checked={biometricSettings.require_biometric_for_transactions}
+                        onCheckedChange={(checked) => updateBiometricSettings({ require_biometric_for_transactions: checked })}
+                      />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Transfers & Withdrawals</span>
+                      <Switch 
+                        checked={biometricSettings.require_biometric_for_transfers}
+                        onCheckedChange={(checked) => updateBiometricSettings({ require_biometric_for_transfers: checked })}
+                      />
+                    </div>
+                  </div>
+
+                  <Button variant="outline" className="w-full" onClick={() => disableBiometric()}>
+                    Disable {biometricName}
+                  </Button>
+                </>
+              ) : (
+                <div className="text-center py-4">
+                  <BiometricIcon className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
+                  <p className="text-muted-foreground mb-4">
+                    {biometricAvailable 
+                      ? `Enable ${biometricName} for faster, more secure access`
+                      : "Biometric authentication not available on this device"}
+                  </p>
+                  <Link to="/settings/security/biometric">
+                    <Button disabled={!biometricAvailable}>
+                      Set Up {biometricName}
+                    </Button>
+                  </Link>
+                </div>
+              )}
+
+              {/* PIN Status */}
+              <div className="pt-4 border-t">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Lock className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm">Security PIN</span>
+                  </div>
+                  {biometricSettings?.pin_enabled ? (
+                    <Badge variant="secondary" className="text-xs">Enabled</Badge>
+                  ) : (
+                    <Link to="/settings/security/pin">
+                      <Button variant="outline" size="sm">Set Up</Button>
+                    </Link>
+                  )}
+                </div>
+              </div>
+
+              {/* Quick Links */}
+              <div className="space-y-2 pt-2">
+                <Link to="/settings/security/devices" className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Smartphone className="h-4 w-4" />
+                    <span className="text-sm">Trusted Devices</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary">{allDeviceSettings.length}</Badge>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                  </div>
+                </Link>
+                <Link to="/settings/security/activity" className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
+                  <div className="flex items-center gap-2">
+                    <History className="h-4 w-4" />
+                    <span className="text-sm">Security Activity</span>
+                  </div>
+                  <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
           {/* 2FA Section */}
           <Card>
             <CardHeader>

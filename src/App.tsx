@@ -109,6 +109,10 @@ import GovernanceHub from "./pages/GovernanceHub";
 import ProposalDetail from "./pages/ProposalDetail";
 import MyGovernance from "./pages/MyGovernance";
 import Delegations from "./pages/Delegations";
+import BiometricSetup from "./pages/BiometricSetup";
+import PinSetup from "./pages/PinSetup";
+import TrustedDevices from "./pages/TrustedDevices";
+import SecurityActivity from "./pages/SecurityActivity";
 
 const queryClient = new QueryClient();
 
@@ -139,6 +143,10 @@ const App = () => (
                 <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
                 <Route path="/settings/notifications" element={<ProtectedRoute><NotificationSettings /></ProtectedRoute>} />
                 <Route path="/settings/security" element={<ProtectedRoute><SecuritySettings /></ProtectedRoute>} />
+                <Route path="/settings/security/biometric" element={<ProtectedRoute><BiometricSetup /></ProtectedRoute>} />
+                <Route path="/settings/security/pin" element={<ProtectedRoute><PinSetup /></ProtectedRoute>} />
+                <Route path="/settings/security/devices" element={<ProtectedRoute><TrustedDevices /></ProtectedRoute>} />
+                <Route path="/settings/security/activity" element={<ProtectedRoute><SecurityActivity /></ProtectedRoute>} />
                 <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
                 <Route path="/user/:userId" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
                 <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
