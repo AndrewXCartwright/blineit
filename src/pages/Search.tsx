@@ -6,11 +6,12 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/Skeleton';
-import { GlobalSearchBar } from '@/components/search/GlobalSearchBar';
 import { SearchResultCard } from '@/components/search/SearchResultCard';
 import { SearchFilters, ActiveFilterPills } from '@/components/search/SearchFilters';
 import { SaveSearchDialog } from '@/components/search/SaveSearchDialog';
 import { SortSelect } from '@/components/search/SortSelect';
+import { TrendingSection } from '@/components/search/TrendingSection';
+import { RecommendationsSection } from '@/components/search/RecommendationsSection';
 import { useSearch } from '@/hooks/useSearch';
 
 export default function Search() {
@@ -29,6 +30,9 @@ export default function Search() {
     isLoading,
     saveSearch,
     isSavingSearch,
+    trendingItems,
+    recommendations,
+    dismissRecommendation,
   } = useSearch();
 
   // Sync URL params with search state
@@ -211,14 +215,26 @@ export default function Search() {
           </div>
         )}
 
-        {/* Empty State */}
+        {/* Empty State with Trending and Recommendations */}
         {!isLoading && !searchQuery && Object.keys(filters).length === 0 && (
-          <div className="text-center py-12">
-            <SearchIcon className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2">Search Across All Assets</h3>
-            <p className="text-muted-foreground max-w-md mx-auto">
-              Find properties, loans, and prediction markets that match your investment criteria.
-            </p>
+          <div className="space-y-8">
+            {/* Hero Section */}
+            <div className="text-center py-8">
+              <SearchIcon className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Search Across All Assets</h3>
+              <p className="text-muted-foreground max-w-md mx-auto">
+                Find properties, loans, and prediction markets that match your investment criteria.
+              </p>
+            </div>
+
+            {/* Trending and Recommendations Grid */}
+            <div className="grid md:grid-cols-2 gap-8">
+              <TrendingSection items={trendingItems} />
+              <RecommendationsSection 
+                items={recommendations} 
+                onDismiss={dismissRecommendation}
+              />
+            </div>
           </div>
         )}
       </div>
