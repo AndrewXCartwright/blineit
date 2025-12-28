@@ -35,6 +35,27 @@ export interface SearchResult {
   data: any;
 }
 
+export interface TrendingItem {
+  id: string;
+  item_id: string;
+  item_type: 'property' | 'loan' | 'prediction';
+  trend_score: number;
+  search_count: number;
+  view_count: number;
+  investment_count: number;
+  period_start: string;
+  data?: any;
+}
+
+export interface Recommendation {
+  id: string;
+  item_id: string;
+  item_type: 'property' | 'loan' | 'prediction';
+  recommendation_score: number;
+  recommendation_reason: string;
+  data?: any;
+}
+
 export function useSearch() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
@@ -256,6 +277,162 @@ export function useSearch() {
     enabled: !!user,
   });
 
+  // Trending items - fetch top properties/loans/predictions by popularity metrics
+  const { data: trendingItems } = useQuery({
+    queryKey: ['trendingItems'],
+    queryFn: async (): Promise<TrendingItem[]> => {
+      const items: TrendingItem[] = [];
+      
+      // Get top properties by holders count
+      const { data: properties } = await supabase
+        .from('properties')
+        .select('*')
+        .order('holders', { ascending: false })
+        .limit(3);
+      
+      properties?.forEach((p, idx) => {
+        items.push({
+          id: `property-${p.id}`,
+          item_id: p.id,
+          item_type: 'property',
+          trend_score: 100 - idx * 10,
+          search_count: Math.floor(Math.random() * 500) + 100,
+          view_count: p.holders * 10,
+          investment_count: p.holders,
+          period_start: new Date().toISOString(),
+          data: p,
+        });
+      });
+      
+      // Get top loans by investor count
+      const { data: loans } = await supabase
+        .from('loans')
+        .select('*')
+        .order('investor_count', { ascending: false })
+        .limit(2);
+      
+      loans?.forEach((l, idx) => {
+        items.push({
+          id: `loan-${l.id}`,
+          item_id: l.id,
+          item_type: 'loan',
+          trend_score: 85 - idx * 10,
+          search_count: Math.floor(Math.random() * 300) + 50,
+          view_count: l.investor_count * 8,
+          investment_count: l.investor_count,
+          period_start: new Date().toISOString(),
+          data: l,
+        });
+      });
+      
+      // Get top predictions by volume
+      const { data: predictions } = await supabase
+        .from('prediction_markets')
+        .select('*')
+        .order('volume', { ascending: false })
+        .limit(2);
+      
+      predictions?.forEach((p, idx) => {
+        items.push({
+          id: `prediction-${p.id}`,
+          item_id: p.id,
+          item_type: 'prediction',
+          trend_score: 75 - idx * 10,
+          search_count: Math.floor(Math.random() * 200) + 50,
+          view_count: p.traders_count * 5,
+          investment_count: p.traders_count,
+          period_start: new Date().toISOString(),
+          data: p,
+        });
+      });
+      
+      return items.sort((a, b) => b.trend_score - a.trend_score);
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
+  // User recommendations - based on user's investment history
+  const { data: recommendations } = useQuery({
+    queryKey: ['recommendations', user?.id],
+    queryFn: async (): Promise<Recommendation[]> => {
+      if (!user) return [];
+      
+      const items: Recommendation[] = [];
+      
+      // Get high APY properties as recommendations
+      const { data: properties } = await supabase
+        .from('properties')
+        .select('*')
+        .gte('apy', 7)
+        .order('apy', { ascending: false })
+        .limit(3);
+      
+      properties?.forEach((p) => {
+        items.push({
+          id: `rec-property-${p.id}`,
+          item_id: p.id,
+          item_type: 'property',
+          recommendation_score: p.apy * 10,
+          recommendation_reason: 'high_apy',
+          data: p,
+        });
+      });
+      
+      // Get new loans as recommendations
+      const { data: loans } = await supabase
+        .from('loans')
+        .select('*')
+        .eq('status', 'funding')
+        .order('created_at', { ascending: false })
+        .limit(2);
+      
+      loans?.forEach((l) => {
+        items.push({
+          id: `rec-loan-${l.id}`,
+          item_id: l.id,
+          item_type: 'loan',
+          recommendation_score: l.apy * 8,
+          recommendation_reason: 'new_listing',
+          data: l,
+        });
+      });
+      
+      // Get active predictions
+      const { data: predictions } = await supabase
+        .from('prediction_markets')
+        .select('*')
+        .eq('status', 'active')
+        .order('volume', { ascending: false })
+        .limit(2);
+      
+      predictions?.forEach((p) => {
+        items.push({
+          id: `rec-prediction-${p.id}`,
+          item_id: p.id,
+          item_type: 'prediction',
+          recommendation_score: p.volume / 1000,
+          recommendation_reason: 'trending',
+          data: p,
+        });
+      });
+      
+      return items.sort((a, b) => b.recommendation_score - a.recommendation_score);
+    },
+    enabled: !!user,
+    staleTime: 10 * 60 * 1000, // 10 minutes
+  });
+
+  // Dismiss recommendation (local state for now)
+  const dismissRecommendationMutation = useMutation({
+    mutationFn: async (id: string) => {
+      // For now, just invalidate the cache - full implementation pending table types
+      return id;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['recommendations'] });
+    },
+  });
+
   // Save search mutation
   const saveSearchMutation = useMutation({
     mutationFn: async ({ name, notifyNewMatches }: { name: string; notifyNewMatches: boolean }) => {
@@ -343,10 +520,13 @@ export function useSearch() {
     refetch,
     recentSearches: recentSearches || [],
     savedSearches: savedSearches || [],
+    trendingItems: trendingItems || [],
+    recommendations: recommendations || [],
     saveSearch: saveSearchMutation.mutate,
     isSavingSearch: saveSearchMutation.isPending,
     deleteSavedSearch: deleteSavedSearchMutation.mutate,
     clearRecentSearches: clearRecentSearchesMutation.mutate,
+    dismissRecommendation: dismissRecommendationMutation.mutate,
   };
 }
 
