@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ArrowLeft, BarChart3, Download, ChevronDown, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -27,6 +28,7 @@ interface HoldingWithProperty {
 
 export default function TaxCostBasis() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
 
@@ -82,9 +84,9 @@ export default function TaxCostBasis() {
           <div className="flex-1">
             <h1 className="text-xl font-bold flex items-center gap-2">
               <BarChart3 className="h-5 w-5 text-primary" />
-              Cost Basis Report
+              {t('tax.costBasisReport')}
             </h1>
-            <p className="text-sm text-muted-foreground">Track your cost basis for all holdings</p>
+            <p className="text-sm text-muted-foreground">{t('tax.trackCostBasis')}</p>
           </div>
         </div>
       </header>
@@ -127,21 +129,21 @@ export default function TaxCostBasis() {
                               <ChevronRight className="h-5 w-5 text-muted-foreground mt-0.5" />
                             )}
                             <div>
-                              <p className="font-semibold">🏢 {holding.property?.name || 'Unknown Property'}</p>
+                              <p className="font-semibold">🏢 {holding.property?.name || t('tax.unknownProperty')}</p>
                               <p className="text-sm text-muted-foreground">
-                                Current Holdings: {holding.tokens.toFixed(2)} tokens
+                                {t('tax.currentHoldings')}: {holding.tokens.toFixed(2)} {t('tax.tokens')}
                               </p>
                               <p className="text-sm text-muted-foreground">
-                                Total Cost Basis: {formatCurrency(costBasis)}
+                                {t('tax.totalCostBasis')}: {formatCurrency(costBasis)}
                               </p>
                               <p className="text-sm text-muted-foreground">
-                                Average Cost: {formatCurrency(holding.average_buy_price)}/token
+                                {t('tax.averageCost')}: {formatCurrency(holding.average_buy_price)}/{t('tax.token')}
                               </p>
                               <p className="text-sm text-muted-foreground">
-                                Current Value: {formatCurrency(currentValue)} ({formatCurrency(holding.property?.token_price || 0)}/token)
+                                {t('tax.currentValue')}: {formatCurrency(currentValue)} ({formatCurrency(holding.property?.token_price || 0)}/{t('tax.token')})
                               </p>
                               <p className={`text-sm font-medium ${unrealizedGain >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                                Unrealized Gain: {unrealizedGain >= 0 ? '+' : ''}{formatCurrency(unrealizedGain)} ({gainPercent >= 0 ? '+' : ''}{gainPercent.toFixed(1)}%)
+                                {t('tax.unrealizedGain')}: {unrealizedGain >= 0 ? '+' : ''}{formatCurrency(unrealizedGain)} ({gainPercent >= 0 ? '+' : ''}{gainPercent.toFixed(1)}%)
                               </p>
                             </div>
                           </div>
@@ -151,14 +153,14 @@ export default function TaxCostBasis() {
                     <CollapsibleContent>
                       <div className="px-4 pb-4">
                         <Separator className="mb-4" />
-                        <h4 className="font-medium mb-3 text-sm">Tax Lots</h4>
+                        <h4 className="font-medium mb-3 text-sm">{t('tax.taxLots')}</h4>
                         <Table>
                           <TableHeader>
                             <TableRow>
-                              <TableHead>Date</TableHead>
-                              <TableHead className="text-right">Tokens</TableHead>
-                              <TableHead className="text-right">Cost</TableHead>
-                              <TableHead className="text-right">Basis/Token</TableHead>
+                              <TableHead>{t('tax.date')}</TableHead>
+                              <TableHead className="text-right">{t('tax.tokens')}</TableHead>
+                              <TableHead className="text-right">{t('tax.cost')}</TableHead>
+                              <TableHead className="text-right">{t('tax.basisPerToken')}</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
@@ -181,7 +183,7 @@ export default function TaxCostBasis() {
           <Card>
             <CardContent className="py-12 text-center">
               <BarChart3 className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <p className="text-muted-foreground">No holdings to display</p>
+              <p className="text-muted-foreground">{t('tax.noHoldings')}</p>
             </CardContent>
           </Card>
         )}
@@ -190,20 +192,20 @@ export default function TaxCostBasis() {
         {holdings && holdings.length > 0 && (
           <Card className="border-primary/50 bg-primary/5">
             <CardHeader>
-              <CardTitle className="text-base">Total Unrealized Gains/Losses</CardTitle>
+              <CardTitle className="text-base">{t('tax.totalUnrealizedGains')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex justify-between">
-                <span>Total Cost Basis:</span>
+                <span>{t('tax.totalCostBasis')}:</span>
                 <span className="font-medium">{formatCurrency(totalCostBasis)}</span>
               </div>
               <div className="flex justify-between">
-                <span>Total Current Value:</span>
+                <span>{t('tax.totalCurrentValue')}:</span>
                 <span className="font-medium">{formatCurrency(totalCurrentValue)}</span>
               </div>
               <Separator />
               <div className="flex justify-between text-lg font-bold">
-                <span>Total Unrealized Gain:</span>
+                <span>{t('tax.totalUnrealizedGain')}:</span>
                 <span className={totalUnrealizedGain >= 0 ? 'text-green-500' : 'text-red-500'}>
                   {totalUnrealizedGain >= 0 ? '+' : ''}{formatCurrency(totalUnrealizedGain)} ({unrealizedGainPercent >= 0 ? '+' : ''}{unrealizedGainPercent.toFixed(1)}%)
                 </span>
@@ -212,10 +214,10 @@ export default function TaxCostBasis() {
               <Separator className="my-4" />
 
               <div>
-                <p className="text-sm text-muted-foreground mb-2">If sold today:</p>
+                <p className="text-sm text-muted-foreground mb-2">{t('tax.ifSoldToday')}:</p>
                 <div className="text-sm space-y-1">
-                  <p>• Short-term gains: {formatCurrency(totalUnrealizedGain > 0 ? totalUnrealizedGain : 0)} (taxed as income)</p>
-                  <p>• Long-term gains: {formatCurrency(0)} (lower tax rate)</p>
+                  <p>• {t('tax.shortTermGainsTaxed')}: {formatCurrency(totalUnrealizedGain > 0 ? totalUnrealizedGain : 0)}</p>
+                  <p>• {t('tax.longTermGainsLower')}: {formatCurrency(0)}</p>
                 </div>
               </div>
             </CardContent>
@@ -225,7 +227,7 @@ export default function TaxCostBasis() {
         {/* Export Button */}
         <Button className="w-full" variant="outline">
           <Download className="h-4 w-4 mr-2" />
-          Export Full Cost Basis Report (CSV)
+          {t('tax.exportFullReport')}
         </Button>
       </main>
 
