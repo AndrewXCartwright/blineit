@@ -52,6 +52,8 @@ import DRIPHistory from "./pages/DRIPHistory";
 import AutoInvest from "./pages/AutoInvest";
 import AutoInvestCreate from "./pages/AutoInvestCreate";
 import AutoInvestDetail from "./pages/AutoInvestDetail";
+import Watchlist from "./pages/Watchlist";
+import Alerts from "./pages/Alerts";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProperties from "./pages/admin/AdminProperties";
 import AdminLoans from "./pages/admin/AdminLoans";
@@ -113,6 +115,8 @@ const App = () => (
                 <Route path="/auto-invest" element={<ProtectedRoute><AutoInvest /></ProtectedRoute>} />
                 <Route path="/auto-invest/create" element={<ProtectedRoute><AutoInvestCreate /></ProtectedRoute>} />
                 <Route path="/auto-invest/:id" element={<ProtectedRoute><AutoInvestDetail /></ProtectedRoute>} />
+                <Route path="/watchlist" element={<ProtectedRoute><Watchlist /></ProtectedRoute>} />
+                <Route path="/alerts" element={<ProtectedRoute><Alerts /></ProtectedRoute>} />
                 <Route path="/r/:code" element={<ReferralLanding />} />
                 <Route path="/install" element={<InstallPage />} />
                 <Route path="/coming-soon/:assetClass" element={<ComingSoon />} />
