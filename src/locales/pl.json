@@ -331,5 +331,28 @@
     "inviteFriends": "Zaproś znajomych",
     "yourCode": "Twój kod polecający",
     "earnings": "Zarobki z poleceń"
+  },
+  "profile": {
+    "title": "Profil",
+    "signInToView": "Zaloguj się, aby zobaczyć swój profil",
+    "trackInvestments": "Śledź swoje inwestycje i zarządzaj kontem",
+    "investor": "Inwestor",
+    "completeVerification": "Ukończ weryfikację",
+    "verifyIdentity": "Zweryfikuj swoją tożsamość, aby odblokować pełny dostęp do inwestowania i wyższe limity.",
+    "startVerification": "Rozpocznij weryfikację",
+    "properties": "Nieruchomości",
+    "totalBets": "Łącznie zakładów",
+    "winRate": "Skuteczność",
+    "viewAllReferrals": "Zobacz wszystkie polecenia i ranking",
+    "adminDashboard": "Panel administracyjny",
+    "managePlatform": "Zarządzaj ustawieniami platformy",
+    "viewWallet": "Zobacz portfel",
+    "exploreProperties": "Przeglądaj nieruchomości",
+    "predictionMarkets": "Rynki prognoz",
+    "appearance": "Wygląd",
+    "notifications": "Powiadomienia",
+    "security": "Bezpieczeństwo",
+    "helpSupport": "Pomoc i wsparcie",
+    "logOut": "Wyloguj się"
   }
 }

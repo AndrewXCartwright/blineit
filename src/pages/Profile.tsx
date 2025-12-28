@@ -5,6 +5,7 @@ import { useKYC } from "@/hooks/useKYC";
 import { useIsAdmin } from "@/hooks/useAdmin";
 import { useReferrals } from "@/hooks/useReferrals";
 import { useNavigate, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { CountUp } from "@/components/CountUp";
 import { EmptyState } from "@/components/EmptyState";
 import { ReferralCard } from "@/components/ReferralCard";
@@ -12,18 +13,19 @@ import { KYCStatusBadge } from "@/components/KYCStatusBadge";
 import { ThemeSwitcher } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 
-const menuItems = [
-  { icon: Bell, label: "Notifications", link: "/settings/notifications" },
-  { icon: Shield, label: "Security", link: "#" },
-  { icon: HelpCircle, label: "Help & Support", link: "#" },
-];
-
 export default function Profile() {
+  const { t } = useTranslation();
   const { user, signOut } = useAuth();
   const { profile, holdings, bets, loading } = useUserData();
   const { kycStatus, isVerified } = useKYC();
   const { isAdmin } = useIsAdmin();
   const navigate = useNavigate();
+  
+  const menuItems = [
+    { icon: Bell, label: t('profile.notifications'), link: "/settings/notifications" },
+    { icon: Shield, label: t('profile.security'), link: "#" },
+    { icon: HelpCircle, label: t('profile.helpSupport'), link: "#" },
+  ];
 
   const handleSignOut = async () => {
     await signOut();
@@ -40,9 +42,9 @@ export default function Profile() {
       <div className="min-h-screen pb-24 flex items-center justify-center px-4">
         <EmptyState
           icon={<User className="w-12 h-12" />}
-          title="Sign in to view your profile"
-          description="Track your investments and manage your account"
-          actionLabel="Sign In"
+          title={t('profile.signInToView')}
+          description={t('profile.trackInvestments')}
+          actionLabel={t('auth.signIn')}
           actionLink="/auth"
         />
       </div>
@@ -55,7 +57,7 @@ export default function Profile() {
   return (
     <div className="min-h-screen pb-24">
       <header className="sticky top-0 z-40 glass-card border-b border-border/50 px-4 py-4">
-        <h1 className="font-display text-2xl font-bold text-foreground">Profile</h1>
+        <h1 className="font-display text-2xl font-bold text-foreground">{t('profile.title')}</h1>
       </header>
 
       <main className="px-4 py-6 space-y-6">
@@ -87,7 +89,7 @@ export default function Profile() {
             {holdings.length > 0 && (
               <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-success/20 text-success text-sm font-medium">
                 <Trophy className="w-4 h-4" />
-                Investor
+                {t('profile.investor')}
               </span>
             )}
           </div>
@@ -101,13 +103,13 @@ export default function Profile() {
                 <AlertCircle className="w-6 h-6 text-warning" />
               </div>
               <div className="flex-1">
-                <h3 className="font-display font-bold text-foreground mb-1">Complete Verification</h3>
+                <h3 className="font-display font-bold text-foreground mb-1">{t('profile.completeVerification')}</h3>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Verify your identity to unlock full access to investing and higher limits.
+                  {t('profile.verifyIdentity')}
                 </p>
                 <Button onClick={() => navigate("/kyc")} size="sm" className="gap-2">
                   <ShieldCheck className="w-4 h-4" />
-                  Start Verification
+                  {t('profile.startVerification')}
                 </Button>
               </div>
             </div>
@@ -121,21 +123,21 @@ export default function Profile() {
             <p className="font-display font-bold text-lg text-foreground">
               <CountUp end={holdings.length} />
             </p>
-            <p className="text-xs text-muted-foreground">Properties</p>
+            <p className="text-xs text-muted-foreground">{t('profile.properties')}</p>
           </div>
           <div className="glass-card rounded-xl p-4 text-center animate-fade-in stagger-2">
             <Target className="w-5 h-5 text-primary mx-auto mb-2" />
             <p className="font-display font-bold text-lg text-foreground">
               <CountUp end={totalBets} />
             </p>
-            <p className="text-xs text-muted-foreground">Total Bets</p>
+            <p className="text-xs text-muted-foreground">{t('profile.totalBets')}</p>
           </div>
           <div className="glass-card rounded-xl p-4 text-center animate-fade-in stagger-3">
             <Trophy className="w-5 h-5 text-primary mx-auto mb-2" />
             <p className="font-display font-bold text-lg text-foreground">
               <CountUp end={winRate} />%
             </p>
-            <p className="text-xs text-muted-foreground">Win Rate</p>
+            <p className="text-xs text-muted-foreground">{t('profile.winRate')}</p>
           </div>
         </div>
 
@@ -146,7 +148,7 @@ export default function Profile() {
             to="/referrals"
             className="block text-center text-sm text-primary hover:underline"
           >
-            View all referrals & leaderboard →
+            {t('profile.viewAllReferrals')} →
           </Link>
         </div>
 
@@ -161,8 +163,8 @@ export default function Profile() {
                 <Crown className="w-5 h-5 text-amber-500" />
               </div>
               <div>
-                <span className="font-medium text-foreground">Admin Dashboard</span>
-                <p className="text-xs text-muted-foreground">Manage platform settings</p>
+                <span className="font-medium text-foreground">{t('profile.adminDashboard')}</span>
+                <p className="text-xs text-muted-foreground">{t('profile.managePlatform')}</p>
               </div>
             </div>
             <ChevronRight className="w-5 h-5 text-muted-foreground" />
@@ -179,7 +181,7 @@ export default function Profile() {
               <div className="p-2 rounded-xl bg-primary/20">
                 <Wallet className="w-5 h-5 text-primary" />
               </div>
-              <span className="font-medium text-foreground">View Wallet</span>
+              <span className="font-medium text-foreground">{t('profile.viewWallet')}</span>
             </div>
             <ChevronRight className="w-5 h-5 text-muted-foreground" />
           </Link>
@@ -191,7 +193,7 @@ export default function Profile() {
               <div className="p-2 rounded-xl bg-success/20">
                 <Building2 className="w-5 h-5 text-success" />
               </div>
-              <span className="font-medium text-foreground">Explore Properties</span>
+              <span className="font-medium text-foreground">{t('profile.exploreProperties')}</span>
             </div>
             <ChevronRight className="w-5 h-5 text-muted-foreground" />
           </Link>
@@ -203,7 +205,7 @@ export default function Profile() {
               <div className="p-2 rounded-xl bg-accent/20">
                 <Target className="w-5 h-5 text-accent" />
               </div>
-              <span className="font-medium text-foreground">Prediction Markets</span>
+              <span className="font-medium text-foreground">{t('profile.predictionMarkets')}</span>
             </div>
             <ChevronRight className="w-5 h-5 text-muted-foreground" />
           </Link>
@@ -215,7 +217,7 @@ export default function Profile() {
             <div className="p-2 rounded-xl bg-primary/20">
               <Palette className="w-5 h-5 text-primary" />
             </div>
-            <h3 className="font-display font-semibold text-foreground">Appearance</h3>
+            <h3 className="font-display font-semibold text-foreground">{t('profile.appearance')}</h3>
           </div>
           <ThemeSwitcher />
         </div>
@@ -248,7 +250,7 @@ export default function Profile() {
           className="w-full glass-card rounded-xl p-4 flex items-center justify-center gap-2 text-destructive hover:bg-destructive/10 transition-colors animate-fade-in stagger-6 interactive-card"
         >
           <LogOut className="w-5 h-5" />
-          <span className="font-medium">Log Out</span>
+          <span className="font-medium">{t('profile.logOut')}</span>
         </button>
       </main>
     </div>
