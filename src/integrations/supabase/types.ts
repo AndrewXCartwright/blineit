@@ -1152,6 +1152,172 @@ export type Database = {
         }
         Relationships: []
       }
+      governance_delegates: {
+        Row: {
+          created_at: string
+          delegate_to: string
+          id: string
+          is_active: boolean
+          item_id: string | null
+          revoked_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          delegate_to: string
+          id?: string
+          is_active?: boolean
+          item_id?: string | null
+          revoked_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          delegate_to?: string
+          id?: string
+          is_active?: boolean
+          item_id?: string | null
+          revoked_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      governance_proposals: {
+        Row: {
+          created_at: string
+          created_by: string
+          description: string
+          documents: Json
+          executed_at: string | null
+          execution_details: string | null
+          id: string
+          item_id: string
+          item_type: string
+          options: Json
+          pass_threshold: number
+          proposal_type: string
+          quorum_percentage: number
+          status: string
+          title: string
+          updated_at: string
+          voting_ends_at: string
+          voting_starts_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          description: string
+          documents?: Json
+          executed_at?: string | null
+          execution_details?: string | null
+          id?: string
+          item_id: string
+          item_type?: string
+          options?: Json
+          pass_threshold?: number
+          proposal_type?: string
+          quorum_percentage?: number
+          status?: string
+          title: string
+          updated_at?: string
+          voting_ends_at: string
+          voting_starts_at: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          description?: string
+          documents?: Json
+          executed_at?: string | null
+          execution_details?: string | null
+          id?: string
+          item_id?: string
+          item_type?: string
+          options?: Json
+          pass_threshold?: number
+          proposal_type?: string
+          quorum_percentage?: number
+          status?: string
+          title?: string
+          updated_at?: string
+          voting_ends_at?: string
+          voting_starts_at?: string
+        }
+        Relationships: []
+      }
+      governance_snapshots: {
+        Row: {
+          created_at: string
+          id: string
+          proposal_id: string
+          snapshot_at: string
+          tokens_held: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          proposal_id: string
+          snapshot_at?: string
+          tokens_held?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          proposal_id?: string
+          snapshot_at?: string
+          tokens_held?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "governance_snapshots_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "governance_proposals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      governance_votes: {
+        Row: {
+          created_at: string
+          id: string
+          proposal_id: string
+          user_id: string
+          vote_option: string
+          voted_at: string
+          voting_power: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          proposal_id: string
+          user_id: string
+          vote_option: string
+          voted_at?: string
+          voting_power?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          proposal_id?: string
+          user_id?: string
+          vote_option?: string
+          voted_at?: string
+          voting_power?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "governance_votes_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "governance_proposals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       institutional_accounts: {
         Row: {
           aum: number | null

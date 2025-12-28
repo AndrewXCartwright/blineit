@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Vote, Users, Clock, TrendingUp, ChevronRight, CheckCircle2, XCircle, Timer } from "lucide-react";
+import { Vote, Users, Clock, TrendingUp, ChevronRight, CheckCircle2, XCircle, Timer, Wrench, DollarSign, LogOut, UserCog, PieChart, HelpCircle } from "lucide-react";
 import { Header } from "@/components/Header";
 import { BottomNav } from "@/components/BottomNav";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,66 +9,48 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useGovernance } from "@/hooks/useGovernance";
+import { useAuth } from "@/hooks/useAuth";
+import { formatDistanceToNow } from "date-fns";
 
-const mockProposals = [
-  {
-    id: "1",
-    title: "Increase Dividend Distribution Frequency",
-    description: "Proposal to change dividend distributions from quarterly to monthly for all equity properties.",
-    status: "active",
-    votesFor: 1250000,
-    votesAgainst: 450000,
-    totalVotes: 1700000,
-    quorum: 2000000,
-    endDate: "2024-02-15",
-    category: "financial",
-  },
-  {
-    id: "2",
-    title: "Add New Property Category: Industrial",
-    description: "Expand platform offerings to include industrial warehouse and logistics properties.",
-    status: "active",
-    votesFor: 890000,
-    votesAgainst: 210000,
-    totalVotes: 1100000,
-    quorum: 1500000,
-    endDate: "2024-02-20",
-    category: "platform",
-  },
-  {
-    id: "3",
-    title: "Reduce Minimum Investment Amount",
-    description: "Lower the minimum investment threshold from $100 to $50 for retail investors.",
-    status: "passed",
-    votesFor: 2100000,
-    votesAgainst: 300000,
-    totalVotes: 2400000,
-    quorum: 2000000,
-    endDate: "2024-01-30",
-    category: "accessibility",
-  },
-  {
-    id: "4",
-    title: "Platform Fee Reduction",
-    description: "Reduce platform management fees from 1% to 0.75% annually.",
-    status: "failed",
-    votesFor: 800000,
-    votesAgainst: 1500000,
-    totalVotes: 2300000,
-    quorum: 2000000,
-    endDate: "2024-01-15",
-    category: "financial",
-  },
-];
+const proposalTypeIcons: Record<string, React.ReactNode> = {
+  operational: <Wrench className="h-3 w-3" />,
+  financial: <DollarSign className="h-3 w-3" />,
+  exit: <LogOut className="h-3 w-3" />,
+  management: <UserCog className="h-3 w-3" />,
+  distribution: <PieChart className="h-3 w-3" />,
+  other: <HelpCircle className="h-3 w-3" />,
+};
 
 const GovernanceHub = () => {
+  const { user } = useAuth();
+  const { 
+    activeProposals, 
+    completedProposals, 
+    userVotes, 
+    loadingProposals,
+    hasVoted,
+    useProposalVotes,
+    calculateVoteTotals,
+    delegationsToMe,
+  } = useGovernance();
   const [activeTab, setActiveTab] = useState("active");
+
+  // Calculate stats
+  const totalVotingPower = 15000; // Mock - would come from user holdings
+  const delegatedPower = delegationsToMe.reduce((acc, d) => acc + 5000, 0); // Mock
+  const proposalsVoted = userVotes.length;
+  const participationRate = activeProposals.length > 0 
+    ? Math.round((proposalsVoted / activeProposals.length) * 100) 
+    : 0;
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "active":
         return "bg-blue-500/10 text-blue-500 border-blue-500/20";
       case "passed":
+      case "executed":
         return "bg-green-500/10 text-green-500 border-green-500/20";
       case "failed":
         return "bg-red-500/10 text-red-500 border-red-500/20";
@@ -80,22 +62,18 @@ const GovernanceHub = () => {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "active":
-        return <Timer className="h-4 w-4" />;
+        return <Timer className="h-3 w-3" />;
       case "passed":
-        return <CheckCircle2 className="h-4 w-4" />;
+      case "executed":
+        return <CheckCircle2 className="h-3 w-3" />;
       case "failed":
-        return <XCircle className="h-4 w-4" />;
+        return <XCircle className="h-3 w-3" />;
       default:
         return null;
     }
   };
 
-  const filteredProposals = mockProposals.filter((p) =>
-    activeTab === "active" ? p.status === "active" : p.status !== "active"
-  );
-
-  const votingPower = 15000;
-  const delegatedPower = 5000;
+  const displayedProposals = activeTab === "active" ? activeProposals : completedProposals;
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -110,8 +88,10 @@ const GovernanceHub = () => {
           {/* Header */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold">Governance</h1>
-              <p className="text-muted-foreground">Vote on platform proposals</p>
+              <h1 className="text-2xl font-bold flex items-center gap-2">
+                🗳️ Governance
+              </h1>
+              <p className="text-muted-foreground">Vote on property decisions</p>
             </div>
             <Link to="/governance/my-votes">
               <Button variant="outline" size="sm">
@@ -129,7 +109,7 @@ const GovernanceHub = () => {
                   <Vote className="h-5 w-5 text-primary" />
                   <span className="text-sm text-muted-foreground">Voting Power</span>
                 </div>
-                <p className="text-2xl font-bold">{votingPower.toLocaleString()}</p>
+                <p className="text-2xl font-bold">{totalVotingPower.toLocaleString()}</p>
                 <p className="text-xs text-muted-foreground mt-1">Based on token holdings</p>
               </CardContent>
             </Card>
@@ -149,23 +129,29 @@ const GovernanceHub = () => {
           </div>
 
           {/* Stats Row */}
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-4 gap-3">
             <Card>
-              <CardContent className="p-4 text-center">
-                <p className="text-2xl font-bold text-primary">12</p>
-                <p className="text-xs text-muted-foreground">Active Proposals</p>
+              <CardContent className="p-3 text-center">
+                <p className="text-xl font-bold text-primary">{activeProposals.length}</p>
+                <p className="text-xs text-muted-foreground">Active</p>
               </CardContent>
             </Card>
             <Card>
-              <CardContent className="p-4 text-center">
-                <p className="text-2xl font-bold text-green-500">89%</p>
-                <p className="text-xs text-muted-foreground">Participation Rate</p>
+              <CardContent className="p-3 text-center">
+                <p className="text-xl font-bold text-green-500">{participationRate}%</p>
+                <p className="text-xs text-muted-foreground">Participation</p>
               </CardContent>
             </Card>
             <Card>
-              <CardContent className="p-4 text-center">
-                <p className="text-2xl font-bold">156</p>
-                <p className="text-xs text-muted-foreground">Total Proposals</p>
+              <CardContent className="p-3 text-center">
+                <p className="text-xl font-bold">{proposalsVoted}</p>
+                <p className="text-xs text-muted-foreground">Voted</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-3 text-center">
+                <p className="text-xl font-bold">{completedProposals.length}</p>
+                <p className="text-xs text-muted-foreground">Completed</p>
               </CardContent>
             </Card>
           </div>
@@ -173,66 +159,43 @@ const GovernanceHub = () => {
           {/* Proposals */}
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="w-full">
-              <TabsTrigger value="active" className="flex-1">Active</TabsTrigger>
-              <TabsTrigger value="completed" className="flex-1">Completed</TabsTrigger>
+              <TabsTrigger value="active" className="flex-1">
+                Active ({activeProposals.length})
+              </TabsTrigger>
+              <TabsTrigger value="completed" className="flex-1">
+                Completed ({completedProposals.length})
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value={activeTab} className="mt-4 space-y-4">
-              {filteredProposals.map((proposal) => (
-                <Link key={proposal.id} to={`/governance/proposal/${proposal.id}`}>
-                  <Card className="hover:border-primary/50 transition-colors cursor-pointer">
+              {loadingProposals ? (
+                Array.from({ length: 3 }).map((_, i) => (
+                  <Card key={i}>
                     <CardContent className="p-4">
-                      <div className="flex items-start justify-between gap-4 mb-3">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <Badge variant="outline" className={getStatusColor(proposal.status)}>
-                              {getStatusIcon(proposal.status)}
-                              <span className="ml-1 capitalize">{proposal.status}</span>
-                            </Badge>
-                            <Badge variant="secondary" className="text-xs">
-                              {proposal.category}
-                            </Badge>
-                          </div>
-                          <h3 className="font-semibold">{proposal.title}</h3>
-                          <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
-                            {proposal.description}
-                          </p>
-                        </div>
-                        <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                      </div>
-
-                      {/* Voting Progress */}
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-green-500">
-                            For: {((proposal.votesFor / proposal.totalVotes) * 100).toFixed(1)}%
-                          </span>
-                          <span className="text-red-500">
-                            Against: {((proposal.votesAgainst / proposal.totalVotes) * 100).toFixed(1)}%
-                          </span>
-                        </div>
-                        <div className="h-2 bg-muted rounded-full overflow-hidden flex">
-                          <div
-                            className="bg-green-500 h-full"
-                            style={{ width: `${(proposal.votesFor / proposal.totalVotes) * 100}%` }}
-                          />
-                          <div
-                            className="bg-red-500 h-full"
-                            style={{ width: `${(proposal.votesAgainst / proposal.totalVotes) * 100}%` }}
-                          />
-                        </div>
-                        <div className="flex justify-between text-xs text-muted-foreground">
-                          <span>Quorum: {((proposal.totalVotes / proposal.quorum) * 100).toFixed(0)}%</span>
-                          <span className="flex items-center gap-1">
-                            <Clock className="h-3 w-3" />
-                            Ends {proposal.endDate}
-                          </span>
-                        </div>
-                      </div>
+                      <Skeleton className="h-6 w-3/4 mb-2" />
+                      <Skeleton className="h-4 w-full mb-4" />
+                      <Skeleton className="h-2 w-full" />
                     </CardContent>
                   </Card>
-                </Link>
-              ))}
+                ))
+              ) : displayedProposals.length === 0 ? (
+                <Card>
+                  <CardContent className="p-8 text-center text-muted-foreground">
+                    <Vote className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>No {activeTab} proposals at this time</p>
+                  </CardContent>
+                </Card>
+              ) : (
+                displayedProposals.map((proposal) => (
+                  <ProposalCard 
+                    key={proposal.id} 
+                    proposal={proposal}
+                    hasVoted={hasVoted(proposal.id)}
+                    getStatusColor={getStatusColor}
+                    getStatusIcon={getStatusIcon}
+                  />
+                ))
+              )}
             </TabsContent>
           </Tabs>
         </motion.div>
@@ -240,6 +203,102 @@ const GovernanceHub = () => {
 
       <BottomNav />
     </div>
+  );
+};
+
+// Separate component for proposal card to handle vote loading
+const ProposalCard = ({ 
+  proposal, 
+  hasVoted,
+  getStatusColor,
+  getStatusIcon,
+}: { 
+  proposal: any;
+  hasVoted: boolean;
+  getStatusColor: (status: string) => string;
+  getStatusIcon: (status: string) => React.ReactNode;
+}) => {
+  const { useProposalVotes, calculateVoteTotals } = useGovernance();
+  const { data: votes = [] } = useProposalVotes(proposal.id);
+  const voteTotals = calculateVoteTotals(votes);
+  
+  const totalPower = Object.values(voteTotals).reduce((acc, v) => acc + v.power, 0);
+  const forPower = voteTotals["for"]?.power || 0;
+  const againstPower = voteTotals["against"]?.power || 0;
+  
+  const forPercent = totalPower > 0 ? (forPower / totalPower) * 100 : 0;
+  const againstPercent = totalPower > 0 ? (againstPower / totalPower) * 100 : 0;
+  
+  const isActive = proposal.status === "active" && new Date(proposal.voting_ends_at) > new Date();
+  const timeRemaining = isActive 
+    ? formatDistanceToNow(new Date(proposal.voting_ends_at), { addSuffix: false })
+    : null;
+
+  return (
+    <Link to={`/governance/proposal/${proposal.id}`}>
+      <Card className="hover:border-primary/50 transition-colors cursor-pointer">
+        <CardContent className="p-4">
+          <div className="flex items-start justify-between gap-4 mb-3">
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1 flex-wrap">
+                <Badge variant="outline" className={getStatusColor(proposal.status)}>
+                  {getStatusIcon(proposal.status)}
+                  <span className="ml-1 capitalize">{proposal.status}</span>
+                </Badge>
+                <Badge variant="secondary" className="text-xs flex items-center gap-1">
+                  {proposalTypeIcons[proposal.proposal_type] || proposalTypeIcons.other}
+                  <span className="capitalize">{proposal.proposal_type}</span>
+                </Badge>
+              </div>
+              <h3 className="font-semibold">{proposal.title}</h3>
+              <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
+                {proposal.description}
+              </p>
+              {proposal.property && (
+                <p className="text-xs text-primary mt-1">{proposal.property.name}</p>
+              )}
+            </div>
+            <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+          </div>
+
+          {/* Voting Progress */}
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span className="text-green-500">
+                For: {forPercent.toFixed(1)}%
+              </span>
+              <span className="text-red-500">
+                Against: {againstPercent.toFixed(1)}%
+              </span>
+            </div>
+            <div className="h-2 bg-muted rounded-full overflow-hidden flex">
+              <div
+                className="bg-green-500 h-full transition-all"
+                style={{ width: `${forPercent}%` }}
+              />
+              <div
+                className="bg-red-500 h-full transition-all"
+                style={{ width: `${againstPercent}%` }}
+              />
+            </div>
+            <div className="flex justify-between text-xs text-muted-foreground">
+              <span>{votes.length} votes cast</span>
+              {isActive && timeRemaining && (
+                <span className="flex items-center gap-1">
+                  <Clock className="h-3 w-3" />
+                  {timeRemaining} left
+                </span>
+              )}
+              {hasVoted && (
+                <Badge variant="outline" className="text-xs bg-primary/10 text-primary border-primary/20">
+                  Voted ✓
+                </Badge>
+              )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </Link>
   );
 };
 
