@@ -91,7 +91,11 @@
     "gains": "gains",
     "verificationRequired": "Verification Required",
     "verificationMessage": "Complete identity verification to start investing. Takes about 5 minutes.",
-    "verifyNow": "Verify Now"
+    "verifyNow": "Verify Now",
+    "community": "Community",
+    "calculators": "Calculators",
+    "alerts": "Alerts",
+    "documents": "Documents"
   },
   "quickStats": {
     "avgReturn": "Avg Return",
@@ -627,6 +631,28 @@
     "notifications": "Notifications",
     "security": "Security",
     "helpSupport": "Help & Support",
-    "logOut": "Log Out"
+    "logOut": "Log Out",
+    "followers": "Followers",
+    "following": "Following",
+    "posts": "Posts",
+    "community": "Community"
+  },
+  "community": {
+    "title": "Community",
+    "leaderboard": "Leaderboard",
+    "new": "New",
+    "trending": "Trending",
+    "following": "Following",
+    "whatsOnYourMind": "What's on your mind?",
+    "image": "Image",
+    "tagProperty": "Tag Property",
+    "tagPrediction": "Tag Prediction",
+    "posting": "Posting...",
+    "post": "Post",
+    "toJoin": "to join the community",
+    "noPostsYet": "No posts yet",
+    "beFirst": "Be the first to share your thoughts!",
+    "createPost": "Create Post",
+    "share": "Share"
   }
 }

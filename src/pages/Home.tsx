@@ -9,7 +9,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useKYC } from "@/hooks/useKYC";
 import { useRealtimeTransactions, useRealtimeWalletBalance, useRealtimePortfolio } from "@/hooks/useRealtimeSubscriptions";
 import { FlashBorder } from "@/components/LiveIndicator";
-import { DollarSign, Building2, Target, TrendingUp, ArrowUpRight, ArrowDownRight, Wallet, ShieldAlert, ShieldCheck } from "lucide-react";
+import { DollarSign, Building2, Target, TrendingUp, ArrowUpRight, ArrowDownRight, Wallet, ShieldAlert, ShieldCheck, Users, Calculator, Bell, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -162,6 +162,37 @@ export default function Home() {
             />
           </div>
         </div>
+
+        {/* Quick Actions */}
+        <section className="animate-fade-in stagger-5">
+          <h2 className="font-display text-lg font-bold text-foreground mb-4">{t('dashboard.quickActions')}</h2>
+          <div className="grid grid-cols-4 gap-3">
+            <Link to="/community" className="glass-card rounded-xl p-4 text-center hover:bg-secondary/50 transition-colors">
+              <div className="p-3 rounded-xl bg-primary/20 mx-auto w-fit mb-2">
+                <Users className="w-5 h-5 text-primary" />
+              </div>
+              <p className="text-xs text-muted-foreground">{t('dashboard.community')}</p>
+            </Link>
+            <Link to="/calculators" className="glass-card rounded-xl p-4 text-center hover:bg-secondary/50 transition-colors">
+              <div className="p-3 rounded-xl bg-success/20 mx-auto w-fit mb-2">
+                <Calculator className="w-5 h-5 text-success" />
+              </div>
+              <p className="text-xs text-muted-foreground">{t('dashboard.calculators')}</p>
+            </Link>
+            <Link to="/notifications" className="glass-card rounded-xl p-4 text-center hover:bg-secondary/50 transition-colors">
+              <div className="p-3 rounded-xl bg-warning/20 mx-auto w-fit mb-2">
+                <Bell className="w-5 h-5 text-warning" />
+              </div>
+              <p className="text-xs text-muted-foreground">{t('dashboard.alerts')}</p>
+            </Link>
+            <Link to="/documents" className="glass-card rounded-xl p-4 text-center hover:bg-secondary/50 transition-colors">
+              <div className="p-3 rounded-xl bg-accent/20 mx-auto w-fit mb-2">
+                <FileText className="w-5 h-5 text-accent" />
+              </div>
+              <p className="text-xs text-muted-foreground">{t('dashboard.documents')}</p>
+            </Link>
+          </div>
+        </section>
 
         {/* Your Properties */}
         <section className="animate-fade-in stagger-5">

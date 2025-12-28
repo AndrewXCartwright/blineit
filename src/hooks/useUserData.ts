@@ -18,6 +18,9 @@ interface Profile {
   qualified_referrals: number | null;
   referral_earnings: number | null;
   referral_commission_earned: number | null;
+  followers_count?: number;
+  following_count?: number;
+  posts_count?: number;
 }
 
 interface Holding {

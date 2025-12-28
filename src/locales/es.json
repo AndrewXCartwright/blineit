@@ -329,6 +329,28 @@
     "notifications": "Notificaciones",
     "security": "Seguridad",
     "helpSupport": "Ayuda y Soporte",
-    "logOut": "Cerrar Sesión"
+    "logOut": "Cerrar Sesión",
+    "followers": "Seguidores",
+    "following": "Siguiendo",
+    "posts": "Publicaciones",
+    "community": "Comunidad"
+  },
+  "community": {
+    "title": "Comunidad",
+    "leaderboard": "Clasificación",
+    "new": "Nuevo",
+    "trending": "Tendencia",
+    "following": "Siguiendo",
+    "whatsOnYourMind": "¿Qué tienes en mente?",
+    "image": "Imagen",
+    "tagProperty": "Etiquetar Propiedad",
+    "tagPrediction": "Etiquetar Predicción",
+    "posting": "Publicando...",
+    "post": "Publicar",
+    "toJoin": "para unirte a la comunidad",
+    "noPostsYet": "Aún no hay publicaciones",
+    "beFirst": "¡Sé el primero en compartir tus pensamientos!",
+    "createPost": "Crear Publicación",
+    "share": "Compartir"
   }
 }
