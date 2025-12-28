@@ -70,6 +70,12 @@ import TaxCapitalGains from "./pages/TaxCapitalGains";
 import TaxPredictions from "./pages/TaxPredictions";
 import TaxSettings from "./pages/TaxSettings";
 import TaxCostBasis from "./pages/TaxCostBasis";
+import DeveloperPortal from "./pages/DeveloperPortal";
+import DeveloperApiKeyCreate from "./pages/DeveloperApiKeyCreate";
+import DeveloperWebhooks from "./pages/DeveloperWebhooks";
+import DeveloperDocs from "./pages/DeveloperDocs";
+import DeveloperUsage from "./pages/DeveloperUsage";
+import DeveloperSandbox from "./pages/DeveloperSandbox";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProperties from "./pages/admin/AdminProperties";
 import AdminLoans from "./pages/admin/AdminLoans";
@@ -154,6 +160,13 @@ const App = () => (
                 <Route path="/r/:code" element={<ReferralLanding />} />
                 <Route path="/install" element={<InstallPage />} />
                 <Route path="/coming-soon/:assetClass" element={<ComingSoon />} />
+                {/* Developer Portal Routes */}
+                <Route path="/developers" element={<ProtectedRoute><DeveloperPortal /></ProtectedRoute>} />
+                <Route path="/developers/keys/create" element={<ProtectedRoute><DeveloperApiKeyCreate /></ProtectedRoute>} />
+                <Route path="/developers/webhooks" element={<ProtectedRoute><DeveloperWebhooks /></ProtectedRoute>} />
+                <Route path="/developers/docs" element={<ProtectedRoute><DeveloperDocs /></ProtectedRoute>} />
+                <Route path="/developers/usage" element={<ProtectedRoute><DeveloperUsage /></ProtectedRoute>} />
+                <Route path="/developers/sandbox" element={<ProtectedRoute><DeveloperSandbox /></ProtectedRoute>} />
                 {/* Admin Routes */}
                 <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
                 <Route path="/admin/properties" element={<ProtectedRoute><AdminProperties /></ProtectedRoute>} />
