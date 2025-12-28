@@ -1,5 +1,6 @@
 import { MapPin, Landmark, ShieldCheck, Clock, Percent, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getLoanFallbackImage } from "@/lib/loanImages";
 
 export interface LoanData {
   id: string;
@@ -35,17 +36,21 @@ export function LoanCard({ loan, onClick }: LoanCardProps) {
     return `$${(amount / 1000).toFixed(0)}K`;
   };
 
+  const imageUrl = loan.imageUrl || getLoanFallbackImage(loan.loanType, loan.id);
+
   return (
     <div
       onClick={onClick}
       className="glass-card rounded-2xl overflow-hidden animate-fade-in interactive-card cursor-pointer"
     >
       {/* Image Header */}
-      <div className="h-32 bg-gradient-to-br from-blue-600 to-blue-800 relative">
+      <div className="h-32 relative overflow-hidden">
+        <img 
+          src={imageUrl} 
+          alt={loan.propertyName}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-card/90" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Landmark className="w-12 h-12 text-white/20" />
-        </div>
         
         {/* Badges */}
         <div className="absolute top-3 left-3 right-3 flex items-start justify-between">
