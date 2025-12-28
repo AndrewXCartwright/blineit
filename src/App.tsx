@@ -134,6 +134,10 @@ import NewTicket from "./pages/NewTicket";
 import MyTickets from "./pages/MyTickets";
 import TicketDetail from "./pages/TicketDetail";
 import LiveChat from "./pages/LiveChat";
+import AchievementsHub from "./pages/AchievementsHub";
+import XPHistory from "./pages/XPHistory";
+import Challenges from "./pages/Challenges";
+import Leaderboards from "./pages/Leaderboards";
 
 const queryClient = new QueryClient();
 
