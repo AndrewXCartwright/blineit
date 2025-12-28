@@ -1949,6 +1949,150 @@ export type Database = {
         }
         Relationships: []
       }
+      tax_documents: {
+        Row: {
+          created_at: string
+          data: Json | null
+          document_type: string
+          file_url: string | null
+          generated_at: string | null
+          id: string
+          status: string
+          tax_year: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json | null
+          document_type: string
+          file_url?: string | null
+          generated_at?: string | null
+          id?: string
+          status?: string
+          tax_year: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json | null
+          document_type?: string
+          file_url?: string | null
+          generated_at?: string | null
+          id?: string
+          status?: string
+          tax_year?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      tax_settings: {
+        Row: {
+          cost_basis_method: string
+          created_at: string
+          electronic_delivery: boolean
+          email_notifications: boolean
+          filing_status: string | null
+          id: string
+          mail_paper_copies: boolean
+          state: string | null
+          tax_id_encrypted: string | null
+          tax_id_last_four: string | null
+          tax_id_type: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cost_basis_method?: string
+          created_at?: string
+          electronic_delivery?: boolean
+          email_notifications?: boolean
+          filing_status?: string | null
+          id?: string
+          mail_paper_copies?: boolean
+          state?: string | null
+          tax_id_encrypted?: string | null
+          tax_id_last_four?: string | null
+          tax_id_type?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cost_basis_method?: string
+          created_at?: string
+          electronic_delivery?: boolean
+          email_notifications?: boolean
+          filing_status?: string | null
+          id?: string
+          mail_paper_copies?: boolean
+          state?: string | null
+          tax_id_encrypted?: string | null
+          tax_id_last_four?: string | null
+          tax_id_type?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      taxable_events: {
+        Row: {
+          cost_basis: number | null
+          created_at: string
+          description: string
+          event_date: string
+          event_type: string
+          fees: number
+          gain_loss: number | null
+          gross_amount: number
+          holding_period: string | null
+          id: string
+          item_id: string
+          item_name: string
+          item_type: string
+          net_amount: number
+          tax_year: number
+          user_id: string
+        }
+        Insert: {
+          cost_basis?: number | null
+          created_at?: string
+          description: string
+          event_date: string
+          event_type: string
+          fees?: number
+          gain_loss?: number | null
+          gross_amount: number
+          holding_period?: string | null
+          id?: string
+          item_id: string
+          item_name: string
+          item_type: string
+          net_amount: number
+          tax_year: number
+          user_id: string
+        }
+        Update: {
+          cost_basis?: number | null
+          created_at?: string
+          description?: string
+          event_date?: string
+          event_type?: string
+          fees?: number
+          gain_loss?: number | null
+          gross_amount?: number
+          holding_period?: string | null
+          id?: string
+          item_id?: string
+          item_name?: string
+          item_type?: string
+          net_amount?: number
+          tax_year?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       token_price_history: {
         Row: {
           created_at: string
