@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { ArrowDownLeft, ArrowUpRight, RefreshCw, Building2, Target, TrendingUp, TrendingDown, Wallet as WalletIcon, Landmark, Zap, Calendar, CheckCircle2, Clock } from "lucide-react";
 import { useUserData } from "@/hooks/useUserData";
 import { useRealtimeWalletBalance, useRealtimeTransactions, useRealtimePortfolio } from "@/hooks/useRealtimeSubscriptions";
@@ -11,6 +12,7 @@ import { LinkedAccountsSection } from "@/components/LinkedAccountsSection";
 import { TransferHistory } from "@/components/TransferHistory";
 
 export default function Wallet() {
+  const { t } = useTranslation();
   const { 
     holdings, 
     bets, 
@@ -113,29 +115,29 @@ export default function Wallet() {
   return (
     <div className="min-h-screen pb-24">
       <header className="sticky top-0 z-40 glass-card border-b border-border/50 px-4 py-4">
-        <h1 className="font-display text-2xl font-bold text-foreground">Wallet</h1>
+        <h1 className="font-display text-2xl font-bold text-foreground">{t('wallet.title')}</h1>
       </header>
 
       <main className="px-4 py-6 space-y-6">
         {/* Balance Card */}
         <FlashBorder flash={walletFlash || portfolioFlash} direction={flashDirection} className="rounded-2xl">
           <div className="glass-card rounded-2xl p-6 animate-fade-in">
-            <p className="text-muted-foreground text-sm mb-1">Total Balance</p>
+            <p className="text-muted-foreground text-sm mb-1">{t('wallet.totalBalance')}</p>
             <h2 className="font-display text-4xl font-bold text-foreground mb-2">
               {loading ? (
-                <span className="animate-pulse">Loading...</span>
+                <span className="animate-pulse">{t('common.loading')}</span>
               ) : (
                 <>$<CountUp end={totalBalance} decimals={2} duration={1500} /></>
               )}
             </h2>
             <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground mb-6">
-              <span>Cash: ${walletBalance.toLocaleString()}</span>
+              <span>{t('wallet.cash')}: ${walletBalance.toLocaleString()}</span>
               <span>•</span>
-              <span>Equity: ${portfolioValue.toLocaleString()}</span>
+              <span>{t('wallet.equity')}: ${portfolioValue.toLocaleString()}</span>
               <span>•</span>
-              <span>Debt: ${totalDebtInvested.toLocaleString()}</span>
+              <span>{t('wallet.debt')}: ${totalDebtInvested.toLocaleString()}</span>
               <span>•</span>
-              <span>Predictions: ${activeBetsValue.toLocaleString()}</span>
+              <span>{t('wallet.predictions')}: ${activeBetsValue.toLocaleString()}</span>
             </div>
 
             <div className="grid grid-cols-3 gap-3">
@@ -143,19 +145,19 @@ export default function Wallet() {
                 <div className="p-2 rounded-full bg-success/30">
                   <ArrowDownLeft className="w-5 h-5 text-success" />
                 </div>
-                <span className="text-xs font-medium text-success">Deposit</span>
+                <span className="text-xs font-medium text-success">{t('wallet.deposit')}</span>
               </button>
               <button className="flex flex-col items-center gap-2 p-3 rounded-xl bg-primary/20 hover:bg-primary/30 transition-colors">
                 <div className="p-2 rounded-full bg-primary/30">
                   <ArrowUpRight className="w-5 h-5 text-primary" />
                 </div>
-                <span className="text-xs font-medium text-primary">Withdraw</span>
+                <span className="text-xs font-medium text-primary">{t('wallet.withdraw')}</span>
               </button>
               <button className="flex flex-col items-center gap-2 p-3 rounded-xl bg-accent/20 hover:bg-accent/30 transition-colors">
                 <div className="p-2 rounded-full bg-accent/30">
                   <RefreshCw className="w-5 h-5 text-accent" />
                 </div>
-                <span className="text-xs font-medium text-accent">Swap</span>
+                <span className="text-xs font-medium text-accent">{t('wallet.swap')}</span>
               </button>
             </div>
           </div>
@@ -169,8 +171,8 @@ export default function Wallet() {
                 <WalletIcon className="w-5 h-5 text-accent" />
               </div>
               <div>
-                <p className="font-semibold text-foreground">Cash Balance</p>
-                <p className="text-xs text-muted-foreground">USDC</p>
+                <p className="font-semibold text-foreground">{t('wallet.cashBalance')}</p>
+                <p className="text-xs text-muted-foreground">{t('wallet.usdc')}</p>
               </div>
             </div>
             <p className="font-semibold text-foreground">
@@ -183,7 +185,7 @@ export default function Wallet() {
         <section>
           <div className="flex items-center gap-2 mb-4">
             <Building2 className="w-5 h-5 text-primary" />
-            <h2 className="font-display text-lg font-bold text-foreground">Equity Holdings</h2>
+            <h2 className="font-display text-lg font-bold text-foreground">{t('wallet.equityHoldings')}</h2>
             <span className="ml-auto text-sm text-muted-foreground">${portfolioValue.toLocaleString()}</span>
           </div>
           <div className="space-y-3">
@@ -227,9 +229,9 @@ export default function Wallet() {
               ))
             ) : (
               <div className="glass-card rounded-xl p-4 text-center">
-                <p className="text-muted-foreground text-sm mb-2">No property tokens yet</p>
+                <p className="text-muted-foreground text-sm mb-2">{t('wallet.noPropertyTokens')}</p>
                 <Link to="/explore" className="text-primary text-sm font-medium hover:underline">
-                  Explore Properties →
+                  {t('wallet.exploreProperties')} →
                 </Link>
               </div>
             )}
@@ -240,7 +242,7 @@ export default function Wallet() {
         <section>
           <div className="flex items-center gap-2 mb-4">
             <Landmark className="w-5 h-5 text-amber-500" />
-            <h2 className="font-display text-lg font-bold text-foreground">Debt Investments</h2>
+            <h2 className="font-display text-lg font-bold text-foreground">{t('wallet.debtInvestments')}</h2>
             <span className="ml-auto text-sm text-muted-foreground">${totalDebtInvested.toLocaleString()}</span>
           </div>
 
@@ -249,19 +251,19 @@ export default function Wallet() {
             <div className="glass-card rounded-xl p-4 mb-4 bg-gradient-to-r from-amber-500/10 to-amber-600/5 border-amber-500/20">
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                  <p className="text-xs text-muted-foreground">Monthly Income</p>
+                  <p className="text-xs text-muted-foreground">{t('wallet.monthlyIncome')}</p>
                   <p className="font-bold text-amber-500">${monthlyIncome.toFixed(2)}/mo</p>
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">Total Interest Earned</p>
+                  <p className="text-xs text-muted-foreground">{t('wallet.totalInterestEarned')}</p>
                   <p className="font-bold text-success">${totalInterestEarned.toFixed(2)}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">Active Investments</p>
+                  <p className="text-xs text-muted-foreground">{t('wallet.activeInvestments')}</p>
                   <p className="font-bold text-foreground">{activeDebtInvestments.length}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">Next Payment</p>
+                  <p className="text-xs text-muted-foreground">{t('wallet.nextPayment')}</p>
                   <p className="font-bold text-foreground flex items-center gap-1">
                     <Calendar className="w-3 h-3" />
                     {daysUntilPayment !== null ? `${daysUntilPayment} days` : "—"}
@@ -394,7 +396,7 @@ export default function Wallet() {
         <section>
           <div className="flex items-center gap-2 mb-4">
             <Target className="w-5 h-5 text-success" />
-            <h2 className="font-display text-lg font-bold text-foreground">Prediction Positions</h2>
+            <h2 className="font-display text-lg font-bold text-foreground">{t('wallet.predictionPositions')}</h2>
             <span className="ml-auto text-sm text-muted-foreground">${activeBetsValue.toLocaleString()}</span>
           </div>
           <div className="space-y-3">
@@ -423,9 +425,9 @@ export default function Wallet() {
               ))
             ) : (
               <div className="glass-card rounded-xl p-4 text-center">
-                <p className="text-muted-foreground text-sm mb-2">No active predictions</p>
+                <p className="text-muted-foreground text-sm mb-2">{t('wallet.noActivePredictions')}</p>
                 <Link to="/predict" className="text-success text-sm font-medium hover:underline">
-                  Browse Markets →
+                  {t('common.browseMarkets')} →
                 </Link>
               </div>
             )}
@@ -434,7 +436,7 @@ export default function Wallet() {
 
         {/* Recent Transactions */}
         <section>
-          <h2 className="font-display text-lg font-bold text-foreground mb-4">Recent Transactions</h2>
+          <h2 className="font-display text-lg font-bold text-foreground mb-4">{t('wallet.recentTransactions')}</h2>
           <div className="space-y-3">
             {transactions.slice(0, 10).map((tx, index) => {
               const isPositive = tx.amount > 0;
@@ -476,7 +478,7 @@ export default function Wallet() {
             })}
             {transactions.length === 0 && (
               <div className="glass-card rounded-xl p-6 text-center">
-                <p className="text-muted-foreground">No transactions yet</p>
+                <p className="text-muted-foreground">{t('common.noTransactionsYet')}</p>
               </div>
             )}
           </div>
