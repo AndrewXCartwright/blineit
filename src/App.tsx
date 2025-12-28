@@ -281,6 +281,11 @@ const App = () => (
                 <Route path="/help/tickets" element={<ProtectedRoute><MyTickets /></ProtectedRoute>} />
                 <Route path="/help/ticket/:id" element={<ProtectedRoute><TicketDetail /></ProtectedRoute>} />
                 <Route path="/help/chat" element={<ProtectedRoute><LiveChat /></ProtectedRoute>} />
+                {/* Achievements & Gamification Routes */}
+                <Route path="/achievements" element={<ProtectedRoute><AchievementsHub /></ProtectedRoute>} />
+                <Route path="/achievements/history" element={<ProtectedRoute><XPHistory /></ProtectedRoute>} />
+                <Route path="/challenges" element={<ProtectedRoute><Challenges /></ProtectedRoute>} />
+                <Route path="/leaderboards" element={<ProtectedRoute><Leaderboards /></ProtectedRoute>} />
                 {/* Developer Portal Routes */}
                 <Route path="/developers" element={<ProtectedRoute><DeveloperPortal /></ProtectedRoute>} />
                 <Route path="/developers/keys/create" element={<ProtectedRoute><DeveloperApiKeyCreate /></ProtectedRoute>} />
