@@ -13,7 +13,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useGovernance, GovernanceProposal } from "@/hooks/useGovernance";
+import { useGovernance, useProposal, useProposalVotes, GovernanceProposal } from "@/hooks/useGovernance";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -36,7 +36,6 @@ const ProposalDetail = () => {
     isVoting, 
     hasVoted, 
     getUserVote,
-    useProposalVotes,
     calculateVoteTotals,
     getUserVotingPower,
   } = useGovernance();
@@ -46,20 +45,7 @@ const ProposalDetail = () => {
   const [votingPower, setVotingPower] = useState(0);
 
   // Fetch proposal
-  const { data: proposal, isLoading: loadingProposal } = useQuery({
-    queryKey: ["governance-proposal", id],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("governance_proposals")
-        .select("*")
-        .eq("id", id)
-        .single();
-
-      if (error) throw error;
-      return data as GovernanceProposal;
-    },
-    enabled: !!id,
-  });
+  const { data: proposal, isLoading: loadingProposal } = useProposal(id);
 
   // Fetch votes
   const { data: votes = [], isLoading: loadingVotes } = useProposalVotes(id || "");

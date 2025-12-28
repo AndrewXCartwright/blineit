@@ -37,6 +37,7 @@ export interface GovernanceVote {
   vote_option: string;
   voting_power: number;
   voted_at: string;
+  created_at: string;
 }
 
 export interface GovernanceDelegate {
@@ -49,15 +50,80 @@ export interface GovernanceDelegate {
   revoked_at: string | null;
 }
 
+export interface GovernanceSnapshot {
+  id: string;
+  proposal_id: string;
+  user_id: string;
+  tokens_held: number;
+  snapshot_at: string;
+  created_at: string;
+}
+
 export interface VoteTotals {
   [key: string]: { count: number; power: number };
 }
+
+// Hook to fetch a single proposal
+export const useProposal = (proposalId: string | undefined) => {
+  return useQuery({
+    queryKey: ["governance-proposal", proposalId],
+    queryFn: async () => {
+      if (!proposalId) return null;
+      const { data, error } = await supabase
+        .from("governance_proposals")
+        .select("*")
+        .eq("id", proposalId)
+        .single();
+
+      if (error) throw error;
+      return data as GovernanceProposal;
+    },
+    enabled: !!proposalId,
+  });
+};
+
+// Hook to fetch votes for a specific proposal
+export const useProposalVotes = (proposalId: string) => {
+  return useQuery({
+    queryKey: ["governance-proposal-votes", proposalId],
+    queryFn: async () => {
+      if (!proposalId) return [];
+      const { data, error } = await supabase
+        .from("governance_votes")
+        .select("*")
+        .eq("proposal_id", proposalId)
+        .order("voted_at", { ascending: false });
+
+      if (error) throw error;
+      return data as GovernanceVote[];
+    },
+    enabled: !!proposalId,
+  });
+};
+
+// Hook to fetch snapshots for a proposal
+export const useProposalSnapshots = (proposalId: string) => {
+  return useQuery({
+    queryKey: ["governance-snapshots", proposalId],
+    queryFn: async () => {
+      if (!proposalId) return [];
+      const { data, error } = await supabase
+        .from("governance_snapshots")
+        .select("*")
+        .eq("proposal_id", proposalId);
+
+      if (error) throw error;
+      return data as GovernanceSnapshot[];
+    },
+    enabled: !!proposalId,
+  });
+};
 
 export const useGovernance = () => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
-  // Fetch all active proposals
+  // Fetch all proposals (active, passed, failed, executed)
   const { data: proposals = [], isLoading: loadingProposals } = useQuery({
     queryKey: ["governance-proposals"],
     queryFn: async () => {
@@ -88,35 +154,6 @@ export const useGovernance = () => {
     enabled: !!user,
   });
 
-  // Fetch votes for a specific proposal
-  const useProposalVotes = (proposalId: string) => {
-    return useQuery({
-      queryKey: ["governance-proposal-votes", proposalId],
-      queryFn: async () => {
-        const { data, error } = await supabase
-          .from("governance_votes")
-          .select("*")
-          .eq("proposal_id", proposalId);
-
-        if (error) throw error;
-        return data as GovernanceVote[];
-      },
-    });
-  };
-
-  // Get vote totals for a proposal
-  const calculateVoteTotals = (votes: GovernanceVote[]): VoteTotals => {
-    const totals: VoteTotals = {};
-    votes.forEach((vote) => {
-      if (!totals[vote.vote_option]) {
-        totals[vote.vote_option] = { count: 0, power: 0 };
-      }
-      totals[vote.vote_option].count += 1;
-      totals[vote.vote_option].power += Number(vote.voting_power);
-    });
-    return totals;
-  };
-
   // Fetch user's delegations
   const { data: delegations = [], isLoading: loadingDelegations } = useQuery({
     queryKey: ["governance-delegations", user?.id],
@@ -134,10 +171,32 @@ export const useGovernance = () => {
     enabled: !!user,
   });
 
-  // Get user's voting power for a property
+  // Fetch user's total holdings for voting power calculation
+  const { data: userHoldings = [] } = useQuery({
+    queryKey: ["user-holdings", user?.id],
+    queryFn: async () => {
+      if (!user) return [];
+      const { data, error } = await supabase
+        .from("user_holdings")
+        .select("property_id, tokens")
+        .eq("user_id", user.id);
+
+      if (error) throw error;
+      return data || [];
+    },
+    enabled: !!user,
+  });
+
+  // Get total voting power across all properties
+  const totalVotingPower = userHoldings.reduce((acc, h) => acc + Number(h.tokens), 0);
+
+  // Get user's voting power for a specific property
   const getUserVotingPower = async (propertyId: string): Promise<number> => {
     if (!user) return 0;
     
+    const holding = userHoldings.find(h => h.property_id === propertyId);
+    if (holding) return Number(holding.tokens);
+
     const { data } = await supabase
       .from("user_holdings")
       .select("tokens")
@@ -146,6 +205,19 @@ export const useGovernance = () => {
       .single();
 
     return data?.tokens || 0;
+  };
+
+  // Get vote totals for a proposal
+  const calculateVoteTotals = (votes: GovernanceVote[]): VoteTotals => {
+    const totals: VoteTotals = {};
+    votes.forEach((vote) => {
+      if (!totals[vote.vote_option]) {
+        totals[vote.vote_option] = { count: 0, power: 0 };
+      }
+      totals[vote.vote_option].count += 1;
+      totals[vote.vote_option].power += Number(vote.voting_power);
+    });
+    return totals;
   };
 
   // Cast a vote
@@ -170,10 +242,10 @@ export const useGovernance = () => {
 
       if (error) throw error;
     },
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["governance-proposals"] });
       queryClient.invalidateQueries({ queryKey: ["governance-user-votes"] });
-      queryClient.invalidateQueries({ queryKey: ["governance-proposal-votes"] });
+      queryClient.invalidateQueries({ queryKey: ["governance-proposal-votes", variables.proposalId] });
       toast.success("Vote cast successfully!");
     },
     onError: (error) => {
@@ -249,6 +321,11 @@ export const useGovernance = () => {
     (p) => p.status === "active" && new Date(p.voting_ends_at) > new Date()
   );
 
+  // Get upcoming proposals (voting not started yet)
+  const upcomingProposals = proposals.filter(
+    (p) => p.status === "active" && new Date(p.voting_starts_at) > new Date()
+  );
+
   // Get completed proposals
   const completedProposals = proposals.filter(
     (p) => p.status === "passed" || p.status === "failed" || p.status === "executed"
@@ -260,25 +337,40 @@ export const useGovernance = () => {
   // Get user's outgoing delegations
   const myDelegations = delegations.filter((d) => d.user_id === user?.id);
 
+  // Calculate delegated voting power
+  const delegatedVotingPower = delegationsToMe.length * 1000; // Placeholder - would need actual token data
+
   return {
+    // Data
     proposals,
     activeProposals,
+    upcomingProposals,
     completedProposals,
     userVotes,
     delegations,
     delegationsToMe,
     myDelegations,
+    userHoldings,
+    totalVotingPower,
+    delegatedVotingPower,
+    
+    // Loading states
     loadingProposals,
     loadingVotes,
     loadingDelegations,
+    
+    // Mutations
     castVote: castVoteMutation.mutate,
     isVoting: castVoteMutation.isPending,
     createDelegation: createDelegationMutation.mutate,
+    isCreatingDelegation: createDelegationMutation.isPending,
     revokeDelegation: revokeDelegationMutation.mutate,
+    isRevokingDelegation: revokeDelegationMutation.isPending,
+    
+    // Helpers
     hasVoted,
     getUserVote,
     getUserVotingPower,
-    useProposalVotes,
     calculateVoteTotals,
   };
 };
