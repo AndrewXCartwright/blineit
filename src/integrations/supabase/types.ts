@@ -336,6 +336,45 @@ export type Database = {
         }
         Relationships: []
       }
+      auth_events: {
+        Row: {
+          auth_method: string
+          created_at: string
+          device_id: string | null
+          event_type: string
+          failure_reason: string | null
+          id: string
+          ip_address: string | null
+          location: string | null
+          success: boolean
+          user_id: string
+        }
+        Insert: {
+          auth_method: string
+          created_at?: string
+          device_id?: string | null
+          event_type: string
+          failure_reason?: string | null
+          id?: string
+          ip_address?: string | null
+          location?: string | null
+          success?: boolean
+          user_id: string
+        }
+        Update: {
+          auth_method?: string
+          created_at?: string
+          device_id?: string | null
+          event_type?: string
+          failure_reason?: string | null
+          id?: string
+          ip_address?: string | null
+          location?: string | null
+          success?: boolean
+          user_id?: string
+        }
+        Relationships: []
+      }
       auto_invest_allocations: {
         Row: {
           allocation_percent: number
@@ -547,6 +586,63 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      biometric_settings: {
+        Row: {
+          biometric_enabled: boolean
+          biometric_type: string | null
+          created_at: string
+          device_id: string
+          device_name: string
+          failed_attempts: number
+          id: string
+          last_biometric_auth: string | null
+          locked_until: string | null
+          pin_enabled: boolean
+          pin_hash: string | null
+          require_biometric_for_login: boolean
+          require_biometric_for_transactions: boolean
+          require_biometric_for_transfers: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          biometric_enabled?: boolean
+          biometric_type?: string | null
+          created_at?: string
+          device_id: string
+          device_name: string
+          failed_attempts?: number
+          id?: string
+          last_biometric_auth?: string | null
+          locked_until?: string | null
+          pin_enabled?: boolean
+          pin_hash?: string | null
+          require_biometric_for_login?: boolean
+          require_biometric_for_transactions?: boolean
+          require_biometric_for_transfers?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          biometric_enabled?: boolean
+          biometric_type?: string | null
+          created_at?: string
+          device_id?: string
+          device_name?: string
+          failed_attempts?: number
+          id?: string
+          last_biometric_auth?: string | null
+          locked_until?: string | null
+          pin_enabled?: boolean
+          pin_hash?: string | null
+          require_biometric_for_login?: boolean
+          require_biometric_for_transactions?: boolean
+          require_biometric_for_transfers?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       buy_orders: {
         Row: {
