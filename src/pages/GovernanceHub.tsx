@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useGovernance } from "@/hooks/useGovernance";
+import { useGovernance, useProposalVotes } from "@/hooks/useGovernance";
 import { useAuth } from "@/hooks/useAuth";
 import { formatDistanceToNow } from "date-fns";
 
@@ -31,15 +31,14 @@ const GovernanceHub = () => {
     userVotes, 
     loadingProposals,
     hasVoted,
-    useProposalVotes,
     calculateVoteTotals,
     delegationsToMe,
+    totalVotingPower,
+    delegatedVotingPower,
   } = useGovernance();
   const [activeTab, setActiveTab] = useState("active");
 
   // Calculate stats
-  const totalVotingPower = 15000; // Mock - would come from user holdings
-  const delegatedPower = delegationsToMe.reduce((acc, d) => acc + 5000, 0); // Mock
   const proposalsVoted = userVotes.length;
   const participationRate = activeProposals.length > 0 
     ? Math.round((proposalsVoted / activeProposals.length) * 100) 
@@ -114,13 +113,13 @@ const GovernanceHub = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-secondary/10 to-secondary/5 border-secondary/20">
+            <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
               <CardContent className="p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Users className="h-5 w-5 text-secondary-foreground" />
                   <span className="text-sm text-muted-foreground">Delegated</span>
                 </div>
-                <p className="text-2xl font-bold">{delegatedPower.toLocaleString()}</p>
+                <p className="text-2xl font-bold">{delegatedVotingPower.toLocaleString()}</p>
                 <Link to="/governance/delegations" className="text-xs text-primary hover:underline mt-1 block">
                   Manage delegations →
                 </Link>
@@ -218,7 +217,7 @@ const ProposalCard = ({
   getStatusColor: (status: string) => string;
   getStatusIcon: (status: string) => React.ReactNode;
 }) => {
-  const { useProposalVotes, calculateVoteTotals } = useGovernance();
+  const { calculateVoteTotals } = useGovernance();
   const { data: votes = [] } = useProposalVotes(proposal.id);
   const voteTotals = calculateVoteTotals(votes);
   
