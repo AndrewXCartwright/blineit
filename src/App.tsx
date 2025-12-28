@@ -53,7 +53,10 @@ import AutoInvest from "./pages/AutoInvest";
 import AutoInvestCreate from "./pages/AutoInvestCreate";
 import AutoInvestDetail from "./pages/AutoInvestDetail";
 import Watchlist from "./pages/Watchlist";
+import WatchlistLists from "./pages/WatchlistLists";
+import WatchlistDetail from "./pages/WatchlistDetail";
 import Alerts from "./pages/Alerts";
+import AlertSettings from "./pages/AlertSettings";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProperties from "./pages/admin/AdminProperties";
 import AdminLoans from "./pages/admin/AdminLoans";
@@ -116,7 +119,10 @@ const App = () => (
                 <Route path="/auto-invest/create" element={<ProtectedRoute><AutoInvestCreate /></ProtectedRoute>} />
                 <Route path="/auto-invest/:id" element={<ProtectedRoute><AutoInvestDetail /></ProtectedRoute>} />
                 <Route path="/watchlist" element={<ProtectedRoute><Watchlist /></ProtectedRoute>} />
+                <Route path="/watchlist/lists" element={<ProtectedRoute><WatchlistLists /></ProtectedRoute>} />
+                <Route path="/watchlist/:id" element={<ProtectedRoute><WatchlistDetail /></ProtectedRoute>} />
                 <Route path="/alerts" element={<ProtectedRoute><Alerts /></ProtectedRoute>} />
+                <Route path="/settings/alerts" element={<ProtectedRoute><AlertSettings /></ProtectedRoute>} />
                 <Route path="/r/:code" element={<ReferralLanding />} />
                 <Route path="/install" element={<InstallPage />} />
                 <Route path="/coming-soon/:assetClass" element={<ComingSoon />} />
