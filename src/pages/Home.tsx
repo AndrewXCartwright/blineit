@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { StatCard } from "@/components/StatCard";
 import { PropertyCard } from "@/components/PropertyCard";
 import { CountUp } from "@/components/CountUp";
+import { SmartRecommendations } from "@/components/SmartRecommendations";
 import { useUserData } from "@/hooks/useUserData";
 import { useAuth } from "@/hooks/useAuth";
 import { useKYC } from "@/hooks/useKYC";
@@ -192,6 +193,11 @@ export default function Home() {
               <p className="text-xs text-muted-foreground">{t('dashboard.documents')}</p>
             </Link>
           </div>
+        </section>
+
+        {/* AI-Powered Recommendations */}
+        <section className="animate-fade-in stagger-5">
+          <SmartRecommendations />
         </section>
 
         {/* Your Properties */}
