@@ -4422,7 +4422,9 @@ export type Database = {
           likes_count: number | null
           prediction_id: string | null
           property_id: string | null
+          tagged_users: string[] | null
           user_id: string
+          video_url: string | null
         }
         Insert: {
           comments_count?: number | null
@@ -4435,7 +4437,9 @@ export type Database = {
           likes_count?: number | null
           prediction_id?: string | null
           property_id?: string | null
+          tagged_users?: string[] | null
           user_id: string
+          video_url?: string | null
         }
         Update: {
           comments_count?: number | null
@@ -4448,7 +4452,9 @@ export type Database = {
           likes_count?: number | null
           prediction_id?: string | null
           property_id?: string | null
+          tagged_users?: string[] | null
           user_id?: string
+          video_url?: string | null
         }
         Relationships: []
       }

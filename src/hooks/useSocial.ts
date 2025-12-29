@@ -30,8 +30,10 @@ export interface UserPost {
   user_id: string;
   content: string;
   image_url: string | null;
+  video_url: string | null;
   property_id: string | null;
   prediction_id: string | null;
+  tagged_users: string[];
   likes_count: number;
   comments_count: number;
   is_pinned: boolean;
@@ -48,6 +50,11 @@ export interface UserPost {
     apy: number;
     token_price: number;
   };
+  tagged_profiles?: {
+    user_id: string;
+    display_name: string;
+    avatar_url: string | null;
+  }[];
   is_liked?: boolean;
 }
 
@@ -275,6 +282,24 @@ export function usePosts(feedType: "following" | "trending" | "new" = "new") {
         }
       }
 
+      // Fetch tagged user profiles
+      const allTaggedUserIds = [...new Set((data || []).flatMap((p: any) => p.tagged_users || []))];
+      let taggedProfilesMap: Record<string, any> = {};
+
+      if (allTaggedUserIds.length > 0) {
+        const { data: taggedProfiles } = await supabase
+          .from("profiles")
+          .select("user_id, display_name, avatar_url")
+          .in("user_id", allTaggedUserIds as string[]);
+
+        if (taggedProfiles) {
+          taggedProfilesMap = taggedProfiles.reduce((acc: any, p: any) => {
+            acc[p.user_id] = p;
+            return acc;
+          }, {});
+        }
+      }
+
       // Check likes
       let likesSet = new Set<string>();
       if (user) {
@@ -294,6 +319,7 @@ export function usePosts(feedType: "following" | "trending" | "new" = "new") {
         ...post,
         user: profilesMap[post.user_id] || { display_name: "Unknown", avatar_url: null },
         property: post.property_id ? propertiesMap[post.property_id] : null,
+        tagged_profiles: (post.tagged_users || []).map((uid: string) => taggedProfilesMap[uid]).filter(Boolean),
         is_liked: likesSet.has(post.id),
       }));
 
@@ -307,7 +333,14 @@ export function usePosts(feedType: "following" | "trending" | "new" = "new") {
     fetchPosts();
   }, [fetchPosts]);
 
-  const createPost = async (content: string, propertyId?: string, predictionId?: string, imageUrl?: string) => {
+  const createPost = async (
+    content: string, 
+    propertyId?: string, 
+    predictionId?: string, 
+    imageUrl?: string,
+    videoUrl?: string,
+    taggedUserIds?: string[]
+  ) => {
     if (!user) {
       toast.error("Please sign in to post");
       return false;
@@ -320,6 +353,8 @@ export function usePosts(feedType: "following" | "trending" | "new" = "new") {
         property_id: propertyId || null,
         prediction_id: predictionId || null,
         image_url: imageUrl || null,
+        video_url: videoUrl || null,
+        tagged_users: taggedUserIds || [],
       });
 
       if (error) {
@@ -336,7 +371,7 @@ export function usePosts(feedType: "following" | "trending" | "new" = "new") {
     }
   };
 
-  const uploadImage = async (file: File): Promise<string | null> => {
+  const uploadMedia = async (file: File): Promise<string | null> => {
     if (!user) return null;
     
     const fileExt = file.name.split('.').pop();
@@ -347,8 +382,8 @@ export function usePosts(feedType: "following" | "trending" | "new" = "new") {
       .upload(fileName, file);
     
     if (error) {
-      console.error('Error uploading image:', error);
-      toast.error('Failed to upload image');
+      console.error('Error uploading media:', error);
+      toast.error('Failed to upload media');
       return null;
     }
     
@@ -357,6 +392,19 @@ export function usePosts(feedType: "following" | "trending" | "new" = "new") {
       .getPublicUrl(fileName);
     
     return data.publicUrl;
+  };
+
+  const searchUsers = async (query: string): Promise<{ user_id: string; display_name: string; avatar_url: string | null }[]> => {
+    if (query.length < 2) return [];
+    
+    const { data } = await supabase
+      .from("profiles")
+      .select("user_id, display_name, avatar_url")
+      .ilike("display_name", `%${query}%`)
+      .neq("user_id", user?.id || "")
+      .limit(5);
+    
+    return data || [];
   };
 
   const toggleLike = async (postId: string) => {
@@ -394,7 +442,8 @@ export function usePosts(feedType: "following" | "trending" | "new" = "new") {
     loading,
     createPost,
     toggleLike,
-    uploadImage,
+    uploadMedia,
+    searchUsers,
     refetch: fetchPosts,
   };
 }

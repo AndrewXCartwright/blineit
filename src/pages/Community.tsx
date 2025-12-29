@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Heart, MessageCircle, Share2, Send, Image as ImageIcon, Building2, Target, TrendingUp, Users, Sparkles, Plus, X, Loader2 } from "lucide-react";
+import { Heart, MessageCircle, Share2, Send, Image as ImageIcon, Building2, Target, TrendingUp, Users, Sparkles, Plus, X, Loader2, Video, UserPlus } from "lucide-react";
 import { usePosts, UserPost } from "@/hooks/useSocial";
 import { useAuth } from "@/hooks/useAuth";
 import { formatDistanceToNow } from "date-fns";
@@ -28,20 +28,28 @@ interface PredictionOption {
   yes_price: number;
 }
 
+interface UserOption {
+  user_id: string;
+  display_name: string;
+  avatar_url: string | null;
+}
+
 export default function Community() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const [feedType, setFeedType] = useState<"following" | "trending" | "new">("new");
-  const { posts, loading, createPost, toggleLike, uploadImage } = usePosts(feedType);
+  const { posts, loading, createPost, toggleLike, uploadMedia, searchUsers } = usePosts(feedType);
   const [newPostContent, setNewPostContent] = useState("");
   const [isPosting, setIsPosting] = useState(false);
   const [showCreatePost, setShowCreatePost] = useState(false);
   
-  // Image upload state
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  // Media upload state
+  const [selectedMedia, setSelectedMedia] = useState<File | null>(null);
+  const [mediaPreview, setMediaPreview] = useState<string | null>(null);
+  const [mediaType, setMediaType] = useState<"image" | "video" | null>(null);
+  const [isUploadingMedia, setIsUploadingMedia] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
   
   // Property tagging state
   const [showPropertyModal, setShowPropertyModal] = useState(false);
@@ -57,6 +65,13 @@ export default function Community() {
   const [selectedPrediction, setSelectedPrediction] = useState<PredictionOption | null>(null);
   const [loadingPredictions, setLoadingPredictions] = useState(false);
 
+  // People tagging state
+  const [showPeopleModal, setShowPeopleModal] = useState(false);
+  const [peopleSearch, setPeopleSearch] = useState("");
+  const [peopleOptions, setPeopleOptions] = useState<UserOption[]>([]);
+  const [selectedPeople, setSelectedPeople] = useState<UserOption[]>([]);
+  const [loadingPeople, setLoadingPeople] = useState(false);
+
   const scrollToCreatePost = () => {
     setShowCreatePost(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -69,17 +84,61 @@ export default function Community() {
         toast.error("Image must be less than 5MB");
         return;
       }
-      setSelectedImage(file);
-      setImagePreview(URL.createObjectURL(file));
+      setSelectedMedia(file);
+      setMediaPreview(URL.createObjectURL(file));
+      setMediaType("image");
     }
   };
 
-  const removeImage = () => {
-    setSelectedImage(null);
-    setImagePreview(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+  const handleVideoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 50 * 1024 * 1024) {
+        toast.error("Video must be less than 50MB");
+        return;
+      }
+      setSelectedMedia(file);
+      setMediaPreview(URL.createObjectURL(file));
+      setMediaType("video");
     }
+  };
+
+  const removeMedia = () => {
+    setSelectedMedia(null);
+    setMediaPreview(null);
+    setMediaType(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+    if (videoInputRef.current) videoInputRef.current.value = "";
+  };
+
+  const searchPeople = async (query: string) => {
+    if (query.length < 2) {
+      setPeopleOptions([]);
+      return;
+    }
+    setLoadingPeople(true);
+    try {
+      const results = await searchUsers(query);
+      // Filter out already selected users
+      const filtered = results.filter(u => !selectedPeople.some(p => p.user_id === u.user_id));
+      setPeopleOptions(filtered);
+    } finally {
+      setLoadingPeople(false);
+    }
+  };
+
+  const addPerson = (person: UserOption) => {
+    if (selectedPeople.length >= 10) {
+      toast.error("Maximum 10 people can be tagged");
+      return;
+    }
+    setSelectedPeople([...selectedPeople, person]);
+    setPeopleOptions(peopleOptions.filter(p => p.user_id !== person.user_id));
+    setPeopleSearch("");
+  };
+
+  const removePerson = (userId: string) => {
+    setSelectedPeople(selectedPeople.filter(p => p.user_id !== userId));
   };
 
   const searchProperties = async (query: string) => {
@@ -124,28 +183,38 @@ export default function Community() {
     setIsPosting(true);
     
     let imageUrl: string | undefined;
+    let videoUrl: string | undefined;
     
-    if (selectedImage) {
-      setIsUploadingImage(true);
-      const url = await uploadImage(selectedImage);
-      setIsUploadingImage(false);
+    if (selectedMedia) {
+      setIsUploadingMedia(true);
+      const url = await uploadMedia(selectedMedia);
+      setIsUploadingMedia(false);
       if (url) {
-        imageUrl = url;
+        if (mediaType === "image") {
+          imageUrl = url;
+        } else {
+          videoUrl = url;
+        }
       }
     }
+    
+    const taggedUserIds = selectedPeople.map(p => p.user_id);
     
     const success = await createPost(
       newPostContent,
       selectedProperty?.id,
       selectedPrediction?.id,
-      imageUrl
+      imageUrl,
+      videoUrl,
+      taggedUserIds
     );
     
     if (success) {
       setNewPostContent("");
-      removeImage();
+      removeMedia();
       setSelectedProperty(null);
       setSelectedPrediction(null);
+      setSelectedPeople([]);
     }
     setIsPosting(false);
   };
@@ -216,16 +285,24 @@ export default function Community() {
                   autoFocus={showCreatePost}
                 />
                 
-                {/* Image Preview */}
-                {imagePreview && (
+                {/* Media Preview */}
+                {mediaPreview && (
                   <div className="relative mb-3 inline-block">
-                    <img 
-                      src={imagePreview} 
-                      alt="Preview" 
-                      className="max-h-48 rounded-lg object-cover"
-                    />
+                    {mediaType === "image" ? (
+                      <img 
+                        src={mediaPreview} 
+                        alt="Preview" 
+                        className="max-h-48 rounded-lg object-cover"
+                      />
+                    ) : (
+                      <video 
+                        src={mediaPreview} 
+                        className="max-h-48 rounded-lg"
+                        controls
+                      />
+                    )}
                     <button
-                      onClick={removeImage}
+                      onClick={removeMedia}
                       className="absolute -top-2 -right-2 p-1 bg-destructive text-destructive-foreground rounded-full"
                     >
                       <X className="w-4 h-4" />
@@ -261,6 +338,32 @@ export default function Community() {
                     </button>
                   </div>
                 )}
+
+                {/* Tagged People */}
+                {selectedPeople.length > 0 && (
+                  <div className="mb-3 p-3 bg-secondary rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <UserPlus className="w-4 h-4 text-primary" />
+                      <span className="text-sm font-medium">Tagged People</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedPeople.map((person) => (
+                        <div key={person.user_id} className="flex items-center gap-1 bg-background px-2 py-1 rounded-full text-xs">
+                          <Avatar className="w-4 h-4">
+                            <AvatarImage src={person.avatar_url || undefined} />
+                            <AvatarFallback className="text-[8px]">
+                              {person.display_name.charAt(0).toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span>{person.display_name}</span>
+                          <button onClick={() => removePerson(person.user_id)}>
+                            <X className="w-3 h-3 text-muted-foreground hover:text-foreground" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 
                 <div className="flex items-center justify-between flex-wrap gap-2">
                   <div className="flex gap-2 flex-wrap">
@@ -271,15 +374,41 @@ export default function Community() {
                       accept="image/*"
                       className="hidden"
                     />
+                    <input
+                      type="file"
+                      ref={videoInputRef}
+                      onChange={handleVideoSelect}
+                      accept="video/*"
+                      className="hidden"
+                    />
                     <Button 
                       variant="outline" 
                       size="sm" 
                       className="gap-2"
                       onClick={() => fileInputRef.current?.click()}
-                      disabled={!!selectedImage}
+                      disabled={!!selectedMedia}
                     >
                       <ImageIcon className="w-4 h-4" />
                       {t('community.image')}
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="gap-2"
+                      onClick={() => videoInputRef.current?.click()}
+                      disabled={!!selectedMedia}
+                    >
+                      <Video className="w-4 h-4" />
+                      Video
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="gap-2"
+                      onClick={() => setShowPeopleModal(true)}
+                    >
+                      <UserPlus className="w-4 h-4" />
+                      Tag People
                     </Button>
                     <Button 
                       variant="outline" 
@@ -304,10 +433,10 @@ export default function Community() {
                   </div>
                   <Button
                     onClick={handleCreatePost}
-                    disabled={!newPostContent.trim() || isPosting || isUploadingImage}
+                    disabled={!newPostContent.trim() || isPosting || isUploadingMedia}
                     className="gap-2"
                   >
-                    {isUploadingImage ? (
+                    {isUploadingMedia ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
                     ) : (
                       <Send className="w-4 h-4" />
@@ -466,6 +595,79 @@ export default function Community() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* People Selection Modal */}
+      <Dialog open={showPeopleModal} onOpenChange={setShowPeopleModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Tag People</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <Input
+              placeholder="Search users..."
+              value={peopleSearch}
+              onChange={(e) => {
+                setPeopleSearch(e.target.value);
+                searchPeople(e.target.value);
+              }}
+            />
+            {loadingPeople ? (
+              <div className="flex justify-center py-4">
+                <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+              </div>
+            ) : peopleOptions.length > 0 ? (
+              <div className="space-y-2">
+                {peopleOptions.map((person) => (
+                  <button
+                    key={person.user_id}
+                    onClick={() => addPerson(person)}
+                    className="w-full p-3 text-left rounded-lg hover:bg-secondary transition-colors flex items-center gap-3"
+                  >
+                    <Avatar className="w-8 h-8">
+                      <AvatarImage src={person.avatar_url || undefined} />
+                      <AvatarFallback>
+                        {person.display_name.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="font-medium">{person.display_name}</span>
+                  </button>
+                ))}
+              </div>
+            ) : peopleSearch.length >= 2 ? (
+              <p className="text-center text-muted-foreground py-4">No users found</p>
+            ) : (
+              <p className="text-center text-muted-foreground py-4">Type to search...</p>
+            )}
+            
+            {selectedPeople.length > 0 && (
+              <div className="border-t pt-4">
+                <p className="text-sm text-muted-foreground mb-2">Selected ({selectedPeople.length}/10):</p>
+                <div className="flex flex-wrap gap-2">
+                  {selectedPeople.map((person) => (
+                    <div key={person.user_id} className="flex items-center gap-1 bg-secondary px-2 py-1 rounded-full text-xs">
+                      <span>{person.display_name}</span>
+                      <button onClick={() => removePerson(person.user_id)}>
+                        <X className="w-3 h-3 text-muted-foreground hover:text-foreground" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            <Button 
+              onClick={() => {
+                setShowPeopleModal(false);
+                setPeopleSearch("");
+                setPeopleOptions([]);
+              }}
+              className="w-full"
+            >
+              Done
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
@@ -516,6 +718,31 @@ function PostCard({ post, onLike, onShare }: PostCardProps) {
               alt="Post image" 
               className="mt-3 rounded-xl max-h-96 w-full object-cover"
             />
+          )}
+
+          {/* Post Video */}
+          {post.video_url && (
+            <video 
+              src={post.video_url} 
+              controls
+              className="mt-3 rounded-xl max-h-96 w-full"
+            />
+          )}
+
+          {/* Tagged People */}
+          {post.tagged_profiles && post.tagged_profiles.length > 0 && (
+            <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
+              <UserPlus className="w-4 h-4" />
+              <span>with</span>
+              {post.tagged_profiles.map((person, index) => (
+                <span key={person.user_id}>
+                  <Link to={`/user/${person.user_id}`} className="text-primary hover:underline">
+                    {person.display_name}
+                  </Link>
+                  {index < post.tagged_profiles!.length - 1 && ", "}
+                </span>
+              ))}
+            </div>
           )}
 
           {/* Tagged Property */}
