@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Search } from "lucide-react";
+import { Search, Bot } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserData } from "@/hooks/useUserData";
 import { NotificationBell } from "./NotificationBell";
@@ -34,6 +34,15 @@ export function Header() {
           </div>
         </div>
         <div className="flex items-center gap-0.5 sm:gap-1 flex-shrink-0">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => navigate('/advisor')}
+            className="h-9 w-9 sm:h-10 sm:w-10"
+            aria-label="AI Investment Advisor"
+          >
+            <Bot className="h-4 w-4 sm:h-5 sm:w-5" />
+          </Button>
           <Button 
             variant="ghost" 
             size="icon" 
