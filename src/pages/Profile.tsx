@@ -171,7 +171,7 @@ export default function Profile() {
               <div className="p-3 rounded-xl bg-orange-500/20 mx-auto w-fit mb-2">
                 <Shield className="w-5 h-5 text-orange-500" />
               </div>
-              <p className="text-sm font-medium text-foreground">{t('profile.riskAssessment') || 'Risk Assessment'}</p>
+              <p className="text-sm font-medium text-foreground">Risk Assessment</p>
               <p className="text-xs text-muted-foreground mt-1">AI-powered analysis</p>
             </Link>
             <Link to="/documents" className="glass-card rounded-xl p-4 text-center hover:bg-secondary/50 transition-colors">
