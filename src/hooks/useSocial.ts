@@ -307,7 +307,7 @@ export function usePosts(feedType: "following" | "trending" | "new" = "new") {
     fetchPosts();
   }, [fetchPosts]);
 
-  const createPost = async (content: string, propertyId?: string, predictionId?: string) => {
+  const createPost = async (content: string, propertyId?: string, predictionId?: string, imageUrl?: string) => {
     if (!user) {
       toast.error("Please sign in to post");
       return false;
@@ -319,6 +319,7 @@ export function usePosts(feedType: "following" | "trending" | "new" = "new") {
         content,
         property_id: propertyId || null,
         prediction_id: predictionId || null,
+        image_url: imageUrl || null,
       });
 
       if (error) {
@@ -333,6 +334,29 @@ export function usePosts(feedType: "following" | "trending" | "new" = "new") {
       console.error("Error creating post:", error);
       return false;
     }
+  };
+
+  const uploadImage = async (file: File): Promise<string | null> => {
+    if (!user) return null;
+    
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+    
+    const { error } = await supabase.storage
+      .from('post-images')
+      .upload(fileName, file);
+    
+    if (error) {
+      console.error('Error uploading image:', error);
+      toast.error('Failed to upload image');
+      return null;
+    }
+    
+    const { data } = supabase.storage
+      .from('post-images')
+      .getPublicUrl(fileName);
+    
+    return data.publicUrl;
   };
 
   const toggleLike = async (postId: string) => {
@@ -370,6 +394,7 @@ export function usePosts(feedType: "following" | "trending" | "new" = "new") {
     loading,
     createPost,
     toggleLike,
+    uploadImage,
     refetch: fetchPosts,
   };
 }
