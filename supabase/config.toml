@@ -1,1 +1,4 @@
 project_id = "ddusguonlzzunvdvzmxg"
+
+[functions.investment-advisor]
+verify_jwt = false

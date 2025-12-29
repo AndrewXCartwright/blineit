@@ -170,6 +170,7 @@ const XPHistory = lazy(() => import("./pages/XPHistory"));
 const Challenges = lazy(() => import("./pages/Challenges"));
 const Leaderboards = lazy(() => import("./pages/Leaderboards"));
 const LaunchChecklist = lazy(() => import("./pages/admin/LaunchChecklist"));
+const InvestmentAdvisor = lazy(() => import("./pages/InvestmentAdvisor"));
 
 const queryClient = new QueryClient();
 
@@ -202,6 +203,7 @@ const App = () => (
                   <Route path="/loan/:id" element={<ProtectedRoute><LoanDetail /></ProtectedRoute>} />
                   <Route path="/kyc" element={<ProtectedRoute><KYCVerification /></ProtectedRoute>} />
                   <Route path="/referrals" element={<ProtectedRoute><Referrals /></ProtectedRoute>} />
+                  <Route path="/advisor" element={<ProtectedRoute><InvestmentAdvisor /></ProtectedRoute>} />
                   <Route path="/notifications" element={<ProtectedRoute><NotificationCenter /></ProtectedRoute>} />
                   <Route path="/notifications/archived" element={<ProtectedRoute><ArchivedNotifications /></ProtectedRoute>} />
                   <Route path="/settings/notifications" element={<ProtectedRoute><NotificationSettings /></ProtectedRoute>} />
