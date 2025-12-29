@@ -5274,7 +5274,59 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      api_requests_log_safe: {
+        Row: {
+          api_key_id: string | null
+          created_at: string | null
+          endpoint: string | null
+          error_message: string | null
+          id: string | null
+          ip_address: string | null
+          method: string | null
+          request_body: Json | null
+          response_time_ms: number | null
+          status_code: number | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          api_key_id?: string | null
+          created_at?: string | null
+          endpoint?: string | null
+          error_message?: string | null
+          id?: string | null
+          ip_address?: never
+          method?: string | null
+          request_body?: never
+          response_time_ms?: number | null
+          status_code?: number | null
+          user_agent?: never
+          user_id?: string | null
+        }
+        Update: {
+          api_key_id?: string | null
+          created_at?: string | null
+          endpoint?: string | null
+          error_message?: string | null
+          id?: string | null
+          ip_address?: never
+          method?: string | null
+          request_body?: never
+          response_time_ms?: number | null
+          status_code?: number | null
+          user_agent?: never
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_requests_log_api_key_id_fkey"
+            columns: ["api_key_id"]
+            isOneToOne: false
+            referencedRelation: "api_keys"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       add_comment: {
@@ -5305,6 +5357,7 @@ export type Database = {
         Args: { p_max_per_minute?: number; p_user_id: string }
         Returns: Json
       }
+      cleanup_old_api_logs: { Args: never; Returns: number }
       complete_transfer: { Args: { p_transfer_id: string }; Returns: Json }
       create_document_envelope: {
         Args: {
