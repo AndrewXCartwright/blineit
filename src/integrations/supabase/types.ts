@@ -5334,12 +5334,12 @@ export type Database = {
           endpoint?: string | null
           error_message?: string | null
           id?: string | null
-          ip_address?: never
+          ip_address?: string | null
           method?: string | null
-          request_body?: never
+          request_body?: Json | null
           response_time_ms?: number | null
           status_code?: number | null
-          user_agent?: never
+          user_agent?: string | null
           user_id?: string | null
         }
         Update: {
@@ -5348,12 +5348,12 @@ export type Database = {
           endpoint?: string | null
           error_message?: string | null
           id?: string | null
-          ip_address?: never
+          ip_address?: string | null
           method?: string | null
-          request_body?: never
+          request_body?: Json | null
           response_time_ms?: number | null
           status_code?: number | null
-          user_agent?: never
+          user_agent?: string | null
           user_id?: string | null
         }
         Relationships: [
