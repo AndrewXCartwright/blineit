@@ -112,7 +112,7 @@ export default function Conversation() {
         )}
       </main>
 
-      <footer className="sticky bottom-0 bg-background border-t border-border p-4">
+      <footer className="sticky bottom-0 bg-background border-t border-border p-4 pb-20 md:pb-4">
         <div className="container mx-auto flex gap-2">
           <Input
             value={input}
