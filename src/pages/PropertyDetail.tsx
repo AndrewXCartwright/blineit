@@ -5,8 +5,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { 
   ArrowLeft, MapPin, TrendingUp, TrendingDown, Users, Building2, Calendar, 
   Percent, DollarSign, BarChart3, FileText, Home, Heart, Share2, 
-  ChevronRight, ExternalLink, ArrowUpRight, ArrowDownRight 
+  ChevronRight, ExternalLink, ArrowUpRight, ArrowDownRight, MessageCircle 
 } from "lucide-react";
+import { usePropertyGroup } from "@/hooks/useMessageGroups";
 import { Skeleton } from "@/components/Skeleton";
 import { CountUp } from "@/components/CountUp";
 import { Sparkline } from "@/components/Sparkline";
@@ -58,6 +59,26 @@ interface RecentTrade {
 }
 
 type TabType = "overview" | "financials" | "documents" | "activity";
+
+// Owner Chat Button Component
+function OwnerChatButton({ propertyId, propertyName }: { propertyId: string; propertyName: string }) {
+  const navigate = useNavigate();
+  const { groupId, loading } = usePropertyGroup(propertyId);
+  
+  if (loading) return null;
+  
+  return (
+    <button
+      onClick={() => groupId && navigate(`/messages/groups/${groupId}`)}
+      className="w-full py-3 rounded-xl bg-accent/20 border border-accent/30 text-accent font-display font-semibold flex items-center justify-center gap-2 hover:bg-accent/30 transition-colors"
+      disabled={!groupId}
+    >
+      <MessageCircle className="w-5 h-5" />
+      Owner Chat
+      <span className="text-sm font-normal text-muted-foreground">• Join the discussion</span>
+    </button>
+  );
+}
 
 export default function PropertyDetail() {
   const { t } = useTranslation();
@@ -375,6 +396,11 @@ export default function PropertyDetail() {
             {t('property.sell')}
           </button>
         </div>
+
+        {/* Owner Chat Button */}
+        {holding && (
+          <OwnerChatButton propertyId={id!} propertyName={property?.name || ''} />
+        )}
 
         {/* Tabs */}
         <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-hide">

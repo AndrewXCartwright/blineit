@@ -3,8 +3,9 @@ import { useState } from "react";
 import { 
   ArrowLeft, MapPin, Calendar, Landmark, ShieldCheck, Users, 
   Building2, DollarSign, Percent, FileText, Clock, BarChart3,
-  Download, Calculator, Share2, Heart, Zap, CheckCircle2, Banknote
+  Download, Calculator, Share2, Heart, Zap, CheckCircle2, Banknote, MessageCircle
 } from "lucide-react";
+import { useLoanGroup } from "@/hooks/useMessageGroups";
 import { Skeleton } from "@/components/Skeleton";
 import { CountUp } from "@/components/CountUp";
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,29 @@ import { useAuth } from "@/hooks/useAuth";
 import { format, differenceInDays } from "date-fns";
 import { getLoanFallbackImage } from "@/lib/loanImages";
 
+import { useNavigate as useRouterNavigate } from "react-router-dom";
+
 type TabType = "overview" | "property" | "borrower" | "documents" | "activity" | "payments";
+
+// Lender Chat Button Component
+function LenderChatButton({ loanId }: { loanId: string }) {
+  const routerNavigate = useRouterNavigate();
+  const { groupId, loading } = useLoanGroup(loanId);
+  
+  if (loading) return null;
+  
+  return (
+    <button
+      onClick={() => groupId && routerNavigate(`/messages/groups/${groupId}`)}
+      className="w-full py-3 rounded-xl bg-blue-500/20 border border-blue-500/30 text-blue-400 font-display font-semibold flex items-center justify-center gap-2 hover:bg-blue-500/30 transition-colors"
+      disabled={!groupId}
+    >
+      <MessageCircle className="w-5 h-5" />
+      Lender Chat
+      <span className="text-sm font-normal text-muted-foreground">• Connect with other lenders</span>
+    </button>
+  );
+}
 
 export default function LoanDetail() {
   const { id } = useParams();
@@ -456,6 +479,11 @@ export default function LoanDetail() {
               </div>
             )}
           </div>
+        )}
+
+        {/* Lender Chat Button */}
+        {userInvestment && (
+          <LenderChatButton loanId={id!} />
         )}
 
         {/* Tabs */}
