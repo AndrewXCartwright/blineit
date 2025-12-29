@@ -1655,6 +1655,192 @@ export type Database = {
           },
         ]
       }
+      group_bans: {
+        Row: {
+          banned_by: string
+          created_at: string
+          expires_at: string | null
+          group_id: string
+          id: string
+          reason: string | null
+          user_id: string
+        }
+        Insert: {
+          banned_by: string
+          created_at?: string
+          expires_at?: string | null
+          group_id: string
+          id?: string
+          reason?: string | null
+          user_id: string
+        }
+        Update: {
+          banned_by?: string
+          created_at?: string
+          expires_at?: string | null
+          group_id?: string
+          id?: string
+          reason?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_bans_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "message_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      group_invites: {
+        Row: {
+          created_at: string
+          created_by: string
+          expires_at: string | null
+          group_id: string
+          id: string
+          invite_code: string
+          max_uses: number | null
+          uses: number
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          expires_at?: string | null
+          group_id: string
+          id?: string
+          invite_code?: string
+          max_uses?: number | null
+          uses?: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          expires_at?: string | null
+          group_id?: string
+          id?: string
+          invite_code?: string
+          max_uses?: number | null
+          uses?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_invites_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "message_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      group_members: {
+        Row: {
+          group_id: string
+          id: string
+          joined_at: string
+          last_read_at: string | null
+          mute_reason: string | null
+          muted: boolean
+          muted_by: string | null
+          muted_until: string | null
+          role: string
+          user_id: string
+        }
+        Insert: {
+          group_id: string
+          id?: string
+          joined_at?: string
+          last_read_at?: string | null
+          mute_reason?: string | null
+          muted?: boolean
+          muted_by?: string | null
+          muted_until?: string | null
+          role?: string
+          user_id: string
+        }
+        Update: {
+          group_id?: string
+          id?: string
+          joined_at?: string
+          last_read_at?: string | null
+          mute_reason?: string | null
+          muted?: boolean
+          muted_by?: string | null
+          muted_until?: string | null
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_members_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "message_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      group_messages: {
+        Row: {
+          content: string
+          created_at: string
+          deleted_at: string | null
+          edited_at: string | null
+          group_id: string
+          id: string
+          is_edited: boolean
+          is_pinned: boolean
+          message_type: string
+          metadata: Json | null
+          parent_id: string | null
+          sender_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          deleted_at?: string | null
+          edited_at?: string | null
+          group_id: string
+          id?: string
+          is_edited?: boolean
+          is_pinned?: boolean
+          message_type?: string
+          metadata?: Json | null
+          parent_id?: string | null
+          sender_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          deleted_at?: string | null
+          edited_at?: string | null
+          group_id?: string
+          id?: string
+          is_edited?: boolean
+          is_pinned?: boolean
+          message_type?: string
+          metadata?: Json | null
+          parent_id?: string | null
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_messages_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "message_groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "group_messages_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "group_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       institutional_accounts: {
         Row: {
           aum: number | null
@@ -2216,6 +2402,158 @@ export type Database = {
             columns: ["market_id"]
             isOneToOne: false
             referencedRelation: "prediction_markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      message_groups: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          created_by: string
+          description: string | null
+          id: string
+          is_private: boolean
+          is_readonly: boolean
+          loan_id: string | null
+          name: string
+          property_id: string | null
+          settings: Json | null
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          created_by: string
+          description?: string | null
+          id?: string
+          is_private?: boolean
+          is_readonly?: boolean
+          loan_id?: string | null
+          name: string
+          property_id?: string | null
+          settings?: Json | null
+          type?: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          id?: string
+          is_private?: boolean
+          is_readonly?: boolean
+          loan_id?: string | null
+          name?: string
+          property_id?: string | null
+          settings?: Json | null
+          type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_groups_loan_id_fkey"
+            columns: ["loan_id"]
+            isOneToOne: false
+            referencedRelation: "loans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "message_groups_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      message_reactions: {
+        Row: {
+          created_at: string
+          emoji: string
+          id: string
+          message_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          emoji: string
+          id?: string
+          message_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          emoji?: string
+          id?: string
+          message_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_reactions_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "group_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      message_reports: {
+        Row: {
+          action_taken: string | null
+          created_at: string
+          details: string | null
+          group_id: string | null
+          id: string
+          message_id: string | null
+          reason: string
+          reported_by: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+        }
+        Insert: {
+          action_taken?: string | null
+          created_at?: string
+          details?: string | null
+          group_id?: string | null
+          id?: string
+          message_id?: string | null
+          reason: string
+          reported_by: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Update: {
+          action_taken?: string | null
+          created_at?: string
+          details?: string | null
+          group_id?: string | null
+          id?: string
+          message_id?: string | null
+          reason?: string
+          reported_by?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_reports_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "message_groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "message_reports_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "group_messages"
             referencedColumns: ["id"]
           },
         ]
@@ -4802,6 +5140,15 @@ export type Database = {
         }
         Returns: Json
       }
+      ban_group_member: {
+        Args: {
+          p_expires_at?: string
+          p_group_id: string
+          p_reason?: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
       buy_tokens: {
         Args: { p_property_id: string; p_token_price: number; p_tokens: number }
         Returns: Json
@@ -4887,6 +5234,15 @@ export type Database = {
         }
         Returns: string
       }
+      mute_group_member: {
+        Args: {
+          p_duration_seconds?: number
+          p_group_id: string
+          p_reason?: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
       notify_bet_result: {
         Args: {
           p_amount: number
@@ -4957,6 +5313,15 @@ export type Database = {
         }
         Returns: string
       }
+      unmute_group_member: {
+        Args: { p_group_id: string; p_user_id: string }
+        Returns: Json
+      }
+      update_group_member_role: {
+        Args: { p_group_id: string; p_new_role: string; p_user_id: string }
+        Returns: Json
+      }
+      use_group_invite: { Args: { p_invite_code: string }; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
