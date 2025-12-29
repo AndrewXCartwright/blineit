@@ -53,6 +53,7 @@ const ArchivedNotifications = lazy(() => import("./pages/ArchivedNotifications")
 const NotificationSettings = lazy(() => import("./pages/NotificationSettings"));
 const RegisteredDevices = lazy(() => import("./pages/RegisteredDevices"));
 const Community = lazy(() => import("./pages/Community"));
+const PostDetail = lazy(() => import("./pages/PostDetail"));
 const UserProfile = lazy(() => import("./pages/UserProfile"));
 const Leaderboard = lazy(() => import("./pages/Leaderboard"));
 const PortfolioAnalytics = lazy(() => import("./pages/PortfolioAnalytics"));
@@ -218,6 +219,7 @@ const App = () => (
                   <Route path="/settings/security/devices" element={<ProtectedRoute><TrustedDevices /></ProtectedRoute>} />
                   <Route path="/settings/security/activity" element={<ProtectedRoute><SecurityActivity /></ProtectedRoute>} />
                   <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+                  <Route path="/post/:id" element={<ProtectedRoute><PostDetail /></ProtectedRoute>} />
                   <Route path="/user/:userId" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
                   <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
                   <Route path="/portfolio/analytics" element={<ProtectedRoute><PortfolioAnalytics /></ProtectedRoute>} />
