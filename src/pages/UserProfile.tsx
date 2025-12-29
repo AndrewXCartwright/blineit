@@ -39,7 +39,7 @@ export default function UserProfile() {
     try {
       const conversationId = await startConversation(userId);
       if (conversationId) {
-        navigate(`/messages/${conversationId}`);
+        navigate(`/messages/dm/${conversationId}`);
       }
     } finally {
       setStartingChat(false);

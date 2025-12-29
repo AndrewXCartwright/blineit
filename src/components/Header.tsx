@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Search, Bot } from "lucide-react";
+import { Search, Bot, MessageCircle } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserData } from "@/hooks/useUserData";
+import { useMessageGroups } from "@/hooks/useMessageGroups";
+import { useConversations } from "@/hooks/useMessages";
 import { NotificationBell } from "./NotificationBell";
 import { ThemeToggle } from "./ThemeToggle";
 import { LanguageSelector } from "./LanguageSelector";
@@ -15,7 +17,14 @@ export function Header() {
   const { user } = useAuth();
   const { profile } = useUserData();
   
+  const { groups } = useMessageGroups();
+  const { conversations } = useConversations();
+  
   const displayName = profile?.display_name || profile?.name || user?.email?.split("@")[0] || t('common.user');
+  
+  // Calculate total unread messages
+  const totalUnread = (groups?.reduce((sum, g) => sum + (g.unread_count || 0), 0) || 0) + 
+    (conversations?.reduce((sum, c) => sum + (c.unread_count || 0), 0) || 0);
 
   return (
     <header className="sticky top-0 z-40 glass-card border-b border-border/50 px-3 sm:px-4 py-3">
@@ -51,6 +60,20 @@ export function Header() {
             aria-label={t("common.search", "Search")}
           >
             <Search className="h-4 w-4 sm:h-5 sm:w-5" />
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => navigate('/messages')}
+            className="h-9 w-9 sm:h-10 sm:w-10 relative"
+            aria-label="Messages"
+          >
+            <MessageCircle className="h-4 w-4 sm:h-5 sm:w-5" />
+            {totalUnread > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] rounded-full bg-destructive text-destructive-foreground text-[10px] font-bold flex items-center justify-center px-1">
+                {totalUnread > 99 ? '99+' : totalUnread}
+              </span>
+            )}
           </Button>
           <ThemeToggle size="sm" />
           <LanguageSelector variant="icon" />
