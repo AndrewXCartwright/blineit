@@ -1,7 +1,8 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, Users, Pin, MoreVertical, Send } from "lucide-react";
+import { ArrowLeft, Users, Pin, MoreVertical, Send, Settings } from "lucide-react";
 import { useGroupMessages, useSendMessage, useTypingIndicator, useMarkAsRead, GroupMessage } from "@/hooks/useGroupMessages";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useGroupDetails, useGroupMembers } from "@/hooks/useMessageGroups";
 import { useAuth } from "@/hooks/useAuth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -95,6 +96,27 @@ export default function GroupChatView() {
             <h1 className="font-semibold truncate">{group.name}</h1>
             <p className="text-xs text-muted-foreground">{group.member_count} members</p>
           </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <MoreVertical className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem asChild>
+                <Link to={`/messages/groups/${groupId}/members`}>
+                  <Users className="h-4 w-4 mr-2" />
+                  Members
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to={`/messages/groups/${groupId}/settings`}>
+                  <Settings className="h-4 w-4 mr-2" />
+                  Settings
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
 

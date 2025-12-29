@@ -162,7 +162,7 @@ export default function MessagesHub() {
                 ).map((conv) => (
                   <Link
                     key={conv.id}
-                    to={`/messages/${conv.id}`}
+                    to={`/messages/dm/${conv.id}`}
                     className="flex items-center gap-3 p-4 bg-card hover:bg-muted/50 rounded-lg transition-colors"
                   >
                     <Avatar className="h-12 w-12">
