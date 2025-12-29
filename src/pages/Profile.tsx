@@ -178,7 +178,7 @@ export default function Profile() {
               <div className="p-3 rounded-xl bg-accent/20 mx-auto w-fit mb-2">
                 <FileText className="w-5 h-5 text-accent" />
               </div>
-              <p className="text-sm font-medium text-foreground">{t('profile.documents') || 'Documents'}</p>
+              <p className="text-sm font-medium text-foreground">Documents</p>
               <p className="text-xs text-muted-foreground mt-1">Manage your docs</p>
             </Link>
           </div>
