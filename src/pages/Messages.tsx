@@ -11,7 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 
 interface UserResult {
-  id: string;
+  user_id: string;
   display_name: string | null;
   avatar_url: string | null;
   name: string | null;
@@ -36,8 +36,8 @@ export default function Messages() {
       setSearching(true);
       const { data } = await supabase
         .from("profiles")
-        .select("id, display_name, avatar_url, name")
-        .neq("id", user?.id || "")
+        .select("user_id, display_name, avatar_url, name")
+        .neq("user_id", user?.id || "")
         .or(`display_name.ilike.%${searchQuery}%,name.ilike.%${searchQuery}%`)
         .limit(10);
       
@@ -101,9 +101,9 @@ export default function Messages() {
             ) : (
               searchResults.map((u) => (
                 <button
-                  key={u.id}
-                  onClick={() => handleStartConversation(u.id)}
-                  disabled={starting === u.id}
+                  key={u.user_id}
+                  onClick={() => handleStartConversation(u.user_id)}
+                  disabled={starting === u.user_id}
                   className="w-full flex items-center gap-3 p-4 bg-card hover:bg-muted/50 rounded-lg transition-colors text-left"
                 >
                   <Avatar className="h-10 w-10">
@@ -113,7 +113,7 @@ export default function Messages() {
                     </AvatarFallback>
                   </Avatar>
                   <span className="font-medium">{u.display_name || u.name || "User"}</span>
-                  {starting === u.id && (
+                  {starting === u.user_id && (
                     <span className="ml-auto text-xs text-muted-foreground">Starting...</span>
                   )}
                 </button>
