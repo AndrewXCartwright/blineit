@@ -1,4 +1,4 @@
-import { User, Settings, Bell, Shield, HelpCircle, LogOut, ChevronRight, Trophy, Target, Building2, Wallet, ShieldCheck, AlertCircle, Crown, Gift, Palette, Users, MessageCircle, FileText } from "lucide-react";
+import { User, Settings, Bell, Shield, HelpCircle, LogOut, ChevronRight, Trophy, Target, Building2, Wallet, ShieldCheck, AlertCircle, Crown, Gift, Palette, Users, MessageCircle, FileText, Camera, Loader2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserData } from "@/hooks/useUserData";
 import { useKYC } from "@/hooks/useKYC";
@@ -12,14 +12,18 @@ import { ReferralCard } from "@/components/ReferralCard";
 import { KYCStatusBadge } from "@/components/KYCStatusBadge";
 import { ThemeSwitcher } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
-
+import { supabase } from "@/integrations/supabase/client";
+import { useState, useRef } from "react";
+import { toast } from "sonner";
 export default function Profile() {
   const { t } = useTranslation();
   const { user, signOut } = useAuth();
-  const { profile, holdings, bets, loading } = useUserData();
+  const { profile, holdings, bets, loading, refetch } = useUserData();
   const { kycStatus, isVerified } = useKYC();
   const { isAdmin } = useIsAdmin();
   const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
   
   const menuItems = [
     { icon: Bell, label: t('profile.notifications'), link: "/settings/notifications" },
@@ -30,6 +34,64 @@ export default function Profile() {
   const handleSignOut = async () => {
     await signOut();
     navigate("/auth");
+  };
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image must be less than 5MB');
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}/avatar.${fileExt}`;
+
+      // Upload to storage
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(fileName, file, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(fileName);
+
+      // Update profile with new avatar URL
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ avatar_url: `${publicUrl}?t=${Date.now()}` })
+        .eq('user_id', user.id);
+
+      if (updateError) throw updateError;
+
+      toast.success('Profile photo updated!');
+      refetch();
+    } catch (error: any) {
+      console.error('Error uploading avatar:', error);
+      toast.error(error.message || 'Failed to upload photo');
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
   };
 
   // Calculate stats
@@ -63,8 +125,21 @@ export default function Profile() {
       <main className="px-4 py-6 space-y-6">
         {/* Profile Card */}
         <div className="glass-card rounded-2xl p-6 text-center animate-fade-in">
-          <div className="w-20 h-20 mx-auto mb-4 rounded-full gradient-primary glow-primary flex items-center justify-center">
-            {profile?.avatar_url ? (
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="hidden"
+          />
+          <button 
+            onClick={handleAvatarClick}
+            disabled={uploading}
+            className="relative w-20 h-20 mx-auto mb-4 rounded-full gradient-primary glow-primary flex items-center justify-center group cursor-pointer disabled:cursor-not-allowed"
+          >
+            {uploading ? (
+              <Loader2 className="w-8 h-8 text-primary-foreground animate-spin" />
+            ) : profile?.avatar_url ? (
               <img 
                 src={profile.avatar_url} 
                 alt={displayName} 
@@ -73,7 +148,10 @@ export default function Profile() {
             ) : (
               <User className="w-10 h-10 text-primary-foreground" />
             )}
-          </div>
+            <div className="absolute inset-0 rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <Camera className="w-6 h-6 text-white" />
+            </div>
+          </button>
           <h2 className="font-display text-xl font-bold text-foreground mb-1">
             {displayName}
           </h2>
