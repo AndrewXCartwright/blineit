@@ -174,6 +174,8 @@ const LaunchChecklist = lazy(() => import("./pages/admin/LaunchChecklist"));
 const InvestmentAdvisor = lazy(() => import("./pages/InvestmentAdvisor"));
 const MarketInsightsPage = lazy(() => import("./pages/MarketInsightsPage"));
 const RiskAssessmentPage = lazy(() => import("./pages/RiskAssessmentPage"));
+const Messages = lazy(() => import("./pages/Messages"));
+const Conversation = lazy(() => import("./pages/Conversation"));
 
 const queryClient = new QueryClient();
 
@@ -221,6 +223,8 @@ const App = () => (
                   <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
                   <Route path="/post/:id" element={<ProtectedRoute><PostDetail /></ProtectedRoute>} />
                   <Route path="/user/:userId" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
+                  <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
+                  <Route path="/messages/:id" element={<ProtectedRoute><Conversation /></ProtectedRoute>} />
                   <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
                   <Route path="/portfolio/analytics" element={<ProtectedRoute><PortfolioAnalytics /></ProtectedRoute>} />
                   <Route path="/documents" element={<ProtectedRoute><Documents /></ProtectedRoute>} />
