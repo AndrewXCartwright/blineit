@@ -456,6 +456,15 @@ export function useAdminTransactions() {
 
     if (!error && data) {
       setTransactions(data);
+      
+      // Log admin access for audit trail (fire and forget)
+      void supabase.rpc('log_admin_access', {
+        p_table_name: 'transactions',
+        p_action_type: 'query',
+        p_query_context: 'Admin transactions list view',
+        p_record_count: data.length,
+        p_filters: { start_date: startDate || null, end_date: endDate || null }
+      });
     }
     setLoading(false);
   }, []);
