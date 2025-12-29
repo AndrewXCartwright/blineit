@@ -15,6 +15,7 @@ import { useLoanById, useUserLoanInvestments, useLoanPayments, useSimulateIntere
 import { useAuth } from "@/hooks/useAuth";
 import { format, differenceInDays } from "date-fns";
 import { getLoanFallbackImage } from "@/lib/loanImages";
+import { CommunityDiscussion } from "@/components/community";
 
 import { useNavigate as useRouterNavigate } from "react-router-dom";
 
@@ -663,6 +664,11 @@ export default function LoanDetail() {
               </div>
             </div>
           )}
+        </div>
+
+        {/* Community Discussion */}
+        <div className="mt-8 pt-8 border-t border-border">
+          <CommunityDiscussion loanId={id} />
         </div>
       </main>
 

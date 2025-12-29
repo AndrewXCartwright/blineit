@@ -14,6 +14,7 @@ import { Sparkline } from "@/components/Sparkline";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
 import { TokenTradeModal } from "@/components/TokenTradeModal";
+import { CommunityDiscussion } from "@/components/community";
 
 interface Property {
   id: string;
@@ -571,6 +572,11 @@ export default function PropertyDetail() {
             </div>
           </div>
         )}
+
+        {/* Community Discussion */}
+        <div className="mt-8 pt-8 border-t border-border">
+          <CommunityDiscussion propertyId={id} />
+        </div>
       </main>
 
       {/* Trade Modal */}
