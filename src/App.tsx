@@ -176,6 +176,9 @@ const MarketInsightsPage = lazy(() => import("./pages/MarketInsightsPage"));
 const RiskAssessmentPage = lazy(() => import("./pages/RiskAssessmentPage"));
 const Messages = lazy(() => import("./pages/Messages"));
 const Conversation = lazy(() => import("./pages/Conversation"));
+const MessagesHub = lazy(() => import("./pages/MessagesHub"));
+const GroupChatView = lazy(() => import("./pages/GroupChatView"));
+const DirectMessageView = lazy(() => import("./pages/DirectMessageView"));
 
 const queryClient = new QueryClient();
 
