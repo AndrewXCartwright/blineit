@@ -167,7 +167,7 @@ export default function Home() {
         {/* Quick Actions */}
         <section className="animate-fade-in stagger-5">
           <h2 className="font-display text-lg font-bold text-foreground mb-4">{t('dashboard.quickActions')}</h2>
-          <div className="grid grid-cols-5 gap-2">
+          <div className="grid grid-cols-4 gap-2">
             <Link to="/insights" className="glass-card rounded-xl p-3 text-center hover:bg-secondary/50 transition-colors">
               <div className="p-2 rounded-xl bg-blue-500/20 mx-auto w-fit mb-2">
                 <BarChart3 className="w-4 h-4 text-blue-500" />
@@ -191,12 +191,6 @@ export default function Home() {
                 <Bell className="w-4 h-4 text-warning" />
               </div>
               <p className="text-[10px] text-muted-foreground">{t('dashboard.alerts')}</p>
-            </Link>
-            <Link to="/documents" className="glass-card rounded-xl p-3 text-center hover:bg-secondary/50 transition-colors">
-              <div className="p-2 rounded-xl bg-accent/20 mx-auto w-fit mb-2">
-                <FileText className="w-4 h-4 text-accent" />
-              </div>
-              <p className="text-[10px] text-muted-foreground">{t('dashboard.documents')}</p>
             </Link>
           </div>
         </section>
