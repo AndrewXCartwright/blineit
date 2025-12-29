@@ -1,4 +1,4 @@
-import { User, Settings, Bell, Shield, HelpCircle, LogOut, ChevronRight, Trophy, Target, Building2, Wallet, ShieldCheck, AlertCircle, Crown, Gift, Palette, Users, MessageCircle } from "lucide-react";
+import { User, Settings, Bell, Shield, HelpCircle, LogOut, ChevronRight, Trophy, Target, Building2, Wallet, ShieldCheck, AlertCircle, Crown, Gift, Palette, Users, MessageCircle, FileText } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserData } from "@/hooks/useUserData";
 import { useKYC } from "@/hooks/useKYC";
@@ -163,7 +163,26 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* Referral Section */}
+        {/* Quick Actions */}
+        <div className="animate-fade-in stagger-4">
+          <h3 className="font-display text-sm font-semibold text-muted-foreground mb-3">{t('dashboard.quickActions') || 'Quick Actions'}</h3>
+          <div className="grid grid-cols-2 gap-3">
+            <Link to="/risk" className="glass-card rounded-xl p-4 text-center hover:bg-secondary/50 transition-colors">
+              <div className="p-3 rounded-xl bg-orange-500/20 mx-auto w-fit mb-2">
+                <Shield className="w-5 h-5 text-orange-500" />
+              </div>
+              <p className="text-sm font-medium text-foreground">{t('profile.riskAssessment') || 'Risk Assessment'}</p>
+              <p className="text-xs text-muted-foreground mt-1">AI-powered analysis</p>
+            </Link>
+            <Link to="/documents" className="glass-card rounded-xl p-4 text-center hover:bg-secondary/50 transition-colors">
+              <div className="p-3 rounded-xl bg-accent/20 mx-auto w-fit mb-2">
+                <FileText className="w-5 h-5 text-accent" />
+              </div>
+              <p className="text-sm font-medium text-foreground">{t('profile.documents') || 'Documents'}</p>
+              <p className="text-xs text-muted-foreground mt-1">Manage your docs</p>
+            </Link>
+          </div>
+        </div>
         <div className="space-y-2">
           <ReferralCard />
           <Link
