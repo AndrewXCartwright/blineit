@@ -179,6 +179,9 @@ const Conversation = lazy(() => import("./pages/Conversation"));
 const MessagesHub = lazy(() => import("./pages/MessagesHub"));
 const GroupChatView = lazy(() => import("./pages/GroupChatView"));
 const DirectMessageView = lazy(() => import("./pages/DirectMessageView"));
+const GroupSettings = lazy(() => import("./pages/GroupSettings"));
+const GroupMembers = lazy(() => import("./pages/GroupMembers"));
+const AdminMessages = lazy(() => import("./pages/admin/AdminMessages"));
 
 const queryClient = new QueryClient();
 
@@ -226,7 +229,11 @@ const App = () => (
                   <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
                   <Route path="/post/:id" element={<ProtectedRoute><PostDetail /></ProtectedRoute>} />
                   <Route path="/user/:userId" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
-                  <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
+                  <Route path="/messages" element={<ProtectedRoute><MessagesHub /></ProtectedRoute>} />
+                  <Route path="/messages/dm/:conversationId" element={<ProtectedRoute><DirectMessageView /></ProtectedRoute>} />
+                  <Route path="/messages/groups/:groupId" element={<ProtectedRoute><GroupChatView /></ProtectedRoute>} />
+                  <Route path="/messages/groups/:groupId/settings" element={<ProtectedRoute><GroupSettings /></ProtectedRoute>} />
+                  <Route path="/messages/groups/:groupId/members" element={<ProtectedRoute><GroupMembers /></ProtectedRoute>} />
                   <Route path="/messages/:id" element={<ProtectedRoute><Conversation /></ProtectedRoute>} />
                   <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
                   <Route path="/portfolio/analytics" element={<ProtectedRoute><PortfolioAnalytics /></ProtectedRoute>} />
@@ -350,6 +357,7 @@ const App = () => (
                   <Route path="/admin/waitlists" element={<ProtectedRoute><AdminWaitlists /></ProtectedRoute>} />
                   <Route path="/admin/transactions" element={<ProtectedRoute><AdminTransactions /></ProtectedRoute>} />
                   <Route path="/admin/settings" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
+                  <Route path="/admin/messages" element={<ProtectedRoute><AdminMessages /></ProtectedRoute>} />
                   <Route path="/admin/launch-checklist" element={<ProtectedRoute><LaunchChecklist /></ProtectedRoute>} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
