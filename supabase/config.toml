@@ -1,13 +1,13 @@
 project_id = "ddusguonlzzunvdvzmxg"
 
 [functions.investment-advisor]
-verify_jwt = false
+verify_jwt = true
 
 [functions.smart-recommendations]
-verify_jwt = false
+verify_jwt = true
 
 [functions.market-insights]
-verify_jwt = false
+verify_jwt = true
 
 [functions.risk-assessment]
-verify_jwt = false
+verify_jwt = true
