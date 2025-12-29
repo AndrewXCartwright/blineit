@@ -116,6 +116,45 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_audit_log: {
+        Row: {
+          action_type: string
+          admin_user_id: string
+          created_at: string
+          filters_used: Json | null
+          id: string
+          ip_address: string | null
+          query_context: string | null
+          record_count: number | null
+          table_name: string
+          user_agent: string | null
+        }
+        Insert: {
+          action_type: string
+          admin_user_id: string
+          created_at?: string
+          filters_used?: Json | null
+          id?: string
+          ip_address?: string | null
+          query_context?: string | null
+          record_count?: number | null
+          table_name: string
+          user_agent?: string | null
+        }
+        Update: {
+          action_type?: string
+          admin_user_id?: string
+          created_at?: string
+          filters_used?: Json | null
+          id?: string
+          ip_address?: string | null
+          query_context?: string | null
+          record_count?: number | null
+          table_name?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       alert_history: {
         Row: {
           actual_value: number
@@ -5327,6 +5366,35 @@ export type Database = {
           },
         ]
       }
+      transactions_admin_view: {
+        Row: {
+          amount: number | null
+          created_at: string | null
+          description: string | null
+          id: string | null
+          market_id: string | null
+          masked_email: string | null
+          property_id: string | null
+          type: string | null
+          user_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "prediction_markets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       add_comment: {
@@ -5434,6 +5502,16 @@ export type Database = {
           p_success: boolean
           p_user_agent?: string
           p_user_id: string
+        }
+        Returns: string
+      }
+      log_admin_access: {
+        Args: {
+          p_action_type: string
+          p_filters?: Json
+          p_query_context?: string
+          p_record_count?: number
+          p_table_name: string
         }
         Returns: string
       }
