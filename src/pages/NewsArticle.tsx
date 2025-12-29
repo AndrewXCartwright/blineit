@@ -84,13 +84,17 @@ export default function NewsArticle() {
 
         {/* Content */}
         <div className="prose prose-sm max-w-none dark:prose-invert">
-          {article.content.split('\n').map((paragraph, i) => {
-            // Handle markdown-style bold
-            const formattedParagraph = paragraph.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            return (
-              <p key={i} dangerouslySetInnerHTML={{ __html: formattedParagraph }} />
-            );
-          })}
+          {article.content.split('\n').map((paragraph, i) => (
+            <p key={i}>
+              {paragraph.split(/(\*\*.*?\*\*)/).map((part, j) => {
+                // Check if this part is bold (wrapped in **)
+                if (part.startsWith('**') && part.endsWith('**')) {
+                  return <strong key={j}>{part.slice(2, -2)}</strong>;
+                }
+                return part;
+              })}
+            </p>
+          ))}
         </div>
 
         {/* Source Attribution */}
