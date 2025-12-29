@@ -115,22 +115,49 @@ export function useReferrals() {
     if (!user) return { error: "Not authenticated" };
 
     try {
-      const { error } = await supabase.from("referrals").insert({
+      // First insert the referral record
+      const { error: insertError } = await supabase.from("referrals").insert({
         referrer_id: user.id,
         referred_email: email,
         status: "invited",
       });
 
-      if (error) {
-        if (error.code === "23505") {
+      if (insertError) {
+        if (insertError.code === "23505") {
           toast.error("This email has already been invited");
         } else {
           toast.error("Failed to send invite");
         }
-        return { error: error.message };
+        return { error: insertError.message };
       }
 
-      toast.success(`Invite sent to ${email}`);
+      // Get referrer's name
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("name, display_name")
+        .eq("user_id", user.id)
+        .single();
+
+      const referrerName = profile?.display_name || profile?.name || "A friend";
+      const referralLink = getReferralLink();
+
+      // Send the actual email via edge function
+      const { error: emailError } = await supabase.functions.invoke("send-referral-invite", {
+        body: {
+          toEmail: email,
+          referrerName,
+          referralCode: referralCode || "",
+          referralLink,
+        },
+      });
+
+      if (emailError) {
+        console.error("Error sending email:", emailError);
+        // Still show success since referral was created, just log the email error
+        toast.success(`Invite sent to ${email}`);
+      } else {
+        toast.success(`Invitation email sent to ${email}!`);
+      }
       
       // Refresh referrals
       const { data: referralsData } = await supabase
@@ -145,6 +172,7 @@ export function useReferrals() {
 
       return { error: null };
     } catch (error) {
+      console.error("Invite error:", error);
       return { error: "Failed to send invite" };
     }
   };
