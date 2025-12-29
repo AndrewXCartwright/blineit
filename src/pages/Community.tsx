@@ -1,5 +1,5 @@
-import { useState, useRef } from "react";
-import { Heart, MessageCircle, Share2, Send, Image as ImageIcon, Building2, Target, TrendingUp, Users, Sparkles, Plus, X, Loader2, Video, UserPlus } from "lucide-react";
+import { useState, useRef, useCallback } from "react";
+import { Heart, MessageCircle, Share2, Send, Image as ImageIcon, Building2, Target, TrendingUp, Users, Sparkles, Plus, X, Loader2, Video, UserPlus, Search } from "lucide-react";
 import { usePosts, UserPost } from "@/hooks/useSocial";
 import { useAuth } from "@/hooks/useAuth";
 import { formatDistanceToNow } from "date-fns";
@@ -7,12 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/Skeleton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface PropertyOption {
   id: string;
@@ -37,11 +38,23 @@ interface UserOption {
 export default function Community() {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [feedType, setFeedType] = useState<"following" | "trending" | "new">("new");
   const { posts, loading, createPost, toggleLike, uploadMedia, searchUsers } = usePosts(feedType);
   const [newPostContent, setNewPostContent] = useState("");
   const [isPosting, setIsPosting] = useState(false);
   const [showCreatePost, setShowCreatePost] = useState(false);
+  
+  // Search state
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<{
+    users: { user_id: string; display_name: string; avatar_url: string | null }[];
+    properties: { id: string; name: string; city: string; state: string }[];
+    posts: { id: string; content: string; user_display_name: string }[];
+  }>({ users: [], properties: [], posts: [] });
+  const [isSearching, setIsSearching] = useState(false);
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   // Media upload state
   const [selectedMedia, setSelectedMedia] = useState<File | null>(null);
@@ -71,6 +84,87 @@ export default function Community() {
   const [peopleOptions, setPeopleOptions] = useState<UserOption[]>([]);
   const [selectedPeople, setSelectedPeople] = useState<UserOption[]>([]);
   const [loadingPeople, setLoadingPeople] = useState(false);
+
+  // Community search function
+  const handleSearch = useCallback(async (query: string) => {
+    if (query.length < 2) {
+      setSearchResults({ users: [], properties: [], posts: [] });
+      setShowSearchResults(false);
+      return;
+    }
+
+    setIsSearching(true);
+    setShowSearchResults(true);
+
+    try {
+      // Search users
+      const { data: users } = await supabase
+        .from("profiles")
+        .select("user_id, display_name, avatar_url")
+        .ilike("display_name", `%${query}%`)
+        .limit(5);
+
+      // Search properties
+      const { data: properties } = await supabase
+        .from("properties")
+        .select("id, name, city, state")
+        .or(`name.ilike.%${query}%,city.ilike.%${query}%`)
+        .limit(5);
+
+      // Search posts
+      const { data: postsData } = await (supabase as any)
+        .from("user_posts")
+        .select("id, content, user_id")
+        .ilike("content", `%${query}%`)
+        .eq("is_hidden", false)
+        .limit(5);
+
+      // Get user names for posts
+      let postsWithUsers: { id: string; content: string; user_display_name: string }[] = [];
+      if (postsData && postsData.length > 0) {
+        const userIds = [...new Set(postsData.map((p: any) => p.user_id))];
+        const { data: profiles } = await supabase
+          .from("profiles")
+          .select("user_id, display_name")
+          .in("user_id", userIds as string[]);
+
+        const profileMap = (profiles || []).reduce((acc: any, p: any) => {
+          acc[p.user_id] = p.display_name;
+          return acc;
+        }, {});
+
+        postsWithUsers = postsData.map((post: any) => ({
+          id: post.id,
+          content: post.content.slice(0, 80) + (post.content.length > 80 ? "..." : ""),
+          user_display_name: profileMap[post.user_id] || "Unknown",
+        }));
+      }
+
+      setSearchResults({
+        users: users || [],
+        properties: properties || [],
+        posts: postsWithUsers,
+      });
+    } finally {
+      setIsSearching(false);
+    }
+  }, []);
+
+  const onSearchChange = (value: string) => {
+    setSearchQuery(value);
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+    searchTimeoutRef.current = setTimeout(() => {
+      handleSearch(value);
+    }, 300);
+  };
+
+  const clearSearch = () => {
+    setSearchQuery("");
+    setSearchResults({ users: [], properties: [], posts: [] });
+    setShowSearchResults(false);
+  };
 
   const scrollToCreatePost = () => {
     setShowCreatePost(true);
@@ -231,7 +325,7 @@ export default function Community() {
 
   return (
     <div className="min-h-screen pb-24">
-      <header className="sticky top-0 z-40 glass-card border-b border-border/50 px-4 py-4">
+      <header className="sticky top-0 z-40 glass-card border-b border-border/50 px-4 py-4 space-y-3">
         <div className="flex items-center justify-between">
           <h1 className="font-display text-2xl font-bold text-foreground">{t('community.title')}</h1>
           <Link to="/leaderboard">
@@ -241,7 +335,135 @@ export default function Community() {
             </Button>
           </Link>
         </div>
+        
+        {/* Search Bar */}
+        <div className="relative">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="Search users, properties, posts..."
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
+              onFocus={() => searchQuery.length >= 2 && setShowSearchResults(true)}
+              className="pl-10 pr-10"
+            />
+            {searchQuery && (
+              <button
+                onClick={clearSearch}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-secondary rounded"
+              >
+                <X className="w-4 h-4 text-muted-foreground" />
+              </button>
+            )}
+          </div>
+
+          {/* Search Results Dropdown */}
+          {showSearchResults && (
+            <div className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-xl shadow-lg z-50 max-h-[400px] overflow-hidden">
+              {isSearching ? (
+                <div className="p-4 flex items-center justify-center">
+                  <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
+                </div>
+              ) : (
+                <ScrollArea className="max-h-[400px]">
+                  {searchResults.users.length === 0 && 
+                   searchResults.properties.length === 0 && 
+                   searchResults.posts.length === 0 ? (
+                    <div className="p-4 text-center text-muted-foreground text-sm">
+                      No results found for "{searchQuery}"
+                    </div>
+                  ) : (
+                    <div className="p-2">
+                      {/* Users Section */}
+                      {searchResults.users.length > 0 && (
+                        <div className="mb-3">
+                          <p className="text-xs font-medium text-muted-foreground px-2 mb-1">Users</p>
+                          {searchResults.users.map((u) => (
+                            <button
+                              key={u.user_id}
+                              onClick={() => {
+                                navigate(`/user/${u.user_id}`);
+                                clearSearch();
+                              }}
+                              className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-secondary transition-colors text-left"
+                            >
+                              <Avatar className="w-8 h-8">
+                                <AvatarImage src={u.avatar_url || undefined} />
+                                <AvatarFallback className="bg-primary/20 text-primary text-xs">
+                                  {u.display_name?.charAt(0).toUpperCase()}
+                                </AvatarFallback>
+                              </Avatar>
+                              <span className="font-medium text-sm">{u.display_name}</span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Properties Section */}
+                      {searchResults.properties.length > 0 && (
+                        <div className="mb-3">
+                          <p className="text-xs font-medium text-muted-foreground px-2 mb-1">Properties</p>
+                          {searchResults.properties.map((p) => (
+                            <button
+                              key={p.id}
+                              onClick={() => {
+                                navigate(`/property/${p.id}`);
+                                clearSearch();
+                              }}
+                              className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-secondary transition-colors text-left"
+                            >
+                              <div className="p-2 rounded-lg bg-primary/20">
+                                <Building2 className="w-4 h-4 text-primary" />
+                              </div>
+                              <div>
+                                <p className="font-medium text-sm">{p.name}</p>
+                                <p className="text-xs text-muted-foreground">{p.city}, {p.state}</p>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Posts Section */}
+                      {searchResults.posts.length > 0 && (
+                        <div>
+                          <p className="text-xs font-medium text-muted-foreground px-2 mb-1">Posts</p>
+                          {searchResults.posts.map((p) => (
+                            <button
+                              key={p.id}
+                              onClick={() => {
+                                navigate(`/post/${p.id}`);
+                                clearSearch();
+                              }}
+                              className="w-full flex items-start gap-3 p-2 rounded-lg hover:bg-secondary transition-colors text-left"
+                            >
+                              <div className="p-2 rounded-lg bg-accent/20">
+                                <MessageCircle className="w-4 h-4 text-accent" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm text-foreground line-clamp-2">{p.content}</p>
+                                <p className="text-xs text-muted-foreground mt-0.5">by {p.user_display_name}</p>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </ScrollArea>
+              )}
+            </div>
+          )}
+        </div>
       </header>
+
+      {/* Click outside to close search results */}
+      {showSearchResults && (
+        <div 
+          className="fixed inset-0 z-30" 
+          onClick={() => setShowSearchResults(false)}
+        />
+      )}
 
       <main className="px-4 py-6 space-y-6">
         {/* Feed Tabs */}
