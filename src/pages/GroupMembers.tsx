@@ -51,10 +51,11 @@ export default function GroupMembers() {
     fetchInvites();
   }, [fetchBans, fetchInvites]);
 
-  const userRole = group?.userRole;
+  const userRole = group?.my_role;
   const isOwner = userRole === 'owner';
   const isAdmin = userRole === 'admin' || isOwner;
   const isModerator = userRole === 'moderator' || isAdmin;
+  const canManage = isModerator;
 
   const filteredMembers = members
     .filter(m => m.profile?.display_name?.toLowerCase().includes(search.toLowerCase()))

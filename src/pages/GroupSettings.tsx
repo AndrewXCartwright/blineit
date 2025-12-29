@@ -36,8 +36,8 @@ export default function GroupSettings() {
     }
   }, [group]);
 
-  const isOwnerOrAdmin = group?.userRole === 'owner' || group?.userRole === 'admin';
-  const isOwner = group?.userRole === 'owner';
+  const isOwnerOrAdmin = group?.my_role === 'owner' || group?.my_role === 'admin';
+  const isOwner = group?.my_role === 'owner';
 
   const handleSaveInfo = async () => {
     await updateGroupInfo(name, description);

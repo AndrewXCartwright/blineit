@@ -3,6 +3,15 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 
+export interface GroupSettings {
+  allow_member_invites?: boolean;
+  allow_reactions?: boolean;
+  allow_replies?: boolean;
+  slow_mode_seconds?: number;
+  filter_profanity?: boolean;
+  block_new_member_links?: boolean;
+}
+
 export interface MessageGroup {
   id: string;
   name: string;
@@ -16,6 +25,7 @@ export interface MessageGroup {
   avatar_url: string | null;
   created_at: string;
   updated_at: string;
+  settings?: GroupSettings;
   member_count?: number;
   unread_count?: number;
   last_message?: {
