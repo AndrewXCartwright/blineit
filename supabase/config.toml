@@ -11,3 +11,6 @@ verify_jwt = true
 
 [functions.risk-assessment]
 verify_jwt = true
+
+[functions.send-referral-invite]
+verify_jwt = false

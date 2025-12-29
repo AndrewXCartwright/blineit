@@ -177,6 +177,44 @@ export function useReferrals() {
     }
   };
 
+  const resendInvite = async (email: string) => {
+    if (!user || !referralCode) return { error: "Not authenticated" };
+
+    try {
+      // Get referrer's name
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("name, display_name")
+        .eq("user_id", user.id)
+        .single();
+
+      const referrerName = profile?.display_name || profile?.name || "A friend";
+      const referralLink = getReferralLink();
+
+      // Send the email via edge function
+      const { error: emailError } = await supabase.functions.invoke("send-referral-invite", {
+        body: {
+          toEmail: email,
+          referrerName,
+          referralCode,
+          referralLink,
+        },
+      });
+
+      if (emailError) {
+        console.error("Error sending email:", emailError);
+        toast.error("Failed to resend invitation");
+        return { error: emailError.message };
+      }
+
+      toast.success(`Invitation resent to ${email}!`);
+      return { error: null };
+    } catch (error) {
+      console.error("Resend error:", error);
+      return { error: "Failed to resend invite" };
+    }
+  };
+
   return {
     referrals,
     referralCode,
@@ -186,5 +224,6 @@ export function useReferrals() {
     copyReferralLink,
     shareReferral,
     inviteFriend,
+    resendInvite,
   };
 }
