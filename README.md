@@ -1,72 +1,77 @@
-# Welcome to your Lovable project
+# The Origin | B-LINE-IT | Dao Harbor
 
-## Project info
+Real estate tokenization platform enabling fractional property investment through blockchain technology.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## 🚀 Live Demo
 
-## How can I edit this code?
+**Platform:** https://blineit.lovable.app/
 
-There are several ways of editing your application.
+## 📋 Overview
 
-**Use Lovable**
+The Origin is a comprehensive real estate tokenization ecosystem that democratizes property investment through:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+- **Fractional Ownership** - Invest in real estate starting from $100
+- **Blockchain Tokenization** - Secure, transparent ownership via digital tokens
+- **Prediction Markets** - Bet on property performance outcomes
+- **Social Investing** - Follow top investors, share strategies, earn achievements
 
-Changes made via Lovable will be committed automatically to this repo.
+## ✨ Features
 
-**Use your preferred IDE**
+- 50+ pages and routes
+- 100+ React components
+- 25+ database tables
+- Multi-asset support (Equity + Debt)
+- 10-language internationalization
+- Progressive Web App (PWA)
+- Dark/Light theme
+- KYC verification flow
+- Institutional investor portal
+- Governance & voting
+- Gamification & achievements
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🛠️ Tech Stack
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- **Frontend:** React 19, TypeScript, Vite
+- **Styling:** Tailwind CSS, shadcn/ui
+- **Backend:** Supabase (PostgreSQL, Auth, Real-time)
+- **i18n:** react-i18next
+- **State:** TanStack Query
 
-Follow these steps:
+## 🏃 Quick Start
+```bash
+# Clone the repo
+git clone https://github.com/AndrewXCartwright/blineit.git
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Install dependencies
+npm install
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start dev server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## 📁 Project Structure
+```
+src/
+├── components/     # Reusable UI components
+├── pages/          # Route pages
+├── hooks/          # Custom React hooks
+├── contexts/       # React contexts
+├── lib/            # Utilities & Supabase client
+├── locales/        # i18n translation files
+└── types/          # TypeScript definitions
+```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🏢 About
 
-**Use GitHub Codespaces**
+**B-LINE-IT Inc.** - Tokenizing $1.75B+ in real estate assets
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Built by Andrew Cartwright | CEO & Founder
 
-## What technologies are used for this project?
+## 📄 License
 
-This project is built with:
+Proprietary - All Rights Reserved
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
+© 2025 B-LINE-IT Inc.
 
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
