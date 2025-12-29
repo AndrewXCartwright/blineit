@@ -9,6 +9,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ThemeProvider } from "@/hooks/useTheme";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { AdminRoute } from "@/components/AdminRoute";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 import { NetworkStatus } from "@/components/NetworkStatus";
 import { UpdatePrompt } from "@/components/UpdatePrompt";
@@ -347,18 +348,18 @@ const App = () => (
                   <Route path="/developers/sdks" element={<ProtectedRoute><DeveloperSdks /></ProtectedRoute>} />
                   <Route path="/developers/changelog" element={<ProtectedRoute><DeveloperChangelog /></ProtectedRoute>} />
                   {/* Admin Routes */}
-                  <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-                  <Route path="/admin/properties" element={<ProtectedRoute><AdminProperties /></ProtectedRoute>} />
-                  <Route path="/admin/loans" element={<ProtectedRoute><AdminLoans /></ProtectedRoute>} />
-                  <Route path="/admin/predictions" element={<ProtectedRoute><AdminPredictions /></ProtectedRoute>} />
-                  <Route path="/admin/users" element={<ProtectedRoute><AdminUsers /></ProtectedRoute>} />
-                  <Route path="/admin/kyc" element={<ProtectedRoute><AdminKYC /></ProtectedRoute>} />
-                  <Route path="/admin/referrals" element={<ProtectedRoute><AdminReferrals /></ProtectedRoute>} />
-                  <Route path="/admin/waitlists" element={<ProtectedRoute><AdminWaitlists /></ProtectedRoute>} />
-                  <Route path="/admin/transactions" element={<ProtectedRoute><AdminTransactions /></ProtectedRoute>} />
-                  <Route path="/admin/settings" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
-                  <Route path="/admin/messages" element={<ProtectedRoute><AdminMessages /></ProtectedRoute>} />
-                  <Route path="/admin/launch-checklist" element={<ProtectedRoute><LaunchChecklist /></ProtectedRoute>} />
+                  <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+                  <Route path="/admin/properties" element={<AdminRoute><AdminProperties /></AdminRoute>} />
+                  <Route path="/admin/loans" element={<AdminRoute><AdminLoans /></AdminRoute>} />
+                  <Route path="/admin/predictions" element={<AdminRoute><AdminPredictions /></AdminRoute>} />
+                  <Route path="/admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
+                  <Route path="/admin/kyc" element={<AdminRoute><AdminKYC /></AdminRoute>} />
+                  <Route path="/admin/referrals" element={<AdminRoute><AdminReferrals /></AdminRoute>} />
+                  <Route path="/admin/waitlists" element={<AdminRoute><AdminWaitlists /></AdminRoute>} />
+                  <Route path="/admin/transactions" element={<AdminRoute><AdminTransactions /></AdminRoute>} />
+                  <Route path="/admin/settings" element={<AdminRoute><AdminSettings /></AdminRoute>} />
+                  <Route path="/admin/messages" element={<AdminRoute><AdminMessages /></AdminRoute>} />
+                  <Route path="/admin/launch-checklist" element={<AdminRoute><LaunchChecklist /></AdminRoute>} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>
