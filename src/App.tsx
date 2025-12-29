@@ -172,6 +172,7 @@ const Leaderboards = lazy(() => import("./pages/Leaderboards"));
 const LaunchChecklist = lazy(() => import("./pages/admin/LaunchChecklist"));
 const InvestmentAdvisor = lazy(() => import("./pages/InvestmentAdvisor"));
 const MarketInsightsPage = lazy(() => import("./pages/MarketInsightsPage"));
+const RiskAssessmentPage = lazy(() => import("./pages/RiskAssessmentPage"));
 
 const queryClient = new QueryClient();
 
@@ -206,6 +207,7 @@ const App = () => (
                   <Route path="/referrals" element={<ProtectedRoute><Referrals /></ProtectedRoute>} />
                   <Route path="/advisor" element={<ProtectedRoute><InvestmentAdvisor /></ProtectedRoute>} />
                   <Route path="/insights" element={<ProtectedRoute><MarketInsightsPage /></ProtectedRoute>} />
+                  <Route path="/risk" element={<ProtectedRoute><RiskAssessmentPage /></ProtectedRoute>} />
                   <Route path="/notifications" element={<ProtectedRoute><NotificationCenter /></ProtectedRoute>} />
                   <Route path="/notifications/archived" element={<ProtectedRoute><ArchivedNotifications /></ProtectedRoute>} />
                   <Route path="/settings/notifications" element={<ProtectedRoute><NotificationSettings /></ProtectedRoute>} />
