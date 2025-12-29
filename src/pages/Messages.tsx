@@ -1,13 +1,61 @@
-import { Link } from "react-router-dom";
-import { MessageCircle, ArrowLeft } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { MessageCircle, ArrowLeft, Search, X } from "lucide-react";
 import { useConversations } from "@/hooks/useMessages";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/Skeleton";
 import { formatDistanceToNow } from "date-fns";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+
+interface UserResult {
+  id: string;
+  display_name: string | null;
+  avatar_url: string | null;
+  name: string | null;
+}
 
 export default function Messages() {
-  const { conversations, loading } = useConversations();
+  const { conversations, loading, startConversation } = useConversations();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<UserResult[]>([]);
+  const [searching, setSearching] = useState(false);
+  const [starting, setStarting] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setSearchResults([]);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setSearching(true);
+      const { data } = await supabase
+        .from("profiles")
+        .select("id, display_name, avatar_url, name")
+        .neq("id", user?.id || "")
+        .or(`display_name.ilike.%${searchQuery}%,name.ilike.%${searchQuery}%`)
+        .limit(10);
+      
+      setSearchResults(data || []);
+      setSearching(false);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery, user?.id]);
+
+  const handleStartConversation = async (userId: string) => {
+    setStarting(userId);
+    const conversationId = await startConversation(userId);
+    if (conversationId) {
+      navigate(`/messages/${conversationId}`);
+    }
+    setStarting(null);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -20,8 +68,62 @@ export default function Messages() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-6">
-        {loading ? (
+      <main className="container mx-auto px-4 py-6 space-y-4">
+        {/* Search Bar */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search users to message..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10 pr-10"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+
+        {/* Search Results */}
+        {searchQuery && (
+          <div className="space-y-2">
+            {searching ? (
+              <div className="flex items-center gap-3 p-4 bg-card rounded-lg">
+                <Skeleton className="h-10 w-10 rounded-full" />
+                <Skeleton className="h-4 w-32" />
+              </div>
+            ) : searchResults.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-4">No users found</p>
+            ) : (
+              searchResults.map((u) => (
+                <button
+                  key={u.id}
+                  onClick={() => handleStartConversation(u.id)}
+                  disabled={starting === u.id}
+                  className="w-full flex items-center gap-3 p-4 bg-card hover:bg-muted/50 rounded-lg transition-colors text-left"
+                >
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage src={u.avatar_url || undefined} />
+                    <AvatarFallback>
+                      {(u.display_name || u.name)?.[0]?.toUpperCase() || "?"}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="font-medium">{u.display_name || u.name || "User"}</span>
+                  {starting === u.id && (
+                    <span className="ml-auto text-xs text-muted-foreground">Starting...</span>
+                  )}
+                </button>
+              ))
+            )}
+          </div>
+        )}
+
+        {/* Conversations List */}
+        {!searchQuery && (loading ? (
           <div className="space-y-4">
             {[...Array(5)].map((_, i) => (
               <div key={i} className="flex items-center gap-3 p-4 bg-card rounded-lg">
@@ -38,7 +140,7 @@ export default function Messages() {
             <MessageCircle className="h-16 w-16 mx-auto text-muted-foreground/30 mb-4" />
             <h2 className="text-lg font-medium text-muted-foreground">No messages yet</h2>
             <p className="text-sm text-muted-foreground/70 mt-1">
-              Start a conversation from someone's profile
+              Search for users above to start a conversation
             </p>
           </div>
         ) : (
@@ -74,7 +176,7 @@ export default function Messages() {
               </Link>
             ))}
           </div>
-        )}
+        ))}
       </main>
     </div>
   );
