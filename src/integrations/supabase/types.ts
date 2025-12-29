@@ -850,6 +850,79 @@ export type Database = {
           },
         ]
       }
+      comment_reports: {
+        Row: {
+          comment_id: string | null
+          created_at: string | null
+          details: string | null
+          id: string
+          reason: string
+          reported_by: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string | null
+        }
+        Insert: {
+          comment_id?: string | null
+          created_at?: string | null
+          details?: string | null
+          id?: string
+          reason: string
+          reported_by: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+        }
+        Update: {
+          comment_id?: string | null
+          created_at?: string | null
+          details?: string | null
+          id?: string
+          reason?: string
+          reported_by?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comment_reports_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "community_comments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      comment_upvotes: {
+        Row: {
+          comment_id: string | null
+          created_at: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          comment_id?: string | null
+          created_at?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          comment_id?: string | null
+          created_at?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comment_upvotes_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "community_comments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       comments: {
         Row: {
           content: string
@@ -899,6 +972,79 @@ export type Database = {
             columns: ["parent_id"]
             isOneToOne: false
             referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_comments: {
+        Row: {
+          content: string
+          created_at: string | null
+          deleted_at: string | null
+          id: string
+          is_edited: boolean | null
+          is_official: boolean | null
+          is_pinned: boolean | null
+          loan_id: string | null
+          parent_id: string | null
+          property_id: string | null
+          reply_count: number | null
+          updated_at: string | null
+          upvote_count: number | null
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          deleted_at?: string | null
+          id?: string
+          is_edited?: boolean | null
+          is_official?: boolean | null
+          is_pinned?: boolean | null
+          loan_id?: string | null
+          parent_id?: string | null
+          property_id?: string | null
+          reply_count?: number | null
+          updated_at?: string | null
+          upvote_count?: number | null
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          deleted_at?: string | null
+          id?: string
+          is_edited?: boolean | null
+          is_official?: boolean | null
+          is_pinned?: boolean | null
+          loan_id?: string | null
+          parent_id?: string | null
+          property_id?: string | null
+          reply_count?: number | null
+          updated_at?: string | null
+          upvote_count?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_comments_loan_id_fkey"
+            columns: ["loan_id"]
+            isOneToOne: false
+            referencedRelation: "loans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "community_comments_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "community_comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "community_comments_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
             referencedColumns: ["id"]
           },
         ]
@@ -5215,6 +5361,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_reply_count: {
+        Args: { comment_id: string }
+        Returns: undefined
+      }
       invest_in_loan: {
         Args: { p_amount: number; p_loan_id: string }
         Returns: Json
@@ -5300,6 +5450,7 @@ export type Database = {
         }
         Returns: Json
       }
+      toggle_comment_upvote: { Args: { p_comment_id: string }; Returns: Json }
       toggle_follow: { Args: { p_following_id: string }; Returns: Json }
       toggle_like: {
         Args: { p_entity_id: string; p_entity_type: string }
