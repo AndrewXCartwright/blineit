@@ -1,4 +1,4 @@
-import { User, Settings, Bell, Shield, HelpCircle, LogOut, ChevronRight, Trophy, Target, Building2, Wallet, ShieldCheck, AlertCircle, Crown, Gift, Palette, Users, MessageCircle } from "lucide-react";
+import { User, Settings, Bell, Shield, HelpCircle, LogOut, ChevronRight, Trophy, Target, Building2, Wallet, ShieldCheck, AlertCircle, Crown, Gift, Palette, Users, MessageCircle, FileText, ShieldAlert } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserData } from "@/hooks/useUserData";
 import { useKYC } from "@/hooks/useKYC";
@@ -233,13 +233,37 @@ export default function Profile() {
           </Link>
           <Link
             to="/community"
-            className="w-full flex items-center justify-between p-4 hover:bg-secondary/50 transition-colors"
+            className="w-full flex items-center justify-between p-4 hover:bg-secondary/50 transition-colors border-b border-border/50"
           >
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-xl bg-primary/20">
                 <Users className="w-5 h-5 text-primary" />
               </div>
               <span className="font-medium text-foreground">{t('profile.community')}</span>
+            </div>
+            <ChevronRight className="w-5 h-5 text-muted-foreground" />
+          </Link>
+          <Link
+            to="/risk"
+            className="w-full flex items-center justify-between p-4 hover:bg-secondary/50 transition-colors border-b border-border/50"
+          >
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-warning/20">
+                <ShieldAlert className="w-5 h-5 text-warning" />
+              </div>
+              <span className="font-medium text-foreground">{t('profile.riskAssessment') || 'Risk Assessment'}</span>
+            </div>
+            <ChevronRight className="w-5 h-5 text-muted-foreground" />
+          </Link>
+          <Link
+            to="/documents"
+            className="w-full flex items-center justify-between p-4 hover:bg-secondary/50 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-secondary">
+                <FileText className="w-5 h-5 text-muted-foreground" />
+              </div>
+              <span className="font-medium text-foreground">{t('profile.documents') || 'Documents'}</span>
             </div>
             <ChevronRight className="w-5 h-5 text-muted-foreground" />
           </Link>
