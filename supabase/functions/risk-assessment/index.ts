@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -54,21 +55,92 @@ serve(async (req) => {
   }
 
   try {
-    const { portfolio } = await req.json();
+    // Verify authentication
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      console.error("No authorization header provided");
+      return new Response(JSON.stringify({ error: "Authentication required" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Create Supabase client and verify user
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      { global: { headers: { Authorization: authHeader } } }
+    );
+
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+    if (userError || !user) {
+      console.error("Invalid or expired token:", userError?.message);
+      return new Response(JSON.stringify({ error: "Invalid or expired token" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    console.log("Authenticated user:", user.id);
+
+    // Fetch user's actual portfolio data from database for verification
+    const { data: userHoldings, error: holdingsError } = await supabaseClient
+      .from('user_holdings')
+      .select('*, properties(name, token_price)')
+      .eq('user_id', user.id);
+
+    const { data: loanInvestments, error: loansError } = await supabaseClient
+      .from('user_loan_investments')
+      .select('*, loans(name, apy)')
+      .eq('user_id', user.id);
+
+    const { data: bets, error: betsError } = await supabaseClient
+      .from('user_bets')
+      .select('*, prediction_markets(title)')
+      .eq('user_id', user.id)
+      .eq('status', 'active');
+
+    // Build verified portfolio from actual database data
+    const verifiedPortfolio = {
+      holdings: userHoldings || [],
+      debtInvestments: loanInvestments || [],
+      predictions: bets || [],
+      totalValue: (userHoldings || []).reduce((sum: number, h: any) => 
+        sum + (h.tokens * (h.properties?.token_price || 0)), 0) +
+        (loanInvestments || []).reduce((sum: number, l: any) => 
+          sum + (l.principal_invested || 0), 0),
+      allocation: {
+        properties: (userHoldings || []).length,
+        loans: (loanInvestments || []).length,
+        predictions: (bets || []).length
+      }
+    };
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    const portfolioSummary = portfolio ? `
-User Portfolio:
-- Total Value: $${portfolio.totalValue?.toLocaleString() || 0}
-- Holdings: ${JSON.stringify(portfolio.holdings || [])}
-- Asset Allocation: ${JSON.stringify(portfolio.allocation || {})}
-- Debt Investments: ${JSON.stringify(portfolio.debtInvestments || [])}
-- Prediction Market Positions: ${JSON.stringify(portfolio.predictions || [])}
-` : "No portfolio data available. Provide general risk assessment guidance.";
+    const portfolioSummary = `
+User Portfolio (Verified from database):
+- Total Value: $${verifiedPortfolio.totalValue?.toLocaleString() || 0}
+- Property Holdings: ${verifiedPortfolio.holdings.length} positions
+- Debt Investments: ${verifiedPortfolio.debtInvestments.length} loans
+- Prediction Market Positions: ${verifiedPortfolio.predictions.length} active bets
+- Holdings Details: ${JSON.stringify(verifiedPortfolio.holdings.map((h: any) => ({
+  property: h.properties?.name,
+  tokens: h.tokens,
+  value: h.tokens * (h.properties?.token_price || 0)
+})))}
+- Loan Details: ${JSON.stringify(verifiedPortfolio.debtInvestments.map((l: any) => ({
+  loan: l.loans?.name,
+  principal: l.principal_invested,
+  apy: l.loans?.apy
+})))}
+`;
+
+    console.log("Analyzing risk for user:", user.id);
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -118,6 +190,8 @@ User Portfolio:
     }
 
     const riskAssessment = JSON.parse(jsonMatch[0]);
+
+    console.log("Risk assessment completed for user:", user.id);
 
     return new Response(JSON.stringify(riskAssessment), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
