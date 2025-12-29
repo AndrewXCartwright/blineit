@@ -1,12 +1,14 @@
-import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, MapPin, Link as LinkIcon, Calendar, Users, TrendingUp, Trophy, Shield, Star, MessageCircle } from "lucide-react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { ArrowLeft, MapPin, Link as LinkIcon, Calendar, Users, TrendingUp, Trophy, Shield, Star, MessageCircle, Loader2 } from "lucide-react";
 import { usePublicProfile } from "@/hooks/useSocial";
+import { useConversations } from "@/hooks/useMessages";
 import { useAuth } from "@/hooks/useAuth";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/Skeleton";
 import { CountUp } from "@/components/CountUp";
+import { useState } from "react";
 
 const BADGE_INFO: Record<string, { emoji: string; label: string }> = {
   early_adopter: { emoji: "🔥", label: "Early Adopter" },
@@ -24,9 +26,25 @@ const BADGE_INFO: Record<string, { emoji: string; label: string }> = {
 export default function UserProfile() {
   const { userId } = useParams<{ userId: string }>();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const { profile, loading, toggleFollow } = usePublicProfile(userId || "");
+  const { startConversation } = useConversations();
+  const [startingChat, setStartingChat] = useState(false);
 
   const isOwnProfile = user?.id === userId;
+
+  const handleMessage = async () => {
+    if (!userId) return;
+    setStartingChat(true);
+    try {
+      const conversationId = await startConversation(userId);
+      if (conversationId) {
+        navigate(`/messages/${conversationId}`);
+      }
+    } finally {
+      setStartingChat(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -171,8 +189,8 @@ export default function UserProfile() {
                 <Users className="w-4 h-4" />
                 {profile.is_following ? "Following" : "Follow"}
               </Button>
-              <Button variant="outline" className="gap-2" disabled>
-                <MessageCircle className="w-4 h-4" />
+              <Button variant="outline" className="gap-2" onClick={handleMessage} disabled={startingChat}>
+                {startingChat ? <Loader2 className="w-4 h-4 animate-spin" /> : <MessageCircle className="w-4 h-4" />}
                 Message
               </Button>
             </div>

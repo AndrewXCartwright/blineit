@@ -957,6 +957,68 @@ export type Database = {
         }
         Relationships: []
       }
+      conversations: {
+        Row: {
+          created_at: string
+          id: string
+          last_message_at: string | null
+          last_message_preview: string | null
+          participant_1: string
+          participant_2: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_message_at?: string | null
+          last_message_preview?: string | null
+          participant_1: string
+          participant_2: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_message_at?: string | null
+          last_message_preview?: string | null
+          participant_1?: string
+          participant_2?: string
+        }
+        Relationships: []
+      }
+      direct_messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          read_at: string | null
+          sender_id: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          sender_id: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "direct_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       document_envelopes: {
         Row: {
           completed_at: string | null
@@ -4774,6 +4836,10 @@ export type Database = {
         Args: { p_buyer_id: string; p_listing_id: string; p_quantity: number }
         Returns: Json
       }
+      get_or_create_conversation: {
+        Args: { p_other_user_id: string }
+        Returns: string
+      }
       invest_in_loan: {
         Args: { p_amount: number; p_loan_id: string }
         Returns: Json
@@ -4837,6 +4903,10 @@ export type Database = {
       sell_tokens: {
         Args: { p_property_id: string; p_token_price: number; p_tokens: number }
         Returns: Json
+      }
+      send_direct_message: {
+        Args: { p_content: string; p_conversation_id: string }
+        Returns: string
       }
       sign_document: {
         Args: {
