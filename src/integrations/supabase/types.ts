@@ -4016,6 +4016,53 @@ export type Database = {
         }
         Relationships: []
       }
+      sponsor_credentials: {
+        Row: {
+          created_at: string | null
+          credential_name: string
+          credential_type: string
+          document_url: string | null
+          expiry_date: string | null
+          id: string
+          is_verified: boolean | null
+          issue_date: string | null
+          issuing_organization: string | null
+          sponsor_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          credential_name: string
+          credential_type: string
+          document_url?: string | null
+          expiry_date?: string | null
+          id?: string
+          is_verified?: boolean | null
+          issue_date?: string | null
+          issuing_organization?: string | null
+          sponsor_id: string
+        }
+        Update: {
+          created_at?: string | null
+          credential_name?: string
+          credential_type?: string
+          document_url?: string | null
+          expiry_date?: string | null
+          id?: string
+          is_verified?: boolean | null
+          issue_date?: string | null
+          issuing_organization?: string | null
+          sponsor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sponsor_credentials_sponsor_id_fkey"
+            columns: ["sponsor_id"]
+            isOneToOne: false
+            referencedRelation: "sponsor_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sponsor_deal_updates: {
         Row: {
           attachments: Json | null
@@ -4279,6 +4326,44 @@ export type Database = {
           },
         ]
       }
+      sponsor_media: {
+        Row: {
+          caption: string | null
+          created_at: string | null
+          display_order: number | null
+          id: string
+          media_type: string
+          sponsor_id: string
+          url: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          media_type: string
+          sponsor_id: string
+          url: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          media_type?: string
+          sponsor_id?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sponsor_media_sponsor_id_fkey"
+            columns: ["sponsor_id"]
+            isOneToOne: false
+            referencedRelation: "sponsor_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sponsor_messages: {
         Row: {
           attachments: Json | null
@@ -4326,6 +4411,77 @@ export type Database = {
           },
           {
             foreignKeyName: "sponsor_messages_sponsor_id_fkey"
+            columns: ["sponsor_id"]
+            isOneToOne: false
+            referencedRelation: "sponsor_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sponsor_past_projects: {
+        Row: {
+          acquisition_date: string | null
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          exit_date: string | null
+          id: string
+          image_url: string | null
+          investor_irr: number | null
+          is_public: boolean | null
+          location_city: string
+          location_state: string
+          project_name: string
+          property_type: string
+          purchase_price: number | null
+          review_status: string | null
+          sale_price: number | null
+          sponsor_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          acquisition_date?: string | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          exit_date?: string | null
+          id?: string
+          image_url?: string | null
+          investor_irr?: number | null
+          is_public?: boolean | null
+          location_city: string
+          location_state: string
+          project_name: string
+          property_type: string
+          purchase_price?: number | null
+          review_status?: string | null
+          sale_price?: number | null
+          sponsor_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          acquisition_date?: string | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          exit_date?: string | null
+          id?: string
+          image_url?: string | null
+          investor_irr?: number | null
+          is_public?: boolean | null
+          location_city?: string
+          location_state?: string
+          project_name?: string
+          property_type?: string
+          purchase_price?: number | null
+          review_status?: string | null
+          sale_price?: number | null
+          sponsor_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sponsor_past_projects_sponsor_id_fkey"
             columns: ["sponsor_id"]
             isOneToOne: false
             referencedRelation: "sponsor_profiles"
@@ -4385,6 +4541,7 @@ export type Database = {
       }
       sponsor_profiles: {
         Row: {
+          asset_specialties: string[] | null
           average_irr: number | null
           bio: string | null
           business_address: string | null
@@ -4396,7 +4553,10 @@ export type Database = {
           created_at: string
           deals_completed: number | null
           ein_tax_id: string | null
+          geographic_focus: string[] | null
           id: string
+          intro_video_url: string | null
+          investment_thesis: string | null
           linkedin_url: string | null
           rejection_reason: string | null
           total_assets_managed: number | null
@@ -4408,6 +4568,7 @@ export type Database = {
           years_in_business: number | null
         }
         Insert: {
+          asset_specialties?: string[] | null
           average_irr?: number | null
           bio?: string | null
           business_address?: string | null
@@ -4419,7 +4580,10 @@ export type Database = {
           created_at?: string
           deals_completed?: number | null
           ein_tax_id?: string | null
+          geographic_focus?: string[] | null
           id?: string
+          intro_video_url?: string | null
+          investment_thesis?: string | null
           linkedin_url?: string | null
           rejection_reason?: string | null
           total_assets_managed?: number | null
@@ -4431,6 +4595,7 @@ export type Database = {
           years_in_business?: number | null
         }
         Update: {
+          asset_specialties?: string[] | null
           average_irr?: number | null
           bio?: string | null
           business_address?: string | null
@@ -4442,7 +4607,10 @@ export type Database = {
           created_at?: string
           deals_completed?: number | null
           ein_tax_id?: string | null
+          geographic_focus?: string[] | null
           id?: string
+          intro_video_url?: string | null
+          investment_thesis?: string | null
           linkedin_url?: string | null
           rejection_reason?: string | null
           total_assets_managed?: number | null
@@ -4591,6 +4759,50 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      sponsor_team_members: {
+        Row: {
+          bio: string | null
+          created_at: string | null
+          display_order: number | null
+          id: string
+          linkedin_url: string | null
+          name: string
+          photo_url: string | null
+          sponsor_id: string
+          title: string
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          linkedin_url?: string | null
+          name: string
+          photo_url?: string | null
+          sponsor_id: string
+          title: string
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          linkedin_url?: string | null
+          name?: string
+          photo_url?: string | null
+          sponsor_id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sponsor_team_members_sponsor_id_fkey"
+            columns: ["sponsor_id"]
+            isOneToOne: false
+            referencedRelation: "sponsor_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       support_tickets: {
         Row: {
