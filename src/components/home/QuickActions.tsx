@@ -1,16 +1,17 @@
 import { useNavigate } from "react-router-dom";
+import { Calculator, Users, Eye, Lightbulb, LucideIcon } from "lucide-react";
 
 interface QuickAction {
-  icon: string;
+  icon: LucideIcon | string;
   label: string;
   route: string;
 }
 
 const actions: QuickAction[] = [
-  { icon: "🧮", label: "Calculators", route: "/calculators" },
-  { icon: "👥", label: "Community", route: "/community" },
-  { icon: "👁️", label: "Watchlist", route: "/watchlist" },
-  { icon: "💡", label: "Insights", route: "/insights" },
+  { icon: Calculator, label: "Calculators", route: "/calculators" },
+  { icon: Users, label: "Community", route: "/community" },
+  { icon: Eye, label: "Watchlist", route: "/watchlist" },
+  { icon: Lightbulb, label: "Insights", route: "/insights" },
 ];
 
 const QuickActions = () => {
@@ -34,8 +35,12 @@ const QuickActions = () => {
             className="cursor-pointer transition-all duration-200 bg-card hover:bg-accent border border-border hover:border-[#00d4aa] rounded-xl py-4 px-2 text-center hover:-translate-y-0.5"
           >
             {/* Icon */}
-            <div className="mb-2 text-2xl">
-              {action.icon}
+            <div className="mb-2 text-2xl flex items-center justify-center">
+              {typeof action.icon === "string" ? (
+                action.icon
+              ) : (
+                <action.icon size={24} className="text-[#00d4aa]" />
+              )}
             </div>
 
             {/* Label */}
