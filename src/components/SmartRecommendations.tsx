@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 type Recommendation = {
   type: "property" | "loan" | "prediction";
@@ -52,6 +53,12 @@ export function SmartRecommendations() {
   const fetchRecommendations = async () => {
     setIsLoading(true);
     try {
+      // Get current user session for authentication
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) {
+        throw new Error("Please sign in to get recommendations");
+      }
+
       // Mock portfolio data - in production, fetch from user's actual portfolio
       const portfolio = {
         totalInvested: "$15,000",
@@ -71,7 +78,7 @@ export function SmartRecommendations() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          Authorization: `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({ portfolio, preferences }),
       });
