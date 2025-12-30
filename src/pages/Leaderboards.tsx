@@ -127,7 +127,7 @@ export default function Leaderboards() {
               onClick={() => handleTabChange(tab.id)}
               className={`bg-transparent border-none text-sm font-medium pb-3 cursor-pointer transition-colors -mb-px ${
                 activeTab === tab.id
-                  ? "text-foreground border-b-2 border-[#00d4aa]"
+                  ? "text-foreground border-b-2 border-purple-500"
                   : "text-muted-foreground border-b-2 border-transparent hover:text-foreground"
               }`}
             >
@@ -151,7 +151,7 @@ export default function Leaderboards() {
                 <div
                   key={item.id}
                   onClick={() => handleItemClick(item)}
-                  className="flex items-center gap-3 p-3.5 bg-card border border-border rounded-xl cursor-pointer transition-all duration-200 hover:border-[#00d4aa]"
+                  className="flex items-center gap-3 p-3.5 bg-card border border-border rounded-xl cursor-pointer transition-all duration-200 hover:border-purple-500"
                 >
                   {/* Rank Circle */}
                   <div
@@ -165,7 +165,7 @@ export default function Leaderboards() {
                   </div>
 
                   {/* Avatar/Icon */}
-                  <div className="w-10 h-10 rounded-[10px] bg-gradient-to-br from-[#00d4aa] to-[#00a8cc] flex items-center justify-center text-sm font-semibold text-white flex-shrink-0">
+                  <div className="w-10 h-10 rounded-[10px] bg-gradient-to-br from-purple-600 to-purple-400 flex items-center justify-center text-sm font-semibold text-white flex-shrink-0">
                     {item.name.charAt(0)}
                   </div>
 
@@ -174,7 +174,7 @@ export default function Leaderboards() {
                     <p className="text-sm font-semibold text-foreground m-0 overflow-hidden text-ellipsis whitespace-nowrap">
                       {item.name}
                     </p>
-                    <p className="text-xs text-[#00d4aa] m-0 mt-0.5">
+                    <p className="text-xs text-purple-400 m-0 mt-0.5">
                       {item.stat}
                     </p>
                     <p className="text-[11px] text-muted-foreground m-0 mt-0.5">
