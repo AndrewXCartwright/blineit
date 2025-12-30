@@ -83,7 +83,7 @@ export default function Home() {
       <HottestPredictions />
 
       {/* Zone 5: Map Preview */}
-      <MapPreview propertyCount={7} distance={25} />
+      <MapPreview />
 
       {/* Zone 6: Quick Actions */}
       <QuickActions />

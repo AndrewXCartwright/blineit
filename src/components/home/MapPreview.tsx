@@ -1,11 +1,5 @@
 import { useNavigate } from "react-router-dom";
 
-interface MapPreviewProps {
-  propertyCount?: number;
-  distance?: number;
-  onExplore?: () => void;
-}
-
 const mapDots = [
   { top: "30%", left: "25%" },
   { top: "50%", left: "60%" },
@@ -13,53 +7,41 @@ const mapDots = [
   { top: "25%", left: "75%" },
 ];
 
-const MapPreview = ({ 
-  propertyCount = 7, 
-  distance = 25,
-  onExplore 
-}: MapPreviewProps) => {
+const MapPreview = () => {
   const navigate = useNavigate();
 
-  const handleExplore = () => {
-    if (onExplore) {
-      onExplore();
-    } else {
-      navigate("/discover");
-    }
-  };
-
   return (
-    <div className="mb-4">
+    <div style={{ marginBottom: "16px" }}>
       {/* Section Header */}
-      <div className="mb-3">
-        <span className="font-semibold" style={{ fontSize: "14px" }}>
+      <div style={{ marginBottom: "12px" }}>
+        <span style={{ fontSize: "14px", fontWeight: 600, color: "white" }}>
           📍 Near You
         </span>
       </div>
 
       {/* Map Card */}
       <div
-        className="overflow-hidden"
         style={{
           background: "#1e1e32",
           border: "1px solid #2a2a4a",
           borderRadius: "16px",
+          overflow: "hidden",
         }}
       >
         {/* Map Preview Area */}
         <div
-          className="relative"
           style={{
             height: "120px",
             background: "linear-gradient(135deg, #1a2a3a 0%, #0f1a2a 100%)",
+            position: "relative",
           }}
         >
           {/* Property Dots */}
           {mapDots.map((dot, index) => (
             <div
               key={index}
-              className="absolute animate-pulse"
               style={{
+                position: "absolute",
                 top: dot.top,
                 left: dot.left,
                 width: "10px",
@@ -67,6 +49,7 @@ const MapPreview = ({
                 background: "#00d4aa",
                 borderRadius: "50%",
                 boxShadow: "0 0 10px #00d4aa",
+                animation: "pulse 2s infinite",
               }}
             />
           ))}
@@ -74,33 +57,49 @@ const MapPreview = ({
 
         {/* CTA Section */}
         <div
-          className="flex items-center justify-between"
-          style={{ padding: "12px" }}
+          style={{
+            padding: "12px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
         >
           {/* Left side */}
           <div>
             <p
-              className="font-semibold text-white"
-              style={{ fontSize: "12px" }}
+              style={{
+                fontSize: "12px",
+                fontWeight: 600,
+                color: "white",
+                margin: 0,
+              }}
             >
               Invest in Your Neighborhood
             </p>
-            <p style={{ fontSize: "10px", color: "#666" }}>
-              {propertyCount} properties within {distance} miles
+            <p
+              style={{
+                fontSize: "10px",
+                color: "#666",
+                margin: 0,
+                marginTop: "2px",
+              }}
+            >
+              7 properties within 25 miles
             </p>
           </div>
 
           {/* Right side - EXPLORE button */}
           <button
-            onClick={handleExplore}
-            className="font-semibold"
+            onClick={() => navigate("/explore")}
             style={{
               background: "#00d4aa",
               color: "#000",
               padding: "8px 14px",
               borderRadius: "20px",
               fontSize: "10px",
+              fontWeight: 600,
               border: "none",
+              cursor: "pointer",
             }}
           >
             EXPLORE
