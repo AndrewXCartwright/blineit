@@ -4016,6 +4016,113 @@ export type Database = {
         }
         Relationships: []
       }
+      sponsor_documents: {
+        Row: {
+          document_name: string
+          document_type: string
+          document_url: string
+          id: string
+          sponsor_profile_id: string
+          uploaded_at: string
+        }
+        Insert: {
+          document_name: string
+          document_type: string
+          document_url: string
+          id?: string
+          sponsor_profile_id: string
+          uploaded_at?: string
+        }
+        Update: {
+          document_name?: string
+          document_type?: string
+          document_url?: string
+          id?: string
+          sponsor_profile_id?: string
+          uploaded_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sponsor_documents_sponsor_profile_id_fkey"
+            columns: ["sponsor_profile_id"]
+            isOneToOne: false
+            referencedRelation: "sponsor_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sponsor_profiles: {
+        Row: {
+          average_irr: number | null
+          bio: string | null
+          business_address: string | null
+          company_logo_url: string | null
+          company_name: string
+          contact_email: string
+          contact_name: string
+          contact_phone: string | null
+          created_at: string
+          deals_completed: number | null
+          ein_tax_id: string | null
+          id: string
+          linkedin_url: string | null
+          rejection_reason: string | null
+          total_assets_managed: number | null
+          updated_at: string
+          user_id: string
+          verification_status: string
+          verified_at: string | null
+          website_url: string | null
+          years_in_business: number | null
+        }
+        Insert: {
+          average_irr?: number | null
+          bio?: string | null
+          business_address?: string | null
+          company_logo_url?: string | null
+          company_name: string
+          contact_email: string
+          contact_name: string
+          contact_phone?: string | null
+          created_at?: string
+          deals_completed?: number | null
+          ein_tax_id?: string | null
+          id?: string
+          linkedin_url?: string | null
+          rejection_reason?: string | null
+          total_assets_managed?: number | null
+          updated_at?: string
+          user_id: string
+          verification_status?: string
+          verified_at?: string | null
+          website_url?: string | null
+          years_in_business?: number | null
+        }
+        Update: {
+          average_irr?: number | null
+          bio?: string | null
+          business_address?: string | null
+          company_logo_url?: string | null
+          company_name?: string
+          contact_email?: string
+          contact_name?: string
+          contact_phone?: string | null
+          created_at?: string
+          deals_completed?: number | null
+          ein_tax_id?: string | null
+          id?: string
+          linkedin_url?: string | null
+          rejection_reason?: string | null
+          total_assets_managed?: number | null
+          updated_at?: string
+          user_id?: string
+          verification_status?: string
+          verified_at?: string | null
+          website_url?: string | null
+          years_in_business?: number | null
+        }
+        Relationships: []
+      }
       support_tickets: {
         Row: {
           assigned_to: string | null
@@ -5606,7 +5713,7 @@ export type Database = {
       use_group_invite: { Args: { p_invite_code: string }; Returns: Json }
     }
     Enums: {
-      app_role: "admin" | "moderator" | "user"
+      app_role: "admin" | "moderator" | "user" | "sponsor"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -5734,7 +5841,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "moderator", "user"],
+      app_role: ["admin", "moderator", "user", "sponsor"],
     },
   },
 } as const
