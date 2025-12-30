@@ -19,111 +19,45 @@ const LeaderboardGrid = () => {
   const navigate = useNavigate();
 
   return (
-    <div style={{ marginBottom: "16px" }}>
+    <div className="mb-4">
       {/* Section Header */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "12px",
-        }}
-      >
-        <span style={{ fontSize: "14px", fontWeight: 600, color: "white" }}>
+      <div className="flex justify-between items-center mb-3">
+        <span className="text-sm font-semibold text-foreground">
           🏆 Leaderboards
         </span>
         <button
           onClick={() => navigate("/leaderboards")}
-          style={{
-            background: "none",
-            border: "none",
-            fontSize: "11px",
-            color: "#00d4aa",
-            cursor: "pointer",
-          }}
+          className="bg-transparent border-none text-[11px] text-[#00d4aa] cursor-pointer"
         >
           View All →
         </button>
       </div>
 
       {/* Grid Container */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "10px",
-        }}
-      >
+      <div className="grid grid-cols-2 gap-2.5">
         {leaderboardData.map((item, index) => (
           <div
             key={index}
             onClick={() => navigate(item.link)}
-            style={{
-              background: "#1e1e32",
-              border: "1px solid #2a2a4a",
-              borderRadius: "12px",
-              padding: "14px",
-              cursor: "pointer",
-              transition: "all 0.2s",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = "#00d4aa";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = "#2a2a4a";
-            }}
+            className="bg-card border border-border rounded-xl p-3.5 cursor-pointer transition-all duration-200 hover:border-[#00d4aa]"
           >
             {/* Rank Label */}
-            <p
-              style={{
-                fontSize: "10px",
-                color: "#ffd700",
-                fontWeight: 600,
-                margin: 0,
-              }}
-            >
+            <p className="text-[10px] text-[#ffd700] font-semibold">
               {item.rank}
             </p>
 
             {/* Name */}
-            <p
-              style={{
-                fontSize: "12px",
-                fontWeight: 600,
-                color: "white",
-                margin: 0,
-                marginTop: "4px",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
-            >
+            <p className="text-xs font-semibold text-foreground mt-1 overflow-hidden text-ellipsis whitespace-nowrap">
               {item.name}
             </p>
 
             {/* Stat */}
-            <p
-              style={{
-                fontSize: "10px",
-                color: "#00d4aa",
-                margin: 0,
-                marginTop: "2px",
-              }}
-            >
+            <p className="text-[10px] text-[#00d4aa] mt-0.5">
               {item.stat}
             </p>
 
             {/* Category */}
-            <p
-              style={{
-                fontSize: "9px",
-                color: "#666",
-                textTransform: "uppercase",
-                letterSpacing: "0.5px",
-                marginTop: "6px",
-                margin: 0,
-              }}
-            >
+            <p className="text-[9px] text-muted-foreground uppercase tracking-[0.5px] mt-1.5">
               {item.category} →
             </p>
           </div>

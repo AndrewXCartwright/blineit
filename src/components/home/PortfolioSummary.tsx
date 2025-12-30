@@ -8,7 +8,6 @@ const PortfolioSummary = () => {
   const unreadAlerts = 3;
 
   const isPositive = dailyChange >= 0;
-  const changeColor = isPositive ? "#00d4aa" : "#ff4757";
   const changeArrow = isPositive ? "↑" : "↓";
 
   const formatCurrency = (value: number) => {
@@ -27,98 +26,29 @@ const PortfolioSummary = () => {
   ];
 
   return (
-    <div
-      style={{
-        background: "linear-gradient(135deg, #1e1e32 0%, #252542 100%)",
-        border: "1px solid #2a2a4a",
-        borderRadius: "16px",
-        padding: "16px",
-        marginBottom: "16px",
-      }}
-    >
+    <div className="bg-gradient-to-br from-purple-100 to-purple-50 dark:from-[#1e1e32] dark:to-[#252542] border border-purple-200 dark:border-[#2a2a4a] rounded-2xl p-4 mb-4">
       {/* Section Label */}
-      <p
-        style={{
-          fontSize: "9px",
-          textTransform: "uppercase",
-          letterSpacing: "2px",
-          color: "#00d4aa",
-          fontWeight: 600,
-          marginBottom: "12px",
-        }}
-      >
+      <p className="text-[9px] uppercase tracking-[2px] text-[#00d4aa] font-semibold mb-3">
         YOUR PORTFOLIO
       </p>
 
       {/* Header Row */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-          marginBottom: "16px",
-        }}
-      >
+      <div className="flex justify-between items-start mb-4">
         {/* Left side - Portfolio Value */}
         <div>
-          <p
-            style={{
-              fontSize: "28px",
-              fontWeight: "bold",
-              color: "white",
-              margin: 0,
-              lineHeight: 1.2,
-            }}
-          >
+          <p className="text-[28px] font-bold text-foreground leading-tight">
             {formatCurrency(portfolioValue)}
           </p>
-          <p
-            style={{
-              fontSize: "13px",
-              color: changeColor,
-              margin: 0,
-              marginTop: "4px",
-            }}
-          >
+          <p className={`text-[13px] mt-1 ${isPositive ? "text-[#00d4aa]" : "text-[#ff4757]"}`}>
             {changeArrow} {formatCurrency(Math.abs(dailyChange))} ({Math.abs(dailyChangePercent).toFixed(1)}%) today
           </p>
         </div>
 
         {/* Right side - Alerts Button */}
-        <button
-          style={{
-            position: "relative",
-            width: "44px",
-            height: "44px",
-            background: "rgba(0, 212, 170, 0.15)",
-            border: "1px solid rgba(0, 212, 170, 0.3)",
-            borderRadius: "12px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-          }}
-        >
-          <Bell size={20} color="#00d4aa" />
+        <button className="relative w-11 h-11 bg-[#00d4aa]/15 border border-[#00d4aa]/30 rounded-xl flex items-center justify-center cursor-pointer">
+          <Bell size={20} className="text-[#00d4aa]" />
           {unreadAlerts > 0 && (
-            <span
-              style={{
-                position: "absolute",
-                top: "-4px",
-                right: "-4px",
-                height: "18px",
-                minWidth: "18px",
-                padding: "0 4px",
-                background: "#ff4757",
-                borderRadius: "9px",
-                fontSize: "10px",
-                fontWeight: "bold",
-                color: "white",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
+            <span className="absolute -top-1 -right-1 h-[18px] min-w-[18px] px-1 bg-[#ff4757] rounded-full text-[10px] font-bold text-white flex items-center justify-center">
               {unreadAlerts}
             </span>
           )}
@@ -126,41 +56,16 @@ const PortfolioSummary = () => {
       </div>
 
       {/* Stats Row */}
-      <div
-        style={{
-          display: "flex",
-          gap: "8px",
-        }}
-      >
+      <div className="flex gap-2">
         {stats.map((stat, index) => (
           <div
             key={index}
-            style={{
-              flex: 1,
-              background: "#0f0f1a",
-              borderRadius: "10px",
-              padding: "10px 6px",
-              textAlign: "center",
-            }}
+            className="flex-1 bg-white dark:bg-[#0f0f1a] rounded-[10px] py-2.5 px-1.5 text-center"
           >
-            <p
-              style={{
-                fontSize: "14px",
-                fontWeight: 600,
-                color: "white",
-                margin: 0,
-              }}
-            >
+            <p className="text-sm font-semibold text-foreground">
               {stat.value}
             </p>
-            <p
-              style={{
-                fontSize: "9px",
-                color: "#666",
-                margin: 0,
-                marginTop: "2px",
-              }}
-            >
+            <p className="text-[9px] text-muted-foreground mt-0.5">
               {stat.label}
             </p>
           </div>

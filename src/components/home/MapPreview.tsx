@@ -11,79 +11,40 @@ const MapPreview = () => {
   const navigate = useNavigate();
 
   return (
-    <div style={{ marginBottom: "16px" }}>
+    <div className="mb-4">
       {/* Section Header */}
-      <div style={{ marginBottom: "12px" }}>
-        <span style={{ fontSize: "14px", fontWeight: 600, color: "white" }}>
+      <div className="mb-3">
+        <span className="text-sm font-semibold text-foreground">
           📍 Near You
         </span>
       </div>
 
       {/* Map Card */}
-      <div
-        style={{
-          background: "#1e1e32",
-          border: "1px solid #2a2a4a",
-          borderRadius: "16px",
-          overflow: "hidden",
-        }}
-      >
+      <div className="bg-card border border-border rounded-2xl overflow-hidden">
         {/* Map Preview Area */}
-        <div
-          style={{
-            height: "120px",
-            background: "linear-gradient(135deg, #1a2a3a 0%, #0f1a2a 100%)",
-            position: "relative",
-          }}
-        >
+        <div className="h-[120px] bg-gradient-to-br from-blue-100 to-blue-50 dark:from-[#1a2a3a] dark:to-[#0f1a2a] relative">
           {/* Property Dots */}
           {mapDots.map((dot, index) => (
             <div
               key={index}
+              className="absolute w-2.5 h-2.5 bg-[#00d4aa] rounded-full animate-pulse"
               style={{
-                position: "absolute",
                 top: dot.top,
                 left: dot.left,
-                width: "10px",
-                height: "10px",
-                background: "#00d4aa",
-                borderRadius: "50%",
                 boxShadow: "0 0 10px #00d4aa",
-                animation: "pulse 2s infinite",
               }}
             />
           ))}
         </div>
 
         {/* CTA Section */}
-        <div
-          style={{
-            padding: "12px",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
+        <div className="p-3 flex justify-between items-center">
           {/* Left side */}
           <div>
-            <p
-              style={{
-                fontSize: "12px",
-                fontWeight: 600,
-                color: "white",
-                margin: 0,
-              }}
-            >
+            <p className="text-xs font-semibold text-foreground">
               Invest in Your Neighborhood
             </p>
-            <p
-              style={{
-                fontSize: "10px",
-                color: "#666",
-                margin: 0,
-                marginTop: "2px",
-              }}
-            >
+            <p className="text-[10px] text-muted-foreground mt-0.5">
               7 properties within 25 miles
             </p>
           </div>
@@ -91,16 +52,7 @@ const MapPreview = () => {
           {/* Right side - EXPLORE button */}
           <button
             onClick={() => navigate("/explore")}
-            style={{
-              background: "#00d4aa",
-              color: "#000",
-              padding: "8px 14px",
-              borderRadius: "20px",
-              fontSize: "10px",
-              fontWeight: 600,
-              border: "none",
-              cursor: "pointer",
-            }}
+            className="bg-[#00d4aa] text-black py-2 px-3.5 rounded-full text-[10px] font-semibold border-none cursor-pointer hover:bg-[#00d4aa]/90 transition-colors"
           >
             EXPLORE
           </button>
