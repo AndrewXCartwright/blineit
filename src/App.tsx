@@ -10,6 +10,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { ThemeProvider } from "@/hooks/useTheme";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { AdminRoute } from "@/components/AdminRoute";
+import { ProtectedSponsorRoute } from "@/components/ProtectedSponsorRoute";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 import { NetworkStatus } from "@/components/NetworkStatus";
 import { UpdatePrompt } from "@/components/UpdatePrompt";
@@ -184,6 +185,11 @@ const GroupSettings = lazy(() => import("./pages/GroupSettings"));
 const GroupMembers = lazy(() => import("./pages/GroupMembers"));
 const AdminMessages = lazy(() => import("./pages/admin/AdminMessages"));
 
+// Sponsor Portal Pages
+const SponsorLogin = lazy(() => import("./pages/sponsor/SponsorLogin"));
+const SponsorRegister = lazy(() => import("./pages/sponsor/SponsorRegister"));
+const SponsorPending = lazy(() => import("./pages/sponsor/SponsorPending"));
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -347,6 +353,10 @@ const App = () => (
                   <Route path="/developers/plans" element={<ProtectedRoute><DeveloperPlans /></ProtectedRoute>} />
                   <Route path="/developers/sdks" element={<ProtectedRoute><DeveloperSdks /></ProtectedRoute>} />
                   <Route path="/developers/changelog" element={<ProtectedRoute><DeveloperChangelog /></ProtectedRoute>} />
+                  {/* Sponsor Portal Routes */}
+                  <Route path="/sponsor/login" element={<SponsorLogin />} />
+                  <Route path="/sponsor/register" element={<SponsorRegister />} />
+                  <Route path="/sponsor/pending" element={<ProtectedSponsorRoute requireVerified={false}><SponsorPending /></ProtectedSponsorRoute>} />
                   {/* Admin Routes */}
                   <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
                   <Route path="/admin/properties" element={<AdminRoute><AdminProperties /></AdminRoute>} />
