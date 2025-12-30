@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { DealActionsMenu } from "@/components/sponsor/DealActionsMenu";
 import { 
   Plus, 
   Search, 
@@ -17,31 +18,24 @@ import {
   TrendingUp,
   Users,
   Calendar,
-  MoreHorizontal,
-  Edit,
-  Eye,
-  Trash2
+  MoreHorizontal
 } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import logo from "@/assets/logo.png";
 
 const statusColors: Record<string, string> = {
   draft: "bg-muted text-muted-foreground",
   pending_review: "bg-yellow-500/20 text-yellow-600",
   active: "bg-green-500/20 text-green-600",
+  paused: "bg-orange-500/20 text-orange-600",
   funded: "bg-blue-500/20 text-blue-600",
   closed: "bg-gray-500/20 text-gray-600",
+  exited: "bg-purple-500/20 text-purple-600",
 };
 
 export default function SponsorDeals() {
   const { signOut } = useAuth();
   const { sponsorProfile } = useSponsor();
-  const { deals, loading } = useSponsorDeals();
+  const { deals, loading, fetchDeals } = useSponsorDeals();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("all");
 
@@ -174,33 +168,15 @@ export default function SponsorDeals() {
                         {deal.property_type}
                       </CardDescription>
                     </div>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
+                    <DealActionsMenu 
+                      deal={deal} 
+                      onUpdate={fetchDeals}
+                      trigger={
                         <Button variant="ghost" size="icon" className="h-8 w-8">
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem asChild>
-                          <Link to={`/sponsor/deals/${deal.id}`}>
-                            <Eye className="h-4 w-4 mr-2" />
-                            View Details
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link to={`/sponsor/deals/${deal.id}/edit`}>
-                            <Edit className="h-4 w-4 mr-2" />
-                            Edit Deal
-                          </Link>
-                        </DropdownMenuItem>
-                        {deal.status === "draft" && (
-                          <DropdownMenuItem className="text-destructive">
-                            <Trash2 className="h-4 w-4 mr-2" />
-                            Delete Draft
-                          </DropdownMenuItem>
-                        )}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                      }
+                    />
                   </div>
                   <Badge className={statusColors[deal.status] || "bg-muted"}>
                     {deal.status.replace("_", " ")}
