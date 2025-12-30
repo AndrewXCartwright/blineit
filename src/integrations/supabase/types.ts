@@ -2443,6 +2443,7 @@ export type Database = {
           personal_guarantee: boolean | null
           property_id: string | null
           property_value: number | null
+          sponsor_id: string | null
           start_date: string | null
           state: string
           status: string
@@ -2472,6 +2473,7 @@ export type Database = {
           personal_guarantee?: boolean | null
           property_id?: string | null
           property_value?: number | null
+          sponsor_id?: string | null
           start_date?: string | null
           state: string
           status?: string
@@ -2501,6 +2503,7 @@ export type Database = {
           personal_guarantee?: boolean | null
           property_id?: string | null
           property_value?: number | null
+          sponsor_id?: string | null
           start_date?: string | null
           state?: string
           status?: string
@@ -2513,6 +2516,13 @@ export type Database = {
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "loans_sponsor_id_fkey"
+            columns: ["sponsor_id"]
+            isOneToOne: false
+            referencedRelation: "sponsor_profiles"
             referencedColumns: ["id"]
           },
         ]
