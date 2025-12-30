@@ -17,126 +17,44 @@ const HottestPredictions = () => {
   const navigate = useNavigate();
 
   return (
-    <div style={{ marginBottom: "16px" }}>
+    <div className="mb-4">
       {/* Section Header */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "12px",
-        }}
-      >
-        <span style={{ fontSize: "14px", fontWeight: 600, color: "white" }}>
+      <div className="flex justify-between items-center mb-3">
+        <span className="text-sm font-semibold text-foreground">
           🎯 Hottest Predictions
         </span>
         <button
           onClick={() => navigate("/predictions")}
-          style={{
-            background: "none",
-            border: "none",
-            fontSize: "11px",
-            color: "#00d4aa",
-            cursor: "pointer",
-          }}
+          className="bg-transparent border-none text-[11px] text-[#00d4aa] cursor-pointer"
         >
           See All →
         </button>
       </div>
 
       {/* Scroll Container */}
-      <div
-        style={{
-          display: "flex",
-          gap: "10px",
-          overflowX: "auto",
-          paddingBottom: "5px",
-          scrollbarWidth: "none",
-          msOverflowStyle: "none",
-        }}
-        className="hottest-predictions-scroll"
-      >
-        <style>{`
-          .hottest-predictions-scroll::-webkit-scrollbar {
-            display: none;
-          }
-        `}</style>
+      <div className="flex gap-2.5 overflow-x-auto pb-1 scrollbar-hide">
         {predictions.map((prediction, index) => (
           <div
             key={index}
-            style={{
-              minWidth: "200px",
-              flexShrink: 0,
-              background: "#1e1e32",
-              border: "1px solid #2a2a4a",
-              borderRadius: "12px",
-              padding: "14px",
-            }}
+            className="min-w-[200px] flex-shrink-0 bg-card border border-border rounded-xl p-3.5"
           >
             {/* Question */}
-            <p
-              style={{
-                fontSize: "11px",
-                color: "white",
-                lineHeight: 1.4,
-                marginBottom: "10px",
-                margin: 0,
-              }}
-            >
+            <p className="text-[11px] text-foreground leading-relaxed">
               {prediction.question}
             </p>
 
             {/* Odds Row */}
-            <div
-              style={{
-                display: "flex",
-                gap: "8px",
-                marginTop: "10px",
-              }}
-            >
-              <button
-                style={{
-                  flex: 1,
-                  padding: "8px",
-                  borderRadius: "6px",
-                  textAlign: "center",
-                  fontSize: "11px",
-                  fontWeight: 600,
-                  background: "rgba(0, 212, 170, 0.2)",
-                  color: "#00d4aa",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-              >
+            <div className="flex gap-2 mt-2.5">
+              <button className="flex-1 py-2 px-2 rounded-md text-center text-[11px] font-semibold bg-[#00d4aa]/20 text-[#00d4aa] border-none cursor-pointer">
                 YES {prediction.yesOdds}%
               </button>
-              <button
-                style={{
-                  flex: 1,
-                  padding: "8px",
-                  borderRadius: "6px",
-                  textAlign: "center",
-                  fontSize: "11px",
-                  fontWeight: 600,
-                  background: "rgba(255, 71, 87, 0.2)",
-                  color: "#ff4757",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-              >
+              <button className="flex-1 py-2 px-2 rounded-md text-center text-[11px] font-semibold bg-[#ff4757]/20 text-[#ff4757] border-none cursor-pointer">
                 NO {prediction.noOdds}%
               </button>
             </div>
 
             {/* Volume */}
-            <p
-              style={{
-                fontSize: "9px",
-                color: "#666",
-                marginTop: "8px",
-                margin: 0,
-              }}
-            >
+            <p className="text-[9px] text-muted-foreground mt-2">
               Volume: {prediction.volume}
             </p>
           </div>

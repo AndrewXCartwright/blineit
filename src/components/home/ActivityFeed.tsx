@@ -38,18 +38,11 @@ const ActivityFeed = () => {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className="cursor-pointer transition-colors"
-            style={{
-              fontSize: "12px",
-              paddingBottom: "6px",
-              color: activeTab === tab.id ? "white" : "#666",
-              borderBottom: activeTab === tab.id ? "2px solid #00d4aa" : "2px solid transparent",
-              background: "none",
-              border: "none",
-              borderBottomStyle: "solid",
-              borderBottomWidth: "2px",
-              borderBottomColor: activeTab === tab.id ? "#00d4aa" : "transparent",
-            }}
+            className={`cursor-pointer transition-colors text-xs pb-1.5 bg-transparent border-0 border-b-2 ${
+              activeTab === tab.id
+                ? "text-foreground border-[#00d4aa]"
+                : "text-muted-foreground border-transparent"
+            }`}
           >
             {tab.label}
           </button>
@@ -62,44 +55,25 @@ const ActivityFeed = () => {
           {activities.map((activity, index) => (
             <div
               key={index}
-              className="flex items-center gap-2.5"
-              style={{
-                padding: "10px 0",
-                borderBottom: index < activities.length - 1 ? "1px solid #1e1e32" : "none",
-              }}
+              className={`flex items-center gap-2.5 py-2.5 ${
+                index < activities.length - 1 ? "border-b border-border" : ""
+              }`}
             >
               {/* Avatar */}
-              <div
-                className="flex items-center justify-center font-semibold flex-shrink-0"
-                style={{
-                  width: "36px",
-                  height: "36px",
-                  borderRadius: "50%",
-                  background: "linear-gradient(135deg, #00d4aa, #00a8cc)",
-                  fontSize: "12px",
-                  color: "white",
-                }}
-              >
+              <div className="flex items-center justify-center font-semibold flex-shrink-0 w-9 h-9 rounded-full bg-gradient-to-br from-[#00d4aa] to-[#00a8cc] text-xs text-white">
                 {activity.initials}
               </div>
 
               {/* Text */}
-              <p
-                className="flex-1"
-                style={{
-                  fontSize: "11px",
-                  lineHeight: 1.4,
-                  color: "#ccc",
-                }}
-              >
-                <span className="font-bold" style={{ color: "#00d4aa" }}>
+              <p className="flex-1 text-[11px] leading-relaxed text-muted-foreground">
+                <span className="font-bold text-[#00d4aa]">
                   {activity.user}
                 </span>{" "}
                 {activity.action}
               </p>
 
               {/* Time */}
-              <span style={{ fontSize: "9px", color: "#666" }}>
+              <span className="text-[9px] text-muted-foreground">
                 {activity.time}
               </span>
             </div>
@@ -113,32 +87,19 @@ const ActivityFeed = () => {
           {newsItems.map((news, index) => (
             <div
               key={index}
-              className="flex items-center gap-3"
-              style={{
-                padding: "10px 0",
-                borderBottom: index < newsItems.length - 1 ? "1px solid #1e1e32" : "none",
-              }}
+              className={`flex items-center gap-3 py-2.5 ${
+                index < newsItems.length - 1 ? "border-b border-border" : ""
+              }`}
             >
               {/* Thumbnail */}
-              <div
-                className="flex-shrink-0"
-                style={{
-                  width: "60px",
-                  height: "60px",
-                  background: "#2a2a4a",
-                  borderRadius: "8px",
-                }}
-              />
+              <div className="flex-shrink-0 w-[60px] h-[60px] bg-muted rounded-lg" />
 
               {/* Text */}
               <div className="flex-1">
-                <p
-                  className="font-semibold text-white mb-1"
-                  style={{ fontSize: "12px" }}
-                >
+                <p className="font-semibold text-foreground mb-1 text-xs">
                   {news.title}
                 </p>
-                <p style={{ fontSize: "10px", color: "#666" }}>
+                <p className="text-[10px] text-muted-foreground">
                   {news.meta}
                 </p>
               </div>
@@ -149,30 +110,16 @@ const ActivityFeed = () => {
 
       {/* Stats Tab Content */}
       {activeTab === "stats" && (
-        <div
-          className="grid"
-          style={{
-            gridTemplateColumns: "1fr 1fr",
-            gap: "10px",
-          }}
-        >
+        <div className="grid grid-cols-2 gap-2.5">
           {platformStats.map((stat, index) => (
             <div
               key={index}
-              className="text-center"
-              style={{
-                background: "#0f0f1a",
-                borderRadius: "10px",
-                padding: "14px 10px",
-              }}
+              className="text-center bg-card border border-border rounded-[10px] py-3.5 px-2.5"
             >
-              <p
-                className="font-semibold text-white"
-                style={{ fontSize: "16px" }}
-              >
+              <p className="font-semibold text-foreground text-base">
                 {stat.value}
               </p>
-              <p style={{ fontSize: "10px", color: "#666" }}>
+              <p className="text-[10px] text-muted-foreground">
                 {stat.label}
               </p>
             </div>

@@ -72,28 +72,15 @@ const TrendingVideo = () => {
   };
 
   return (
-    <div style={{ marginBottom: "20px" }}>
+    <div className="mb-5">
       {/* Section Header */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "12px",
-        }}
-      >
-        <span style={{ fontSize: "14px", fontWeight: 600, color: "white" }}>
+      <div className="flex justify-between items-center mb-3">
+        <span className="text-sm font-semibold text-foreground">
           🔥 Trending Now
         </span>
         <button
           onClick={() => navigate("/community")}
-          style={{
-            background: "none",
-            border: "none",
-            fontSize: "11px",
-            color: "#00d4aa",
-            cursor: "pointer",
-          }}
+          className="bg-transparent border-none text-[11px] text-[#00d4aa] cursor-pointer"
         >
           See All →
         </button>
@@ -101,112 +88,41 @@ const TrendingVideo = () => {
 
       {/* Video Card */}
       {loading ? (
-        <div
-          style={{
-            background: "#1e1e32",
-            border: "1px solid #2a2a4a",
-            borderRadius: "16px",
-            height: "200px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <span style={{ color: "#666", fontSize: "12px" }}>Loading...</span>
+        <div className="bg-card border border-border rounded-2xl h-[200px] flex items-center justify-center">
+          <span className="text-muted-foreground text-xs">Loading...</span>
         </div>
       ) : videoPost ? (
         <div
           onClick={handleVideoClick}
-          style={{
-            background: "#1e1e32",
-            border: "1px solid #2a2a4a",
-            borderRadius: "16px",
-            overflow: "hidden",
-            cursor: "pointer",
-          }}
+          className="bg-card border border-border rounded-2xl overflow-hidden cursor-pointer"
         >
           {/* Thumbnail Area */}
-          <div
-            style={{
-              height: "140px",
-              background: "linear-gradient(135deg, #2a2a4a 0%, #1a1a2e 100%)",
-              position: "relative",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <div className="h-[140px] bg-gradient-to-br from-muted to-muted/50 relative flex items-center justify-center">
             {/* Video thumbnail preview */}
             <video
               src={videoPost.video_url}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                position: "absolute",
-                top: 0,
-                left: 0,
-              }}
+              className="w-full h-full object-cover absolute top-0 left-0"
               muted
               preload="metadata"
             />
 
             {/* NEW Badge */}
-            <div
-              style={{
-                position: "absolute",
-                top: "10px",
-                left: "10px",
-                background: "#00d4aa",
-                padding: "4px 8px",
-                borderRadius: "4px",
-                fontSize: "9px",
-                fontWeight: 600,
-                color: "black",
-                zIndex: 2,
-              }}
-            >
+            <div className="absolute top-2.5 left-2.5 bg-[#00d4aa] px-2 py-1 rounded text-[9px] font-semibold text-black z-[2]">
               NEW
             </div>
 
             {/* Play Button */}
-            <div
-              style={{
-                width: "50px",
-                height: "50px",
-                borderRadius: "50%",
-                background: "rgba(0, 212, 170, 0.9)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                zIndex: 2,
-              }}
-            >
-              <Play size={24} color="black" fill="black" />
+            <div className="w-[50px] h-[50px] rounded-full bg-[#00d4aa]/90 flex items-center justify-center z-[2]">
+              <Play size={24} className="text-black" fill="black" />
             </div>
           </div>
 
           {/* Video Info */}
-          <div style={{ padding: "12px" }}>
-            <p
-              style={{
-                fontSize: "13px",
-                fontWeight: 600,
-                color: "white",
-                margin: 0,
-                lineHeight: 1.3,
-              }}
-            >
+          <div className="p-3">
+            <p className="text-[13px] font-semibold text-foreground leading-tight">
               {getTitle(videoPost.content)}
             </p>
-            <p
-              style={{
-                fontSize: "11px",
-                color: "#666",
-                margin: 0,
-                marginTop: "6px",
-              }}
-            >
+            <p className="text-[11px] text-muted-foreground mt-1.5">
               {videoPost.user?.display_name} • {formatRelativeTime(videoPost.created_at)} • Community
             </p>
           </div>
@@ -215,32 +131,12 @@ const TrendingVideo = () => {
         /* Fallback - No videos */
         <div
           onClick={() => navigate("/community")}
-          style={{
-            background: "#1e1e32",
-            border: "1px solid #2a2a4a",
-            borderRadius: "16px",
-            padding: "40px 20px",
-            textAlign: "center",
-            cursor: "pointer",
-          }}
+          className="bg-card border border-border rounded-2xl py-10 px-5 text-center cursor-pointer"
         >
-          <p
-            style={{
-              fontSize: "13px",
-              color: "#666",
-              margin: 0,
-            }}
-          >
+          <p className="text-[13px] text-muted-foreground">
             No videos yet - be the first to post!
           </p>
-          <p
-            style={{
-              fontSize: "11px",
-              color: "#00d4aa",
-              margin: 0,
-              marginTop: "8px",
-            }}
-          >
+          <p className="text-[11px] text-[#00d4aa] mt-2">
             Go to Community →
           </p>
         </div>
