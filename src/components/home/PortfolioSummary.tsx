@@ -22,10 +22,10 @@ const PortfolioSummary = () => {
   };
 
   const stats = [
-    { value: "12", label: "Investments", route: "/portfolio" },
+    { value: "12", label: "Investments", route: "/portfolio/analytics" },
     { value: "5", label: "Active Bets", route: "/predict" },
     { value: "$892", label: "Earnings", route: "/wallet" },
-    { value: "8.4%", label: "Avg Yield", route: "/portfolio" },
+    { value: "8.4%", label: "Avg Yield", route: "/portfolio/analytics" },
   ];
 
   const handleKeyDown = (e: React.KeyboardEvent, route: string) => {
@@ -49,8 +49,8 @@ const PortfolioSummary = () => {
           role="button"
           tabIndex={0}
           aria-label="View your full portfolio"
-          onClick={() => navigate("/portfolio")}
-          onKeyDown={(e) => handleKeyDown(e, "/portfolio")}
+          onClick={() => navigate("/portfolio/analytics")}
+          onKeyDown={(e) => handleKeyDown(e, "/portfolio/analytics")}
           className="cursor-pointer group"
         >
           <p className="text-[28px] font-bold text-white leading-tight group-hover:underline group-hover:underline-offset-4 transition-all">
