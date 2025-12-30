@@ -33,6 +33,7 @@ import { useNavigate } from "react-router-dom";
 import logo from "@/assets/logo.png";
 import { formatCurrency } from "@/lib/formatters";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { SponsorOnboardingChecklist } from "@/components/sponsor/SponsorOnboardingChecklist";
 
 // Mock data for the dashboard
 const mockDeals = [
@@ -458,6 +459,9 @@ export default function SponsorDashboard() {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* Onboarding Checklist - shows until complete */}
+            <SponsorOnboardingChecklist />
+
             {/* Quick Actions */}
             <Card>
               <CardHeader className="pb-3">
