@@ -189,6 +189,7 @@ const AdminMessages = lazy(() => import("./pages/admin/AdminMessages"));
 const SponsorLogin = lazy(() => import("./pages/sponsor/SponsorLogin"));
 const SponsorRegister = lazy(() => import("./pages/sponsor/SponsorRegister"));
 const SponsorPending = lazy(() => import("./pages/sponsor/SponsorPending"));
+const SponsorDashboard = lazy(() => import("./pages/sponsor/SponsorDashboard"));
 
 const queryClient = new QueryClient();
 
@@ -357,6 +358,7 @@ const App = () => (
                   <Route path="/sponsor/login" element={<SponsorLogin />} />
                   <Route path="/sponsor/register" element={<SponsorRegister />} />
                   <Route path="/sponsor/pending" element={<ProtectedSponsorRoute requireVerified={false}><SponsorPending /></ProtectedSponsorRoute>} />
+                  <Route path="/sponsor/dashboard" element={<ProtectedSponsorRoute><SponsorDashboard /></ProtectedSponsorRoute>} />
                   {/* Admin Routes */}
                   <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
                   <Route path="/admin/properties" element={<AdminRoute><AdminProperties /></AdminRoute>} />
