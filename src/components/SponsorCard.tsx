@@ -5,6 +5,7 @@ import {
   MessageCircle, ChevronRight, Briefcase 
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SponsorReviewModal } from "@/components/sponsor/SponsorReviewModal";
 import {
   Dialog,
   DialogContent,
@@ -35,10 +36,13 @@ interface SponsorInfo {
 interface SponsorCardProps {
   sponsor: SponsorInfo;
   propertyName?: string;
+  dealId?: string;
+  hasInvested?: boolean;
 }
 
-export function SponsorCard({ sponsor, propertyName }: SponsorCardProps) {
+export function SponsorCard({ sponsor, propertyName, dealId, hasInvested = false }: SponsorCardProps) {
   const [showInquiryModal, setShowInquiryModal] = useState(false);
+  const [showReviewModal, setShowReviewModal] = useState(false);
   const [showFullBio, setShowFullBio] = useState(false);
   const [inquirySubject, setInquirySubject] = useState("");
   const [inquiryMessage, setInquiryMessage] = useState("");
@@ -185,23 +189,37 @@ export function SponsorCard({ sponsor, propertyName }: SponsorCardProps) {
         </div>
 
         {/* Actions */}
-        <div className="flex gap-3">
-          <Link 
-            to={`/sponsors/${sponsor.id}`}
-            className="flex-1"
-          >
-            <Button variant="outline" className="w-full">
-              View Full Profile
-              <ChevronRight className="w-4 h-4 ml-1" />
+        <div className="space-y-2">
+          <div className="flex gap-3">
+            <Link 
+              to={`/sponsors/${sponsor.id}`}
+              className="flex-1"
+            >
+              <Button variant="outline" className="w-full">
+                View Full Profile
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </Button>
+            </Link>
+            <Button 
+              onClick={() => setShowInquiryModal(true)}
+              className="flex-1"
+            >
+              <MessageCircle className="w-4 h-4 mr-2" />
+              Message Sponsor
             </Button>
-          </Link>
-          <Button 
-            onClick={() => setShowInquiryModal(true)}
-            className="flex-1"
-          >
-            <MessageCircle className="w-4 h-4 mr-2" />
-            Message Sponsor
-          </Button>
+          </div>
+          
+          {/* Rate Sponsor Button - only show if invested */}
+          {hasInvested && (
+            <Button 
+              variant="secondary"
+              className="w-full"
+              onClick={() => setShowReviewModal(true)}
+            >
+              <Star className="w-4 h-4 mr-2" />
+              Rate This Sponsor
+            </Button>
+          )}
         </div>
       </div>
 
@@ -250,6 +268,16 @@ export function SponsorCard({ sponsor, propertyName }: SponsorCardProps) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Review Modal */}
+      <SponsorReviewModal
+        isOpen={showReviewModal}
+        onClose={() => setShowReviewModal(false)}
+        sponsorId={sponsor.id}
+        sponsorName={sponsor.companyName}
+        dealId={dealId}
+        dealName={propertyName}
+      />
     </>
   );
 }

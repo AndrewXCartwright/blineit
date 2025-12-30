@@ -4455,6 +4455,143 @@ export type Database = {
         }
         Relationships: []
       }
+      sponsor_review_prompts: {
+        Row: {
+          deal_id: string | null
+          dismissed_at: string | null
+          id: string
+          investor_id: string
+          prompted_at: string | null
+          reviewed_at: string | null
+          sponsor_id: string
+        }
+        Insert: {
+          deal_id?: string | null
+          dismissed_at?: string | null
+          id?: string
+          investor_id: string
+          prompted_at?: string | null
+          reviewed_at?: string | null
+          sponsor_id: string
+        }
+        Update: {
+          deal_id?: string | null
+          dismissed_at?: string | null
+          id?: string
+          investor_id?: string
+          prompted_at?: string | null
+          reviewed_at?: string | null
+          sponsor_id?: string
+        }
+        Relationships: []
+      }
+      sponsor_review_reports: {
+        Row: {
+          created_at: string | null
+          details: string | null
+          id: string
+          reason: string
+          reported_by: string
+          review_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          details?: string | null
+          id?: string
+          reason: string
+          reported_by: string
+          review_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          details?: string | null
+          id?: string
+          reason?: string
+          reported_by?: string
+          review_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sponsor_review_reports_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "sponsor_reviews"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sponsor_reviews: {
+        Row: {
+          communication_rating: number | null
+          created_at: string | null
+          deal_id: string | null
+          id: string
+          investor_id: string
+          is_public: boolean | null
+          is_verified: boolean | null
+          moderation_notes: string | null
+          overall_rating: number
+          professionalism_rating: number | null
+          published_at: string | null
+          returns_rating: number | null
+          review_text: string | null
+          show_name: boolean | null
+          sponsor_id: string
+          status: string | null
+          transparency_rating: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          communication_rating?: number | null
+          created_at?: string | null
+          deal_id?: string | null
+          id?: string
+          investor_id: string
+          is_public?: boolean | null
+          is_verified?: boolean | null
+          moderation_notes?: string | null
+          overall_rating: number
+          professionalism_rating?: number | null
+          published_at?: string | null
+          returns_rating?: number | null
+          review_text?: string | null
+          show_name?: boolean | null
+          sponsor_id: string
+          status?: string | null
+          transparency_rating?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          communication_rating?: number | null
+          created_at?: string | null
+          deal_id?: string | null
+          id?: string
+          investor_id?: string
+          is_public?: boolean | null
+          is_verified?: boolean | null
+          moderation_notes?: string | null
+          overall_rating?: number
+          professionalism_rating?: number | null
+          published_at?: string | null
+          returns_rating?: number | null
+          review_text?: string | null
+          show_name?: boolean | null
+          sponsor_id?: string
+          status?: string | null
+          transparency_rating?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       support_tickets: {
         Row: {
           assigned_to: string | null
@@ -5845,6 +5982,7 @@ export type Database = {
         }
         Returns: Json
       }
+      approve_pending_reviews: { Args: never; Returns: number }
       ban_group_member: {
         Args: {
           p_expires_at?: string
@@ -5913,6 +6051,10 @@ export type Database = {
       get_or_create_conversation: {
         Args: { p_other_user_id: string }
         Returns: string
+      }
+      get_sponsor_rating_summary: {
+        Args: { p_sponsor_id: string }
+        Returns: Json
       }
       has_role: {
         Args: {
@@ -6017,6 +6159,20 @@ export type Database = {
           p_envelope_id: string
           p_fields?: Json
           p_signature_data: string
+        }
+        Returns: Json
+      }
+      submit_sponsor_review: {
+        Args: {
+          p_communication_rating?: number
+          p_deal_id: string
+          p_overall_rating: number
+          p_professionalism_rating?: number
+          p_returns_rating?: number
+          p_review_text?: string
+          p_show_name?: boolean
+          p_sponsor_id: string
+          p_transparency_rating?: number
         }
         Returns: Json
       }
