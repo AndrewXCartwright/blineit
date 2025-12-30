@@ -11,8 +11,8 @@ interface LeaderboardItem {
 const leaderboardData: LeaderboardItem[] = [
   { rank: "#1 INVESTOR", name: "CryptoWhale_42", stat: "$2.4M invested", category: "Top Investor", link: "/leaderboards?tab=investors" },
   { rank: "#1 SPONSOR", name: "Meridian RE", stat: "14 properties", category: "Top Sponsor", link: "/leaderboards?tab=sponsors" },
-  { rank: "#1 PROPERTY", name: "Austin Mixed-Use", stat: "+34% this week", category: "Trending", link: "/explore" },
-  { rank: "#1 STARTUP", name: "GreenGrid Solar", stat: "847 follows", category: "Most Social", link: "/community" },
+  { rank: "#1 PROPERTY", name: "Austin Mixed-Use", stat: "+34% this week", category: "Trending", link: "/leaderboards?tab=properties" },
+  { rank: "#1 STARTUP", name: "GreenGrid Solar", stat: "847 follows", category: "Most Social", link: "/leaderboards?tab=startups" },
 ];
 
 const LeaderboardGrid = () => {
