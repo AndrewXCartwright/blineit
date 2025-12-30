@@ -1,5 +1,5 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { Search, ArrowLeft, MapPin, TrendingUp, Flame, Building2, Gem, Landmark } from "lucide-react";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
+import { Search, ArrowLeft, MapPin, TrendingUp, Flame, Building2, Gem, Landmark, BadgeCheck, ChevronDown, X } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/Skeleton";
@@ -8,6 +8,19 @@ import { EmptyState } from "@/components/EmptyState";
 import { LoanCard } from "@/components/LoanCard";
 import { LoanTypeFilter, type LoanType } from "@/components/LoanTypeFilter";
 import { useLoans, type Loan } from "@/hooks/useLoanData";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+interface SponsorInfo {
+  id: string;
+  company_name: string;
+  company_logo_url: string | null;
+  verification_status: string;
+}
 
 interface Property {
   id: string;
@@ -20,6 +33,8 @@ interface Property {
   is_hot: boolean;
   category: string;
   image_url?: string;
+  sponsor_id?: string | null;
+  sponsor?: SponsorInfo | null;
 }
 
 const categoryLabels: Record<string, string> = {
@@ -59,21 +74,64 @@ export default function AssetsExplore() {
   const [properties, setProperties] = useState<Property[]>([]);
   const [propertiesLoading, setPropertiesLoading] = useState(true);
   const [loanTypeFilter, setLoanTypeFilter] = useState<LoanType>("all");
+  const [sponsors, setSponsors] = useState<SponsorInfo[]>([]);
+  const [selectedSponsor, setSelectedSponsor] = useState<string | null>(null);
 
   const { loans, loading: loansLoading, refetch: refetchLoans } = useLoans();
 
   const isDebt = investmentType === "debt";
   const categoryLabel = categoryLabels[assetClass] || "All Assets";
 
-  const fetchProperties = useCallback(async () => {
-    const { data, error } = await supabase.from("properties").select("*");
+  const fetchSponsors = useCallback(async () => {
+    const { data, error } = await supabase
+      .from("sponsor_profiles")
+      .select("id, company_name, company_logo_url, verification_status")
+      .eq("verification_status", "verified")
+      .order("company_name");
+    
     if (!error && data) {
-      let filtered = data;
-      if (assetClass === "commercial") {
-        filtered = data.filter(p => p.category === "Commercial");
-      } else if (assetClass === "real-estate" || assetClass === "re-loans") {
-        filtered = data.filter(p => p.category === "Multifamily" || p.category === "Residential");
+      setSponsors(data as unknown as SponsorInfo[]);
+    }
+  }, []);
+
+  const fetchProperties = useCallback(async () => {
+    // First fetch properties
+    const { data, error } = await supabase
+      .from("properties")
+      .select("*");
+    
+    if (!error && data) {
+      // Get unique sponsor IDs
+      const sponsorIds = [...new Set(data.filter(p => p.sponsor_id).map(p => p.sponsor_id))];
+      
+      // Fetch sponsor details for these properties
+      let sponsorMap: Record<string, SponsorInfo> = {};
+      if (sponsorIds.length > 0) {
+        const { data: sponsorData } = await supabase
+          .from("sponsor_profiles")
+          .select("id, company_name, company_logo_url, verification_status")
+          .in("id", sponsorIds);
+        
+        if (sponsorData) {
+          sponsorMap = Object.fromEntries(
+            (sponsorData as unknown as SponsorInfo[]).map(s => [s.id, s])
+          );
+        }
       }
+      
+      // Merge sponsor info with properties
+      let filtered = data.map(p => ({
+        ...p,
+        sponsor: p.sponsor_id ? sponsorMap[p.sponsor_id] || null : null
+      }));
+      
+      // Apply category filter
+      if (assetClass === "commercial") {
+        filtered = filtered.filter(p => p.category === "Commercial");
+      } else if (assetClass === "real-estate" || assetClass === "re-loans") {
+        filtered = filtered.filter(p => p.category === "Multifamily" || p.category === "Residential");
+      }
+      
       setProperties(filtered);
     }
     setPropertiesLoading(false);
@@ -81,7 +139,8 @@ export default function AssetsExplore() {
 
   useEffect(() => {
     fetchProperties();
-  }, [fetchProperties]);
+    fetchSponsors();
+  }, [fetchProperties, fetchSponsors]);
 
   const handleRefresh = async () => {
     if (isDebt) {
@@ -92,8 +151,13 @@ export default function AssetsExplore() {
   };
 
   const filteredProperties = properties.filter((property) => {
-    return property.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-           property.city.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = property.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+           property.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+           (property.sponsor?.company_name?.toLowerCase().includes(searchQuery.toLowerCase()) || false);
+    
+    const matchesSponsor = !selectedSponsor || property.sponsor_id === selectedSponsor;
+    
+    return matchesSearch && matchesSponsor;
   });
 
   const filteredLoans = loans.filter((loan) => {
@@ -105,6 +169,7 @@ export default function AssetsExplore() {
   });
 
   const loading = isDebt ? loansLoading : propertiesLoading;
+  const selectedSponsorName = sponsors.find(s => s.id === selectedSponsor)?.company_name;
 
   return (
     <div className="min-h-screen pb-24">
@@ -140,7 +205,7 @@ export default function AssetsExplore() {
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <input
             type="text"
-            placeholder={isDebt ? "Search loans..." : `Search ${categoryLabel.toLowerCase()}...`}
+            placeholder={isDebt ? "Search loans..." : `Search properties or sponsors...`}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-secondary border border-border rounded-xl pl-12 pr-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
@@ -150,9 +215,62 @@ export default function AssetsExplore() {
 
       <PullToRefresh onRefresh={handleRefresh} className="h-[calc(100vh-200px)]">
         <main className="px-4 py-6 space-y-4">
-          {/* Loan Type Filter for Debt */}
-          {isDebt && (
+          {/* Filters */}
+          {isDebt ? (
             <LoanTypeFilter value={loanTypeFilter} onChange={setLoanTypeFilter} />
+          ) : (
+            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+              {/* Sponsor Filter */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className={`flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+                    selectedSponsor 
+                      ? "gradient-primary text-primary-foreground" 
+                      : "bg-secondary text-muted-foreground hover:text-foreground"
+                  }`}>
+                    <Building2 className="w-4 h-4" />
+                    {selectedSponsorName || "All Sponsors"}
+                    <ChevronDown className="w-3 h-3" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="max-h-64 overflow-y-auto">
+                  <DropdownMenuItem onClick={() => setSelectedSponsor(null)}>
+                    All Sponsors
+                  </DropdownMenuItem>
+                  {sponsors.map((sponsor) => (
+                    <DropdownMenuItem 
+                      key={sponsor.id}
+                      onClick={() => setSelectedSponsor(sponsor.id)}
+                      className="flex items-center gap-2"
+                    >
+                      {sponsor.company_logo_url ? (
+                        <img 
+                          src={sponsor.company_logo_url} 
+                          alt={sponsor.company_name}
+                          className="w-5 h-5 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">
+                          {sponsor.company_name.charAt(0)}
+                        </div>
+                      )}
+                      <span>{sponsor.company_name}</span>
+                      {sponsor.verification_status === 'verified' && <BadgeCheck className="w-3 h-3 text-primary" />}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              
+              {/* Clear filter button */}
+              {selectedSponsor && (
+                <button 
+                  onClick={() => setSelectedSponsor(null)}
+                  className="flex items-center gap-1 px-2 py-2 rounded-full bg-destructive/20 text-destructive text-sm"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              )}
+            </div>
           )}
 
           {loading ? (
@@ -194,8 +312,8 @@ export default function AssetsExplore() {
                 icon={<Building2 className="w-12 h-12" />}
                 title="No assets found"
                 description="Try adjusting your search to find what you're looking for."
-                actionLabel="Clear Search"
-                onAction={() => setSearchQuery("")}
+                actionLabel="Clear Filters"
+                onAction={() => { setSearchQuery(""); setSelectedSponsor(null); }}
               />
             ) : (
               <div className="grid grid-cols-1 gap-4">
@@ -203,7 +321,7 @@ export default function AssetsExplore() {
                   <div
                     key={property.id}
                     onClick={() => navigate(`/property/${property.id}`)}
-                    className="glass-card rounded-2xl overflow-hidden animate-fade-in interactive-card"
+                    className="glass-card rounded-2xl overflow-hidden animate-fade-in interactive-card cursor-pointer"
                     style={{ animationDelay: `${index * 0.05}s` }}
                   >
                     <div className="flex">
@@ -224,6 +342,26 @@ export default function AssetsExplore() {
                             <Flame className="w-3 h-3" />Hot
                           </span>
                         )}
+                        {/* Sponsor Logo Overlay */}
+                        {property.sponsor && (
+                          <Link
+                            to={`/sponsors/${property.sponsor.id}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="absolute bottom-2 right-2"
+                          >
+                            {property.sponsor.company_logo_url ? (
+                              <img 
+                                src={property.sponsor.company_logo_url} 
+                                alt={property.sponsor.company_name}
+                                className="w-7 h-7 rounded-full border-2 border-background object-cover bg-background"
+                              />
+                            ) : (
+                              <div className="w-7 h-7 rounded-full border-2 border-background bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold">
+                                {property.sponsor.company_name.charAt(0)}
+                              </div>
+                            )}
+                          </Link>
+                        )}
                       </div>
                       <div className="flex-1 p-3">
                         <div className="flex items-start justify-between mb-1">
@@ -234,10 +372,21 @@ export default function AssetsExplore() {
                             EQUITY
                           </span>
                         </div>
-                        <div className="flex items-center gap-1 text-xs text-muted-foreground mb-2">
+                        <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
                           <MapPin className="w-3 h-3" />
                           <span>{property.city}, {property.state}</span>
                         </div>
+                        {/* Sponsor Name */}
+                        {property.sponsor && (
+                          <Link
+                            to={`/sponsors/${property.sponsor.id}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="flex items-center gap-1 text-[10px] text-primary hover:underline mb-2"
+                          >
+                            <span className="truncate">By {property.sponsor.company_name}</span>
+                            {property.sponsor.verification_status === 'verified' && <BadgeCheck className="w-3 h-3 flex-shrink-0" />}
+                          </Link>
+                        )}
                         <div className="grid grid-cols-2 gap-2">
                           <div className="flex items-center gap-1 text-xs">
                             <span className="text-muted-foreground">Token:</span>

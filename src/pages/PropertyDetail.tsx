@@ -35,6 +35,21 @@ interface Property {
   description: string | null;
   image_url?: string;
   is_hot: boolean;
+  sponsor_id?: string | null;
+}
+
+interface SponsorData {
+  id: string;
+  companyName: string;
+  isVerified: boolean;
+  yearsInBusiness: number;
+  totalDeals: number;
+  averageRating: number;
+  reviewCount: number;
+  totalCapitalRaised: number;
+  averageIrr: number;
+  bio: string;
+  logoUrl?: string | null;
 }
 
 interface UserHolding {
@@ -88,6 +103,7 @@ export default function PropertyDetail() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [property, setProperty] = useState<Property | null>(null);
+  const [sponsor, setSponsor] = useState<SponsorData | null>(null);
   const [holding, setHolding] = useState<UserHolding | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<TabType>("overview");
@@ -120,6 +136,37 @@ export default function PropertyDetail() {
 
     if (!error && data) {
       setProperty(data);
+      
+      // Fetch sponsor data if property has sponsor_id
+      if (data.sponsor_id) {
+        const { data: sponsorData } = await supabase
+          .from("sponsor_profiles")
+          .select("*")
+          .eq("id", data.sponsor_id)
+          .single();
+        
+        if (sponsorData) {
+          // Get review count separately
+          const { count } = await supabase
+            .from("sponsor_reviews")
+            .select("*", { count: 'exact', head: true })
+            .eq("sponsor_id", data.sponsor_id);
+          
+          setSponsor({
+            id: sponsorData.id,
+            companyName: sponsorData.company_name,
+            isVerified: sponsorData.verification_status === 'verified',
+            yearsInBusiness: sponsorData.years_in_business || 0,
+            totalDeals: sponsorData.deals_completed || 0,
+            averageRating: 4.5,
+            reviewCount: count || 0,
+            totalCapitalRaised: sponsorData.total_assets_managed || 0,
+            averageIrr: sponsorData.average_irr || 0,
+            bio: sponsorData.bio || '',
+            logoUrl: sponsorData.company_logo_url,
+          });
+        }
+      }
     }
 
     // Fetch user holdings
@@ -384,29 +431,20 @@ export default function PropertyDetail() {
         )}
 
         {/* Meet the Sponsor */}
-        <div className="space-y-3">
-          <h3 className="font-display font-semibold text-foreground flex items-center gap-2">
-            <Building2 className="w-5 h-5 text-primary" />
-            Meet the Sponsor
-          </h3>
-          <SponsorCard 
-            sponsor={{
-              id: "sponsor-123",
-              companyName: "Starwood Capital Partners",
-              isVerified: true,
-              yearsInBusiness: 15,
-              totalDeals: 42,
-              averageRating: 4.8,
-              reviewCount: 156,
-              totalCapitalRaised: 285000000,
-              averageIrr: 18,
-              bio: "Starwood Capital Partners is a leading real estate investment firm specializing in multifamily and commercial properties across major U.S. markets. With over 15 years of experience and a proven track record of delivering consistent returns to investors, we focus on value-add opportunities in high-growth metropolitan areas.",
-            }}
-            propertyName={property.name}
-            dealId={id}
-            hasInvested={!!holding}
-          />
-        </div>
+        {sponsor && (
+          <div className="space-y-3">
+            <h3 className="font-display font-semibold text-foreground flex items-center gap-2">
+              <Building2 className="w-5 h-5 text-primary" />
+              Meet the Sponsor
+            </h3>
+            <SponsorCard 
+              sponsor={sponsor}
+              propertyName={property.name}
+              dealId={id}
+              hasInvested={!!holding}
+            />
+          </div>
+        )}
 
         {/* Action Buttons */}
         <div className="flex gap-3">
