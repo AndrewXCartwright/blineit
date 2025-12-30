@@ -108,7 +108,7 @@ export function SponsorCard({ sponsor, propertyName }: SponsorCardProps) {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
               <Link 
-                to={`/sponsor/${sponsor.id}`}
+                to={`/sponsors/${sponsor.id}`}
                 className="font-display font-bold text-lg text-foreground hover:text-primary transition-colors truncate"
               >
                 {sponsor.companyName}
@@ -187,7 +187,7 @@ export function SponsorCard({ sponsor, propertyName }: SponsorCardProps) {
         {/* Actions */}
         <div className="flex gap-3">
           <Link 
-            to={`/sponsor/${sponsor.id}`}
+            to={`/sponsors/${sponsor.id}`}
             className="flex-1"
           >
             <Button variant="outline" className="w-full">
