@@ -26,7 +26,7 @@ const PortfolioSummary = () => {
   ];
 
   return (
-    <div className="bg-gradient-to-br from-purple-100 to-purple-50 dark:from-[#1e1e32] dark:to-[#252542] border border-purple-200 dark:border-[#2a2a4a] rounded-2xl p-4 mb-4">
+    <div className="bg-gradient-to-r from-purple-600 to-purple-400 rounded-2xl p-4 mb-4">
       {/* Section Label */}
       <p className="text-[9px] uppercase tracking-[2px] text-[#00d4aa] font-semibold mb-3">
         YOUR PORTFOLIO
