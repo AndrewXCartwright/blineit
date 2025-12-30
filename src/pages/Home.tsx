@@ -71,17 +71,7 @@ export default function Home() {
       </header>
 
       {/* Zone 1: Portfolio Summary */}
-      <PortfolioSummary
-        totalValue={127450.25}
-        dailyChange={1250.75}
-        dailyChangePercent={2.4}
-        investments={12}
-        activeBets={5}
-        earnings={8234.5}
-        avgYield={8.2}
-        unreadAlerts={3}
-        onAlertsClick={() => navigate("/alerts")}
-      />
+      <PortfolioSummary />
 
       {/* Zone 2: Trending Video */}
       <TrendingVideo
