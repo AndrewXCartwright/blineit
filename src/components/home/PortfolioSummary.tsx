@@ -1,6 +1,9 @@
-import { Bell } from "lucide-react";
+import { Bell, ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const PortfolioSummary = () => {
+  const navigate = useNavigate();
+  
   // Demo data
   const portfolioValue = 47250.00;
   const dailyChange = 1247.50;
@@ -19,11 +22,18 @@ const PortfolioSummary = () => {
   };
 
   const stats = [
-    { value: "12", label: "Investments" },
-    { value: "5", label: "Active Bets" },
-    { value: "$892", label: "Earnings" },
-    { value: "8.4%", label: "Avg Yield" },
+    { value: "12", label: "Investments", route: "/portfolio" },
+    { value: "5", label: "Active Bets", route: "/predict" },
+    { value: "$892", label: "Earnings", route: "/wallet" },
+    { value: "8.4%", label: "Avg Yield", route: "/portfolio" },
   ];
+
+  const handleKeyDown = (e: React.KeyboardEvent, route: string) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      navigate(route);
+    }
+  };
 
   return (
     <div className="bg-gradient-to-r from-purple-600 to-purple-400 rounded-2xl p-4 mb-4">
@@ -34,9 +44,16 @@ const PortfolioSummary = () => {
 
       {/* Header Row */}
       <div className="flex justify-between items-start mb-4">
-        {/* Left side - Portfolio Value */}
-        <div>
-          <p className="text-[28px] font-bold text-white leading-tight">
+        {/* Left side - Portfolio Value (Clickable) */}
+        <div
+          role="button"
+          tabIndex={0}
+          aria-label="View your full portfolio"
+          onClick={() => navigate("/portfolio")}
+          onKeyDown={(e) => handleKeyDown(e, "/portfolio")}
+          className="cursor-pointer group"
+        >
+          <p className="text-[28px] font-bold text-white leading-tight group-hover:underline group-hover:underline-offset-4 transition-all">
             {formatCurrency(portfolioValue)}
           </p>
           <p className={`text-[13px] mt-1 ${isPositive ? "text-[#00d4aa]" : "text-[#ff4757]"}`}>
@@ -45,7 +62,11 @@ const PortfolioSummary = () => {
         </div>
 
         {/* Right side - Alerts Button */}
-        <button className="relative w-11 h-11 bg-[#00d4aa]/15 border border-[#00d4aa]/30 rounded-xl flex items-center justify-center cursor-pointer">
+        <button 
+          onClick={() => navigate("/notifications")}
+          aria-label={`View ${unreadAlerts} unread alerts`}
+          className="relative w-11 h-11 bg-[#00d4aa]/15 border border-[#00d4aa]/30 rounded-xl flex items-center justify-center cursor-pointer hover:bg-[#00d4aa]/25 transition-all"
+        >
           <Bell size={20} className="text-[#00d4aa]" />
           {unreadAlerts > 0 && (
             <span className="absolute -top-1 -right-1 h-[18px] min-w-[18px] px-1 bg-[#ff4757] rounded-full text-[10px] font-bold text-white flex items-center justify-center">
@@ -60,8 +81,17 @@ const PortfolioSummary = () => {
         {stats.map((stat, index) => (
           <div
             key={index}
-            className="flex-1 bg-white dark:bg-[#0f0f1a] rounded-[10px] py-2.5 px-1.5 text-center"
+            role="button"
+            tabIndex={0}
+            aria-label={`View your ${stat.value} ${stat.label}`}
+            onClick={() => navigate(stat.route)}
+            onKeyDown={(e) => handleKeyDown(e, stat.route)}
+            className="flex-1 bg-white dark:bg-[#0f0f1a] rounded-[10px] py-2.5 px-1.5 text-center cursor-pointer border border-transparent hover:border-purple-400 hover:-translate-y-0.5 hover:bg-gray-50 dark:hover:bg-[#1a1a2e] transition-all duration-200 group relative"
           >
+            <ChevronRight 
+              size={10} 
+              className="absolute top-1.5 right-1.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" 
+            />
             <p className="text-sm font-semibold text-foreground">
               {stat.value}
             </p>
