@@ -74,14 +74,7 @@ export default function Home() {
       <PortfolioSummary />
 
       {/* Zone 2: Trending Video */}
-      <TrendingVideo
-        title="Miami Luxury Condo Market Analysis 2024"
-        views="12.4K"
-        category="Market Analysis"
-        isLive={true}
-        onPlay={() => console.log("Play video")}
-        onSeeAll={() => navigate("/trending")}
-      />
+      <TrendingVideo />
 
       {/* Zone 3: Leaderboard Grid */}
       <LeaderboardGrid onViewAll={() => navigate("/leaderboards")} />
