@@ -24,7 +24,7 @@ const HottestPredictions = () => {
           🎯 Hottest Predictions
         </span>
         <button
-          onClick={() => navigate("/predictions")}
+          onClick={() => navigate("/predict")}
           className="bg-transparent border-none text-[11px] text-[#00d4aa] cursor-pointer"
         >
           See All →
