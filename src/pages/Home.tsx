@@ -1,4 +1,5 @@
-import { useNavigate } from "react-router-dom";
+import { Header } from "@/components/Header";
+import { BottomNav } from "@/components/BottomNav";
 import PortfolioSummary from "@/components/home/PortfolioSummary";
 import TrendingVideo from "@/components/home/TrendingVideo";
 import LeaderboardGrid from "@/components/home/LeaderboardGrid";
@@ -8,88 +9,41 @@ import QuickActions from "@/components/home/QuickActions";
 import ActivityFeed from "@/components/home/ActivityFeed";
 
 export default function Home() {
-  const navigate = useNavigate();
-
   return (
-    <div
-      style={{
-        background: "#0f0f1a",
-        minHeight: "100vh",
-        padding: "20px 15px 80px 15px",
-      }}
-    >
-      {/* Header */}
-      <header
-        className="flex items-center justify-between"
-        style={{ padding: "0 5px 15px" }}
+    <div className="min-h-screen bg-background">
+      {/* Existing Navbar with B-LINE-IT branding */}
+      <Header />
+
+      {/* Main Content Area */}
+      <main
+        style={{
+          padding: "20px 15px 100px 15px",
+        }}
       >
-        {/* Logo */}
-        <h1
-          className="font-bold"
-          style={{
-            fontSize: "20px",
-            background: "linear-gradient(135deg, #00d4aa, #00a8cc)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-          }}
-        >
-          THE ORIGIN
-        </h1>
+        {/* Zone 1: Portfolio Summary */}
+        <PortfolioSummary />
 
-        {/* Right Icons */}
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => navigate("/search")}
-            className="flex items-center justify-center"
-            style={{
-              width: "32px",
-              height: "32px",
-              borderRadius: "50%",
-              background: "#1e1e32",
-              border: "none",
-              fontSize: "14px",
-            }}
-          >
-            🔍
-          </button>
-          <button
-            onClick={() => navigate("/profile")}
-            className="flex items-center justify-center"
-            style={{
-              width: "32px",
-              height: "32px",
-              borderRadius: "50%",
-              background: "#1e1e32",
-              border: "none",
-              fontSize: "14px",
-            }}
-          >
-            👤
-          </button>
-        </div>
-      </header>
+        {/* Zone 2: Trending Video */}
+        <TrendingVideo />
 
-      {/* Zone 1: Portfolio Summary */}
-      <PortfolioSummary />
+        {/* Zone 3: Leaderboard Grid */}
+        <LeaderboardGrid />
 
-      {/* Zone 2: Trending Video */}
-      <TrendingVideo />
+        {/* Zone 4: Hottest Predictions */}
+        <HottestPredictions />
 
-      {/* Zone 3: Leaderboard Grid */}
-      <LeaderboardGrid />
+        {/* Zone 5: Map Preview */}
+        <MapPreview />
 
-      {/* Zone 4: Hottest Predictions */}
-      <HottestPredictions />
+        {/* Zone 6: Quick Actions */}
+        <QuickActions />
 
-      {/* Zone 5: Map Preview */}
-      <MapPreview />
+        {/* Zone 7: Activity Feed */}
+        <ActivityFeed />
+      </main>
 
-      {/* Zone 6: Quick Actions */}
-      <QuickActions />
-
-      {/* Zone 7: Activity Feed */}
-      <ActivityFeed />
+      {/* Bottom Navigation */}
+      <BottomNav />
     </div>
   );
 }
