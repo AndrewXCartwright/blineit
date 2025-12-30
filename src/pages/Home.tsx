@@ -77,7 +77,7 @@ export default function Home() {
       <TrendingVideo />
 
       {/* Zone 3: Leaderboard Grid */}
-      <LeaderboardGrid onViewAll={() => navigate("/leaderboards")} />
+      <LeaderboardGrid />
 
       {/* Zone 4: Hottest Predictions */}
       <HottestPredictions onSeeAll={() => navigate("/predict")} />
