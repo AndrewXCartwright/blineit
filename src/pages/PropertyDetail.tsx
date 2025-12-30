@@ -403,6 +403,8 @@ export default function PropertyDetail() {
               bio: "Starwood Capital Partners is a leading real estate investment firm specializing in multifamily and commercial properties across major U.S. markets. With over 15 years of experience and a proven track record of delivering consistent returns to investors, we focus on value-add opportunities in high-growth metropolitan areas.",
             }}
             propertyName={property.name}
+            dealId={id}
+            hasInvested={!!holding}
           />
         </div>
 
