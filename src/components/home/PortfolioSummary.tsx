@@ -36,7 +36,7 @@ const PortfolioSummary = () => {
       <div className="flex justify-between items-start mb-4">
         {/* Left side - Portfolio Value */}
         <div>
-          <p className="text-[28px] font-bold text-white leading-tight">
+          <p className={`text-[28px] font-bold leading-tight ${isPositive ? "text-[#00d4aa]" : "text-[#ff4757]"}`}>
             {formatCurrency(portfolioValue)}
           </p>
           <p className={`text-[13px] mt-1 ${isPositive ? "text-[#00d4aa]" : "text-[#ff4757]"}`}>
