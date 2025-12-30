@@ -200,8 +200,9 @@ const SponsorFees = lazy(() => import("./pages/sponsor/SponsorFees"));
 const SponsorMessages = lazy(() => import("./pages/sponsor/SponsorMessages"));
 const SponsorSettings = lazy(() => import("./pages/sponsor/SponsorSettings"));
 
-// Public Sponsor Profile
+// Public Sponsor Pages
 const SponsorProfile = lazy(() => import("./pages/SponsorProfile"));
+const SponsorDirectory = lazy(() => import("./pages/SponsorDirectory"));
 
 const queryClient = new QueryClient();
 
@@ -232,6 +233,7 @@ const App = () => (
                   <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                   <Route path="/property/:id" element={<ProtectedRoute><PropertyDetail /></ProtectedRoute>} />
                   <Route path="/loan/:id" element={<ProtectedRoute><LoanDetail /></ProtectedRoute>} />
+                  <Route path="/sponsors" element={<ProtectedRoute><SponsorDirectory /></ProtectedRoute>} />
                   <Route path="/kyc" element={<ProtectedRoute><KYCVerification /></ProtectedRoute>} />
                   <Route path="/referrals" element={<ProtectedRoute><Referrals /></ProtectedRoute>} />
                   <Route path="/advisor" element={<ProtectedRoute><InvestmentAdvisor /></ProtectedRoute>} />
