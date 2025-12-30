@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Play } from "lucide-react";
+import { Play, Volume2, VolumeX } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { formatRelativeTime } from "@/lib/formatters";
 
@@ -19,6 +19,68 @@ const TrendingVideo = () => {
   const navigate = useNavigate();
   const [videoPost, setVideoPost] = useState<VideoPost | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Check for prefers-reduced-motion
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mediaQuery.matches);
+    
+    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
+
+  // Intersection Observer for auto-play
+  useEffect(() => {
+    if (prefersReducedMotion || !videoPost) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+            // Video is 50%+ visible - play it
+            videoRef.current?.play().catch(() => {
+              // Auto-play was prevented, that's okay
+            });
+            setIsPlaying(true);
+          } else {
+            // Video scrolled out - pause it
+            videoRef.current?.pause();
+            setIsPlaying(false);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [videoPost, prefersReducedMotion]);
+
+  // Track video progress
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleTimeUpdate = () => {
+      if (video.duration) {
+        setProgress((video.currentTime / video.duration) * 100);
+      }
+    };
+
+    video.addEventListener("timeupdate", handleTimeUpdate);
+    return () => video.removeEventListener("timeupdate", handleTimeUpdate);
+  }, [videoPost]);
 
   useEffect(() => {
     const fetchLatestVideo = async () => {
@@ -59,9 +121,16 @@ const TrendingVideo = () => {
     fetchLatestVideo();
   }, []);
 
-  const handleVideoClick = () => {
-    if (videoPost) {
-      navigate(`/post/${videoPost.id}`);
+  const handleCardClick = () => {
+    // Navigate to Community page, NOT single video page
+    navigate("/community");
+  };
+
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Don't trigger card click
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(!isMuted);
     }
   };
 
@@ -93,16 +162,20 @@ const TrendingVideo = () => {
         </div>
       ) : videoPost ? (
         <div
-          onClick={handleVideoClick}
+          ref={containerRef}
+          onClick={handleCardClick}
           className="bg-card border border-border rounded-2xl overflow-hidden cursor-pointer"
         >
-          {/* Thumbnail Area */}
+          {/* Video Area */}
           <div className="h-[140px] bg-gradient-to-br from-muted to-muted/50 relative flex items-center justify-center">
-            {/* Video thumbnail preview */}
+            {/* Video element */}
             <video
+              ref={videoRef}
               src={videoPost.video_url}
               className="w-full h-full object-cover absolute top-0 left-0"
-              muted
+              muted={isMuted}
+              loop
+              playsInline
               preload="metadata"
             />
 
@@ -111,9 +184,32 @@ const TrendingVideo = () => {
               NEW
             </div>
 
-            {/* Play Button */}
-            <div className="w-[50px] h-[50px] rounded-full bg-[#00d4aa]/90 flex items-center justify-center z-[2]">
-              <Play size={24} className="text-black" fill="black" />
+            {/* Play Button - only show when not playing or reduced motion */}
+            {(!isPlaying || prefersReducedMotion) && (
+              <div className="w-[50px] h-[50px] rounded-full bg-[#00d4aa]/90 flex items-center justify-center z-[2]">
+                <Play size={24} className="text-black" fill="black" />
+              </div>
+            )}
+
+            {/* Mute/Unmute Button */}
+            <button
+              onClick={toggleMute}
+              className="absolute bottom-2.5 right-2.5 w-8 h-8 rounded-full bg-black/60 flex items-center justify-center z-[3] hover:bg-black/80 transition-colors"
+              aria-label={isMuted ? "Unmute video" : "Mute video"}
+            >
+              {isMuted ? (
+                <VolumeX size={16} className="text-white" />
+              ) : (
+                <Volume2 size={16} className="text-white" />
+              )}
+            </button>
+
+            {/* Progress Bar */}
+            <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-black/30 z-[2]">
+              <div
+                className="h-full bg-[#00d4aa] transition-all duration-100"
+                style={{ width: `${progress}%` }}
+              />
             </div>
           </div>
 
