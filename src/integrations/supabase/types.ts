@@ -4592,7 +4592,7 @@ export type Database = {
           rejection_reason: string | null
           total_assets_managed: number | null
           updated_at: string
-          user_id: string
+          user_id: string | null
           verification_status: string
           verified_at: string | null
           website_url: string | null
@@ -4619,7 +4619,7 @@ export type Database = {
           rejection_reason?: string | null
           total_assets_managed?: number | null
           updated_at?: string
-          user_id: string
+          user_id?: string | null
           verification_status?: string
           verified_at?: string | null
           website_url?: string | null
@@ -4646,7 +4646,7 @@ export type Database = {
           rejection_reason?: string | null
           total_assets_managed?: number | null
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
           verification_status?: string
           verified_at?: string | null
           website_url?: string | null
