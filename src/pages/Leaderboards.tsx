@@ -110,19 +110,6 @@ export default function Leaderboards() {
     }
   };
 
-  const getRankStyle = (rank: number) => {
-    if (rank <= 3) {
-      return {
-        background: "linear-gradient(135deg, #ffd700, #ffb800)",
-        color: "#000",
-      };
-    }
-    return {
-      background: "#2a2a4a",
-      color: "#ccc",
-    };
-  };
-
   const data = getData();
 
   return (
@@ -130,32 +117,19 @@ export default function Leaderboards() {
       <Header />
       <main className="container max-w-2xl mx-auto px-4 py-6">
         {/* Page Title */}
-        <h1 className="text-2xl font-bold mb-6">🏆 Leaderboards</h1>
+        <h1 className="text-2xl font-bold text-foreground mb-6">🏆 Leaderboards</h1>
 
         {/* Tabs Row */}
-        <div
-          style={{
-            display: "flex",
-            gap: "20px",
-            marginBottom: "20px",
-            borderBottom: "1px solid #2a2a4a",
-          }}
-        >
+        <div className="flex gap-5 mb-5 border-b border-border">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
-              style={{
-                background: "none",
-                border: "none",
-                fontSize: "14px",
-                fontWeight: 500,
-                paddingBottom: "12px",
-                cursor: "pointer",
-                color: activeTab === tab.id ? "white" : "#666",
-                borderBottom: activeTab === tab.id ? "2px solid #00d4aa" : "2px solid transparent",
-                marginBottom: "-1px",
-              }}
+              className={`bg-transparent border-none text-sm font-medium pb-3 cursor-pointer transition-colors -mb-px ${
+                activeTab === tab.id
+                  ? "text-foreground border-b-2 border-[#00d4aa]"
+                  : "text-muted-foreground border-b-2 border-transparent hover:text-foreground"
+              }`}
             >
               {tab.label}
             </button>
@@ -164,117 +138,52 @@ export default function Leaderboards() {
 
         {/* Ranked List */}
         {data.length === 0 ? (
-          <div
-            style={{
-              textAlign: "center",
-              padding: "40px",
-              color: "#666",
-            }}
-          >
+          <div className="text-center py-10 text-muted-foreground">
             No {activeTab} to display yet
           </div>
         ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          <div className="flex flex-col gap-2.5">
             {data.map((item, index) => {
               const rank = index + 1;
+              const isTopThree = rank <= 3;
+              
               return (
                 <div
                   key={item.id}
                   onClick={() => handleItemClick(item)}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "12px",
-                    padding: "14px",
-                    background: "#1e1e32",
-                    border: "1px solid #2a2a4a",
-                    borderRadius: "12px",
-                    cursor: "pointer",
-                    transition: "all 0.2s",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = "#00d4aa";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = "#2a2a4a";
-                  }}
+                  className="flex items-center gap-3 p-3.5 bg-card border border-border rounded-xl cursor-pointer transition-all duration-200 hover:border-[#00d4aa]"
                 >
                   {/* Rank Circle */}
                   <div
-                    style={{
-                      width: "36px",
-                      height: "36px",
-                      borderRadius: "50%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "14px",
-                      fontWeight: 700,
-                      flexShrink: 0,
-                      ...getRankStyle(rank),
-                    }}
+                    className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 ${
+                      isTopThree
+                        ? "bg-gradient-to-br from-[#ffd700] to-[#ffb800] text-black"
+                        : "bg-muted text-muted-foreground"
+                    }`}
                   >
                     {rank}
                   </div>
 
                   {/* Avatar/Icon */}
-                  <div
-                    style={{
-                      width: "40px",
-                      height: "40px",
-                      borderRadius: "10px",
-                      background: "linear-gradient(135deg, #00d4aa, #00a8cc)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "14px",
-                      fontWeight: 600,
-                      color: "white",
-                      flexShrink: 0,
-                    }}
-                  >
+                  <div className="w-10 h-10 rounded-[10px] bg-gradient-to-br from-[#00d4aa] to-[#00a8cc] flex items-center justify-center text-sm font-semibold text-white flex-shrink-0">
                     {item.name.charAt(0)}
                   </div>
 
                   {/* Info */}
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <p
-                      style={{
-                        fontSize: "14px",
-                        fontWeight: 600,
-                        color: "white",
-                        margin: 0,
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-foreground m-0 overflow-hidden text-ellipsis whitespace-nowrap">
                       {item.name}
                     </p>
-                    <p
-                      style={{
-                        fontSize: "12px",
-                        color: "#00d4aa",
-                        margin: 0,
-                        marginTop: "2px",
-                      }}
-                    >
+                    <p className="text-xs text-[#00d4aa] m-0 mt-0.5">
                       {item.stat}
                     </p>
-                    <p
-                      style={{
-                        fontSize: "11px",
-                        color: "#666",
-                        margin: 0,
-                        marginTop: "2px",
-                      }}
-                    >
+                    <p className="text-[11px] text-muted-foreground m-0 mt-0.5">
                       {item.secondary}
                     </p>
                   </div>
 
                   {/* Arrow */}
-                  <ChevronRight size={20} color="#666" />
+                  <ChevronRight size={20} className="text-muted-foreground" />
                 </div>
               );
             })}
