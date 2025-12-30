@@ -15,6 +15,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
 import { TokenTradeModal } from "@/components/TokenTradeModal";
 import { CommunityDiscussion } from "@/components/community";
+import { SponsorCard } from "@/components/SponsorCard";
 
 interface Property {
   id: string;
@@ -381,6 +382,29 @@ export default function PropertyDetail() {
             </div>
           </div>
         )}
+
+        {/* Meet the Sponsor */}
+        <div className="space-y-3">
+          <h3 className="font-display font-semibold text-foreground flex items-center gap-2">
+            <Building2 className="w-5 h-5 text-primary" />
+            Meet the Sponsor
+          </h3>
+          <SponsorCard 
+            sponsor={{
+              id: "sponsor-123",
+              companyName: "Starwood Capital Partners",
+              isVerified: true,
+              yearsInBusiness: 15,
+              totalDeals: 42,
+              averageRating: 4.8,
+              reviewCount: 156,
+              totalCapitalRaised: 285000000,
+              averageIrr: 18,
+              bio: "Starwood Capital Partners is a leading real estate investment firm specializing in multifamily and commercial properties across major U.S. markets. With over 15 years of experience and a proven track record of delivering consistent returns to investors, we focus on value-add opportunities in high-growth metropolitan areas.",
+            }}
+            propertyName={property.name}
+          />
+        </div>
 
         {/* Action Buttons */}
         <div className="flex gap-3">
