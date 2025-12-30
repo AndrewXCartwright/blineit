@@ -189,7 +189,16 @@ const AdminMessages = lazy(() => import("./pages/admin/AdminMessages"));
 const SponsorLogin = lazy(() => import("./pages/sponsor/SponsorLogin"));
 const SponsorRegister = lazy(() => import("./pages/sponsor/SponsorRegister"));
 const SponsorPending = lazy(() => import("./pages/sponsor/SponsorPending"));
+const SponsorOnboarding = lazy(() => import("./pages/sponsor/SponsorOnboarding"));
 const SponsorDashboard = lazy(() => import("./pages/sponsor/SponsorDashboard"));
+const SponsorDeals = lazy(() => import("./pages/sponsor/SponsorDeals"));
+const SponsorNewDeal = lazy(() => import("./pages/sponsor/SponsorNewDeal"));
+const SponsorDealDetail = lazy(() => import("./pages/sponsor/SponsorDealDetail"));
+const SponsorDealEdit = lazy(() => import("./pages/sponsor/SponsorDealEdit"));
+const SponsorAnalytics = lazy(() => import("./pages/sponsor/SponsorAnalytics"));
+const SponsorFees = lazy(() => import("./pages/sponsor/SponsorFees"));
+const SponsorMessages = lazy(() => import("./pages/sponsor/SponsorMessages"));
+const SponsorSettings = lazy(() => import("./pages/sponsor/SponsorSettings"));
 
 const queryClient = new QueryClient();
 
@@ -358,7 +367,16 @@ const App = () => (
                   <Route path="/sponsor/login" element={<SponsorLogin />} />
                   <Route path="/sponsor/register" element={<SponsorRegister />} />
                   <Route path="/sponsor/pending" element={<ProtectedSponsorRoute requireVerified={false}><SponsorPending /></ProtectedSponsorRoute>} />
+                  <Route path="/sponsor/onboarding" element={<ProtectedSponsorRoute><SponsorOnboarding /></ProtectedSponsorRoute>} />
                   <Route path="/sponsor/dashboard" element={<ProtectedSponsorRoute><SponsorDashboard /></ProtectedSponsorRoute>} />
+                  <Route path="/sponsor/deals" element={<ProtectedSponsorRoute><SponsorDeals /></ProtectedSponsorRoute>} />
+                  <Route path="/sponsor/deals/new" element={<ProtectedSponsorRoute><SponsorNewDeal /></ProtectedSponsorRoute>} />
+                  <Route path="/sponsor/deals/:id" element={<ProtectedSponsorRoute><SponsorDealDetail /></ProtectedSponsorRoute>} />
+                  <Route path="/sponsor/deals/:id/edit" element={<ProtectedSponsorRoute><SponsorDealEdit /></ProtectedSponsorRoute>} />
+                  <Route path="/sponsor/analytics" element={<ProtectedSponsorRoute><SponsorAnalytics /></ProtectedSponsorRoute>} />
+                  <Route path="/sponsor/fees" element={<ProtectedSponsorRoute><SponsorFees /></ProtectedSponsorRoute>} />
+                  <Route path="/sponsor/messages" element={<ProtectedSponsorRoute><SponsorMessages /></ProtectedSponsorRoute>} />
+                  <Route path="/sponsor/settings" element={<ProtectedSponsorRoute><SponsorSettings /></ProtectedSponsorRoute>} />
                   {/* Admin Routes */}
                   <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
                   <Route path="/admin/properties" element={<AdminRoute><AdminProperties /></AdminRoute>} />
