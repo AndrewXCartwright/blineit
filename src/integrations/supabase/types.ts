@@ -4016,6 +4016,155 @@ export type Database = {
         }
         Relationships: []
       }
+      sponsor_deals: {
+        Row: {
+          accredited_only: boolean | null
+          acquisition_fee: number | null
+          amount_raised: number | null
+          approved_at: string | null
+          cash_on_cash_target: number | null
+          city: string | null
+          created_at: string
+          current_occupancy: number | null
+          current_step: number | null
+          distribution_frequency: string | null
+          hold_period: string | null
+          id: string
+          investment_type: string | null
+          investor_count: number | null
+          management_fee: number | null
+          maximum_investment: number | null
+          minimum_investment: number
+          offering_type: string | null
+          operating_agreement_url: string | null
+          ppm_document_url: string | null
+          preferred_return: number | null
+          projected_irr: number | null
+          property_description: string | null
+          property_documents: Json | null
+          property_images: Json | null
+          property_name: string
+          property_type: string
+          raise_goal: number
+          rejection_reason: string | null
+          sec_filing_number: string | null
+          sponsor_id: string
+          sponsor_promote: number | null
+          state: string | null
+          status: string
+          street_address: string | null
+          submitted_at: string | null
+          subscription_agreement_url: string | null
+          token_price: number
+          total_sqft: number | null
+          total_tokens: number | null
+          total_units: number | null
+          updated_at: string
+          year_built: number | null
+          zip_code: string | null
+        }
+        Insert: {
+          accredited_only?: boolean | null
+          acquisition_fee?: number | null
+          amount_raised?: number | null
+          approved_at?: string | null
+          cash_on_cash_target?: number | null
+          city?: string | null
+          created_at?: string
+          current_occupancy?: number | null
+          current_step?: number | null
+          distribution_frequency?: string | null
+          hold_period?: string | null
+          id?: string
+          investment_type?: string | null
+          investor_count?: number | null
+          management_fee?: number | null
+          maximum_investment?: number | null
+          minimum_investment?: number
+          offering_type?: string | null
+          operating_agreement_url?: string | null
+          ppm_document_url?: string | null
+          preferred_return?: number | null
+          projected_irr?: number | null
+          property_description?: string | null
+          property_documents?: Json | null
+          property_images?: Json | null
+          property_name: string
+          property_type: string
+          raise_goal?: number
+          rejection_reason?: string | null
+          sec_filing_number?: string | null
+          sponsor_id: string
+          sponsor_promote?: number | null
+          state?: string | null
+          status?: string
+          street_address?: string | null
+          submitted_at?: string | null
+          subscription_agreement_url?: string | null
+          token_price?: number
+          total_sqft?: number | null
+          total_tokens?: number | null
+          total_units?: number | null
+          updated_at?: string
+          year_built?: number | null
+          zip_code?: string | null
+        }
+        Update: {
+          accredited_only?: boolean | null
+          acquisition_fee?: number | null
+          amount_raised?: number | null
+          approved_at?: string | null
+          cash_on_cash_target?: number | null
+          city?: string | null
+          created_at?: string
+          current_occupancy?: number | null
+          current_step?: number | null
+          distribution_frequency?: string | null
+          hold_period?: string | null
+          id?: string
+          investment_type?: string | null
+          investor_count?: number | null
+          management_fee?: number | null
+          maximum_investment?: number | null
+          minimum_investment?: number
+          offering_type?: string | null
+          operating_agreement_url?: string | null
+          ppm_document_url?: string | null
+          preferred_return?: number | null
+          projected_irr?: number | null
+          property_description?: string | null
+          property_documents?: Json | null
+          property_images?: Json | null
+          property_name?: string
+          property_type?: string
+          raise_goal?: number
+          rejection_reason?: string | null
+          sec_filing_number?: string | null
+          sponsor_id?: string
+          sponsor_promote?: number | null
+          state?: string | null
+          status?: string
+          street_address?: string | null
+          submitted_at?: string | null
+          subscription_agreement_url?: string | null
+          token_price?: number
+          total_sqft?: number | null
+          total_tokens?: number | null
+          total_units?: number | null
+          updated_at?: string
+          year_built?: number | null
+          zip_code?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sponsor_deals_sponsor_id_fkey"
+            columns: ["sponsor_id"]
+            isOneToOne: false
+            referencedRelation: "sponsor_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sponsor_documents: {
         Row: {
           document_name: string
