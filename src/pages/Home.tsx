@@ -10,7 +10,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useKYC } from "@/hooks/useKYC";
 import { useRealtimeTransactions, useRealtimeWalletBalance, useRealtimePortfolio } from "@/hooks/useRealtimeSubscriptions";
 import { FlashBorder } from "@/components/LiveIndicator";
-import { DollarSign, Building2, Target, TrendingUp, ArrowUpRight, ArrowDownRight, Wallet, ShieldAlert, ShieldCheck, Users, Calculator, Bell, FileText, BarChart3 } from "lucide-react";
+import { DollarSign, Building2, Target, TrendingUp, ArrowUpRight, ArrowDownRight, Wallet, ShieldAlert, ShieldCheck, Users, Calculator, Bell, FileText, BarChart3, Handshake } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -167,16 +167,22 @@ export default function Home() {
         {/* Quick Actions */}
         <section className="animate-fade-in stagger-5">
           <h2 className="font-display text-lg font-bold text-foreground mb-4">{t('dashboard.quickActions')}</h2>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-5 gap-2">
             <Link to="/insights" className="glass-card rounded-xl p-3 text-center hover:bg-secondary/50 transition-colors">
               <div className="p-2 rounded-xl bg-blue-500/20 mx-auto w-fit mb-2">
                 <BarChart3 className="w-4 h-4 text-blue-500" />
               </div>
               <p className="text-[10px] text-muted-foreground">Insights</p>
             </Link>
-            <Link to="/community" className="glass-card rounded-xl p-3 text-center hover:bg-secondary/50 transition-colors">
+            <Link to="/sponsors" className="glass-card rounded-xl p-3 text-center hover:bg-secondary/50 transition-colors">
               <div className="p-2 rounded-xl bg-primary/20 mx-auto w-fit mb-2">
-                <Users className="w-4 h-4 text-primary" />
+                <Handshake className="w-4 h-4 text-primary" />
+              </div>
+              <p className="text-[10px] text-muted-foreground">Sponsors</p>
+            </Link>
+            <Link to="/community" className="glass-card rounded-xl p-3 text-center hover:bg-secondary/50 transition-colors">
+              <div className="p-2 rounded-xl bg-purple-500/20 mx-auto w-fit mb-2">
+                <Users className="w-4 h-4 text-purple-500" />
               </div>
               <p className="text-[10px] text-muted-foreground">{t('dashboard.community')}</p>
             </Link>
