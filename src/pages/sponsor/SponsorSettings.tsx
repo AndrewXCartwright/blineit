@@ -15,6 +15,9 @@ import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { SponsorMediaTab } from "@/components/sponsor/SponsorMediaTab";
+import { SponsorPastProjectsTab } from "@/components/sponsor/SponsorPastProjectsTab";
+import { SponsorTeamTab } from "@/components/sponsor/SponsorTeamTab";
 import { 
   Building2, 
   ArrowLeft,
@@ -41,7 +44,10 @@ import {
   Mail,
   Phone,
   Lock,
-  AlertTriangle
+  AlertTriangle,
+  Image,
+  Building,
+  Users
 } from "lucide-react";
 import { toast } from "sonner";
 import logo from "@/assets/logo.png";
@@ -136,7 +142,7 @@ export default function SponsorSettings() {
         </div>
 
         <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className="grid grid-cols-5 w-full">
+          <TabsList className="flex flex-wrap h-auto gap-1 p-1">
             <TabsTrigger value="profile" className="gap-2">
               <User className="h-4 w-4 hidden sm:block" />
               Profile
@@ -144,6 +150,18 @@ export default function SponsorSettings() {
             <TabsTrigger value="company" className="gap-2">
               <Building2 className="h-4 w-4 hidden sm:block" />
               Company
+            </TabsTrigger>
+            <TabsTrigger value="media" className="gap-2">
+              <Image className="h-4 w-4 hidden sm:block" />
+              Media
+            </TabsTrigger>
+            <TabsTrigger value="projects" className="gap-2">
+              <Building className="h-4 w-4 hidden sm:block" />
+              Projects
+            </TabsTrigger>
+            <TabsTrigger value="team" className="gap-2">
+              <Users className="h-4 w-4 hidden sm:block" />
+              Team
             </TabsTrigger>
             <TabsTrigger value="banking" className="gap-2">
               <CreditCard className="h-4 w-4 hidden sm:block" />
@@ -158,6 +176,21 @@ export default function SponsorSettings() {
               Security
             </TabsTrigger>
           </TabsList>
+
+          {/* Media Tab */}
+          <TabsContent value="media" className="space-y-6">
+            <SponsorMediaTab />
+          </TabsContent>
+
+          {/* Past Projects Tab */}
+          <TabsContent value="projects" className="space-y-6">
+            <SponsorPastProjectsTab />
+          </TabsContent>
+
+          {/* Team & Bio Tab */}
+          <TabsContent value="team" className="space-y-6">
+            <SponsorTeamTab />
+          </TabsContent>
 
           {/* Profile Tab */}
           <TabsContent value="profile" className="space-y-6">
