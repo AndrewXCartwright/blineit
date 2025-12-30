@@ -176,6 +176,7 @@ const LaunchChecklist = lazy(() => import("./pages/admin/LaunchChecklist"));
 const InvestmentAdvisor = lazy(() => import("./pages/InvestmentAdvisor"));
 const MarketInsightsPage = lazy(() => import("./pages/MarketInsightsPage"));
 const RiskAssessmentPage = lazy(() => import("./pages/RiskAssessmentPage"));
+const AIRecommendations = lazy(() => import("./pages/AIRecommendations"));
 const Messages = lazy(() => import("./pages/Messages"));
 const Conversation = lazy(() => import("./pages/Conversation"));
 const MessagesHub = lazy(() => import("./pages/MessagesHub"));
@@ -239,6 +240,7 @@ const App = () => (
                   <Route path="/advisor" element={<ProtectedRoute><InvestmentAdvisor /></ProtectedRoute>} />
                   <Route path="/insights" element={<ProtectedRoute><MarketInsightsPage /></ProtectedRoute>} />
                   <Route path="/risk" element={<ProtectedRoute><RiskAssessmentPage /></ProtectedRoute>} />
+                  <Route path="/ai-recommendations" element={<ProtectedRoute><AIRecommendations /></ProtectedRoute>} />
                   <Route path="/notifications" element={<ProtectedRoute><NotificationCenter /></ProtectedRoute>} />
                   <Route path="/notifications/archived" element={<ProtectedRoute><ArchivedNotifications /></ProtectedRoute>} />
                   <Route path="/settings/notifications" element={<ProtectedRoute><NotificationSettings /></ProtectedRoute>} />

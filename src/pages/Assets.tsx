@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Search, Sparkles, Building2 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { InvestmentTypeToggle, type InvestmentType } from "@/components/InvestmentTypeToggle";
 import { AssetClassGrid } from "@/components/AssetClassGrid";
 import { QuickStatsBar } from "@/components/QuickStatsBar";
-
 export default function Assets() {
   const { t } = useTranslation();
   const [investmentType, setInvestmentType] = useState<InvestmentType>("equity");
@@ -55,20 +55,20 @@ export default function Assets() {
 
         {/* Bottom Action Buttons */}
         <div className="flex gap-3 mt-6">
-          <button
-            onClick={() => window.location.href = '/ai-recommendations'}
+          <Link
+            to="/ai-recommendations"
             className="flex-1 bg-primary/10 border border-primary/30 text-primary font-semibold py-3 px-4 rounded-xl hover:bg-primary/20 transition-all flex items-center justify-center gap-2"
           >
             <Sparkles className="w-5 h-5" />
             AI-Powered Recommendations
-          </button>
-          <button
-            onClick={() => window.location.href = '/properties'}
+          </Link>
+          <Link
+            to="/properties"
             className="flex-1 bg-secondary border border-border text-foreground font-semibold py-3 px-4 rounded-xl hover:bg-secondary/80 transition-all flex items-center justify-center gap-2"
           >
             <Building2 className="w-5 h-5" />
             Your Properties
-          </button>
+          </Link>
         </div>
       </main>
     </div>
