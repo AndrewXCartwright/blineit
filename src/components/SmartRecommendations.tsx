@@ -53,12 +53,6 @@ export function SmartRecommendations() {
   const fetchRecommendations = async () => {
     setIsLoading(true);
     try {
-      // Get current user session for authentication
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.access_token) {
-        throw new Error("Please sign in to get recommendations");
-      }
-
       // Mock portfolio data - in production, fetch from user's actual portfolio
       const portfolio = {
         totalInvested: "$15,000",
@@ -74,20 +68,15 @@ export function SmartRecommendations() {
         timeHorizon: "5-10 years",
       };
 
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/smart-recommendations`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session.access_token}`,
-        },
-        body: JSON.stringify({ portfolio, preferences }),
+      // Use supabase.functions.invoke which handles auth automatically
+      const { data: result, error } = await supabase.functions.invoke('smart-recommendations', {
+        body: { portfolio, preferences },
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to get recommendations");
+      if (error) {
+        throw error;
       }
 
-      const result = await response.json();
       setData(result);
       setHasLoaded(true);
     } catch (error) {
