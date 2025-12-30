@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { 
   ArrowLeft, Building2, CheckCircle2, MapPin, Globe, Linkedin, 
@@ -22,50 +22,37 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { Skeleton } from "@/components/Skeleton";
 
-// Mock sponsor data
-const mockSponsor = {
-  id: "sponsor-123",
-  companyName: "Starwood Capital Partners",
-  logoUrl: "",
-  isVerified: true,
-  location: "Miami, FL",
-  website: "https://starwoodcapital.com",
-  linkedIn: "https://linkedin.com/company/starwood-capital",
-  yearsInBusiness: 15,
-  totalDeals: 42,
-  totalCapitalRaised: 285000000,
-  averageRating: 4.8,
-  reviewCount: 156,
-  bio: `Starwood Capital Partners is a leading real estate investment firm with a focus on creating exceptional value for our investors. Founded in 2009, we have grown to become one of the most trusted sponsors in the real estate crowdfunding space.
-
-Our team brings together decades of experience in real estate acquisition, development, and asset management. We specialize in identifying undervalued properties with significant upside potential, implementing value-add strategies, and delivering consistent returns to our investor base.
-
-We believe in complete transparency with our investors, providing regular updates, detailed financial reporting, and open communication throughout the life of each investment.`,
-  investmentPhilosophy: `Our investment philosophy centers on three core principles:
-
-1. **Value Creation**: We target properties where we can implement operational improvements, physical upgrades, or repositioning strategies to drive significant value appreciation.
-
-2. **Risk Management**: Every investment undergoes rigorous due diligence, including market analysis, property inspections, and financial modeling with conservative assumptions.
-
-3. **Alignment of Interests**: Our team co-invests alongside our investors in every deal, ensuring our incentives are aligned with yours.`,
-  teamHighlights: [
-    { name: "John Mitchell", role: "Managing Partner", experience: "25+ years in real estate" },
-    { name: "Sarah Chen", role: "Director of Acquisitions", experience: "Former Goldman Sachs" },
-    { name: "Michael Torres", role: "VP of Asset Management", experience: "500+ units managed" },
-  ],
-  averageIrr: 18.5,
-  averageHoldPeriod: 4.2,
-  assetTypes: ["Multifamily", "Industrial", "Mixed-Use", "Self-Storage"],
-  geographicFocus: ["Florida", "Texas", "Georgia", "North Carolina", "Arizona"],
-  videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+interface Sponsor {
+  id: string;
+  companyName: string;
+  logoUrl: string | null;
+  isVerified: boolean;
+  location: string;
+  website: string | null;
+  linkedIn: string | null;
+  yearsInBusiness: number;
+  totalDeals: number;
+  totalCapitalRaised: number;
+  averageRating: number;
+  reviewCount: number;
+  bio: string;
+  investmentPhilosophy: string;
+  teamHighlights: { name: string; role: string; experience: string }[];
+  averageIrr: number;
+  averageHoldPeriod: number;
+  assetTypes: string[];
+  geographicFocus: string[];
+  videoUrl: string | null;
   ratings: {
-    communication: 4.9,
-    transparency: 4.8,
-    returnsVsProjections: 4.6,
-    professionalism: 4.9,
-  },
-};
+    communication: number;
+    transparency: number;
+    returnsVsProjections: number;
+    professionalism: number;
+  };
+}
 
 const mockPastProjects = [
   {
@@ -168,6 +155,8 @@ const mockReviews = [
 export default function SponsorProfile() {
   const { sponsorId } = useParams();
   const navigate = useNavigate();
+  const [sponsor, setSponsor] = useState<Sponsor | null>(null);
+  const [loading, setLoading] = useState(true);
   const [showInquiryModal, setShowInquiryModal] = useState(false);
   const [inquirySubject, setInquirySubject] = useState("");
   const [inquiryMessage, setInquiryMessage] = useState("");
@@ -175,7 +164,72 @@ export default function SponsorProfile() {
   const [currentPage, setCurrentPage] = useState(1);
   const reviewsPerPage = 3;
 
-  const sponsor = mockSponsor;
+  useEffect(() => {
+    async function fetchSponsor() {
+      if (!sponsorId) return;
+      
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("sponsor_profiles")
+        .select("*")
+        .eq("id", sponsorId)
+        .single();
+      
+      if (error || !data) {
+        console.error("Error fetching sponsor:", error);
+        setLoading(false);
+        return;
+      }
+
+      // Get review count
+      const { count: reviewCount } = await supabase
+        .from("sponsor_reviews")
+        .select("*", { count: 'exact', head: true })
+        .eq("sponsor_id", sponsorId);
+
+      // Extract location from business_address if available
+      let location = 'United States';
+      if (data.business_address) {
+        // Try to parse city, state from address
+        const addressParts = data.business_address.split(',');
+        if (addressParts.length >= 2) {
+          location = addressParts.slice(-2).join(',').trim();
+        }
+      }
+
+      setSponsor({
+        id: data.id,
+        companyName: data.company_name,
+        logoUrl: data.company_logo_url,
+        isVerified: data.verification_status === 'verified',
+        location,
+        website: data.website_url,
+        linkedIn: data.linkedin_url,
+        yearsInBusiness: data.years_in_business || 0,
+        totalDeals: data.deals_completed || 0,
+        totalCapitalRaised: data.total_assets_managed || 0,
+        averageRating: 4.5, // TODO: Calculate from reviews
+        reviewCount: reviewCount || 0,
+        bio: data.bio || '',
+        investmentPhilosophy: data.investment_thesis || '',
+        teamHighlights: [], // TODO: Fetch from team members table
+        averageIrr: data.average_irr || 0,
+        averageHoldPeriod: 4, // Default hold period
+        assetTypes: data.asset_specialties || [],
+        geographicFocus: data.geographic_focus || [],
+        videoUrl: data.intro_video_url,
+        ratings: {
+          communication: 4.9,
+          transparency: 4.8,
+          returnsVsProjections: 4.6,
+          professionalism: 4.9,
+        },
+      });
+      setLoading(false);
+    }
+
+    fetchSponsor();
+  }, [sponsorId]);
 
   const formatCurrency = (amount: number) => {
     if (amount >= 1000000000) {
@@ -205,7 +259,7 @@ export default function SponsorProfile() {
     
     toast({
       title: "Message sent!",
-      description: `Your inquiry has been sent to ${sponsor.companyName}`,
+      description: `Your inquiry has been sent to ${sponsor?.companyName}`,
     });
     
     setShowInquiryModal(false);
@@ -234,6 +288,44 @@ export default function SponsorProfile() {
       />
     ));
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background pb-24">
+        <div className="max-w-4xl mx-auto px-4 py-6">
+          <Skeleton className="h-8 w-24 mb-6" />
+          <div className="flex gap-6">
+            <Skeleton className="w-24 h-24 rounded-2xl" />
+            <div className="flex-1 space-y-3">
+              <Skeleton className="h-8 w-64" />
+              <Skeleton className="h-4 w-48" />
+              <Skeleton className="h-10 w-40" />
+            </div>
+          </div>
+          <div className="grid grid-cols-4 gap-4 mt-8">
+            {[1, 2, 3, 4].map(i => (
+              <Skeleton key={i} className="h-32 rounded-xl" />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!sponsor) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Building2 className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+          <h2 className="font-display text-xl font-semibold text-foreground mb-2">Sponsor Not Found</h2>
+          <p className="text-muted-foreground mb-4">The sponsor you're looking for doesn't exist.</p>
+          <Button onClick={() => navigate("/sponsors")}>
+            Browse All Sponsors
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background pb-24">
