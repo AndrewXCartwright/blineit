@@ -80,7 +80,7 @@ export default function Home() {
       <LeaderboardGrid />
 
       {/* Zone 4: Hottest Predictions */}
-      <HottestPredictions onSeeAll={() => navigate("/predict")} />
+      <HottestPredictions />
 
       {/* Zone 5: Map Preview */}
       <MapPreview propertyCount={7} distance={25} />
