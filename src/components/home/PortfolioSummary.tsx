@@ -1,28 +1,12 @@
 import { Bell } from "lucide-react";
 
-interface PortfolioSummaryProps {
-  totalValue: number;
-  dailyChange: number;
-  dailyChangePercent: number;
-  investments: number;
-  activeBets: number;
-  earnings: number;
-  avgYield: number;
-  unreadAlerts: number;
-  onAlertsClick: () => void;
-}
+const PortfolioSummary = () => {
+  // Demo data
+  const portfolioValue = 47250.00;
+  const dailyChange = 1247.50;
+  const dailyChangePercent = 2.7;
+  const unreadAlerts = 3;
 
-const PortfolioSummary = ({
-  totalValue,
-  dailyChange,
-  dailyChangePercent,
-  investments,
-  activeBets,
-  earnings,
-  avgYield,
-  unreadAlerts,
-  onAlertsClick,
-}: PortfolioSummaryProps) => {
   const isPositive = dailyChange >= 0;
   const changeColor = isPositive ? "#00d4aa" : "#ff4757";
   const changeArrow = isPositive ? "↑" : "↓";
@@ -36,67 +20,90 @@ const PortfolioSummary = ({
   };
 
   const stats = [
-    { value: investments.toString(), label: "Investments" },
-    { value: activeBets.toString(), label: "Active Bets" },
-    { value: formatCurrency(earnings), label: "Earnings" },
-    { value: `${avgYield.toFixed(1)}%`, label: "Avg Yield" },
+    { value: "12", label: "Investments" },
+    { value: "5", label: "Active Bets" },
+    { value: "$892", label: "Earnings" },
+    { value: "8.4%", label: "Avg Yield" },
   ];
 
   return (
     <div
-      className="mb-4 rounded-2xl p-4"
       style={{
         background: "linear-gradient(135deg, #1e1e32 0%, #252542 100%)",
         border: "1px solid #2a2a4a",
         borderRadius: "16px",
+        padding: "16px",
+        marginBottom: "16px",
       }}
     >
       {/* Section Label */}
       <p
-        className="mb-3"
         style={{
           fontSize: "9px",
           textTransform: "uppercase",
           letterSpacing: "2px",
           color: "#00d4aa",
           fontWeight: 600,
+          marginBottom: "12px",
         }}
       >
         YOUR PORTFOLIO
       </p>
 
       {/* Header Row */}
-      <div className="flex items-start justify-between mb-4">
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          marginBottom: "16px",
+        }}
+      >
         {/* Left side - Portfolio Value */}
         <div>
           <p
-            className="font-bold text-white"
-            style={{ fontSize: "28px" }}
+            style={{
+              fontSize: "28px",
+              fontWeight: "bold",
+              color: "white",
+              margin: 0,
+              lineHeight: 1.2,
+            }}
           >
-            {formatCurrency(totalValue)}
+            {formatCurrency(portfolioValue)}
           </p>
-          <p style={{ fontSize: "13px", color: changeColor }}>
+          <p
+            style={{
+              fontSize: "13px",
+              color: changeColor,
+              margin: 0,
+              marginTop: "4px",
+            }}
+          >
             {changeArrow} {formatCurrency(Math.abs(dailyChange))} ({Math.abs(dailyChangePercent).toFixed(1)}%) today
           </p>
         </div>
 
         {/* Right side - Alerts Button */}
         <button
-          onClick={onAlertsClick}
-          className="relative flex items-center justify-center"
           style={{
+            position: "relative",
             width: "44px",
             height: "44px",
             background: "rgba(0, 212, 170, 0.15)",
             border: "1px solid rgba(0, 212, 170, 0.3)",
             borderRadius: "12px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
           }}
         >
           <Bell size={20} color="#00d4aa" />
           {unreadAlerts > 0 && (
             <span
-              className="absolute flex items-center justify-center"
               style={{
+                position: "absolute",
                 top: "-4px",
                 right: "-4px",
                 height: "18px",
@@ -107,6 +114,9 @@ const PortfolioSummary = ({
                 fontSize: "10px",
                 fontWeight: "bold",
                 color: "white",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
               {unreadAlerts}
@@ -116,24 +126,41 @@ const PortfolioSummary = ({
       </div>
 
       {/* Stats Row */}
-      <div className="flex gap-2">
+      <div
+        style={{
+          display: "flex",
+          gap: "8px",
+        }}
+      >
         {stats.map((stat, index) => (
           <div
             key={index}
-            className="flex-1 text-center"
             style={{
+              flex: 1,
               background: "#0f0f1a",
               borderRadius: "10px",
               padding: "10px 6px",
+              textAlign: "center",
             }}
           >
             <p
-              className="font-semibold text-white"
-              style={{ fontSize: "14px" }}
+              style={{
+                fontSize: "14px",
+                fontWeight: 600,
+                color: "white",
+                margin: 0,
+              }}
             >
               {stat.value}
             </p>
-            <p style={{ fontSize: "9px", color: "#666" }}>
+            <p
+              style={{
+                fontSize: "9px",
+                color: "#666",
+                margin: 0,
+                marginTop: "2px",
+              }}
+            >
               {stat.label}
             </p>
           </div>
