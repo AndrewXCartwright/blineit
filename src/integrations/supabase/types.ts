@@ -3241,6 +3241,7 @@ export type Database = {
           is_hot: boolean | null
           name: string
           occupancy: number
+          sponsor_id: string | null
           state: string
           token_price: number
           total_tokens: number
@@ -3262,6 +3263,7 @@ export type Database = {
           is_hot?: boolean | null
           name: string
           occupancy?: number
+          sponsor_id?: string | null
           state: string
           token_price?: number
           total_tokens?: number
@@ -3283,6 +3285,7 @@ export type Database = {
           is_hot?: boolean | null
           name?: string
           occupancy?: number
+          sponsor_id?: string | null
           state?: string
           token_price?: number
           total_tokens?: number
@@ -3291,7 +3294,15 @@ export type Database = {
           value?: number
           year_built?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "properties_sponsor_id_fkey"
+            columns: ["sponsor_id"]
+            isOneToOne: false
+            referencedRelation: "sponsor_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       property_updates: {
         Row: {
@@ -4127,6 +4138,7 @@ export type Database = {
           projected_irr: number | null
           property_description: string | null
           property_documents: Json | null
+          property_id: string | null
           property_images: Json | null
           property_name: string
           property_type: string
@@ -4173,6 +4185,7 @@ export type Database = {
           projected_irr?: number | null
           property_description?: string | null
           property_documents?: Json | null
+          property_id?: string | null
           property_images?: Json | null
           property_name: string
           property_type: string
@@ -4219,6 +4232,7 @@ export type Database = {
           projected_irr?: number | null
           property_description?: string | null
           property_documents?: Json | null
+          property_id?: string | null
           property_images?: Json | null
           property_name?: string
           property_type?: string
@@ -4241,6 +4255,13 @@ export type Database = {
           zip_code?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "sponsor_deals_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "sponsor_deals_sponsor_id_fkey"
             columns: ["sponsor_id"]
