@@ -4016,6 +4016,44 @@ export type Database = {
         }
         Relationships: []
       }
+      sponsor_deal_updates: {
+        Row: {
+          attachments: Json | null
+          content: string
+          created_at: string | null
+          deal_id: string
+          id: string
+          notify_investors: boolean | null
+          title: string
+        }
+        Insert: {
+          attachments?: Json | null
+          content: string
+          created_at?: string | null
+          deal_id: string
+          id?: string
+          notify_investors?: boolean | null
+          title: string
+        }
+        Update: {
+          attachments?: Json | null
+          content?: string
+          created_at?: string | null
+          deal_id?: string
+          id?: string
+          notify_investors?: boolean | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sponsor_deal_updates_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "sponsor_deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sponsor_deals: {
         Row: {
           accredited_only: boolean | null
@@ -4165,6 +4203,47 @@ export type Database = {
           },
         ]
       }
+      sponsor_distributions: {
+        Row: {
+          created_at: string | null
+          deal_id: string
+          distribution_date: string
+          distribution_type: string
+          id: string
+          notes: string | null
+          status: string | null
+          total_amount: number
+        }
+        Insert: {
+          created_at?: string | null
+          deal_id: string
+          distribution_date: string
+          distribution_type: string
+          id?: string
+          notes?: string | null
+          status?: string | null
+          total_amount: number
+        }
+        Update: {
+          created_at?: string | null
+          deal_id?: string
+          distribution_date?: string
+          distribution_type?: string
+          id?: string
+          notes?: string | null
+          status?: string | null
+          total_amount?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sponsor_distributions_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "sponsor_deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sponsor_documents: {
         Row: {
           document_name: string
@@ -4194,6 +4273,110 @@ export type Database = {
           {
             foreignKeyName: "sponsor_documents_sponsor_profile_id_fkey"
             columns: ["sponsor_profile_id"]
+            isOneToOne: false
+            referencedRelation: "sponsor_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sponsor_messages: {
+        Row: {
+          attachments: Json | null
+          body: string
+          deal_id: string | null
+          id: string
+          is_read: boolean | null
+          message_type: string
+          recipient_id: string | null
+          sent_at: string | null
+          sponsor_id: string
+          subject: string | null
+        }
+        Insert: {
+          attachments?: Json | null
+          body: string
+          deal_id?: string | null
+          id?: string
+          is_read?: boolean | null
+          message_type: string
+          recipient_id?: string | null
+          sent_at?: string | null
+          sponsor_id: string
+          subject?: string | null
+        }
+        Update: {
+          attachments?: Json | null
+          body?: string
+          deal_id?: string | null
+          id?: string
+          is_read?: boolean | null
+          message_type?: string
+          recipient_id?: string | null
+          sent_at?: string | null
+          sponsor_id?: string
+          subject?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sponsor_messages_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "sponsor_deals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sponsor_messages_sponsor_id_fkey"
+            columns: ["sponsor_id"]
+            isOneToOne: false
+            referencedRelation: "sponsor_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sponsor_platform_fees: {
+        Row: {
+          billing_period_end: string
+          billing_period_start: string
+          created_at: string | null
+          fee_amount: number
+          fee_rate: number | null
+          id: string
+          invoice_url: string | null
+          paid_at: string | null
+          sponsor_id: string
+          status: string | null
+          total_aum: number
+        }
+        Insert: {
+          billing_period_end: string
+          billing_period_start: string
+          created_at?: string | null
+          fee_amount: number
+          fee_rate?: number | null
+          id?: string
+          invoice_url?: string | null
+          paid_at?: string | null
+          sponsor_id: string
+          status?: string | null
+          total_aum: number
+        }
+        Update: {
+          billing_period_end?: string
+          billing_period_start?: string
+          created_at?: string | null
+          fee_amount?: number
+          fee_rate?: number | null
+          id?: string
+          invoice_url?: string | null
+          paid_at?: string | null
+          sponsor_id?: string
+          status?: string | null
+          total_aum?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sponsor_platform_fees_sponsor_id_fkey"
+            columns: ["sponsor_id"]
             isOneToOne: false
             referencedRelation: "sponsor_profiles"
             referencedColumns: ["id"]
