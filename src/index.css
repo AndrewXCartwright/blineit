@@ -50,10 +50,10 @@
 
     --radius: 1rem;
 
-    --gradient-primary: linear-gradient(135deg, hsl(288 52% 36%) 0%, hsl(270 60% 50%) 100%);
-    --gradient-gold: linear-gradient(135deg, hsl(38 91% 55%) 0%, hsl(45 100% 60%) 100%);
-    --gradient-bull: linear-gradient(135deg, hsl(160 84% 39%) 0%, hsl(160 84% 50%) 100%);
-    --gradient-bear: linear-gradient(135deg, hsl(0 84% 60%) 0%, hsl(0 72% 51%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(288 60% 28%) 0%, hsl(270 60% 40%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(38 85% 45%) 0%, hsl(45 90% 55%) 100%);
+    --gradient-bull: linear-gradient(135deg, hsl(160 84% 28%) 0%, hsl(160 84% 38%) 100%);
+    --gradient-bear: linear-gradient(135deg, hsl(0 72% 45%) 0%, hsl(0 72% 38%) 100%);
     --gradient-dark: linear-gradient(180deg, hsl(220 20% 97%) 0%, hsl(220 20% 95%) 100%);
     --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(220 14% 98%) 100%);
     --gradient-shimmer: linear-gradient(90deg, transparent 0%, hsla(0, 0%, 0%, 0.04) 50%, transparent 100%);
@@ -61,20 +61,20 @@
     --glass-bg: hsla(0, 0%, 100%, 0.8);
     --glass-border: hsla(0, 0%, 0%, 0.08);
 
-    --shadow-glow-primary: 0 0 40px hsla(288, 52%, 36%, 0.2);
-    --shadow-glow-gold: 0 0 30px hsla(38, 91%, 55%, 0.2);
-    --shadow-glow-bull: 0 0 30px hsla(160, 84%, 39%, 0.3);
-    --shadow-glow-bear: 0 0 30px hsla(0, 84%, 60%, 0.3);
+    --shadow-glow-primary: 0 0 40px hsla(288, 60%, 28%, 0.2);
+    --shadow-glow-gold: 0 0 30px hsla(38, 85%, 45%, 0.2);
+    --shadow-glow-bull: 0 0 30px hsla(160, 84%, 28%, 0.3);
+    --shadow-glow-bear: 0 0 30px hsla(0, 72%, 45%, 0.3);
     --shadow-card: 0 4px 24px hsla(0, 0%, 0%, 0.08);
 
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 240 33% 12%;
-    --sidebar-primary: 288 52% 36%;
+    --sidebar-primary: 288 60% 28%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 220 14% 96%;
     --sidebar-accent-foreground: 240 33% 12%;
     --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 288 52% 36%;
+    --sidebar-ring: 288 60% 28%;
   }
 
   .dark {
