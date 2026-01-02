@@ -127,12 +127,12 @@ export default {
           "50%": { boxShadow: "0 0 40px hsla(288, 52%, 36%, 0.6)" },
         },
         "pulse-glow-bull": {
-          "0%, 100%": { boxShadow: "0 0 15px hsla(160, 84%, 39%, 0.3)" },
-          "50%": { boxShadow: "0 0 30px hsla(160, 84%, 39%, 0.6)" },
+          "0%, 100%": { boxShadow: "0 0 15px hsla(160, 84%, 28%, 0.3)" },
+          "50%": { boxShadow: "0 0 30px hsla(160, 84%, 28%, 0.6)" },
         },
         "pulse-glow-bear": {
-          "0%, 100%": { boxShadow: "0 0 15px hsla(0, 84%, 60%, 0.3)" },
-          "50%": { boxShadow: "0 0 30px hsla(0, 84%, 60%, 0.6)" },
+          "0%, 100%": { boxShadow: "0 0 15px hsla(0, 72%, 45%, 0.3)" },
+          "50%": { boxShadow: "0 0 30px hsla(0, 72%, 45%, 0.6)" },
         },
         "pulse-glow-gold": {
           "0%, 100%": { boxShadow: "0 0 15px hsla(38, 91%, 55%, 0.3)" },
