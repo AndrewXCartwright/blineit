@@ -83,7 +83,7 @@ export default function GroupChatView() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header className="sticky top-0 z-10 bg-background/95 backdrop-blur border-b border-border">
+      <header className="sticky top-0 z-10 bg-background/95 backdrop-blur border-b border-border pt-[env(safe-area-inset-top)]">
         <div className="container mx-auto px-4 py-3 flex items-center gap-3">
           <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
             <ArrowLeft className="h-5 w-5" />
@@ -167,7 +167,7 @@ export default function GroupChatView() {
       </main>
 
       {!group.is_readonly && (
-        <footer className="sticky bottom-0 bg-background border-t border-border p-4">
+        <footer className="sticky bottom-0 bg-background border-t border-border p-4 pb-[calc(1rem+5rem+env(safe-area-inset-bottom))]">
           <form onSubmit={handleSend} className="flex gap-2">
             <input
               value={message}

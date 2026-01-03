@@ -41,7 +41,7 @@ export default function Conversation() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header className="sticky top-0 z-10 bg-background/95 backdrop-blur border-b border-border">
+      <header className="sticky top-0 z-10 bg-background/95 backdrop-blur border-b border-border pt-[env(safe-area-inset-top)]">
         <div className="container mx-auto px-4 py-4 flex items-center gap-4">
           <Link to="/messages" className="text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-5 w-5" />
