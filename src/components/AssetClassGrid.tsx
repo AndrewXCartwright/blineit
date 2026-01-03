@@ -20,7 +20,9 @@ interface AssetClass {
 const equityAssets: AssetClass[] = [
   { id: "real-estate", icon: "🏠", nameKey: "assets.realEstate", value: "$1.2B", subtitle: "45", subtitleKey: "assets.properties", isLive: true, filterPath: "/assets/explore?type=equity&class=real-estate" },
   { id: "commercial", icon: "🏢", nameKey: "assets.commercial", value: "$840M", subtitle: "28", subtitleKey: "assets.properties", isLive: true, filterPath: "/assets/explore?type=equity&class=commercial" },
-  { id: "gold", icon: "🥇", nameKey: "assets.goldCommodities", value: "$500M", subtitle: "Coming Q3 2025", isLive: false, launchDate: "Q3 2025", waitlistId: "gold_commodities" },
+  { id: "gold", icon: "🥇", nameKey: "assets.gold", value: "$680M", subtitle: "Physical & ETF backed", isLive: true, filterPath: "/assets/explore?type=equity&class=gold" },
+  { id: "crypto", icon: "₿", nameKey: "assets.crypto", value: "$920M", subtitle: "BTC, ETH & more", isLive: true, filterPath: "/assets/explore?type=equity&class=crypto" },
+  { id: "commodities", icon: "🛢️", nameKey: "assets.commodities", value: "$340M", subtitle: "Oil, Silver, Platinum", isLive: true, filterPath: "/assets/explore?type=equity&class=commodities" },
   { id: "private", icon: "🏭", nameKey: "assets.privateBusiness", value: "$320M", subtitle: "Coming Q1 2026", isLive: false, launchDate: "Q1 2026", waitlistId: "private_business" },
   { id: "startups", icon: "🚀", nameKey: "assets.startupsVc", value: "$180M", subtitle: "Coming Q3 2026", isLive: false, launchDate: "Q3 2026", waitlistId: "startups_vc" },
   { id: "predictions", icon: "🎯", nameKey: "assets.predictions", value: "", subtitleKey: "assets.volume", subtitle: "$2.4M", isLive: true, filterPath: "/predict" },
