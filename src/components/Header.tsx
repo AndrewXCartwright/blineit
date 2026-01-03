@@ -27,7 +27,7 @@ export function Header() {
     (conversations?.reduce((sum, c) => sum + (c.unread_count || 0), 0) || 0);
 
   return (
-    <header className="sticky top-0 z-40 glass-card border-b border-border/50 px-3 sm:px-4 py-3">
+    <header className="sticky top-0 z-40 glass-card border-b border-border/50 px-3 sm:px-4 py-3 pt-[calc(0.75rem+env(safe-area-inset-top))]">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
           <img 
