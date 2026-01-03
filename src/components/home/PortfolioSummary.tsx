@@ -38,7 +38,7 @@ const PortfolioSummary = () => {
   return (
     <div className="gradient-primary rounded-2xl p-4 mb-4">
       {/* Section Label */}
-      <p className="text-[9px] uppercase tracking-[2px] text-bull font-semibold mb-3">
+      <p className="text-sm uppercase tracking-[2px] text-white font-bold mb-3">
         YOUR PORTFOLIO
       </p>
 
@@ -56,7 +56,7 @@ const PortfolioSummary = () => {
           <p className="text-[28px] font-bold text-white leading-tight group-hover:underline group-hover:underline-offset-4 transition-all">
             {formatCurrency(portfolioValue)}
           </p>
-          <p className={`text-[13px] mt-1 ${isPositive ? "text-bull" : "text-bear"}`}>
+          <p className={`text-[13px] font-bold mt-1 ${isPositive ? "text-[#00ff88]" : "text-[#ff4444]"}`}>
             {changeArrow} {formatCurrency(Math.abs(dailyChange))} ({Math.abs(dailyChangePercent).toFixed(1)}%) today
           </p>
         </div>
