@@ -38,7 +38,13 @@ const PortfolioSummary = () => {
   return (
     <div className="gradient-primary rounded-2xl p-4 mb-4">
       {/* Section Label */}
-      <p className="text-sm uppercase tracking-[2px] text-white font-bold mb-3">
+      <p 
+        role="button"
+        tabIndex={0}
+        onClick={() => navigate("/portfolio/analytics")}
+        onKeyDown={(e) => handleKeyDown(e, "/portfolio/analytics")}
+        className="text-sm uppercase tracking-[2px] text-white font-bold mb-3 cursor-pointer hover:underline hover:underline-offset-4 transition-all"
+      >
         YOUR PORTFOLIO
       </p>
 
