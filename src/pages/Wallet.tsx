@@ -82,17 +82,42 @@ export default function Wallet() {
     }
   };
 
-  const totalBalance = walletBalance + portfolioValue + activeBetsValue + totalDebtInvested;
+  // Demo values for $147M portfolio display
+  const demoWalletBalance = 12450000; // $12.45M cash
+  const demoPortfolioValue = 98750000; // $98.75M equity
+  const demoDebtInvested = 28500000; // $28.5M debt
+  const demoActiveBetsValue = 7557230.88; // ~$7.5M in predictions
+  const demoMonthlyIncome = 237500; // ~$237.5K/month
+  const demoTotalInterestEarned = 1425000; // $1.425M earned
+
+  // Use demo values if no real data
+  const displayWalletBalance = walletBalance > 0 ? walletBalance : demoWalletBalance;
+  const displayPortfolioValue = portfolioValue > 0 ? portfolioValue : demoPortfolioValue;
+  const displayDebtInvested = totalDebtInvested > 0 ? totalDebtInvested : demoDebtInvested;
+  const displayActiveBetsValue = activeBetsValue > 0 ? activeBetsValue : demoActiveBetsValue;
+  const displayMonthlyIncome = monthlyIncome > 0 ? monthlyIncome : demoMonthlyIncome;
+  const displayTotalInterestEarned = totalInterestEarned > 0 ? totalInterestEarned : demoTotalInterestEarned;
+
+  const totalBalance = displayWalletBalance + displayPortfolioValue + displayActiveBetsValue + displayDebtInvested;
   const activeBets = bets.filter(b => b.status === "active");
   const activeDebtInvestments = debtInvestments.filter(inv => inv.status === "active");
 
   // Days until next payment
   const daysUntilPayment = nextPaymentDate 
     ? Math.max(0, Math.ceil((nextPaymentDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
-    : null;
+    : 12; // Default 12 days for demo
+
+  // Demo equity holdings for display
+  const demoEquityHoldings = [
+    { type: "property" as const, name: "Manhattan Tower Portfolio", amount: "2,450,000 tokens", value: 34250000, change: 8.4, propertyId: "demo-1" },
+    { type: "property" as const, name: "Miami Beach Resort Collection", amount: "1,850,000 tokens", value: 27750000, change: 12.1, propertyId: "demo-2" },
+    { type: "property" as const, name: "San Francisco Tech Campus", amount: "1,200,000 tokens", value: 21600000, change: 5.7, propertyId: "demo-3" },
+    { type: "property" as const, name: "Chicago Loop Commercial", amount: "750,000 tokens", value: 9750000, change: -2.3, propertyId: "demo-4" },
+    { type: "property" as const, name: "Austin Mixed-Use Development", amount: "425,000 tokens", value: 5400000, change: 15.8, propertyId: "demo-5" },
+  ];
 
   // Build holdings display - Equity (Properties)
-  const equityHoldings = holdings.map(h => ({
+  const realEquityHoldings = holdings.map(h => ({
     type: "property" as const,
     name: h.property?.name || "Property",
     amount: `${h.tokens.toLocaleString()} tokens`,
@@ -103,14 +128,35 @@ export default function Wallet() {
     propertyId: h.property_id,
   }));
 
+  const equityHoldings = realEquityHoldings.length > 0 ? realEquityHoldings : demoEquityHoldings;
+
+  // Demo prediction holdings
+  const demoPredictionHoldings = [
+    { type: "prediction" as const, name: "BULL - Fed Rate Decision Q1", amount: "125,000.00 shares", value: 3125000, change: 4.2 },
+    { type: "prediction" as const, name: "BEAR - Tech Sector Correction", amount: "85,000.00 shares", value: 2125000, change: -1.8 },
+    { type: "prediction" as const, name: "BULL - Real Estate Market Rally", amount: "92,289.15 shares", value: 2307230.88, change: 7.5 },
+  ];
+
   // Active predictions
-  const predictionHoldings = activeBets.map(b => ({
+  const realPredictionHoldings = activeBets.map(b => ({
     type: "prediction" as const,
     name: `${b.position} - ${b.market?.title || "Market"}`,
     amount: `${b.shares.toFixed(2)} shares`,
     value: b.amount,
     change: 0,
   }));
+
+  const predictionHoldings = realPredictionHoldings.length > 0 ? realPredictionHoldings : demoPredictionHoldings;
+
+  // Demo debt investments
+  const demoDebtInvestments = [
+    { id: "demo-debt-1", loan: { name: "Luxury Condo Development Loan", apy: 11.5 }, principal_invested: 12500000, expected_monthly_payment: 119792, total_interest_earned: 718750, next_payment_date: new Date(Date.now() + 12 * 24 * 60 * 60 * 1000).toISOString(), status: "active", loan_id: "demo-loan-1" },
+    { id: "demo-debt-2", loan: { name: "Commercial Office Refinance", apy: 9.75 }, principal_invested: 8500000, expected_monthly_payment: 69063, total_interest_earned: 414375, next_payment_date: new Date(Date.now() + 18 * 24 * 60 * 60 * 1000).toISOString(), status: "active", loan_id: "demo-loan-2" },
+    { id: "demo-debt-3", loan: { name: "Multi-Family Acquisition Bridge", apy: 12.25 }, principal_invested: 7500000, expected_monthly_payment: 76563, total_interest_earned: 291875, next_payment_date: new Date(Date.now() + 8 * 24 * 60 * 60 * 1000).toISOString(), status: "active", loan_id: "demo-loan-3" },
+  ];
+
+  const displayDebtInvestments = debtInvestments.length > 0 ? debtInvestments : demoDebtInvestments;
+  const displayActiveDebtInvestments = displayDebtInvestments.filter((inv: any) => inv.status === "active");
 
   return (
     <div className="min-h-screen pb-24">
@@ -131,13 +177,13 @@ export default function Wallet() {
               )}
             </h2>
             <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground mb-6">
-              <span>{t('wallet.cash')}: ${walletBalance.toLocaleString()}</span>
+              <span>{t('wallet.cash')}: ${displayWalletBalance.toLocaleString()}</span>
               <span>•</span>
-              <span>{t('wallet.equity')}: ${portfolioValue.toLocaleString()}</span>
+              <span>{t('wallet.equity')}: ${displayPortfolioValue.toLocaleString()}</span>
               <span>•</span>
-              <span>{t('wallet.debt')}: ${totalDebtInvested.toLocaleString()}</span>
+              <span>{t('wallet.debt')}: ${displayDebtInvested.toLocaleString()}</span>
               <span>•</span>
-              <span>{t('wallet.predictions')}: ${activeBetsValue.toLocaleString()}</span>
+              <span>{t('wallet.predictions')}: ${displayActiveBetsValue.toLocaleString()}</span>
             </div>
 
             <div className="grid grid-cols-3 gap-3">
@@ -176,7 +222,7 @@ export default function Wallet() {
               </div>
             </div>
             <p className="font-semibold text-foreground">
-              ${walletBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              ${displayWalletBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </p>
           </div>
         </section>
@@ -186,7 +232,7 @@ export default function Wallet() {
           <div className="flex items-center gap-2 mb-4">
             <Building2 className="w-5 h-5 text-primary" />
             <h2 className="font-display text-lg font-bold text-foreground">{t('wallet.equityHoldings')}</h2>
-            <span className="ml-auto text-sm text-muted-foreground">${portfolioValue.toLocaleString()}</span>
+            <span className="ml-auto text-sm text-muted-foreground">${displayPortfolioValue.toLocaleString()}</span>
           </div>
           <div className="space-y-3">
             {equityHoldings.length > 0 ? (
@@ -243,30 +289,30 @@ export default function Wallet() {
           <div className="flex items-center gap-2 mb-4">
             <Landmark className="w-5 h-5 text-amber-500" />
             <h2 className="font-display text-lg font-bold text-foreground">{t('wallet.debtInvestments')}</h2>
-            <span className="ml-auto text-sm text-muted-foreground">${totalDebtInvested.toLocaleString()}</span>
+            <span className="ml-auto text-sm text-muted-foreground">${displayDebtInvested.toLocaleString()}</span>
           </div>
 
           {/* Debt Stats Summary */}
-          {activeDebtInvestments.length > 0 && (
+          {displayActiveDebtInvestments.length > 0 && (
             <div className="glass-card rounded-xl p-4 mb-4 bg-gradient-to-r from-amber-500/10 to-amber-600/5 border-amber-500/20">
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
                   <p className="text-xs text-muted-foreground">{t('wallet.monthlyIncome')}</p>
-                  <p className="font-bold text-amber-500">${monthlyIncome.toFixed(2)}/mo</p>
+                  <p className="font-bold text-amber-500">${displayMonthlyIncome.toLocaleString()}/mo</p>
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground">{t('wallet.totalInterestEarned')}</p>
-                  <p className="font-bold text-success">${totalInterestEarned.toFixed(2)}</p>
+                  <p className="font-bold text-success">${displayTotalInterestEarned.toLocaleString()}</p>
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground">{t('wallet.activeInvestments')}</p>
-                  <p className="font-bold text-foreground">{activeDebtInvestments.length}</p>
+                  <p className="font-bold text-foreground">{displayActiveDebtInvestments.length}</p>
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground">{t('wallet.nextPayment')}</p>
                   <p className="font-bold text-foreground flex items-center gap-1">
                     <Calendar className="w-3 h-3" />
-                    {daysUntilPayment !== null ? `${daysUntilPayment} days` : "—"}
+                    {daysUntilPayment} days
                   </p>
                 </div>
               </div>
@@ -283,8 +329,8 @@ export default function Wallet() {
           )}
 
           <div className="space-y-4">
-            {debtInvestments.length > 0 ? (
-              debtInvestments.map((inv, index) => {
+            {displayDebtInvestments.length > 0 ? (
+              displayDebtInvestments.map((inv: any, index: number) => {
                 const loan = inv.loan;
                 const paymentsReceived = inv.total_interest_earned > 0 
                   ? Math.round(inv.total_interest_earned / inv.expected_monthly_payment)
@@ -397,7 +443,7 @@ export default function Wallet() {
           <div className="flex items-center gap-2 mb-4">
             <Target className="w-5 h-5 text-success" />
             <h2 className="font-display text-lg font-bold text-foreground">{t('wallet.predictionPositions')}</h2>
-            <span className="ml-auto text-sm text-muted-foreground">${activeBetsValue.toLocaleString()}</span>
+            <span className="ml-auto text-sm text-muted-foreground">${displayActiveBetsValue.toLocaleString()}</span>
           </div>
           <div className="space-y-3">
             {predictionHoldings.length > 0 ? (
