@@ -54,7 +54,7 @@ interface IncomeBreakdown {
 const generateMockSnapshots = (days: number): PortfolioSnapshot[] => {
   const snapshots: PortfolioSnapshot[] = [];
   const now = new Date();
-  let baseValue = 100000;
+  let baseValue = 140000000;
   
   for (let i = days; i >= 0; i--) {
     const date = new Date(now);
@@ -89,7 +89,7 @@ const generateMockMonthlyIncome = (): { month: string; income: number }[] => {
   const months = ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'];
   return months.map(month => ({
     month,
-    income: 800 + Math.random() * 600
+    income: 850000 + Math.random() * 450000
   }));
 };
 
@@ -129,11 +129,11 @@ export const useUserPerformance = () => {
     queryFn: async () => {
       // Return mock performance data for demo
       return {
-        today: { value: 3012, percent: 2.4 },
-        week: { value: 10845, percent: 8.7 },
-        month: { value: 12456, percent: 10.8 },
-        ytd: { value: 25123, percent: 24.5 },
-        allTime: { value: 27845, percent: 27.8 }
+        today: { value: 3892450, percent: 2.7 },
+        week: { value: 12845000, percent: 9.6 },
+        month: { value: 18756000, percent: 14.6 },
+        ytd: { value: 31250000, percent: 27.0 },
+        allTime: { value: 42890000, percent: 41.1 }
       };
     }
   });
@@ -232,13 +232,15 @@ export const useHoldingsPerformance = () => {
 };
 
 const getMockHoldings = (): HoldingPerformance[] => [
-  { id: '1', name: 'Sunset Apartments', type: 'property', currentValue: 31125, costBasis: 27500, pnl: 3625, pnlPercent: 13.2, tokens: 250, apy: 8.2 },
-  { id: '2', name: 'Marina Heights', type: 'property', currentValue: 18720, costBasis: 16200, pnl: 2520, pnlPercent: 15.6, tokens: 150, apy: 7.8 },
-  { id: '3', name: 'Downtown Tower', type: 'property', currentValue: 18605, costBasis: 20000, pnl: -1395, pnlPercent: -7.0, tokens: 160, apy: 9.1 },
-  { id: '4', name: 'Bridge Loan - Austin', type: 'loan', currentValue: 10875, costBasis: 10000, pnl: 875, pnlPercent: 8.8, apy: 10.5 },
-  { id: '5', name: 'Construction Loan - Miami', type: 'loan', currentValue: 10650, costBasis: 10000, pnl: 650, pnlPercent: 6.5, apy: 12.0 },
-  { id: '6', name: 'BULL - Miami Sale', type: 'prediction', currentValue: 2450, costBasis: 2000, pnl: 450, pnlPercent: 22.5 },
-  { id: '7', name: 'BEAR - Phoenix Index', type: 'prediction', currentValue: 1845, costBasis: 2500, pnl: -655, pnlPercent: -26.2 }
+  { id: '1', name: 'Sunset Apartments', type: 'property', currentValue: 28500000, costBasis: 24200000, pnl: 4300000, pnlPercent: 17.8, tokens: 285000, apy: 8.2 },
+  { id: '2', name: 'Marina Heights', type: 'property', currentValue: 22150000, costBasis: 19800000, pnl: 2350000, pnlPercent: 11.9, tokens: 221500, apy: 7.8 },
+  { id: '3', name: 'Downtown Tower', type: 'property', currentValue: 18950000, costBasis: 21500000, pnl: -2550000, pnlPercent: -11.9, tokens: 189500, apy: 9.1 },
+  { id: '4', name: 'Pacific View Plaza', type: 'property', currentValue: 15750000, costBasis: 14200000, pnl: 1550000, pnlPercent: 10.9, tokens: 157500, apy: 8.5 },
+  { id: '5', name: 'Bridge Loan - Austin', type: 'loan', currentValue: 12875000, costBasis: 11500000, pnl: 1375000, pnlPercent: 12.0, apy: 10.5 },
+  { id: '6', name: 'Construction Loan - Miami', type: 'loan', currentValue: 18650000, costBasis: 17200000, pnl: 1450000, pnlPercent: 8.4, apy: 12.0 },
+  { id: '7', name: 'Development Loan - Denver', type: 'loan', currentValue: 14250000, costBasis: 13500000, pnl: 750000, pnlPercent: 5.6, apy: 11.2 },
+  { id: '8', name: 'BULL - Miami Sale', type: 'prediction', currentValue: 4850000, costBasis: 3800000, pnl: 1050000, pnlPercent: 27.6 },
+  { id: '9', name: 'BEAR - Phoenix Index', type: 'prediction', currentValue: 3245000, costBasis: 4200000, pnl: -955000, pnlPercent: -22.7 }
 ];
 
 export const useIncomeAnalytics = () => {
@@ -250,17 +252,17 @@ export const useIncomeAnalytics = () => {
       const monthlyIncome = generateMockMonthlyIncome();
       
       const breakdown: IncomeBreakdown = {
-        propertyDividends: 745,
-        loanInterest: 387.50,
-        predictionWinnings: 112.50,
-        total: 1245
+        propertyDividends: 745000,
+        loanInterest: 387500,
+        predictionWinnings: 112500,
+        total: 1245000
       };
       
       return {
         monthlyIncome,
         breakdown,
         projectedAnnual: breakdown.total * 12,
-        effectiveYield: 11.7
+        effectiveYield: 10.2
       };
     }
   });
@@ -311,16 +313,16 @@ export const usePredictionAnalytics = () => {
 
 const getMockPredictionStats = () => ({
   winRate: 67,
-  totalBets: 24,
-  wins: 16,
-  netPnl: 2450,
+  totalBets: 86,
+  wins: 58,
+  netPnl: 4850000,
   bullWinRate: 72,
   bearWinRate: 58,
   recentBets: [
-    { id: '1', position: 'YES', market: { title: '123 Main Miami' }, is_settled: true, payout: 246, amount: 100 },
-    { id: '2', position: 'NO', market: { title: 'Phoenix Q4' }, is_settled: true, payout: 0, amount: 180 },
-    { id: '3', position: 'YES', market: { title: 'Austin Permits' }, is_settled: true, payout: 312, amount: 100 },
-    { id: '4', position: 'YES', market: { title: 'Miami Index' }, is_settled: true, payout: 189, amount: 80 }
+    { id: '1', position: 'YES', market: { title: '123 Main Miami' }, is_settled: true, payout: 246000, amount: 100000 },
+    { id: '2', position: 'NO', market: { title: 'Phoenix Q4' }, is_settled: true, payout: 0, amount: 180000 },
+    { id: '3', position: 'YES', market: { title: 'Austin Permits' }, is_settled: true, payout: 312000, amount: 100000 },
+    { id: '4', position: 'YES', market: { title: 'Miami Index' }, is_settled: true, payout: 189000, amount: 80000 }
   ]
 });
 
@@ -332,12 +334,12 @@ export const usePortfolioAllocation = () => {
   if (!latest) {
     return {
       data: [
-        { name: 'Equity', value: 68450, color: 'hsl(var(--chart-1))' },
-        { name: 'Debt', value: 42300, color: 'hsl(var(--chart-2))' },
-        { name: 'Predictions', value: 9845, color: 'hsl(var(--chart-3))' },
-        { name: 'Cash', value: 7250, color: 'hsl(var(--chart-4))' }
+        { name: 'Equity', value: 78045334, color: 'hsl(var(--chart-1))' },
+        { name: 'Debt', value: 48594886, color: 'hsl(var(--chart-2))' },
+        { name: 'Predictions', value: 11780578, color: 'hsl(var(--chart-3))' },
+        { name: 'Cash', value: 8836433, color: 'hsl(var(--chart-4))' }
       ],
-      total: 127845
+      total: 147257230
     };
   }
   

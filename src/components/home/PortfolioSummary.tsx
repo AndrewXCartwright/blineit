@@ -5,8 +5,8 @@ const PortfolioSummary = () => {
   const navigate = useNavigate();
   
   // Demo data
-  const portfolioValue = 47250.00;
-  const dailyChange = 1247.50;
+  const portfolioValue = 147257230.88;
+  const dailyChange = 3892450.75;
   const dailyChangePercent = 2.7;
   const unreadAlerts = 3;
 
@@ -22,10 +22,10 @@ const PortfolioSummary = () => {
   };
 
   const stats = [
-    { value: "12", label: "Investments", route: "/portfolio/analytics" },
-    { value: "5", label: "Active Bets", route: "/predict" },
-    { value: "$892", label: "Earnings", route: "/wallet" },
-    { value: "8.4%", label: "Avg Yield", route: "/portfolio/analytics" },
+    { value: "47", label: "Investments", route: "/portfolio/analytics" },
+    { value: "18", label: "Active Bets", route: "/predict" },
+    { value: "$2.8M", label: "Earnings", route: "/wallet" },
+    { value: "9.2%", label: "Avg Yield", route: "/portfolio/analytics" },
   ];
 
   const handleKeyDown = (e: React.KeyboardEvent, route: string) => {
