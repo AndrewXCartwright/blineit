@@ -133,7 +133,7 @@ const VoiceFAB = () => {
           setState('response');
         }}
         className={cn(
-          "fixed bottom-[100px] right-5 z-50",
+          "fixed bottom-[calc(10rem+env(safe-area-inset-bottom))] right-5 z-50",
           "w-14 h-14 rounded-full",
           "bg-muted text-muted-foreground",
           "flex items-center justify-center",
@@ -153,7 +153,7 @@ const VoiceFAB = () => {
       <button
         onClick={startListening}
         className={cn(
-          "fixed bottom-[100px] right-5 z-50",
+          "fixed bottom-[calc(10rem+env(safe-area-inset-bottom))] right-5 z-50",
           "w-14 h-14 rounded-full",
           "bg-[#00d4aa] text-white",
           "flex items-center justify-center",
@@ -171,7 +171,7 @@ const VoiceFAB = () => {
   }
 
   return (
-    <div className="fixed bottom-[100px] right-5 z-50 w-[280px] max-w-[calc(100vw-40px)]">
+    <div className="fixed bottom-[calc(10rem+env(safe-area-inset-bottom))] right-5 z-50 w-[280px] max-w-[calc(100vw-40px)]">
       <div className="bg-card border border-border rounded-3xl p-4 shadow-xl animate-scale-in">
         {/* Close button */}
         <button
