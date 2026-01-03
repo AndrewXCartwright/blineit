@@ -36,9 +36,9 @@ const PortfolioSummary = () => {
   };
 
   return (
-    <div className="bg-gradient-to-r from-purple-600 to-purple-400 rounded-2xl p-4 mb-4">
+    <div className="gradient-primary rounded-2xl p-4 mb-4">
       {/* Section Label */}
-      <p className="text-[9px] uppercase tracking-[2px] text-[#00d4aa] font-semibold mb-3">
+      <p className="text-[9px] uppercase tracking-[2px] text-bull font-semibold mb-3">
         YOUR PORTFOLIO
       </p>
 
@@ -56,7 +56,7 @@ const PortfolioSummary = () => {
           <p className="text-[28px] font-bold text-white leading-tight group-hover:underline group-hover:underline-offset-4 transition-all">
             {formatCurrency(portfolioValue)}
           </p>
-          <p className={`text-[13px] mt-1 ${isPositive ? "text-[#00d4aa]" : "text-[#ff4757]"}`}>
+          <p className={`text-[13px] mt-1 ${isPositive ? "text-bull" : "text-bear"}`}>
             {changeArrow} {formatCurrency(Math.abs(dailyChange))} ({Math.abs(dailyChangePercent).toFixed(1)}%) today
           </p>
         </div>
@@ -65,11 +65,11 @@ const PortfolioSummary = () => {
         <button 
           onClick={() => navigate("/notifications")}
           aria-label={`View ${unreadAlerts} unread alerts`}
-          className="relative w-11 h-11 bg-[#00d4aa]/15 border border-[#00d4aa]/30 rounded-xl flex items-center justify-center cursor-pointer hover:bg-[#00d4aa]/25 transition-all"
+          className="relative w-11 h-11 bg-bull/15 border border-bull/30 rounded-xl flex items-center justify-center cursor-pointer hover:bg-bull/25 transition-all"
         >
-          <Bell size={20} className="text-[#00d4aa]" />
+          <Bell size={20} className="text-bull" />
           {unreadAlerts > 0 && (
-            <span className="absolute -top-1 -right-1 h-[18px] min-w-[18px] px-1 bg-[#ff4757] rounded-full text-[10px] font-bold text-white flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 h-[18px] min-w-[18px] px-1 bg-bear rounded-full text-[10px] font-bold text-white flex items-center justify-center">
               {unreadAlerts}
             </span>
           )}
@@ -86,7 +86,7 @@ const PortfolioSummary = () => {
             aria-label={`View your ${stat.value} ${stat.label}`}
             onClick={() => navigate(stat.route)}
             onKeyDown={(e) => handleKeyDown(e, stat.route)}
-            className="flex-1 bg-white dark:bg-[#0f0f1a] rounded-[10px] py-2.5 px-1.5 text-center cursor-pointer border border-transparent hover:border-purple-400 hover:-translate-y-0.5 hover:bg-gray-50 dark:hover:bg-[#1a1a2e] transition-all duration-200 group relative"
+            className="flex-1 bg-white dark:bg-card rounded-[10px] py-2.5 px-1.5 text-center cursor-pointer border border-transparent hover:border-primary hover:-translate-y-0.5 hover:bg-gray-50 dark:hover:bg-secondary transition-all duration-200 group relative"
           >
             <ChevronRight 
               size={10} 

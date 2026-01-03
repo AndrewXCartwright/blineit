@@ -149,7 +149,7 @@ const TrendingVideo = () => {
         </span>
         <button
           onClick={() => navigate("/community")}
-          className="bg-transparent border-none text-[11px] text-[#00d4aa] cursor-pointer"
+          className="bg-transparent border-none text-[11px] text-bull cursor-pointer"
         >
           See All →
         </button>
@@ -180,14 +180,14 @@ const TrendingVideo = () => {
             />
 
             {/* NEW Badge */}
-            <div className="absolute top-2.5 left-2.5 bg-[#00d4aa] px-2 py-1 rounded text-[9px] font-semibold text-black z-[2]">
+            <div className="absolute top-2.5 left-2.5 bg-bull px-2 py-1 rounded text-[9px] font-semibold text-bull-foreground z-[2]">
               NEW
             </div>
 
             {/* Play Button - only show when not playing or reduced motion */}
             {(!isPlaying || prefersReducedMotion) && (
-              <div className="w-[50px] h-[50px] rounded-full bg-[#00d4aa]/90 flex items-center justify-center z-[2]">
-                <Play size={24} className="text-black" fill="black" />
+              <div className="w-[50px] h-[50px] rounded-full bg-bull/90 flex items-center justify-center z-[2]">
+                <Play size={24} className="text-bull-foreground" fill="currentColor" />
               </div>
             )}
 
@@ -207,7 +207,7 @@ const TrendingVideo = () => {
             {/* Progress Bar */}
             <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-black/30 z-[2]">
               <div
-                className="h-full bg-[#00d4aa] transition-all duration-100"
+                className="h-full bg-bull transition-all duration-100"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -232,7 +232,7 @@ const TrendingVideo = () => {
           <p className="text-[13px] text-muted-foreground">
             No videos yet - be the first to post!
           </p>
-          <p className="text-[11px] text-[#00d4aa] mt-2">
+          <p className="text-[11px] text-bull mt-2">
             Go to Community →
           </p>
         </div>

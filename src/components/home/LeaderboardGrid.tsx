@@ -27,7 +27,7 @@ const LeaderboardGrid = () => {
         </span>
         <button
           onClick={() => navigate("/leaderboards")}
-          className="bg-transparent border-none text-[11px] text-[#00d4aa] cursor-pointer"
+          className="bg-transparent border-none text-[11px] text-bull cursor-pointer"
         >
           View All →
         </button>
@@ -39,10 +39,10 @@ const LeaderboardGrid = () => {
           <div
             key={index}
             onClick={() => navigate(item.link)}
-            className="bg-card border border-border rounded-xl p-3.5 cursor-pointer transition-all duration-200 hover:border-[#00d4aa]"
+            className="bg-card border border-border rounded-xl p-3.5 cursor-pointer transition-all duration-200 hover:border-bull"
           >
             {/* Rank Label */}
-            <p className="text-[10px] text-[#ffd700] font-semibold">
+            <p className="text-[10px] text-accent font-semibold">
               {item.rank}
             </p>
 
@@ -52,7 +52,7 @@ const LeaderboardGrid = () => {
             </p>
 
             {/* Stat */}
-            <p className="text-[10px] text-[#00d4aa] mt-0.5">
+            <p className="text-[10px] text-bull mt-0.5">
               {item.stat}
             </p>
 

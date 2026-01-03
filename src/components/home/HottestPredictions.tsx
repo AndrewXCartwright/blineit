@@ -25,7 +25,7 @@ const HottestPredictions = () => {
         </span>
         <button
           onClick={() => navigate("/predict")}
-          className="bg-transparent border-none text-[11px] text-[#00d4aa] cursor-pointer"
+          className="bg-transparent border-none text-[11px] text-bull cursor-pointer"
         >
           See All →
         </button>
@@ -45,10 +45,10 @@ const HottestPredictions = () => {
 
             {/* Odds Row */}
             <div className="flex gap-2 mt-2.5">
-              <button className="flex-1 py-2 px-2 rounded-md text-center text-[11px] font-semibold bg-[#00d4aa]/20 text-[#00d4aa] border-none cursor-pointer">
+              <button className="flex-1 py-2 px-2 rounded-md text-center text-[11px] font-semibold bg-bull/20 text-bull border-none cursor-pointer">
                 YES {prediction.yesOdds}%
               </button>
-              <button className="flex-1 py-2 px-2 rounded-md text-center text-[11px] font-semibold bg-[#ff4757]/20 text-[#ff4757] border-none cursor-pointer">
+              <button className="flex-1 py-2 px-2 rounded-md text-center text-[11px] font-semibold bg-bear/20 text-bear border-none cursor-pointer">
                 NO {prediction.noOdds}%
               </button>
             </div>

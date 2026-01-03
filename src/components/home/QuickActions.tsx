@@ -32,14 +32,14 @@ const QuickActions = () => {
           <button
             key={index}
             onClick={() => navigate(action.route)}
-            className="cursor-pointer transition-all duration-200 bg-card hover:bg-accent border border-border hover:border-[#00d4aa] rounded-xl py-4 px-2 text-center hover:-translate-y-0.5"
+            className="cursor-pointer transition-all duration-200 bg-card hover:bg-accent border border-border hover:border-bull rounded-xl py-4 px-2 text-center hover:-translate-y-0.5"
           >
             {/* Icon */}
             <div className="mb-2 text-2xl flex items-center justify-center">
               {typeof action.icon === "string" ? (
                 action.icon
               ) : (
-                <action.icon size={24} className="text-[#00d4aa]" />
+                <action.icon size={24} className="text-bull" />
               )}
             </div>
 
