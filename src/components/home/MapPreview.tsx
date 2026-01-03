@@ -22,16 +22,15 @@ const MapPreview = () => {
       {/* Map Card */}
       <div className="bg-card border border-border rounded-2xl overflow-hidden">
         {/* Map Preview Area */}
-        <div className="h-[120px] bg-gradient-to-br from-blue-100 to-blue-50 dark:from-[#1a2a3a] dark:to-[#0f1a2a] relative">
+        <div className="h-[120px] bg-gradient-to-br from-blue-100 to-blue-50 dark:from-secondary dark:to-background relative">
           {/* Property Dots */}
           {mapDots.map((dot, index) => (
             <div
               key={index}
-              className="absolute w-2.5 h-2.5 bg-[#00d4aa] rounded-full animate-pulse"
+              className="absolute w-2.5 h-2.5 bg-bull rounded-full animate-pulse glow-bull"
               style={{
                 top: dot.top,
                 left: dot.left,
-                boxShadow: "0 0 10px #00d4aa",
               }}
             />
           ))}
@@ -52,7 +51,7 @@ const MapPreview = () => {
           {/* Right side - EXPLORE button */}
           <button
             onClick={() => navigate("/explore")}
-            className="bg-[#00d4aa] text-black py-2 px-3.5 rounded-full text-[10px] font-semibold border-none cursor-pointer hover:bg-[#00d4aa]/90 transition-colors"
+            className="bg-bull text-bull-foreground py-2 px-3.5 rounded-full text-[10px] font-semibold border-none cursor-pointer hover:opacity-90 transition-opacity"
           >
             EXPLORE
           </button>

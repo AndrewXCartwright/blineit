@@ -40,7 +40,7 @@ const ActivityFeed = () => {
             onClick={() => setActiveTab(tab.id)}
             className={`cursor-pointer transition-colors text-xs pb-1.5 bg-transparent border-0 border-b-2 ${
               activeTab === tab.id
-                ? "text-foreground border-[#00d4aa]"
+                ? "text-foreground border-bull"
                 : "text-muted-foreground border-transparent"
             }`}
           >
@@ -60,13 +60,13 @@ const ActivityFeed = () => {
               }`}
             >
               {/* Avatar */}
-              <div className="flex items-center justify-center font-semibold flex-shrink-0 w-9 h-9 rounded-full bg-gradient-to-br from-[#00d4aa] to-[#00a8cc] text-xs text-white">
+              <div className="flex items-center justify-center font-semibold flex-shrink-0 w-9 h-9 rounded-full gradient-bull text-xs text-white">
                 {activity.initials}
               </div>
 
               {/* Text */}
               <p className="flex-1 text-[11px] leading-relaxed text-muted-foreground">
-                <span className="font-bold text-[#00d4aa]">
+                <span className="font-bold text-bull">
                   {activity.user}
                 </span>{" "}
                 {activity.action}
