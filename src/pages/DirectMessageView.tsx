@@ -74,7 +74,7 @@ export default function DirectMessageView() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-background/95 backdrop-blur border-b border-border">
+      <header className="sticky top-0 z-10 bg-background/95 backdrop-blur border-b border-border pt-[env(safe-area-inset-top)]">
         <div className="container mx-auto px-4 py-3 flex items-center gap-3">
           <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
             <ArrowLeft className="h-5 w-5" />
@@ -109,7 +109,7 @@ export default function DirectMessageView() {
       </header>
 
       {/* Messages */}
-      <main className="flex-1 overflow-y-auto p-4 space-y-4">
+      <main className="flex-1 overflow-y-auto p-4 pb-[calc(10rem+env(safe-area-inset-bottom))] space-y-4">
         {loading ? (
           <div className="space-y-4">
             {[...Array(5)].map((_, i) => (
@@ -180,7 +180,7 @@ export default function DirectMessageView() {
       </main>
 
       {/* Input */}
-      <footer className="sticky bottom-0 bg-background border-t border-border p-4">
+      <footer className="fixed left-0 right-0 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-[60] bg-background border-t border-border p-4">
         <form onSubmit={handleSend} className="flex gap-2">
           <input
             name="message"
