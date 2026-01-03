@@ -38,7 +38,7 @@ export default function MessagesHub() {
 
   return (
     <div className="min-h-screen bg-background pb-24">
-      <header className="sticky top-0 z-10 bg-background/95 backdrop-blur border-b border-border">
+      <header className="sticky top-0 z-10 bg-background/95 backdrop-blur border-b border-border pt-[env(safe-area-inset-top)]">
         <div className="container mx-auto px-4 py-4 flex items-center gap-4">
           <Link to="/" className="text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-5 w-5" />
@@ -60,10 +60,6 @@ export default function MessagesHub() {
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="w-full grid grid-cols-2">
-            <TabsTrigger value="groups" className="gap-2">
-              <Users className="h-4 w-4" />
-              Groups
-            </TabsTrigger>
             <TabsTrigger value="direct" className="gap-2">
               <MessageCircle className="h-4 w-4" />
               Direct
@@ -72,6 +68,10 @@ export default function MessagesHub() {
                   {totalUnread}
                 </Badge>
               )}
+            </TabsTrigger>
+            <TabsTrigger value="groups" className="gap-2">
+              <Users className="h-4 w-4" />
+              Groups
             </TabsTrigger>
           </TabsList>
 
