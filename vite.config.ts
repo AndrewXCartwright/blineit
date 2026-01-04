@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => ({
     mode === "development" && componentTagger(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'robots.txt', 'icons/*.png'],
+      includeAssets: ['favicon.ico', 'favicon-16x16.png', 'favicon-32x32.png', 'robots.txt', 'icons/*.png'],
       manifest: {
         name: 'B-LINE-IT',
         short_name: 'B-LINE-IT',
@@ -27,13 +27,7 @@ export default defineConfig(({ mode }) => ({
         orientation: 'portrait-primary',
         categories: ['finance', 'investment'],
         icons: [
-          { src: '/icons/icon-72.png', sizes: '72x72', type: 'image/png' },
-          { src: '/icons/icon-96.png', sizes: '96x96', type: 'image/png' },
-          { src: '/icons/icon-128.png', sizes: '128x128', type: 'image/png' },
-          { src: '/icons/icon-144.png', sizes: '144x144', type: 'image/png' },
-          { src: '/icons/icon-152.png', sizes: '152x152', type: 'image/png' },
           { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
-          { src: '/icons/icon-384.png', sizes: '384x384', type: 'image/png' },
           { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
         ],
         shortcuts: [
