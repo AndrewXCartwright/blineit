@@ -37,16 +37,25 @@ const PortfolioSummary = () => {
 
   return (
     <div className="gradient-primary rounded-2xl p-4 mb-4">
-      {/* Section Label */}
-      <p 
-        role="button"
-        tabIndex={0}
-        onClick={() => navigate("/portfolio/analytics")}
-        onKeyDown={(e) => handleKeyDown(e, "/portfolio/analytics")}
-        className="text-sm uppercase tracking-[2px] text-white font-bold mb-1.5 cursor-pointer hover:underline hover:underline-offset-4 transition-all"
-      >
-        YOUR PORTFOLIO
-      </p>
+      {/* Section Label Row */}
+      <div className="flex justify-between items-center mb-1.5">
+        <p 
+          role="button"
+          tabIndex={0}
+          onClick={() => navigate("/portfolio/analytics")}
+          onKeyDown={(e) => handleKeyDown(e, "/portfolio/analytics")}
+          className="text-sm uppercase tracking-[2px] text-white font-bold cursor-pointer hover:underline hover:underline-offset-4 transition-all"
+        >
+          YOUR PORTFOLIO
+        </p>
+        {/* Invest Now Button */}
+        <button
+          onClick={() => navigate("/assets")}
+          className="bg-[#FFD700] hover:bg-[#FFC700] text-black font-bold text-xs px-3 py-1.5 rounded-xl transition-all hover:-translate-y-0.5"
+        >
+          Invest Now
+        </button>
+      </div>
 
       {/* Header Row */}
       <div className="flex justify-between items-start mb-4">
@@ -67,30 +76,19 @@ const PortfolioSummary = () => {
           </p>
         </div>
 
-        {/* Right side - Invest Now Button & Alerts */}
-        <div className="flex items-center gap-2">
-          {/* Invest Now Button */}
-          <button
-            onClick={() => navigate("/assets")}
-            className="bg-[#FFD700] hover:bg-[#FFC700] text-black font-bold text-xs px-3 py-2 rounded-xl transition-all hover:-translate-y-0.5"
-          >
-            Invest Now
-          </button>
-
-          {/* Alerts Button */}
-          <button 
-            onClick={() => navigate("/notifications")}
-            aria-label={`View ${unreadAlerts} unread alerts`}
-            className="relative w-11 h-11 bg-bull/15 border border-bull/30 rounded-xl flex items-center justify-center cursor-pointer hover:bg-bull/25 transition-all"
-          >
-            <Bell size={20} className="text-bull" />
-            {unreadAlerts > 0 && (
-              <span className="absolute -top-1 -right-1 h-[18px] min-w-[18px] px-1 bg-bear rounded-full text-[10px] font-bold text-white flex items-center justify-center">
-                {unreadAlerts}
-              </span>
-            )}
-          </button>
-        </div>
+        {/* Right side - Alerts Button */}
+        <button
+          onClick={() => navigate("/notifications")}
+          aria-label={`View ${unreadAlerts} unread alerts`}
+          className="relative w-11 h-11 bg-bull/15 border border-bull/30 rounded-xl flex items-center justify-center cursor-pointer hover:bg-bull/25 transition-all"
+        >
+          <Bell size={20} className="text-bull" />
+          {unreadAlerts > 0 && (
+            <span className="absolute -top-1 -right-1 h-[18px] min-w-[18px] px-1 bg-bear rounded-full text-[10px] font-bold text-white flex items-center justify-center">
+              {unreadAlerts}
+            </span>
+          )}
+        </button>
       </div>
 
       {/* Stats Row */}
