@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { Mic, X, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 type FABState = 'idle' | 'listening' | 'processing' | 'response';
 
@@ -104,12 +106,82 @@ const VoiceFAB = () => {
   const processQuery = async (query: string) => {
     setState('processing');
     
-    // TODO: Connect to your AI backend
-    // For now, simulate a response
-    setTimeout(() => {
-      setResponse(`You asked about "${query}". This is where the AI response will appear. Connect to your AI backend to get real answers about properties, investments, predictions, and more.`);
+    try {
+      // Check if user is authenticated
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        setResponse("Please sign in to use the AI assistant. The voice assistant provides personalized investment advice and requires authentication.");
+        setState('response');
+        return;
+      }
+
+      // Call the investment-advisor edge function
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/investment-advisor`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({
+            messages: [{ role: 'user', content: query }],
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        if (response.status === 429) {
+          throw new Error('Rate limit exceeded. Please try again in a moment.');
+        }
+        if (response.status === 402) {
+          throw new Error('AI credits exhausted. Please add credits to continue.');
+        }
+        throw new Error('Failed to get AI response');
+      }
+
+      // Parse the streaming response
+      const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error('No response stream');
+      }
+
+      const decoder = new TextDecoder();
+      let fullResponse = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n');
+
+        for (const line of lines) {
+          if (line.startsWith('data: ') && line !== 'data: [DONE]') {
+            try {
+              const jsonStr = line.slice(6);
+              const parsed = JSON.parse(jsonStr);
+              const content = parsed.choices?.[0]?.delta?.content;
+              if (content) {
+                fullResponse += content;
+              }
+            } catch {
+              // Skip non-JSON lines
+            }
+          }
+        }
+      }
+
+      setResponse(fullResponse || "I couldn't generate a response. Please try again.");
       setState('response');
-    }, 1500);
+    } catch (error) {
+      console.error('Voice AI error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'An error occurred';
+      toast.error(errorMessage);
+      setResponse(errorMessage);
+      setState('response');
+    }
   };
 
   const reset = () => {
