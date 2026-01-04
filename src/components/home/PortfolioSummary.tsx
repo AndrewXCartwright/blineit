@@ -82,6 +82,14 @@ const PortfolioSummary = () => {
         </button>
       </div>
 
+      {/* Invest Now Button */}
+      <button
+        onClick={() => navigate("/assets")}
+        className="w-full bg-[#FFD700] hover:bg-[#FFC700] text-black font-bold text-sm py-2.5 rounded-xl mb-3 transition-all hover:-translate-y-0.5"
+      >
+        Invest Now
+      </button>
+
       {/* Stats Row */}
       <div className="flex gap-2">
         {stats.map((stat, index) => (
