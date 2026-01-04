@@ -37,26 +37,17 @@ const PortfolioSummary = () => {
 
   return (
     <div className="gradient-primary rounded-2xl p-4 mb-4">
-      {/* Section Label + Portfolio Value */}
-      <div className="flex justify-between items-start mb-3">
-        <div
+      {/* Section Label Row */}
+      <div className="flex justify-between items-center mb-1.5">
+        <p 
           role="button"
           tabIndex={0}
-          aria-label="View your full portfolio"
           onClick={() => navigate("/portfolio/analytics")}
           onKeyDown={(e) => handleKeyDown(e, "/portfolio/analytics")}
-          className="cursor-pointer group"
+          className="text-sm uppercase tracking-[2px] text-white font-bold cursor-pointer hover:underline hover:underline-offset-4 transition-all"
         >
-          <p className="text-sm uppercase tracking-[2px] text-white font-bold mb-0.5 group-hover:underline group-hover:underline-offset-4 transition-all">
-            YOUR PORTFOLIO
-          </p>
-          <p className="text-[28px] font-bold text-white leading-tight">
-            {formatCurrency(portfolioValue)}
-          </p>
-          <p className={`text-[13px] font-bold mt-0.5 ${isPositive ? "text-[#00ff88]" : "text-[#ff4444]"}`}>
-            {changeArrow} {formatCurrency(Math.abs(dailyChange))} ({Math.abs(dailyChangePercent).toFixed(1)}%) today
-          </p>
-        </div>
+          YOUR PORTFOLIO
+        </p>
         {/* Invest Now Button */}
         <button
           onClick={() => navigate("/assets")}
@@ -66,8 +57,26 @@ const PortfolioSummary = () => {
         </button>
       </div>
 
-      {/* Bell Icon Row */}
-      <div className="flex justify-center mb-3">
+      {/* Header Row */}
+      <div className="flex justify-between items-start mb-4">
+        {/* Left side - Portfolio Value (Clickable) */}
+        <div
+          role="button"
+          tabIndex={0}
+          aria-label="View your full portfolio"
+          onClick={() => navigate("/portfolio/analytics")}
+          onKeyDown={(e) => handleKeyDown(e, "/portfolio/analytics")}
+          className="cursor-pointer group"
+        >
+          <p className="text-[28px] font-bold text-white leading-tight group-hover:underline group-hover:underline-offset-4 transition-all">
+            {formatCurrency(portfolioValue)}
+          </p>
+          <p className={`text-[13px] font-bold mt-1 ${isPositive ? "text-[#00ff88]" : "text-[#ff4444]"}`}>
+            {changeArrow} {formatCurrency(Math.abs(dailyChange))} ({Math.abs(dailyChangePercent).toFixed(1)}%) today
+          </p>
+        </div>
+
+        {/* Right side - Alerts Button */}
         <button
           onClick={() => navigate("/notifications")}
           aria-label={`View ${unreadAlerts} unread alerts`}
