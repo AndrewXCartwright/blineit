@@ -43,7 +43,7 @@ const PortfolioSummary = () => {
         tabIndex={0}
         onClick={() => navigate("/portfolio/analytics")}
         onKeyDown={(e) => handleKeyDown(e, "/portfolio/analytics")}
-        className="text-sm uppercase tracking-[2px] text-white font-bold mb-3 cursor-pointer hover:underline hover:underline-offset-4 transition-all"
+        className="text-sm uppercase tracking-[2px] text-white font-bold mb-1.5 cursor-pointer hover:underline hover:underline-offset-4 transition-all"
       >
         YOUR PORTFOLIO
       </p>
