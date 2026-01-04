@@ -67,28 +67,31 @@ const PortfolioSummary = () => {
           </p>
         </div>
 
-        {/* Right side - Alerts Button */}
-        <button 
-          onClick={() => navigate("/notifications")}
-          aria-label={`View ${unreadAlerts} unread alerts`}
-          className="relative w-11 h-11 bg-bull/15 border border-bull/30 rounded-xl flex items-center justify-center cursor-pointer hover:bg-bull/25 transition-all"
-        >
-          <Bell size={20} className="text-bull" />
-          {unreadAlerts > 0 && (
-            <span className="absolute -top-1 -right-1 h-[18px] min-w-[18px] px-1 bg-bear rounded-full text-[10px] font-bold text-white flex items-center justify-center">
-              {unreadAlerts}
-            </span>
-          )}
-        </button>
-      </div>
+        {/* Right side - Invest Now Button & Alerts */}
+        <div className="flex items-center gap-2">
+          {/* Invest Now Button */}
+          <button
+            onClick={() => navigate("/assets")}
+            className="bg-[#FFD700] hover:bg-[#FFC700] text-black font-bold text-xs px-3 py-2 rounded-xl transition-all hover:-translate-y-0.5"
+          >
+            Invest Now
+          </button>
 
-      {/* Invest Now Button */}
-      <button
-        onClick={() => navigate("/assets")}
-        className="w-full bg-[#FFD700] hover:bg-[#FFC700] text-black font-bold text-sm py-2.5 rounded-xl mb-3 transition-all hover:-translate-y-0.5"
-      >
-        Invest Now
-      </button>
+          {/* Alerts Button */}
+          <button 
+            onClick={() => navigate("/notifications")}
+            aria-label={`View ${unreadAlerts} unread alerts`}
+            className="relative w-11 h-11 bg-bull/15 border border-bull/30 rounded-xl flex items-center justify-center cursor-pointer hover:bg-bull/25 transition-all"
+          >
+            <Bell size={20} className="text-bull" />
+            {unreadAlerts > 0 && (
+              <span className="absolute -top-1 -right-1 h-[18px] min-w-[18px] px-1 bg-bear rounded-full text-[10px] font-bold text-white flex items-center justify-center">
+                {unreadAlerts}
+              </span>
+            )}
+          </button>
+        </div>
+      </div>
 
       {/* Stats Row */}
       <div className="flex gap-2">
