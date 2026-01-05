@@ -255,35 +255,35 @@ export default function Profile() {
 
         {/* Quick Actions */}
         <div className="animate-fade-in stagger-4">
-          <h3 className="font-display text-sm font-semibold text-muted-foreground mb-3">{t('dashboard.quickActions') || 'Quick Actions'}</h3>
+          <h3 className="font-display text-sm font-semibold text-muted-foreground mb-3">{t('dashboard.quickActions')}</h3>
           <div className="grid grid-cols-2 gap-3">
             <Link to="/messages" className="glass-card rounded-xl p-4 text-center hover:bg-secondary/50 transition-colors">
               <div className="p-3 rounded-xl bg-primary/20 mx-auto w-fit mb-2">
                 <MessageCircle className="w-5 h-5 text-primary" />
               </div>
-              <p className="text-sm font-medium text-foreground">Messages</p>
-              <p className="text-xs text-muted-foreground mt-1">Direct messages</p>
+              <p className="text-sm font-medium text-foreground">{t('common.messages', 'Messages')}</p>
+              <p className="text-xs text-muted-foreground mt-1">{t('profile.directMessages', 'Direct messages')}</p>
             </Link>
             <Link to="/community" className="glass-card rounded-xl p-4 text-center hover:bg-secondary/50 transition-colors">
               <div className="p-3 rounded-xl bg-emerald-500/20 mx-auto w-fit mb-2">
                 <Users className="w-5 h-5 text-emerald-500" />
               </div>
-              <p className="text-sm font-medium text-foreground">Community</p>
-              <p className="text-xs text-muted-foreground mt-1">Social feed</p>
+              <p className="text-sm font-medium text-foreground">{t('profile.community')}</p>
+              <p className="text-xs text-muted-foreground mt-1">{t('profile.socialFeed', 'Social feed')}</p>
             </Link>
             <Link to="/risk" className="glass-card rounded-xl p-4 text-center hover:bg-secondary/50 transition-colors">
               <div className="p-3 rounded-xl bg-orange-500/20 mx-auto w-fit mb-2">
                 <Shield className="w-5 h-5 text-orange-500" />
               </div>
-              <p className="text-sm font-medium text-foreground">Risk Assessment</p>
-              <p className="text-xs text-muted-foreground mt-1">AI-powered analysis</p>
+              <p className="text-sm font-medium text-foreground">{t('profile.riskAssessment', 'Risk Assessment')}</p>
+              <p className="text-xs text-muted-foreground mt-1">{t('profile.aiAnalysis', 'AI-powered analysis')}</p>
             </Link>
             <Link to="/documents" className="glass-card rounded-xl p-4 text-center hover:bg-secondary/50 transition-colors">
               <div className="p-3 rounded-xl bg-accent/20 mx-auto w-fit mb-2">
                 <FileText className="w-5 h-5 text-accent" />
               </div>
-              <p className="text-sm font-medium text-foreground">Documents</p>
-              <p className="text-xs text-muted-foreground mt-1">Manage your docs</p>
+              <p className="text-sm font-medium text-foreground">{t('common.documents')}</p>
+              <p className="text-xs text-muted-foreground mt-1">{t('profile.manageDocs', 'Manage your docs')}</p>
             </Link>
           </div>
         </div>
