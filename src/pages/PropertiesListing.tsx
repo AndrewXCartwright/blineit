@@ -82,7 +82,7 @@ export default function PropertiesListing() {
     <div className="min-h-screen bg-background pb-20">
       <PullToRefresh onRefresh={fetchProperties}>
         {/* Header */}
-        <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-xl border-b border-border">
+        <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-xl border-b border-border pt-[env(safe-area-inset-top)]">
           <div className="flex items-center gap-3 p-4">
             <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="shrink-0">
               <ChevronLeft className="w-5 h-5" />

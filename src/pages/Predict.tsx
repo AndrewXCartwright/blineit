@@ -152,7 +152,7 @@ export default function Predict() {
     <div className="min-h-screen pb-24">
       <SuccessCheck active={showSuccess} />
       
-      <header className="sticky top-0 z-40 glass-card border-b border-border/50 px-4 py-4">
+      <header className="sticky top-0 z-40 glass-card border-b border-border/50 px-4 py-4 pt-[calc(1rem+env(safe-area-inset-top))]">
         <div className="flex items-center gap-3 mb-4">
           <div className="p-2 rounded-xl gradient-gold glow-gold">
             <Target className="w-6 h-6 text-accent-foreground" />
