@@ -598,6 +598,38 @@ export default function Settings() {
 
             <Card>
               <CardHeader className="pb-3">
+                <CardTitle className="text-base">Password</CardTitle>
+                <CardDescription>Manage your password</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => navigate("/security")}
+                >
+                  Change Password
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base">Active Sessions</CardTitle>
+                <CardDescription>Devices currently logged into your account</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => navigate("/security/devices")}
+                >
+                  View Active Sessions
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="pb-3">
                 <CardTitle className="text-base">Security Activity</CardTitle>
                 <CardDescription>Recent account activity</CardDescription>
               </CardHeader>

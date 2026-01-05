@@ -27,8 +27,9 @@ export default function Profile() {
   
   const menuItems = [
     { icon: Bell, label: t('profile.notifications'), link: "/settings/notifications" },
-    { icon: Shield, label: t('profile.security'), link: "#" },
-    { icon: HelpCircle, label: t('profile.helpSupport'), link: "#" },
+    { icon: Shield, label: t('profile.security'), link: "/security" },
+    { icon: Settings, label: "Settings", link: "/settings" },
+    { icon: HelpCircle, label: t('profile.helpSupport'), link: "/help" },
   ];
 
   const handleSignOut = async () => {
@@ -119,7 +120,18 @@ export default function Profile() {
   return (
     <div className="min-h-screen pb-24">
       <header className="sticky top-0 z-40 glass-card border-b border-border/50 px-4 py-4 pt-[calc(1rem+env(safe-area-inset-top))]">
-        <h1 className="font-display text-2xl font-bold text-foreground">{t('profile.title')}</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="font-display text-2xl font-bold text-foreground">{t('profile.title')}</h1>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => navigate('/settings')}
+            className="h-9 w-9"
+            aria-label="Settings"
+          >
+            <Settings className="h-5 w-5" />
+          </Button>
+        </div>
       </header>
 
       <main className="px-4 py-6 space-y-6">
