@@ -240,8 +240,8 @@ export default function Settings() {
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div>
-            <h1 className="font-display font-bold text-lg">Settings</h1>
-            <p className="text-xs text-muted-foreground">Manage your account</p>
+            <h1 className="font-display font-bold text-lg">{t('settings.title')}</h1>
+            <p className="text-xs text-muted-foreground">{t('settings.manageAccount')}</p>
           </div>
         </div>
       </div>
@@ -251,19 +251,19 @@ export default function Settings() {
           <TabsList className="grid w-full grid-cols-4 h-auto">
             <TabsTrigger value="account" className="flex flex-col gap-1 py-2 text-xs">
               <User className="h-4 w-4" />
-              Account
+              {t('settings.account')}
             </TabsTrigger>
             <TabsTrigger value="notifications" className="flex flex-col gap-1 py-2 text-xs">
               <Bell className="h-4 w-4" />
-              Alerts
+              {t('settings.alerts')}
             </TabsTrigger>
             <TabsTrigger value="security" className="flex flex-col gap-1 py-2 text-xs">
               <Shield className="h-4 w-4" />
-              Security
+              {t('settings.security')}
             </TabsTrigger>
             <TabsTrigger value="appearance" className="flex flex-col gap-1 py-2 text-xs">
               <Palette className="h-4 w-4" />
-              Display
+              {t('settings.display')}
             </TabsTrigger>
           </TabsList>
 
@@ -273,7 +273,7 @@ export default function Settings() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
                   <Camera className="h-4 w-4" />
-                  Profile Photo
+                  {t('settings.profilePhoto')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -301,8 +301,8 @@ export default function Settings() {
                     </label>
                   </div>
                   <div className="text-sm text-muted-foreground">
-                    <p>Upload a profile photo</p>
-                    <p className="text-xs">Max 5MB, JPG or PNG</p>
+                    <p>{t('settings.uploadPhoto')}</p>
+                    <p className="text-xs">{t('settings.maxSize')}</p>
                   </div>
                 </div>
               </CardContent>
@@ -310,34 +310,34 @@ export default function Settings() {
 
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-base">Account Information</CardTitle>
-                <CardDescription>Your personal details</CardDescription>
+                <CardTitle className="text-base">{t('settings.accountInfo')}</CardTitle>
+                <CardDescription>{t('settings.personalDetails')}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="displayName" className="flex items-center gap-2">
                     <User className="h-3.5 w-3.5" />
-                    Display Name
+                    {t('settings.displayName')}
                   </Label>
                   <Input
                     id="displayName"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
-                    placeholder="Your full name"
+                    placeholder={t('settings.yourFullName')}
                   />
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="username" className="flex items-center gap-2">
                     <AtSign className="h-3.5 w-3.5" />
-                    Username
+                    {t('settings.username')}
                   </Label>
                   <div className="relative">
                     <Input
                       id="username"
                       value={username}
                       onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ""))}
-                      placeholder="your_username"
+                      placeholder={t('settings.usernamePlaceholder')}
                       className={cn(
                         "pr-10",
                         usernameStatus === "available" && "border-green-500 focus-visible:ring-green-500",
@@ -353,17 +353,17 @@ export default function Settings() {
                     <p className="text-xs text-destructive">{usernameError}</p>
                   )}
                   {usernameStatus === "available" && username && (
-                    <p className="text-xs text-green-500">Username is available!</p>
+                    <p className="text-xs text-green-500">{t('settings.usernameAvailable')}</p>
                   )}
                   <p className="text-xs text-muted-foreground">
-                    3-20 characters, letters, numbers, and underscores only
+                    {t('settings.usernameRules')}
                   </p>
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="email" className="flex items-center gap-2">
                     <Mail className="h-3.5 w-3.5" />
-                    Email
+                    {t('settings.email')}
                   </Label>
                   <Input
                     id="email"
@@ -372,20 +372,20 @@ export default function Settings() {
                     className="bg-muted"
                   />
                   <p className="text-xs text-muted-foreground">
-                    Email cannot be changed here
+                    {t('settings.emailCannotChange')}
                   </p>
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="phone" className="flex items-center gap-2">
                     <Phone className="h-3.5 w-3.5" />
-                    Phone Number (optional)
+                    {t('settings.phoneNumber')}
                   </Label>
                   <Input
                     id="phone"
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
-                    placeholder="+1 (555) 123-4567"
+                    placeholder={t('settings.phonePlaceholder')}
                     type="tel"
                   />
                 </div>
@@ -400,12 +400,12 @@ export default function Settings() {
                   {saving ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Saving...
+                      {t('settings.saving')}
                     </>
                   ) : (
                     <>
                       <Save className="mr-2 h-4 w-4" />
-                      Save Changes
+                      {t('settings.saveChanges')}
                     </>
                   )}
                 </Button>
@@ -417,14 +417,14 @@ export default function Settings() {
           <TabsContent value="notifications" className="space-y-4 mt-4">
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-base">Email Notifications</CardTitle>
-                <CardDescription>Choose what emails you receive</CardDescription>
+                <CardTitle className="text-base">{t('settings.emailNotifications')}</CardTitle>
+                <CardDescription>{t('settings.chooseEmails')}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-sm">Investment Confirmations</p>
-                    <p className="text-xs text-muted-foreground">Get notified when you make investments</p>
+                    <p className="font-medium text-sm">{t('settings.investmentConfirmations')}</p>
+                    <p className="text-xs text-muted-foreground">{t('settings.investmentConfirmationsDesc')}</p>
                   </div>
                   <Switch
                     checked={preferences?.email_investment_confirm ?? true}
@@ -434,8 +434,8 @@ export default function Settings() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-sm">Prediction Results</p>
-                    <p className="text-xs text-muted-foreground">Know when your bets are resolved</p>
+                    <p className="font-medium text-sm">{t('settings.predictionResults')}</p>
+                    <p className="text-xs text-muted-foreground">{t('settings.predictionResultsDesc')}</p>
                   </div>
                   <Switch
                     checked={preferences?.email_bet_resolved ?? true}
@@ -445,8 +445,8 @@ export default function Settings() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-sm">Payment Updates</p>
-                    <p className="text-xs text-muted-foreground">Interest and dividend payments</p>
+                    <p className="font-medium text-sm">{t('settings.paymentUpdates')}</p>
+                    <p className="text-xs text-muted-foreground">{t('settings.paymentUpdatesDesc')}</p>
                   </div>
                   <Switch
                     checked={preferences?.email_interest_payment ?? true}
@@ -456,8 +456,8 @@ export default function Settings() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-sm">Weekly Digest</p>
-                    <p className="text-xs text-muted-foreground">Summary of your portfolio</p>
+                    <p className="font-medium text-sm">{t('settings.weeklyDigest')}</p>
+                    <p className="text-xs text-muted-foreground">{t('settings.weeklyDigestDesc')}</p>
                   </div>
                   <Switch
                     checked={preferences?.email_weekly_digest ?? true}
@@ -467,8 +467,8 @@ export default function Settings() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-sm">Marketing Emails</p>
-                    <p className="text-xs text-muted-foreground">New features and promotions</p>
+                    <p className="font-medium text-sm">{t('settings.marketingEmails')}</p>
+                    <p className="text-xs text-muted-foreground">{t('settings.marketingEmailsDesc')}</p>
                   </div>
                   <Switch
                     checked={preferences?.email_marketing ?? false}
@@ -481,14 +481,14 @@ export default function Settings() {
 
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-base">Push Notifications</CardTitle>
-                <CardDescription>Mobile and browser alerts</CardDescription>
+                <CardTitle className="text-base">{t('settings.pushNotifications')}</CardTitle>
+                <CardDescription>{t('settings.mobileAlerts')}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-sm">Enable Push Notifications</p>
-                    <p className="text-xs text-muted-foreground">Receive real-time alerts</p>
+                    <p className="font-medium text-sm">{t('settings.enablePush')}</p>
+                    <p className="text-xs text-muted-foreground">{t('settings.enablePushDesc')}</p>
                   </div>
                   <Switch
                     checked={preferences?.push_enabled ?? false}
@@ -501,8 +501,8 @@ export default function Settings() {
                     <Separator />
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium text-sm">Price Alerts</p>
-                        <p className="text-xs text-muted-foreground">When assets hit your targets</p>
+                        <p className="font-medium text-sm">{t('settings.priceAlerts')}</p>
+                        <p className="text-xs text-muted-foreground">{t('settings.priceAlertsDesc')}</p>
                       </div>
                       <Switch
                         checked={preferences?.push_price_alerts ?? false}
@@ -512,8 +512,8 @@ export default function Settings() {
                     </div>
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium text-sm">New Properties</p>
-                        <p className="text-xs text-muted-foreground">New investment opportunities</p>
+                        <p className="font-medium text-sm">{t('settings.newProperties')}</p>
+                        <p className="text-xs text-muted-foreground">{t('settings.newPropertiesDesc')}</p>
                       </div>
                       <Switch
                         checked={preferences?.push_new_properties ?? false}
@@ -528,14 +528,14 @@ export default function Settings() {
 
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-base">Quiet Hours</CardTitle>
-                <CardDescription>Pause notifications during certain times</CardDescription>
+                <CardTitle className="text-base">{t('settings.quietHours')}</CardTitle>
+                <CardDescription>{t('settings.quietHoursDesc')}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-sm">Enable Quiet Hours</p>
-                    <p className="text-xs text-muted-foreground">No notifications during these hours</p>
+                    <p className="font-medium text-sm">{t('settings.enableQuietHours')}</p>
+                    <p className="text-xs text-muted-foreground">{t('settings.enableQuietHoursDesc')}</p>
                   </div>
                   <Switch
                     checked={preferences?.quiet_hours_enabled ?? false}
@@ -546,7 +546,7 @@ export default function Settings() {
                 {preferences?.quiet_hours_enabled && (
                   <div className="flex gap-4">
                     <div className="flex-1 space-y-2">
-                      <Label className="text-xs">Start</Label>
+                      <Label className="text-xs">{t('settings.start')}</Label>
                       <Input
                         type="time"
                         value={preferences?.quiet_hours_start || "22:00"}
@@ -554,7 +554,7 @@ export default function Settings() {
                       />
                     </div>
                     <div className="flex-1 space-y-2">
-                      <Label className="text-xs">End</Label>
+                      <Label className="text-xs">{t('settings.end')}</Label>
                       <Input
                         type="time"
                         value={preferences?.quiet_hours_end || "07:00"}
@@ -571,17 +571,17 @@ export default function Settings() {
           <TabsContent value="security" className="space-y-4 mt-4">
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-base">Two-Factor Authentication</CardTitle>
-                <CardDescription>Add an extra layer of security</CardDescription>
+                <CardTitle className="text-base">{t('settings.twoFactorAuth')}</CardTitle>
+                <CardDescription>{t('settings.addExtraSecurity')}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-sm">Enable 2FA</p>
+                    <p className="font-medium text-sm">{t('settings.enable2FA')}</p>
                     <p className="text-xs text-muted-foreground">
                       {(profile as any)?.two_factor_enabled 
-                        ? "Two-factor authentication is enabled" 
-                        : "Protect your account with 2FA"
+                        ? t('settings.twoFactorEnabled')
+                        : t('settings.protect2FA')
                       }
                     </p>
                   </div>
@@ -590,7 +590,7 @@ export default function Settings() {
                     size="sm"
                     onClick={() => navigate("/security")}
                   >
-                    {(profile as any)?.two_factor_enabled ? "Manage" : "Set Up"}
+                    {(profile as any)?.two_factor_enabled ? t('settings.manage') : t('settings.setUp')}
                   </Button>
                 </div>
               </CardContent>
@@ -598,8 +598,8 @@ export default function Settings() {
 
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-base">Password</CardTitle>
-                <CardDescription>Manage your password</CardDescription>
+                <CardTitle className="text-base">{t('settings.password')}</CardTitle>
+                <CardDescription>{t('settings.managePassword')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <Button
@@ -607,15 +607,15 @@ export default function Settings() {
                   className="w-full"
                   onClick={() => navigate("/security")}
                 >
-                  Change Password
+                  {t('settings.changePassword')}
                 </Button>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-base">Active Sessions</CardTitle>
-                <CardDescription>Devices currently logged into your account</CardDescription>
+                <CardTitle className="text-base">{t('settings.activeSessions')}</CardTitle>
+                <CardDescription>{t('settings.activeSessionsDesc')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <Button
@@ -623,15 +623,15 @@ export default function Settings() {
                   className="w-full"
                   onClick={() => navigate("/security/devices")}
                 >
-                  View Active Sessions
+                  {t('settings.viewActiveSessions')}
                 </Button>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-base">Security Activity</CardTitle>
-                <CardDescription>Recent account activity</CardDescription>
+                <CardTitle className="text-base">{t('settings.securityActivity')}</CardTitle>
+                <CardDescription>{t('settings.recentAccountActivity')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <Button
@@ -639,7 +639,7 @@ export default function Settings() {
                   className="w-full"
                   onClick={() => navigate("/security")}
                 >
-                  View Security Settings
+                  {t('settings.viewSecuritySettings')}
                 </Button>
               </CardContent>
             </Card>
@@ -651,9 +651,9 @@ export default function Settings() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
                   <Palette className="h-4 w-4" />
-                  Theme
+                  {t('settings.theme')}
                 </CardTitle>
-                <CardDescription>Choose your preferred appearance</CardDescription>
+                <CardDescription>{t('settings.chooseAppearance')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <ThemeSwitcher />
@@ -664,9 +664,9 @@ export default function Settings() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
                   <Globe className="h-4 w-4" />
-                  Language
+                  {t('settings.language')}
                 </CardTitle>
-                <CardDescription>Select your preferred language</CardDescription>
+                <CardDescription>{t('settings.selectLanguage')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <LanguageSelector variant="button" />
@@ -675,14 +675,14 @@ export default function Settings() {
 
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-base">Sound</CardTitle>
-                <CardDescription>Notification sounds</CardDescription>
+                <CardTitle className="text-base">{t('settings.sound')}</CardTitle>
+                <CardDescription>{t('settings.notificationSounds')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-sm">Notification Sounds</p>
-                    <p className="text-xs text-muted-foreground">Play sounds for alerts</p>
+                    <p className="font-medium text-sm">{t('settings.notificationSounds')}</p>
+                    <p className="text-xs text-muted-foreground">{t('settings.playSounds')}</p>
                   </div>
                   <Switch
                     checked={preferences?.notification_sounds ?? true}
