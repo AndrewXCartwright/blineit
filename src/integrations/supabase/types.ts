@@ -3099,6 +3099,7 @@ export type Database = {
           last_document_signed_at: string | null
           location: string | null
           name: string | null
+          phone_number: string | null
           prediction_win_rate: number | null
           preferred_currency: string | null
           preferred_date_format: string | null
@@ -3126,6 +3127,7 @@ export type Database = {
           two_factor_secret: string | null
           updated_at: string
           user_id: string
+          username: string | null
           wallet_balance: number | null
           website_url: string | null
         }
@@ -3148,6 +3150,7 @@ export type Database = {
           last_document_signed_at?: string | null
           location?: string | null
           name?: string | null
+          phone_number?: string | null
           prediction_win_rate?: number | null
           preferred_currency?: string | null
           preferred_date_format?: string | null
@@ -3175,6 +3178,7 @@ export type Database = {
           two_factor_secret?: string | null
           updated_at?: string
           user_id: string
+          username?: string | null
           wallet_balance?: number | null
           website_url?: string | null
         }
@@ -3197,6 +3201,7 @@ export type Database = {
           last_document_signed_at?: string | null
           location?: string | null
           name?: string | null
+          phone_number?: string | null
           prediction_win_rate?: number | null
           preferred_currency?: string | null
           preferred_date_format?: string | null
@@ -3224,6 +3229,7 @@ export type Database = {
           two_factor_secret?: string | null
           updated_at?: string
           user_id?: string
+          username?: string | null
           wallet_balance?: number | null
           website_url?: string | null
         }
@@ -6245,6 +6251,10 @@ export type Database = {
         Args: { p_max_per_minute?: number; p_user_id: string }
         Returns: Json
       }
+      check_username_available: {
+        Args: { check_username: string }
+        Returns: boolean
+      }
       cleanup_old_api_logs: { Args: never; Returns: number }
       complete_transfer: { Args: { p_transfer_id: string }; Returns: Json }
       create_document_envelope: {
@@ -6441,6 +6451,7 @@ export type Database = {
         Args: { p_group_id: string; p_new_role: string; p_user_id: string }
         Returns: Json
       }
+      update_username: { Args: { new_username: string }; Returns: Json }
       use_group_invite: { Args: { p_invite_code: string }; Returns: Json }
     }
     Enums: {
