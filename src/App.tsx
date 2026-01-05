@@ -43,6 +43,7 @@ const AssetsExplore = lazy(() => import("./pages/AssetsExplore"));
 const Predict = lazy(() => import("./pages/Predict"));
 const Wallet = lazy(() => import("./pages/Wallet"));
 const Profile = lazy(() => import("./pages/Profile"));
+const Settings = lazy(() => import("./pages/Settings"));
 const Auth = lazy(() => import("./pages/Auth"));
 const PropertyDetail = lazy(() => import("./pages/PropertyDetail"));
 const LoanDetail = lazy(() => import("./pages/LoanDetail"));
@@ -233,6 +234,7 @@ const App = () => (
                   <Route path="/predict" element={<ProtectedRoute><Predict /></ProtectedRoute>} />
                   <Route path="/wallet" element={<ProtectedRoute><Wallet /></ProtectedRoute>} />
                   <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                  <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
                   <Route path="/property/:id" element={<ProtectedRoute><PropertyDetail /></ProtectedRoute>} />
                   <Route path="/loan/:id" element={<ProtectedRoute><LoanDetail /></ProtectedRoute>} />
                   <Route path="/sponsors" element={<ProtectedRoute><SponsorDirectory /></ProtectedRoute>} />

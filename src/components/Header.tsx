@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Search, Bot, MessageCircle } from "lucide-react";
+import { Search, Bot, MessageCircle, Settings } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserData } from "@/hooks/useUserData";
 import { useMessageGroups } from "@/hooks/useMessageGroups";
@@ -78,6 +78,17 @@ export function Header() {
           <ThemeToggle size="sm" />
           <LanguageSelector variant="icon" />
           <NotificationBell />
+          {user && (
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => navigate('/settings')}
+              className="h-9 w-9 sm:h-10 sm:w-10"
+              aria-label="Settings"
+            >
+              <Settings className="h-4 w-4 sm:h-5 sm:w-5" />
+            </Button>
+          )}
         </div>
       </div>
     </header>
