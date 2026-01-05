@@ -19,7 +19,7 @@ import { ComparisonTray } from "@/components/comparison/ComparisonTray";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import SkipLink from "@/components/SkipLink";
 import { Skeleton } from "@/components/ui/skeleton";
-import VoiceFAB from "@/components/ui/VoiceFAB";
+
 
 // Loading fallback component
 const PageLoader = () => (
@@ -405,7 +405,7 @@ const App = () => (
               </Suspense>
               <ComparisonTray />
               <BottomNav />
-              <VoiceFAB />
+              
             </BrowserRouter>
           </ComparisonProvider>
         </AuthProvider>
