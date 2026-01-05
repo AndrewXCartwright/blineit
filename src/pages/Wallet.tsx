@@ -160,7 +160,7 @@ export default function Wallet() {
 
   return (
     <div className="min-h-screen pb-24">
-      <header className="sticky top-0 z-40 glass-card border-b border-border/50 px-4 py-4">
+      <header className="sticky top-0 z-40 glass-card border-b border-border/50 px-4 py-4 pt-[calc(1rem+env(safe-area-inset-top))]">
         <h1 className="font-display text-2xl font-bold text-foreground">{t('wallet.title')}</h1>
       </header>
 
