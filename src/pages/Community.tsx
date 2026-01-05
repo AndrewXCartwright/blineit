@@ -1026,7 +1026,6 @@ function PostCard({ post, onLike, onShare }: PostCardProps) {
               <span className="text-sm">Share</span>
             </button>
           </div>
-        </div>
       </div>
     </div>
   );
