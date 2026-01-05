@@ -16,7 +16,7 @@ export default function MessagesHub() {
   const { conversations, loading: dmsLoading } = useConversations();
   const { groups, loading: groupsLoading } = useMessageGroups();
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState("groups");
+  const [activeTab, setActiveTab] = useState("direct");
 
   const totalUnread = conversations.reduce((sum, c) => sum + c.unread_count, 0);
 
