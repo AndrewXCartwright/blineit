@@ -465,7 +465,7 @@ export default function Community() {
         />
       )}
 
-      <main className="px-4 py-6 space-y-6">
+      <main className="px-2 py-6 space-y-4">
         {/* Feed Tabs */}
         <div className="flex gap-2">
           {[
@@ -902,10 +902,11 @@ interface PostCardProps {
 
 function PostCard({ post, onLike, onShare }: PostCardProps) {
   return (
-    <div className="glass-card rounded-2xl p-5">
-      <div className="flex items-start gap-3">
+    <div className="glass-card rounded-xl overflow-hidden">
+      {/* Header with padding */}
+      <div className="px-4 pt-4 pb-2 flex items-start gap-3">
         <Link to={`/user/${post.user_id}`}>
-          <Avatar className="w-12 h-12">
+          <Avatar className="w-10 h-10">
             <AvatarImage src={post.user?.avatar_url || undefined} />
             <AvatarFallback className="bg-primary/20 text-primary">
               {post.user?.display_name?.charAt(0) || "?"}
@@ -917,39 +918,47 @@ function PostCard({ post, onLike, onShare }: PostCardProps) {
           <div className="flex items-center gap-2">
             <Link
               to={`/user/${post.user_id}`}
-              className="font-semibold text-foreground hover:underline"
+              className="font-semibold text-foreground hover:underline text-sm"
             >
               {post.user?.display_name || "Unknown"}
             </Link>
             {post.user?.is_verified_investor && (
               <span className="text-primary">✓</span>
             )}
-            <span className="text-muted-foreground text-sm">
+            <span className="text-muted-foreground text-xs">
               {formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}
             </span>
           </div>
+        </div>
+      </div>
 
-          <p className="text-foreground mt-2 whitespace-pre-wrap break-words">
-            {post.content}
-          </p>
+      {/* Content with padding */}
+      <div className="px-4 pb-2">
+        <p className="text-foreground whitespace-pre-wrap break-words text-sm">
+          {post.content}
+        </p>
+      </div>
 
-          {/* Post Image */}
-          {post.image_url && (
-            <img 
-              src={post.image_url} 
-              alt="Post image" 
-              className="mt-3 rounded-xl max-h-96 w-full object-cover"
-            />
-          )}
+      {/* Post Image - Edge to edge */}
+      {post.image_url && (
+        <img 
+          src={post.image_url} 
+          alt="Post image" 
+          className="w-full max-h-[500px] object-cover"
+        />
+      )}
 
-          {/* Post Video */}
-          {post.video_url && (
-            <video 
-              src={post.video_url} 
-              controls
-              className="mt-3 rounded-xl max-h-96 w-full"
-            />
-          )}
+      {/* Post Video - Edge to edge */}
+      {post.video_url && (
+        <video 
+          src={post.video_url} 
+          controls
+          className="w-full max-h-[500px]"
+        />
+      )}
+
+      {/* Rest of content with padding */}
+      <div className="px-4 pb-4">
 
           {/* Tagged People */}
           {post.tagged_profiles && post.tagged_profiles.length > 0 && (
@@ -1013,7 +1022,7 @@ function PostCard({ post, onLike, onShare }: PostCardProps) {
               onClick={onShare}
               className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
             >
-              <Share2 className="w-5 h-5" />
+              <Share2 className="w-4 h-4" />
               <span className="text-sm">Share</span>
             </button>
           </div>
