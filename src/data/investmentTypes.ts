@@ -1,3 +1,11 @@
+import litigationFundingImg from '@/assets/investment/litigation-funding.jpg';
+import creditCardFactoringImg from '@/assets/investment/credit-card-factoring.jpg';
+import invoiceFactoringImg from '@/assets/investment/invoice-factoring.jpg';
+import otherFactoringImg from '@/assets/investment/other-factoring.jpg';
+import taxLienImg from '@/assets/investment/tax-lien.jpg';
+import secondTrustDeedImg from '@/assets/investment/second-trust-deed.jpg';
+import otherLiensImg from '@/assets/investment/other-liens.jpg';
+
 export interface ProcessStep {
   step: number;
   title: string;
@@ -37,6 +45,7 @@ export interface InvestmentTypeData {
   exampleOffering: ExampleOffering;
   riskDisclosure: string;
   icon: string;
+  image?: string;
 }
 
 export const factorInvestments: InvestmentTypeData[] = [
@@ -53,6 +62,7 @@ export const factorInvestments: InvestmentTypeData[] = [
     investmentType: 'Alternative Debt',
     sponsorRole: 'Sponsor underwrites cases, manages legal relationships, and distributes proceeds upon settlement.',
     icon: '⚖️',
+    image: litigationFundingImg,
     howItWorks: [
       { step: 1, title: 'Sponsor Sources Cases', description: 'Sponsor partners with attorneys to identify strong personal injury, commercial litigation, or mass tort cases needing funding' },
       { step: 2, title: 'Sponsor Underwrites & Structures Deal', description: 'Sponsor evaluates case merits, expected settlement value, and timeline; structures investment terms' },
@@ -100,6 +110,7 @@ export const factorInvestments: InvestmentTypeData[] = [
     investmentType: 'Receivables Financing',
     sponsorRole: 'Sponsor acquires merchant accounts, processes daily remittances, and manages collections.',
     icon: '💳',
+    image: creditCardFactoringImg,
     howItWorks: [
       { step: 1, title: 'Sponsor Identifies Merchants', description: 'Sponsor sources small businesses needing working capital who process consistent credit card volume' },
       { step: 2, title: 'Underwriting & Approval', description: 'Sponsor reviews 6+ months of credit card processing statements, bank statements, and business performance' },
@@ -150,6 +161,7 @@ export const factorInvestments: InvestmentTypeData[] = [
     investmentType: 'Receivables Financing',
     sponsorRole: 'Sponsor verifies invoices, manages debtor relationships, and handles collections.',
     icon: '📋',
+    image: invoiceFactoringImg,
     howItWorks: [
       { step: 1, title: 'Sponsor Partners with Businesses', description: 'Sponsor establishes relationships with B2B companies that have creditworthy customers but need faster cash flow' },
       { step: 2, title: 'Invoice Verification', description: 'Business submits invoices; Sponsor verifies invoice is valid, goods/services delivered, and debtor is creditworthy' },
@@ -200,6 +212,7 @@ export const factorInvestments: InvestmentTypeData[] = [
     investmentType: 'Receivables Financing',
     sponsorRole: 'Sponsor specializes in specific factoring vertical and manages full lifecycle.',
     icon: '📦',
+    image: otherFactoringImg,
     howItWorks: [
       { step: 1, title: 'Sponsor Identifies Opportunity', description: 'Sponsor sources specialty receivables in their area of expertise (PO financing, healthcare, equipment)' },
       { step: 2, title: 'Due Diligence & Structuring', description: 'Sponsor performs specialized underwriting based on asset type and structures appropriate terms' },
@@ -251,6 +264,7 @@ export const lienInvestments: InvestmentTypeData[] = [
     investmentType: 'Government-Secured Debt',
     sponsorRole: 'Sponsor purchases liens at auction, manages redemption periods, and initiates foreclosure if necessary.',
     icon: '🏛️',
+    image: taxLienImg,
     howItWorks: [
       { step: 1, title: 'County Auctions Tax Liens', description: 'Property owner fails to pay property taxes; county places lien on property and auctions the lien to recover taxes' },
       { step: 2, title: 'Sponsor Acquires Liens at Auction', description: 'Sponsor bids on liens; wins liens at auction by either bidding lowest interest rate or highest premium (varies by state)' },
@@ -302,6 +316,7 @@ export const lienInvestments: InvestmentTypeData[] = [
     investmentType: 'Real Estate Secured Debt',
     sponsorRole: 'Sponsor underwrites borrowers, services loans, and manages default/foreclosure proceedings.',
     icon: '🏡',
+    image: secondTrustDeedImg,
     howItWorks: [
       { step: 1, title: 'Borrower Needs Capital', description: 'Property owner with existing first mortgage needs additional funds (home improvement, debt consolidation, business capital)' },
       { step: 2, title: 'Sponsor Underwrites Loan', description: 'Sponsor evaluates property value, existing liens, borrower income/credit, and structures second position loan' },
@@ -355,6 +370,7 @@ export const lienInvestments: InvestmentTypeData[] = [
     investmentType: 'Secured Debt',
     sponsorRole: 'Sponsor acquires lien positions, manages legal enforcement, and distributes proceeds upon resolution.',
     icon: '🔒',
+    image: otherLiensImg,
     howItWorks: [
       { step: 1, title: 'Sponsor Identifies Lien Opportunity', description: 'Sponsor sources liens from contractors, judgment creditors, or equipment lenders who need immediate liquidity' },
       { step: 2, title: 'Lien Verification & Valuation', description: 'Sponsor verifies lien validity, priority position, and underlying collateral value' },
