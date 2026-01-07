@@ -47,7 +47,7 @@ const PortfolioSummary = () => {
           YOUR PORTFOLIO
         </p>
         {/* Invest Now Button */}
-        <button onClick={() => navigate("/assets")} className="bg-[#FFD700] hover:bg-[#FFC700] text-black font-bold text-xs px-3 py-1.5 rounded-xl transition-all hover:-translate-y-0.5">
+        <button onClick={() => navigate("/assets")} className="bg-[#FFD700] hover:bg-[#FFC700] text-black font-bold text-xs py-1.5 rounded-xl transition-all hover:-translate-y-0.5 px-[20px] mx-[50px]">
           Invest Now
         </button>
       </div>
