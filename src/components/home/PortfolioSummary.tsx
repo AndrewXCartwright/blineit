@@ -23,7 +23,7 @@ const PortfolioSummary = () => {
     route: "/portfolio/analytics"
   }, {
     value: "18",
-    label: "Active Bets",
+    label: "Positions",
     route: "/predict"
   }, {
     value: "$2.8M",
