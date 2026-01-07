@@ -100,7 +100,7 @@ export function AvailableOfferingCard({ offering }: AvailableOfferingCardProps) 
           className="w-full" 
           size="sm"
           disabled={offering.status === 'closed'}
-          onClick={() => navigate(`/loan/${offering.id}`)}
+          onClick={() => navigate(`/offerings/${offering.id}`)}
         >
           View Details
         </Button>

@@ -192,6 +192,7 @@ const AdminMessages = lazy(() => import("./pages/admin/AdminMessages"));
 const DebtFactorCategory = lazy(() => import("./pages/explore/DebtFactorCategory"));
 const DebtLienCategory = lazy(() => import("./pages/explore/DebtLienCategory"));
 const InvestmentTypeDetail = lazy(() => import("./pages/explore/InvestmentTypeDetail"));
+const OfferingDetail = lazy(() => import("./pages/OfferingDetail"));
 
 // Sponsor Portal Pages
 const SponsorLogin = lazy(() => import("./pages/sponsor/SponsorLogin"));
@@ -238,6 +239,7 @@ const App = () => (
                   <Route path="/explore/debt/factor" element={<ProtectedRoute><DebtFactorCategory /></ProtectedRoute>} />
                   <Route path="/explore/debt/lien" element={<ProtectedRoute><DebtLienCategory /></ProtectedRoute>} />
                   <Route path="/explore/debt/:category/:slug" element={<ProtectedRoute><InvestmentTypeDetail /></ProtectedRoute>} />
+                  <Route path="/offerings/:id" element={<ProtectedRoute><OfferingDetail /></ProtectedRoute>} />
                   <Route path="/properties" element={<ProtectedRoute><PropertiesListing /></ProtectedRoute>} />
                   <Route path="/explore" element={<ProtectedRoute><PropertiesListing /></ProtectedRoute>} />
                   <Route path="/predict" element={<ProtectedRoute><Predict /></ProtectedRoute>} />
