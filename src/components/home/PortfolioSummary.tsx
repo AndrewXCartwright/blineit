@@ -47,8 +47,8 @@ const PortfolioSummary = () => {
           YOUR PORTFOLIO
         </p>
         {/* Invest Now Button */}
-        <button onClick={() => navigate("/assets")} className="bg-[#FFD700] hover:bg-[#FFC700] text-black font-bold text-xs py-1.5 rounded-xl transition-all hover:-translate-y-0.5 mx-[50px] my-0 px-[20px]">
-          INVEST   
+        <button onClick={() => navigate("/assets")} className="bg-[#FFD700] hover:bg-[#FFC700] text-black font-bold text-xs px-3 py-1.5 rounded-xl transition-all hover:-translate-y-0.5">
+          Invest Now
         </button>
       </div>
 
@@ -75,12 +75,12 @@ const PortfolioSummary = () => {
 
       {/* Stats Row */}
       <div className="flex gap-2">
-        {stats.map((stat, index) => <div key={index} role="button" tabIndex={0} aria-label={`View your ${stat.value} ${stat.label}`} onClick={() => navigate(stat.route)} onKeyDown={e => handleKeyDown(e, stat.route)} className="flex-1 bg-white dark:bg-card rounded-[10px] text-center cursor-pointer border border-transparent hover:border-primary hover:-translate-y-0.5 hover:bg-gray-50 dark:hover:bg-secondary transition-all duration-200 group relative py-0 px-0">
+        {stats.map((stat, index) => <div key={index} role="button" tabIndex={0} aria-label={`View your ${stat.value} ${stat.label}`} onClick={() => navigate(stat.route)} onKeyDown={e => handleKeyDown(e, stat.route)} className="flex-1 bg-white dark:bg-card rounded-[10px] py-2.5 px-1.5 text-center cursor-pointer border border-transparent hover:border-primary hover:-translate-y-0.5 hover:bg-gray-50 dark:hover:bg-secondary transition-all duration-200 group relative">
             <ChevronRight size={10} className="absolute top-1.5 right-1.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-            <p className="font-semibold text-foreground text-lg py-0">
+            <p className="font-semibold text-foreground text-lg">
               {stat.value}
             </p>
-            <p className="text-muted-foreground mt-0.5 text-sm my-0">
+            <p className="text-muted-foreground mt-0.5 text-base my-[4px]">
               {stat.label}
             </p>
           </div>)}
