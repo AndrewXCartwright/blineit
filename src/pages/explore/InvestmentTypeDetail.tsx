@@ -1,8 +1,10 @@
-import { ArrowLeft, AlertTriangle, Bell } from "lucide-react";
+import { ArrowLeft, AlertTriangle } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getInvestmentTypeBySlug } from "@/data/investmentTypes";
 import { ProcessFlow } from "@/components/debt/ProcessFlow";
 import { ExampleOfferingCard } from "@/components/debt/ExampleOfferingCard";
+import { AvailableOfferings } from "@/components/debt/AvailableOfferings";
+import { BecomeSponsorCTA } from "@/components/debt/BecomeSponsorCTA";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -109,6 +111,12 @@ export default function InvestmentTypeDetail() {
           </div>
         </div>
 
+        {/* Available Offerings - NEW SECTION */}
+        <AvailableOfferings 
+          investmentSlug={investment.slug} 
+          investmentTitle={investment.title} 
+        />
+
         {/* Sponsor Role */}
         <div className="glass-card rounded-2xl p-5">
           <h3 className="font-display font-semibold text-foreground mb-2">
@@ -152,25 +160,8 @@ export default function InvestmentTypeDetail() {
           </AccordionItem>
         </Accordion>
 
-        {/* CTA buttons */}
-        <div className="space-y-3">
-          <Button 
-            className="w-full" 
-            size="lg"
-            onClick={() => navigate(`/assets/explore?type=debt&class=${investment.slug}`)}
-          >
-            View Available Offerings
-          </Button>
-          
-          <Button 
-            variant="outline" 
-            className="w-full"
-            size="lg"
-          >
-            <Bell className="w-4 h-4 mr-2" />
-            Get Notified of New Offerings
-          </Button>
-        </div>
+        {/* Become a Sponsor CTA */}
+        <BecomeSponsorCTA investmentTitle={investment.title} />
       </main>
     </div>
   );
