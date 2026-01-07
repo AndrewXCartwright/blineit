@@ -188,6 +188,11 @@ const GroupSettings = lazy(() => import("./pages/GroupSettings"));
 const GroupMembers = lazy(() => import("./pages/GroupMembers"));
 const AdminMessages = lazy(() => import("./pages/admin/AdminMessages"));
 
+// Debt Investment Category Pages
+const DebtFactorCategory = lazy(() => import("./pages/explore/DebtFactorCategory"));
+const DebtLienCategory = lazy(() => import("./pages/explore/DebtLienCategory"));
+const InvestmentTypeDetail = lazy(() => import("./pages/explore/InvestmentTypeDetail"));
+
 // Sponsor Portal Pages
 const SponsorLogin = lazy(() => import("./pages/sponsor/SponsorLogin"));
 const SponsorRegister = lazy(() => import("./pages/sponsor/SponsorRegister"));
@@ -229,6 +234,10 @@ const App = () => (
                   <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
                   <Route path="/assets" element={<ProtectedRoute><Assets /></ProtectedRoute>} />
                   <Route path="/assets/explore" element={<ProtectedRoute><AssetsExplore /></ProtectedRoute>} />
+                  {/* Debt Investment Category Routes */}
+                  <Route path="/explore/debt/factor" element={<ProtectedRoute><DebtFactorCategory /></ProtectedRoute>} />
+                  <Route path="/explore/debt/lien" element={<ProtectedRoute><DebtLienCategory /></ProtectedRoute>} />
+                  <Route path="/explore/debt/:category/:slug" element={<ProtectedRoute><InvestmentTypeDetail /></ProtectedRoute>} />
                   <Route path="/properties" element={<ProtectedRoute><PropertiesListing /></ProtectedRoute>} />
                   <Route path="/explore" element={<ProtectedRoute><PropertiesListing /></ProtectedRoute>} />
                   <Route path="/predict" element={<ProtectedRoute><Predict /></ProtectedRoute>} />

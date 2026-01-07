@@ -95,14 +95,21 @@ const debtAssets: AssetClass[] = [{
   isLive: true,
   filterPath: "/assets/explore?type=debt&class=construction"
 }, {
-  id: "business",
-  icon: "💼",
-  nameKey: "assets.businessLoans",
-  value: "$95M",
-  subtitle: "Coming Q1 2026",
-  isLive: false,
-  launchDate: "Q1 2026",
-  waitlistId: "private_business"
+  id: "factor",
+  icon: "📋",
+  nameKey: "assets.factor",
+  value: "$380M",
+  subtitle: "12-40% APY",
+  isLive: true,
+  filterPath: "/explore/debt/factor"
+}, {
+  id: "lien",
+  icon: "🔒",
+  nameKey: "assets.lien",
+  value: "$290M",
+  subtitle: "8-25% APY",
+  isLive: true,
+  filterPath: "/explore/debt/lien"
 }, {
   id: "bridge",
   icon: "🌉",
@@ -111,15 +118,6 @@ const debtAssets: AssetClass[] = [{
   subtitle: "10-15% APY",
   isLive: true,
   filterPath: "/assets/explore?type=debt&class=bridge"
-}, {
-  id: "portfolios",
-  icon: "📊",
-  nameKey: "assets.loanPortfolios",
-  value: "",
-  subtitleKey: "assets.diversified",
-  subtitle: "Coming Q2 2026",
-  isLive: false,
-  launchDate: "Q2 2026"
 }];
 interface AssetClassGridProps {
   investmentType: InvestmentType;
