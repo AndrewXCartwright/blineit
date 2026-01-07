@@ -3,8 +3,6 @@ import { Check, Users } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useWaitlistCounts, useUserWaitlistStatus, AssetClass as WaitlistAssetClass } from "@/hooks/useWaitlist";
 import type { InvestmentType } from "./InvestmentTypeToggle";
-import factorImage from "@/assets/factor-business.jpg";
-import lienImage from "@/assets/lien-home.jpg";
 
 interface AssetClass {
   id: string;
@@ -17,7 +15,6 @@ interface AssetClass {
   launchDate?: string;
   filterPath?: string;
   waitlistId?: WaitlistAssetClass;
-  image?: string;
 }
 
 const equityAssets: AssetClass[] = [{
@@ -131,8 +128,7 @@ const debtAssets: AssetClass[] = [{
   value: "$380M",
   subtitle: "12-40% APY",
   isLive: true,
-  filterPath: "/explore/debt/factor",
-  image: factorImage
+  filterPath: "/explore/debt/factor"
 }, {
   id: "lien",
   icon: "🔒",
@@ -140,8 +136,7 @@ const debtAssets: AssetClass[] = [{
   value: "$290M",
   subtitle: "8-25% APY",
   isLive: true,
-  filterPath: "/explore/debt/lien",
-  image: lienImage
+  filterPath: "/explore/debt/lien"
 }];
 
 interface AssetClassGridProps {
@@ -202,47 +197,38 @@ export function AssetClassGrid({ investmentType }: AssetClassGridProps) {
             className="p-4 rounded-2xl glass-card text-left transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] animate-fade-in relative overflow-hidden"
             style={{ animationDelay: `${index * 0.05}s` }}
           >
-            {asset.image && (
-              <div className="absolute inset-0 z-0">
-                <img src={asset.image} alt="" className="w-full h-full object-cover opacity-30" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/40" />
+            <div className="flex items-start justify-between mb-2">
+              <span className="text-2xl">{asset.icon}</span>
+              <div className="flex flex-col items-end gap-1">
+                {asset.isLive ? (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-success/20 text-success uppercase">
+                    {t('assets.live')}
+                  </span>
+                ) : isOnWaitlist ? (
+                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-success/20 text-success">
+                    <Check className="w-3 h-3" />
+                    {t('assets.waitlisted')}
+                  </span>
+                ) : (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-muted text-muted-foreground">
+                    {asset.launchDate || t('assets.soon')}
+                  </span>
+                )}
+                {!asset.isLive && waitlistCount > 0 && (
+                  <span className="flex items-center gap-0.5 text-[9px] text-muted-foreground">
+                    <Users className="w-2.5 h-2.5" />
+                    {formatWaitlistCount(waitlistCount)} {t('assets.waiting')}
+                  </span>
+                )}
               </div>
-            )}
-            <div className="relative z-10">
-              <div className="flex items-start justify-between mb-2">
-                {!asset.image && <span className="text-2xl">{asset.icon}</span>}
-                {asset.image && <div className="w-6" />}
-                <div className="flex flex-col items-end gap-1">
-                  {asset.isLive ? (
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-success/20 text-success uppercase">
-                      {t('assets.live')}
-                    </span>
-                  ) : isOnWaitlist ? (
-                    <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-success/20 text-success">
-                      <Check className="w-3 h-3" />
-                      {t('assets.waitlisted')}
-                    </span>
-                  ) : (
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-muted text-muted-foreground">
-                      {asset.launchDate || t('assets.soon')}
-                    </span>
-                  )}
-                  {!asset.isLive && waitlistCount > 0 && (
-                    <span className="flex items-center gap-0.5 text-[9px] text-muted-foreground">
-                      <Users className="w-2.5 h-2.5" />
-                      {formatWaitlistCount(waitlistCount)} {t('assets.waiting')}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <h3 className="font-display font-semibold text-foreground mb-1 leading-tight text-base">
-                {displayName}
-              </h3>
-              <p className={`text-sm font-bold mb-0.5 ${investmentType === "equity" ? "text-purple-400" : "text-blue-400"}`}>
-                {getValue(asset)}
-              </p>
-              <p className="text-xs text-muted-foreground">{getSubtitle(asset)}</p>
             </div>
+            <h3 className="font-display font-semibold text-foreground mb-1 leading-tight text-base">
+              {displayName}
+            </h3>
+            <p className={`text-sm font-bold mb-0.5 ${investmentType === "equity" ? "text-purple-400" : "text-blue-400"}`}>
+              {getValue(asset)}
+            </p>
+            <p className="text-xs text-muted-foreground">{getSubtitle(asset)}</p>
           </button>
         );
       })}
