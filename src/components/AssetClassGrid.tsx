@@ -3,6 +3,9 @@ import { Check, Users } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useWaitlistCounts, useUserWaitlistStatus, AssetClass as WaitlistAssetClass } from "@/hooks/useWaitlist";
 import type { InvestmentType } from "./InvestmentTypeToggle";
+import factorImage from "@/assets/factor-business.jpg";
+import lienImage from "@/assets/lien-home.jpg";
+
 interface AssetClass {
   id: string;
   icon: string;
@@ -14,7 +17,9 @@ interface AssetClass {
   launchDate?: string;
   filterPath?: string;
   waitlistId?: WaitlistAssetClass;
+  image?: string;
 }
+
 const equityAssets: AssetClass[] = [{
   id: "real-estate",
   icon: "🏠",
@@ -70,6 +75,7 @@ const equityAssets: AssetClass[] = [{
   isLive: true,
   filterPath: "/predict"
 }];
+
 const debtAssets: AssetClass[] = [{
   id: "re-loans",
   icon: "🏠",
@@ -87,6 +93,14 @@ const debtAssets: AssetClass[] = [{
   isLive: true,
   filterPath: "/assets/explore?type=debt&class=commercial"
 }, {
+  id: "bridge",
+  icon: "🌉",
+  nameKey: "assets.bridgeLoans",
+  value: "$210M",
+  subtitle: "10-15% APY",
+  isLive: true,
+  filterPath: "/assets/explore?type=debt&class=bridge"
+}, {
   id: "construction",
   icon: "🏗️",
   nameKey: "assets.constructionLoans",
@@ -95,47 +109,53 @@ const debtAssets: AssetClass[] = [{
   isLive: true,
   filterPath: "/assets/explore?type=debt&class=construction"
 }, {
+  id: "business-loans",
+  icon: "💼",
+  nameKey: "assets.businessLoans",
+  value: "$240M",
+  subtitle: "10-18% APY",
+  isLive: true,
+  filterPath: "/assets/explore?type=debt&class=business"
+}, {
+  id: "loan-portfolios",
+  icon: "📁",
+  nameKey: "assets.loanPortfolios",
+  value: "$175M",
+  subtitle: "8-14% APY",
+  isLive: true,
+  filterPath: "/assets/explore?type=debt&class=portfolios"
+}, {
   id: "factor",
   icon: "📋",
-  nameKey: "assets.factor",
+  nameKey: "Factor",
   value: "$380M",
   subtitle: "12-40% APY",
   isLive: true,
-  filterPath: "/explore/debt/factor"
+  filterPath: "/explore/debt/factor",
+  image: factorImage
 }, {
   id: "lien",
   icon: "🔒",
-  nameKey: "assets.lien",
+  nameKey: "Lien",
   value: "$290M",
   subtitle: "8-25% APY",
   isLive: true,
-  filterPath: "/explore/debt/lien"
-}, {
-  id: "bridge",
-  icon: "🌉",
-  nameKey: "assets.bridgeLoans",
-  value: "$210M",
-  subtitle: "10-15% APY",
-  isLive: true,
-  filterPath: "/assets/explore?type=debt&class=bridge"
+  filterPath: "/explore/debt/lien",
+  image: lienImage
 }];
+
 interface AssetClassGridProps {
   investmentType: InvestmentType;
 }
-export function AssetClassGrid({
-  investmentType
-}: AssetClassGridProps) {
-  const {
-    t
-  } = useTranslation();
+
+export function AssetClassGrid({ investmentType }: AssetClassGridProps) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
-  const {
-    counts
-  } = useWaitlistCounts();
-  const {
-    statuses
-  } = useUserWaitlistStatus();
+  const { counts } = useWaitlistCounts();
+  const { statuses } = useUserWaitlistStatus();
+
   const assets = investmentType === "equity" ? equityAssets : debtAssets;
+
   const handleAssetClick = (asset: AssetClass) => {
     if (asset.isLive && asset.filterPath) {
       navigate(asset.filterPath);
@@ -143,18 +163,21 @@ export function AssetClassGrid({
       navigate(`/coming-soon/${asset.waitlistId}`);
     }
   };
+
   const formatWaitlistCount = (count: number) => {
     if (count >= 1000) {
       return `${(count / 1000).toFixed(1)}K`;
     }
     return count.toString();
   };
+
   const getSubtitle = (asset: AssetClass) => {
     if (asset.subtitleKey && asset.subtitle) {
       return `${asset.subtitle} ${t(asset.subtitleKey)}`;
     }
     return asset.subtitle || '';
   };
+
   const getValue = (asset: AssetClass) => {
     if (asset.id === "predictions") {
       return t('assets.betAndWin');
@@ -164,38 +187,65 @@ export function AssetClassGrid({
     }
     return asset.value;
   };
-  return <div className="grid grid-cols-2 gap-3">
+
+  return (
+    <div className="grid grid-cols-2 gap-3">
       {assets.map((asset, index) => {
-      const waitlistCount = asset.waitlistId ? counts[asset.waitlistId] || 0 : 0;
-      const isOnWaitlist = asset.waitlistId ? statuses[asset.waitlistId] || false : false;
-      return <button key={asset.id} onClick={() => handleAssetClick(asset)} className="p-4 rounded-2xl glass-card text-left transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] animate-fade-in relative" style={{
-        animationDelay: `${index * 0.05}s`
-      }}>
-            <div className="flex items-start justify-between mb-2">
-              <span className="text-2xl">{asset.icon}</span>
-              <div className="flex flex-col items-end gap-1">
-                {asset.isLive ? <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-success/20 text-success uppercase">
-                    {t('assets.live')}
-                  </span> : isOnWaitlist ? <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-success/20 text-success">
-                    <Check className="w-3 h-3" />
-                    {t('assets.waitlisted')}
-                  </span> : <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-muted text-muted-foreground">
-                    {asset.launchDate || t('assets.soon')}
-                  </span>}
-                {!asset.isLive && waitlistCount > 0 && <span className="flex items-center gap-0.5 text-[9px] text-muted-foreground">
-                    <Users className="w-2.5 h-2.5" />
-                    {formatWaitlistCount(waitlistCount)} {t('assets.waiting')}
-                  </span>}
+        const waitlistCount = asset.waitlistId ? counts[asset.waitlistId] || 0 : 0;
+        const isOnWaitlist = asset.waitlistId ? statuses[asset.waitlistId] || false : false;
+        const displayName = asset.nameKey.startsWith('assets.') ? t(asset.nameKey) : asset.nameKey;
+
+        return (
+          <button
+            key={asset.id}
+            onClick={() => handleAssetClick(asset)}
+            className="p-4 rounded-2xl glass-card text-left transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] animate-fade-in relative overflow-hidden"
+            style={{ animationDelay: `${index * 0.05}s` }}
+          >
+            {asset.image && (
+              <div className="absolute inset-0 z-0">
+                <img src={asset.image} alt="" className="w-full h-full object-cover opacity-30" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/40" />
               </div>
+            )}
+            <div className="relative z-10">
+              <div className="flex items-start justify-between mb-2">
+                {!asset.image && <span className="text-2xl">{asset.icon}</span>}
+                {asset.image && <div className="w-6" />}
+                <div className="flex flex-col items-end gap-1">
+                  {asset.isLive ? (
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-success/20 text-success uppercase">
+                      {t('assets.live')}
+                    </span>
+                  ) : isOnWaitlist ? (
+                    <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-success/20 text-success">
+                      <Check className="w-3 h-3" />
+                      {t('assets.waitlisted')}
+                    </span>
+                  ) : (
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-muted text-muted-foreground">
+                      {asset.launchDate || t('assets.soon')}
+                    </span>
+                  )}
+                  {!asset.isLive && waitlistCount > 0 && (
+                    <span className="flex items-center gap-0.5 text-[9px] text-muted-foreground">
+                      <Users className="w-2.5 h-2.5" />
+                      {formatWaitlistCount(waitlistCount)} {t('assets.waiting')}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <h3 className="font-display font-semibold text-foreground mb-1 leading-tight text-base">
+                {displayName}
+              </h3>
+              <p className={`text-sm font-bold mb-0.5 ${investmentType === "equity" ? "text-purple-400" : "text-blue-400"}`}>
+                {getValue(asset)}
+              </p>
+              <p className="text-xs text-muted-foreground">{getSubtitle(asset)}</p>
             </div>
-            <h3 className="font-display font-semibold text-foreground mb-1 leading-tight text-base">
-              {t(asset.nameKey)}
-            </h3>
-            <p className={`text-sm font-bold mb-0.5 ${investmentType === "equity" ? "text-purple-400" : "text-blue-400"}`}>
-              {getValue(asset)}
-            </p>
-            <p className="text-xs text-muted-foreground">{getSubtitle(asset)}</p>
-          </button>;
-    })}
-    </div>;
+          </button>
+        );
+      })}
+    </div>
+  );
 }
