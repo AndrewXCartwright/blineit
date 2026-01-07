@@ -1,20 +1,23 @@
 import { useNavigate } from "react-router-dom";
-
-const mapDots = [
-  { top: "30%", left: "25%" },
-  { top: "50%", left: "60%" },
-  { top: "70%", left: "40%" },
-  { top: "25%", left: "75%" },
-];
-
+const mapDots = [{
+  top: "30%",
+  left: "25%"
+}, {
+  top: "50%",
+  left: "60%"
+}, {
+  top: "70%",
+  left: "40%"
+}, {
+  top: "25%",
+  left: "75%"
+}];
 const MapPreview = () => {
   const navigate = useNavigate();
-
-  return (
-    <div className="mb-4">
+  return <div className="mb-4">
       {/* Section Header */}
       <div className="mb-3">
-        <span className="text-sm font-semibold text-foreground">
+        <span className="font-semibold text-foreground text-base">
           📍 Near You
         </span>
       </div>
@@ -24,16 +27,10 @@ const MapPreview = () => {
         {/* Map Preview Area */}
         <div className="h-[120px] bg-gradient-to-br from-blue-100 to-blue-50 dark:from-secondary dark:to-background relative">
           {/* Property Dots */}
-          {mapDots.map((dot, index) => (
-            <div
-              key={index}
-              className="absolute w-2.5 h-2.5 bg-bull rounded-full animate-pulse glow-bull"
-              style={{
-                top: dot.top,
-                left: dot.left,
-              }}
-            />
-          ))}
+          {mapDots.map((dot, index) => <div key={index} className="absolute w-2.5 h-2.5 bg-bull rounded-full animate-pulse glow-bull" style={{
+          top: dot.top,
+          left: dot.left
+        }} />)}
         </div>
 
         {/* CTA Section */}
@@ -49,16 +46,11 @@ const MapPreview = () => {
           </div>
 
           {/* Right side - EXPLORE button */}
-          <button
-            onClick={() => navigate("/explore")}
-            className="bg-bull text-bull-foreground py-2 px-3.5 rounded-full text-[10px] font-semibold border-none cursor-pointer hover:opacity-90 transition-opacity"
-          >
+          <button onClick={() => navigate("/explore")} className="bg-bull text-bull-foreground py-2 px-3.5 rounded-full text-[10px] font-semibold border-none cursor-pointer hover:opacity-90 transition-opacity">
             EXPLORE
           </button>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default MapPreview;

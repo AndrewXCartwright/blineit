@@ -36,7 +36,7 @@ const LeaderboardGrid = () => {
   return <div className="mb-4">
       {/* Section Header */}
       <div className="flex justify-between items-center mb-3">
-        <span className="text-sm font-semibold text-foreground">
+        <span className="font-semibold text-foreground text-base">
           🏆 Leaderboards
         </span>
         <button onClick={() => navigate("/leaderboards")} className="bg-transparent border-none text-[11px] text-bull cursor-pointer">
