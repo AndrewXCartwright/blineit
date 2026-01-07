@@ -80,7 +80,7 @@ const PortfolioSummary = () => {
             <p className="font-semibold text-foreground text-lg">
               {stat.value}
             </p>
-            <p className="text-muted-foreground mt-0.5 text-base">
+            <p className="text-muted-foreground mt-0.5 text-sm">
               {stat.label}
             </p>
           </div>)}
