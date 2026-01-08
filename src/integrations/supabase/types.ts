@@ -2284,6 +2284,173 @@ export type Database = {
         }
         Relationships: []
       }
+      liquidity_program_settings: {
+        Row: {
+          created_at: string
+          enabled: boolean | null
+          fee_tiers: Json
+          id: string
+          max_monthly_redemptions: number | null
+          min_holding_days: number
+          offering_id: string
+          reserve_balance: number
+          reserve_percent: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          enabled?: boolean | null
+          fee_tiers?: Json
+          id?: string
+          max_monthly_redemptions?: number | null
+          min_holding_days?: number
+          offering_id: string
+          reserve_balance?: number
+          reserve_percent?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          enabled?: boolean | null
+          fee_tiers?: Json
+          id?: string
+          max_monthly_redemptions?: number | null
+          min_holding_days?: number
+          offering_id?: string
+          reserve_balance?: number
+          reserve_percent?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "liquidity_program_settings_offering_id_fkey"
+            columns: ["offering_id"]
+            isOneToOne: true
+            referencedRelation: "exclusive_offerings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      liquidity_requests: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          denial_reason: string | null
+          fee_amount: number
+          fee_percent_applied: number
+          fee_tier_applied: Json
+          gross_value: number
+          holding_period_days: number
+          holding_start_date: string
+          id: string
+          investor_id: string
+          net_payout: number
+          offering_id: string
+          payout_reference: string | null
+          processed_at: string | null
+          property_id: string | null
+          quantity: number
+          request_number: string | null
+          requested_at: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          token_holding_id: string | null
+          token_value_at_request: number
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          denial_reason?: string | null
+          fee_amount: number
+          fee_percent_applied: number
+          fee_tier_applied: Json
+          gross_value: number
+          holding_period_days: number
+          holding_start_date: string
+          id?: string
+          investor_id: string
+          net_payout: number
+          offering_id: string
+          payout_reference?: string | null
+          processed_at?: string | null
+          property_id?: string | null
+          quantity: number
+          request_number?: string | null
+          requested_at?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          token_holding_id?: string | null
+          token_value_at_request: number
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          denial_reason?: string | null
+          fee_amount?: number
+          fee_percent_applied?: number
+          fee_tier_applied?: Json
+          gross_value?: number
+          holding_period_days?: number
+          holding_start_date?: string
+          id?: string
+          investor_id?: string
+          net_payout?: number
+          offering_id?: string
+          payout_reference?: string | null
+          processed_at?: string | null
+          property_id?: string | null
+          quantity?: number
+          request_number?: string | null
+          requested_at?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          token_holding_id?: string | null
+          token_value_at_request?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "liquidity_requests_investor_id_fkey"
+            columns: ["investor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "liquidity_requests_offering_id_fkey"
+            columns: ["offering_id"]
+            isOneToOne: false
+            referencedRelation: "exclusive_offerings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "liquidity_requests_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "liquidity_requests_reviewed_by_fkey"
+            columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "liquidity_requests_token_holding_id_fkey"
+            columns: ["token_holding_id"]
+            isOneToOne: false
+            referencedRelation: "user_holdings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       listings: {
         Row: {
           created_at: string
@@ -4042,6 +4209,102 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      secondary_listings: {
+        Row: {
+          buyer_id: string | null
+          created_at: string
+          expires_at: string | null
+          id: string
+          listed_at: string
+          listing_number: string | null
+          offering_id: string
+          original_token_price: number
+          price_change_percent: number
+          price_per_token: number
+          property_id: string | null
+          quantity: number
+          seller_id: string
+          sold_at: string | null
+          status: string
+          token_holding_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          buyer_id?: string | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          listed_at?: string
+          listing_number?: string | null
+          offering_id: string
+          original_token_price: number
+          price_change_percent?: number
+          price_per_token: number
+          property_id?: string | null
+          quantity: number
+          seller_id: string
+          sold_at?: string | null
+          status?: string
+          token_holding_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          buyer_id?: string | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          listed_at?: string
+          listing_number?: string | null
+          offering_id?: string
+          original_token_price?: number
+          price_change_percent?: number
+          price_per_token?: number
+          property_id?: string | null
+          quantity?: number
+          seller_id?: string
+          sold_at?: string | null
+          status?: string
+          token_holding_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "secondary_listings_buyer_id_fkey"
+            columns: ["buyer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "secondary_listings_offering_id_fkey"
+            columns: ["offering_id"]
+            isOneToOne: false
+            referencedRelation: "exclusive_offerings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "secondary_listings_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "secondary_listings_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "secondary_listings_token_holding_id_fkey"
+            columns: ["token_holding_id"]
+            isOneToOne: false
+            referencedRelation: "user_holdings"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       sponsor_credentials: {
         Row: {
