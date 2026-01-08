@@ -46,6 +46,7 @@ const Profile = lazy(() => import("./pages/Profile"));
 const Settings = lazy(() => import("./pages/Settings"));
 const Auth = lazy(() => import("./pages/Auth"));
 const PropertyDetail = lazy(() => import("./pages/PropertyDetail"));
+const InvestmentDetail = lazy(() => import("./pages/InvestmentDetail"));
 const LoanDetail = lazy(() => import("./pages/LoanDetail"));
 const KYCVerification = lazy(() => import("./pages/KYCVerification"));
 const ComingSoon = lazy(() => import("./pages/ComingSoon"));
@@ -247,6 +248,7 @@ const App = () => (
                   <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                   <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
                   <Route path="/property/:id" element={<ProtectedRoute><PropertyDetail /></ProtectedRoute>} />
+                  <Route path="/invest/:offeringId" element={<ProtectedRoute><InvestmentDetail /></ProtectedRoute>} />
                   <Route path="/loan/:id" element={<ProtectedRoute><LoanDetail /></ProtectedRoute>} />
                   <Route path="/sponsors" element={<ProtectedRoute><SponsorDirectory /></ProtectedRoute>} />
                   <Route path="/kyc" element={<ProtectedRoute><KYCVerification /></ProtectedRoute>} />
