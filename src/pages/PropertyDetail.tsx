@@ -240,13 +240,13 @@ function LiquidityProgramCard({
 }
 
 // Investment Features Card Component
-function InvestmentFeaturesCard({ hasLiquidity }: { hasLiquidity: boolean }) {
+function InvestmentFeaturesCard() {
   const features = [
     "Monthly cash distributions",
     "Pro-rata ownership rights",
     "Full transparency & reporting",
     "Secondary market trading",
-    ...(hasLiquidity ? ["Guaranteed liquidity option"] : []),
+    "Guaranteed liquidity option",
   ];
 
   return (
@@ -802,7 +802,7 @@ export default function PropertyDetail() {
               />
 
               {/* Investment Features Card */}
-              <InvestmentFeaturesCard hasLiquidity={true} />
+              <InvestmentFeaturesCard />
             </div>
           )}
 
