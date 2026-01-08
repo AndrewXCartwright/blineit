@@ -732,12 +732,12 @@ export default function PropertyDetail() {
         )}
 
         {/* Tabs */}
-        <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-hide">
+        <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
           {(["overview", "marketplace", "financials", "documents", "activity"] as TabType[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+              className={`flex-shrink-0 px-4 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all min-w-max ${
                 activeTab === tab
                   ? "gradient-primary text-primary-foreground"
                   : "bg-secondary text-muted-foreground hover:text-foreground"
