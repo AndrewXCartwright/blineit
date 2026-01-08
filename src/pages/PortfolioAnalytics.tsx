@@ -7,6 +7,8 @@ import { AllocationChart } from '@/components/analytics/AllocationChart';
 import { IncomeChart } from '@/components/analytics/IncomeChart';
 import { HoldingsTable } from '@/components/analytics/HoldingsTable';
 import { PredictionAnalytics } from '@/components/analytics/PredictionAnalytics';
+import { ActiveListingsSection } from '@/components/analytics/ActiveListingsSection';
+import { LiquidityRequestsSection } from '@/components/analytics/LiquidityRequestsSection';
 import { BottomNav } from '@/components/BottomNav';
 
 const PortfolioAnalytics = () => {
@@ -42,6 +44,12 @@ const PortfolioAnalytics = () => {
         
         {/* Holdings Table */}
         <HoldingsTable />
+
+        {/* My Active Listings */}
+        <ActiveListingsSection />
+
+        {/* Liquidity Requests */}
+        <LiquidityRequestsSection />
         
         {/* Prediction Analytics */}
         <PredictionAnalytics />
