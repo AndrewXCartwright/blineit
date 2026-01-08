@@ -62,6 +62,7 @@ const PostDetail = lazy(() => import("./pages/PostDetail"));
 const UserProfile = lazy(() => import("./pages/UserProfile"));
 const Leaderboard = lazy(() => import("./pages/Leaderboard"));
 const PortfolioAnalytics = lazy(() => import("./pages/PortfolioAnalytics"));
+const LiquidityRequest = lazy(() => import("./pages/LiquidityRequest"));
 const InstallPage = lazy(() => import("./pages/InstallPage"));
 const SecuritySettings = lazy(() => import("./pages/SecuritySettings"));
 const Documents = lazy(() => import("./pages/Documents"));
@@ -277,6 +278,7 @@ const App = () => (
                   <Route path="/messages/:id" element={<ProtectedRoute><Conversation /></ProtectedRoute>} />
                   <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
                   <Route path="/portfolio/analytics" element={<ProtectedRoute><PortfolioAnalytics /></ProtectedRoute>} />
+                  <Route path="/portfolio/:holdingId/liquidity" element={<ProtectedRoute><LiquidityRequest /></ProtectedRoute>} />
                   <Route path="/documents" element={<ProtectedRoute><Documents /></ProtectedRoute>} />
                   <Route path="/search" element={<ProtectedRoute><Search /></ProtectedRoute>} />
                   <Route path="/search/advanced" element={<ProtectedRoute><AdvancedSearch /></ProtectedRoute>} />
