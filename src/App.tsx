@@ -133,6 +133,8 @@ const AdminTransactions = lazy(() => import("./pages/admin/AdminTransactions"));
 const AdminSettings = lazy(() => import("./pages/admin/AdminSettings"));
 const AdminKYC = lazy(() => import("./pages/admin/AdminKYC"));
 const AdminReferrals = lazy(() => import("./pages/admin/AdminReferrals"));
+const AdminLiquidity = lazy(() => import("./pages/admin/AdminLiquidity"));
+const AdminLiquiditySettings = lazy(() => import("./pages/admin/AdminLiquiditySettings"));
 const Accreditation = lazy(() => import("./pages/Accreditation"));
 const AccreditationStatus = lazy(() => import("./pages/AccreditationStatus"));
 const ExclusiveOfferings = lazy(() => import("./pages/ExclusiveOfferings"));
@@ -414,6 +416,8 @@ const App = () => (
                   <Route path="/admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
                   <Route path="/admin/kyc" element={<AdminRoute><AdminKYC /></AdminRoute>} />
                   <Route path="/admin/referrals" element={<AdminRoute><AdminReferrals /></AdminRoute>} />
+                  <Route path="/admin/liquidity" element={<AdminRoute><AdminLiquidity /></AdminRoute>} />
+                  <Route path="/admin/liquidity/settings" element={<AdminRoute><AdminLiquiditySettings /></AdminRoute>} />
                   <Route path="/admin/waitlists" element={<AdminRoute><AdminWaitlists /></AdminRoute>} />
                   <Route path="/admin/transactions" element={<AdminRoute><AdminTransactions /></AdminRoute>} />
                   <Route path="/admin/settings" element={<AdminRoute><AdminSettings /></AdminRoute>} />

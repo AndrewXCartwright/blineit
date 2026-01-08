@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { 
   LayoutDashboard, Building2, Landmark, Target, Users, 
-  ClipboardList, Receipt, Settings, ArrowLeft, ShieldCheck, Gift
+  ClipboardList, Receipt, Settings, ArrowLeft, ShieldCheck, Gift, Droplets
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -10,6 +10,7 @@ const navItems = [
   { icon: Building2, label: "Properties", path: "/admin/properties" },
   { icon: Landmark, label: "Loans", path: "/admin/loans" },
   { icon: Target, label: "Predictions", path: "/admin/predictions" },
+  { icon: Droplets, label: "Liquidity", path: "/admin/liquidity" },
   { icon: Users, label: "Users", path: "/admin/users" },
   { icon: ShieldCheck, label: "KYC Reviews", path: "/admin/kyc" },
   { icon: Gift, label: "Referrals", path: "/admin/referrals" },
