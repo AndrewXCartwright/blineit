@@ -20,6 +20,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import type { FeeTier } from "@/types/liquidity";
 import { addBusinessDays, format } from "date-fns";
+import { useLiquidityNotifications } from "@/hooks/useLiquidityNotifications";
 
 // Sample holding data for demo
 const sampleHolding = {
@@ -46,6 +47,7 @@ export default function LiquidityRequest() {
   const { holdingId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { notifyRequestSubmitted, notifyAdminNewRequest, showToast } = useLiquidityNotifications();
   
   const [tokenQuantity, setTokenQuantity] = useState(1);
   const [submitStep, setSubmitStep] = useState<SubmitStep>('form');
@@ -126,6 +128,30 @@ export default function LiquidityRequest() {
       
       const estimatedCompletion = addBusinessDays(new Date(), 5);
       
+      // Create mock request for notifications
+      const mockRequest = {
+        id: `request-${randomNum}`,
+        request_number: requestNumber,
+        investor_id: user?.id,
+        offering_id: holding.offeringId,
+        quantity: tokenQuantity,
+        gross_value: payoutCalc.grossValue,
+        fee_amount: payoutCalc.feeAmount,
+        net_payout: payoutCalc.netPayout,
+        status: 'pending' as const,
+      };
+      
+      // Send notifications (fire and forget for demo)
+      const investorEmail = user?.email || 'investor@example.com';
+      notifyRequestSubmitted(mockRequest, investorEmail, holding.propertyName, user?.user_metadata?.full_name);
+      notifyAdminNewRequest(
+        mockRequest, 
+        investorEmail, 
+        user?.user_metadata?.full_name || 'Investor',
+        holding.propertyName, 
+        ['admin@blineit.com'] // In real app, fetch admin emails from DB
+      );
+      
       setSubmissionResult({
         requestNumber,
         tokens: tokenQuantity,
@@ -134,7 +160,7 @@ export default function LiquidityRequest() {
       });
       setSubmitStep('success');
       
-      toast.success('Liquidity request submitted successfully!');
+      showToast('success', 'Liquidity request submitted!', 'You will receive email confirmation shortly.');
     } catch (error) {
       console.error('Error submitting liquidity request:', error);
       setErrorMessage('An error occurred while submitting your request. Please try again.');
