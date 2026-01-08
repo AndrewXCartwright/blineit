@@ -43,6 +43,7 @@ import { Label } from "@/components/ui/label";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import { useLiquidityNotifications } from "@/hooks/useLiquidityNotifications";
 
 // Sample data for demo
 const sampleRequests = [
@@ -146,6 +147,8 @@ export default function AdminLiquidity() {
   const [denyingRequestId, setDenyingRequestId] = useState<string | null>(null);
   const [bulkDenyOpen, setBulkDenyOpen] = useState(false);
   
+  const { notifyRequestApproved, notifyRequestProcessing, notifyRequestCompleted, notifyRequestDenied } = useLiquidityNotifications();
+  
   const requests = sampleRequests as LiquidityRequest[];
   
   // Filter requests by tab
@@ -198,11 +201,18 @@ export default function AdminLiquidity() {
   };
   
   const handleApprove = (id: string) => {
+    const request = requests.find(r => r.id === id);
+    if (request) {
+      notifyRequestApproved(
+        { id, request_number: request.request_number, investor_id: id, net_payout: request.net_payout },
+        request.investor.email
+      );
+    }
     toast.success(`Request approved and moved to processing`);
-    // In real app, call API
   };
   
   const handleBulkApprove = () => {
+    selectedRequests.forEach(id => handleApprove(id));
     toast.success(`${selectedRequests.size} requests approved`);
     setSelectedRequests(new Set());
   };
@@ -217,6 +227,14 @@ export default function AdminLiquidity() {
     if (!denyReason.trim()) {
       toast.error('Please provide a denial reason');
       return;
+    }
+    const request = requests.find(r => r.id === denyingRequestId);
+    if (request) {
+      notifyRequestDenied(
+        { id: denyingRequestId!, request_number: request.request_number, investor_id: denyingRequestId! },
+        request.investor.email,
+        denyReason
+      );
     }
     toast.success(`Request denied`);
     setDenyModalOpen(false);
@@ -236,10 +254,25 @@ export default function AdminLiquidity() {
   };
   
   const handleMarkProcessing = (id: string) => {
+    const request = requests.find(r => r.id === id);
+    if (request) {
+      notifyRequestProcessing(
+        { id, request_number: request.request_number, investor_id: id, net_payout: request.net_payout },
+        request.investor.email
+      );
+    }
     toast.success(`Request marked as processing`);
   };
   
   const handleMarkCompleted = (id: string) => {
+    const request = requests.find(r => r.id === id);
+    if (request) {
+      notifyRequestCompleted(
+        { id, request_number: request.request_number, investor_id: id, net_payout: request.net_payout },
+        request.investor.email,
+        `PAY-${Date.now()}`
+      );
+    }
     toast.success(`Request marked as completed`);
   };
   
