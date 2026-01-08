@@ -563,7 +563,7 @@ export default function PropertyDetail() {
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
         
         {/* Top controls */}
-        <div className="absolute top-0 left-0 right-0 p-4 flex items-center justify-between z-10">
+        <div className="absolute top-0 left-0 right-0 pt-[calc(1rem+env(safe-area-inset-top))] px-4 pb-4 flex items-center justify-between z-10">
           <button
             onClick={() => navigate(-1)}
             className="p-2.5 rounded-full glass-card hover:bg-secondary/80 transition-colors"
