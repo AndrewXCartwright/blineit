@@ -591,12 +591,10 @@ export default function PropertyDetail() {
 
         {/* Badges - Bottom right of hero */}
         <div className="absolute bottom-20 right-4 flex flex-col gap-2 z-10">
-          {hasLiquidityProgram && (
-            <span className="flex items-center gap-1 bg-blue-500 text-white px-3 py-1.5 rounded-full text-sm font-semibold">
-              <Droplets className="w-4 h-4" />
-              Liquidity Guaranteed
-            </span>
-          )}
+          <span className="flex items-center gap-1 bg-blue-500 text-white px-3 py-1.5 rounded-full text-sm font-semibold">
+            <Droplets className="w-4 h-4" />
+            Liquidity Guaranteed
+          </span>
           {property.is_hot && (
             <span className="flex items-center gap-1 bg-accent/90 text-accent-foreground px-3 py-1.5 rounded-full text-sm font-semibold">
               🔥 {t('property.hotProperty')}
@@ -797,16 +795,14 @@ export default function PropertyDetail() {
               </div>
 
               {/* Guaranteed Liquidity Program Card */}
-              {hasLiquidityProgram && (
-                <LiquidityProgramCard
-                  feeTiers={feeTiers}
-                  isExpanded={isLiquidityExpanded}
-                  onToggle={() => setIsLiquidityExpanded(!isLiquidityExpanded)}
-                />
-              )}
+              <LiquidityProgramCard
+                feeTiers={feeTiers}
+                isExpanded={isLiquidityExpanded}
+                onToggle={() => setIsLiquidityExpanded(!isLiquidityExpanded)}
+              />
 
               {/* Investment Features Card */}
-              <InvestmentFeaturesCard hasLiquidity={hasLiquidityProgram} />
+              <InvestmentFeaturesCard hasLiquidity={true} />
             </div>
           )}
 
