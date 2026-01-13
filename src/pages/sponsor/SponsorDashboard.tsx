@@ -213,12 +213,20 @@ export default function SponsorDashboard() {
               </p>
             </div>
           </div>
-          <Button className="gap-2" asChild>
-            <Link to="/sponsor/deals/new">
-              <Plus className="h-4 w-4" />
-              List New Deal
-            </Link>
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" className="gap-2" asChild>
+              <Link to="/sponsor/properties/new">
+                <Building2 className="h-4 w-4" />
+                Add Property
+              </Link>
+            </Button>
+            <Button className="gap-2" asChild>
+              <Link to="/sponsor/deals/new">
+                <Plus className="h-4 w-4" />
+                List New Deal
+              </Link>
+            </Button>
+          </div>
         </div>
 
         {/* Quick Stats Row */}

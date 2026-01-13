@@ -207,6 +207,7 @@ const SponsorOnboarding = lazy(() => import("./pages/sponsor/SponsorOnboarding")
 const SponsorDashboard = lazy(() => import("./pages/sponsor/SponsorDashboard"));
 const SponsorDeals = lazy(() => import("./pages/sponsor/SponsorDeals"));
 const SponsorNewDeal = lazy(() => import("./pages/sponsor/SponsorNewDeal"));
+const SponsorNewProperty = lazy(() => import("./pages/sponsor/SponsorNewProperty"));
 const SponsorDealDetail = lazy(() => import("./pages/sponsor/SponsorDealDetail"));
 const SponsorDealEdit = lazy(() => import("./pages/sponsor/SponsorDealEdit"));
 const SponsorAnalytics = lazy(() => import("./pages/sponsor/SponsorAnalytics"));
@@ -400,6 +401,7 @@ const App = () => (
                   <Route path="/sponsor/dashboard" element={<ProtectedSponsorRoute><SponsorDashboard /></ProtectedSponsorRoute>} />
                   <Route path="/sponsor/deals" element={<ProtectedSponsorRoute><SponsorDeals /></ProtectedSponsorRoute>} />
                   <Route path="/sponsor/deals/new" element={<ProtectedSponsorRoute><SponsorNewDeal /></ProtectedSponsorRoute>} />
+                  <Route path="/sponsor/properties/new" element={<ProtectedSponsorRoute><SponsorNewProperty /></ProtectedSponsorRoute>} />
                   <Route path="/sponsor/deals/:id" element={<ProtectedSponsorRoute><SponsorDealDetail /></ProtectedSponsorRoute>} />
                   <Route path="/sponsor/deals/:id/edit" element={<ProtectedSponsorRoute><SponsorDealEdit /></ProtectedSponsorRoute>} />
                   <Route path="/sponsor/analytics" element={<ProtectedSponsorRoute><SponsorAnalytics /></ProtectedSponsorRoute>} />

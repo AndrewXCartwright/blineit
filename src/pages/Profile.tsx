@@ -1,8 +1,9 @@
-import { User, Settings, Bell, Shield, HelpCircle, LogOut, ChevronRight, Trophy, Target, Building2, Wallet, ShieldCheck, AlertCircle, Crown, Gift, Palette, Users, MessageCircle, FileText, Camera, Loader2 } from "lucide-react";
+import { User, Settings, Bell, Shield, HelpCircle, LogOut, ChevronRight, Trophy, Target, Building2, Wallet, ShieldCheck, AlertCircle, Crown, Gift, Palette, Users, MessageCircle, FileText, Camera, Loader2, Briefcase } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserData } from "@/hooks/useUserData";
 import { useKYC } from "@/hooks/useKYC";
 import { useIsAdmin } from "@/hooks/useAdmin";
+import { useSponsor } from "@/hooks/useSponsor";
 import { useReferrals } from "@/hooks/useReferrals";
 import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -21,6 +22,7 @@ export default function Profile() {
   const { profile, holdings, bets, loading, refetch } = useUserData();
   const { kycStatus, isVerified } = useKYC();
   const { isAdmin } = useIsAdmin();
+  const { isSponsor } = useSponsor();
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
@@ -296,6 +298,25 @@ export default function Profile() {
             {t('profile.viewAllReferrals')} →
           </Link>
         </div>
+
+        {/* Sponsor Portal Link */}
+        {isSponsor && (
+          <Link
+            to="/sponsor/dashboard"
+            className="glass-card rounded-2xl p-4 flex items-center justify-between hover:bg-secondary/50 transition-colors animate-fade-in border border-primary/30"
+          >
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-primary/20">
+                <Briefcase className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <span className="font-medium text-foreground">Sponsor Portal</span>
+                <p className="text-xs text-muted-foreground">Manage deals & properties</p>
+              </div>
+            </div>
+            <ChevronRight className="w-5 h-5 text-muted-foreground" />
+          </Link>
+        )}
 
         {/* Admin Link */}
         {isAdmin && (
