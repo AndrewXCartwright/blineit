@@ -25,7 +25,7 @@ export function LoanTypeFilter({ value, onChange }: LoanTypeFilterProps) {
           key={type.value}
           onClick={() => onChange(type.value)}
           className={cn(
-            "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all",
+            "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap flex-shrink-0 transition-all",
             value === type.value
               ? "bg-blue-500 text-white"
               : "bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80"
