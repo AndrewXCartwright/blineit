@@ -75,12 +75,12 @@ const PortfolioSummary = () => {
 
       {/* Stats Row */}
       <div className="flex gap-2">
-        {stats.map((stat, index) => <div key={index} role="button" tabIndex={0} aria-label={`View your ${stat.value} ${stat.label}`} onClick={() => navigate(stat.route)} onKeyDown={e => handleKeyDown(e, stat.route)} className="flex-1 bg-white dark:bg-card rounded-[10px] py-2.5 px-1.5 text-center cursor-pointer border border-transparent hover:border-primary hover:-translate-y-0.5 hover:bg-gray-50 dark:hover:bg-secondary transition-all duration-200 group relative">
-            <ChevronRight size={10} className="absolute top-1.5 right-1.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-            <p className="font-semibold text-foreground text-lg">
+        {stats.map((stat, index) => <div key={index} role="button" tabIndex={0} aria-label={`View your ${stat.value} ${stat.label}`} onClick={() => navigate(stat.route)} onKeyDown={e => handleKeyDown(e, stat.route)} className="flex-1 bg-white dark:bg-card rounded-[10px] py-1.5 px-1.5 text-center cursor-pointer border border-transparent hover:border-primary hover:-translate-y-0.5 hover:bg-gray-50 dark:hover:bg-secondary transition-all duration-200 group relative">
+            <ChevronRight size={10} className="absolute top-1 right-1 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+            <p className="font-semibold text-foreground text-lg leading-tight">
               {stat.value}
             </p>
-            <p className="text-muted-foreground mt-0.5 my-[4px] text-sm">
+            <p className="text-muted-foreground mt-0.5 text-sm leading-tight">
               {stat.label}
             </p>
           </div>)}
