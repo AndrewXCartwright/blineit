@@ -200,6 +200,8 @@ const InvestmentTypeDetail = lazy(() => import("./pages/explore/InvestmentTypeDe
 const OfferingDetail = lazy(() => import("./pages/OfferingDetail"));
 
 // Sponsor Portal Pages
+const SponsorLanding = lazy(() => import("./pages/sponsor/SponsorLanding"));
+const SponsorApply = lazy(() => import("./pages/sponsor/SponsorApply"));
 const SponsorLogin = lazy(() => import("./pages/sponsor/SponsorLogin"));
 const SponsorRegister = lazy(() => import("./pages/sponsor/SponsorRegister"));
 const SponsorPending = lazy(() => import("./pages/sponsor/SponsorPending"));
@@ -394,6 +396,8 @@ const App = () => (
                   <Route path="/developers/sdks" element={<ProtectedRoute><DeveloperSdks /></ProtectedRoute>} />
                   <Route path="/developers/changelog" element={<ProtectedRoute><DeveloperChangelog /></ProtectedRoute>} />
                   {/* Sponsor Portal Routes */}
+                  <Route path="/sponsor" element={<ProtectedRoute><SponsorLanding /></ProtectedRoute>} />
+                  <Route path="/sponsor/apply" element={<ProtectedRoute><SponsorApply /></ProtectedRoute>} />
                   <Route path="/sponsor/login" element={<SponsorLogin />} />
                   <Route path="/sponsor/register" element={<SponsorRegister />} />
                   <Route path="/sponsor/pending" element={<ProtectedSponsorRoute requireVerified={false}><SponsorPending /></ProtectedSponsorRoute>} />
