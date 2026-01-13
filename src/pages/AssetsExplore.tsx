@@ -52,7 +52,8 @@ const loanToCardData = (loan: Loan) => ({
   fundedAmount: Number(loan.amount_funded),
   minInvestment: Number(loan.min_investment),
   isSecured: loan.loan_position !== "mezzanine",
-  lienPosition: loan.loan_position === "1st_lien" ? "1st" as const : loan.loan_position === "2nd_lien" ? "2nd" as const : "mezzanine" as const
+  lienPosition: loan.loan_position === "1st_lien" ? "1st" as const : loan.loan_position === "2nd_lien" ? "2nd" as const : "mezzanine" as const,
+  imageUrl: loan.image_url || undefined
 });
 export default function AssetsExplore() {
   const navigate = useNavigate();
