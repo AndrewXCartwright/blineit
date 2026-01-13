@@ -20,7 +20,7 @@ export function BecomeSponsorCTA({ investmentTitle }: BecomeSponsorCTAProps) {
             Are You a Sponsor?
           </h4>
           <p className="text-sm text-muted-foreground mb-3">
-            Have {investmentTitle} opportunities to offer investors? List your offerings on The Origin platform and access our network of accredited investors.
+            Have {investmentTitle} opportunities to offer investors? List your offerings on B Line It and access our network of accredited investors.
           </p>
           <Button 
             variant="outline" 
