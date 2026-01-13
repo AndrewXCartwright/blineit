@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -16,12 +16,16 @@ export const usePWA = () => {
   const [showIOSPrompt, setShowIOSPrompt] = useState(false);
   const [updateAvailable, setUpdateAvailable] = useState(false);
 
+  // Prevent reload loops when a new service worker takes control
+  const refreshingRef = useRef(false);
+
   useEffect(() => {
     // Check if running in standalone mode
     const checkStandalone = () => {
-      const standalone = window.matchMedia('(display-mode: standalone)').matches 
-        || (window.navigator as any).standalone 
-        || document.referrer.includes('android-app://');
+      const standalone =
+        window.matchMedia('(display-mode: standalone)').matches ||
+        (window.navigator as any).standalone ||
+        document.referrer.includes('android-app://');
       setIsStandalone(standalone);
       setIsInstalled(standalone);
     };
@@ -31,7 +35,7 @@ export const usePWA = () => {
     const checkIOS = () => {
       const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
       setIsIOS(isIOSDevice);
-      
+
       // Show iOS prompt if on iOS, not installed, and not dismissed recently
       if (isIOSDevice && !isInstalled) {
         const lastDismissed = localStorage.getItem('pwa-ios-dismissed');
@@ -64,19 +68,68 @@ export const usePWA = () => {
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
-    // Check for service worker updates
+    // --- Service worker update checks (helps prevent "old cached" UI on iOS/PWA) ---
+    let swRegistration: ServiceWorkerRegistration | null = null;
+    let updateInterval: number | undefined;
+
+    const checkForUpdates = async () => {
+      if (!('serviceWorker' in navigator)) return;
+      if (!navigator.onLine) return;
+
+      try {
+        const reg = swRegistration ?? (await navigator.serviceWorker.getRegistration());
+        if (!reg) return;
+
+        swRegistration = reg;
+        await reg.update();
+
+        // If an update was already downloaded
+        if (reg.waiting && navigator.serviceWorker.controller) {
+          setUpdateAvailable(true);
+        }
+      } catch {
+        // Ignore: iOS can throw during background/restore.
+      }
+    };
+
+    const handleControllerChange = () => {
+      if (refreshingRef.current) return;
+      refreshingRef.current = true;
+      window.location.reload();
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        void checkForUpdates();
+      }
+    };
+
     if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange);
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+
       navigator.serviceWorker.ready.then((registration) => {
+        swRegistration = registration;
+
+        // If the browser already has a waiting SW (common after backgrounding)
+        if (registration.waiting && navigator.serviceWorker.controller) {
+          setUpdateAvailable(true);
+        }
+
         registration.addEventListener('updatefound', () => {
           const newWorker = registration.installing;
-          if (newWorker) {
-            newWorker.addEventListener('statechange', () => {
-              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                setUpdateAvailable(true);
-              }
-            });
-          }
+          if (!newWorker) return;
+
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              setUpdateAvailable(true);
+            }
+          });
         });
+
+        // Proactively check now + periodically
+        void checkForUpdates();
+        updateInterval = window.setInterval(checkForUpdates, 5 * 60 * 1000);
       });
     }
 
@@ -85,21 +138,30 @@ export const usePWA = () => {
       window.removeEventListener('appinstalled', handleAppInstalled);
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.removeEventListener('controllerchange', handleControllerChange);
+      }
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+
+      if (updateInterval) {
+        window.clearInterval(updateInterval);
+      }
     };
   }, [isInstalled]);
 
   const installApp = useCallback(async () => {
     if (!deferredPrompt) return false;
-    
+
     try {
       await deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
-      
+
       if (outcome === 'accepted') {
         setIsInstalled(true);
         setIsInstallable(false);
       }
-      
+
       setDeferredPrompt(null);
       return outcome === 'accepted';
     } catch (error) {
@@ -116,12 +178,25 @@ export const usePWA = () => {
   }, []);
 
   const updateApp = useCallback(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.ready.then((registration) => {
-        registration.waiting?.postMessage({ type: 'SKIP_WAITING' });
+    if (!('serviceWorker' in navigator)) return;
+
+    navigator.serviceWorker.ready.then(async (registration) => {
+      try {
+        await registration.update();
+
+        if (registration.waiting) {
+          registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+          // Give iOS a moment, then hard-reload (controllerchange will also reload)
+          window.setTimeout(() => window.location.reload(), 2000);
+          return;
+        }
+
+        // Fallback: force reload (also helps when Safari restores from bfcache)
         window.location.reload();
-      });
-    }
+      } catch {
+        window.location.reload();
+      }
+    });
   }, []);
 
   return {
@@ -134,6 +209,6 @@ export const usePWA = () => {
     updateAvailable,
     installApp,
     dismissIOSPrompt,
-    updateApp
+    updateApp,
   };
 };
