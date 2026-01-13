@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { useSponsor } from './useSponsor';
 import { toast } from 'sonner';
+import { Json } from '@/integrations/supabase/types';
 
 // DigiShares-compatible field structure
 export interface ShareType {
@@ -175,6 +176,21 @@ export function useSponsorProperties() {
     }
   };
 
+  // Helper to convert form data to DB-compatible format
+  const toDbFormat = (data: Partial<PropertyFormData>) => {
+    const dbData: Record<string, any> = { ...data };
+    if (data.documents) {
+      dbData.documents = data.documents as unknown as Json;
+    }
+    if (data.shareTypes) {
+      dbData.shareTypes = data.shareTypes as unknown as Json;
+    }
+    if (data.gallery) {
+      dbData.gallery = data.gallery as unknown as Json;
+    }
+    return dbData;
+  };
+
   const createProperty = async (data: Partial<PropertyFormData>): Promise<string | null> => {
     if (!sponsorProfile?.id) {
       toast.error('Sponsor profile not found');
@@ -183,13 +199,14 @@ export function useSponsorProperties() {
 
     setSaving(true);
     try {
+      const dbData = toDbFormat(data);
       const { data: newProperty, error } = await supabase
         .from('sponsor_properties')
         .insert({
           sponsor_id: sponsorProfile.id,
           title: data.title || 'New Property',
-          ...data,
-        } as any)
+          ...dbData,
+        })
         .select('id')
         .single();
 
@@ -209,10 +226,11 @@ export function useSponsorProperties() {
   const updateProperty = async (propertyId: string, data: Partial<PropertyFormData>): Promise<boolean> => {
     setSaving(true);
     try {
+      const dbData = toDbFormat(data);
       const { error } = await supabase
         .from('sponsor_properties')
         .update({
-          ...data,
+          ...dbData,
           updated_at: new Date().toISOString(),
         })
         .eq('id', propertyId);
