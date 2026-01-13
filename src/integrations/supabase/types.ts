@@ -4923,6 +4923,155 @@ export type Database = {
         }
         Relationships: []
       }
+      sponsor_properties: {
+        Row: {
+          address: string | null
+          approved_at: string | null
+          capRate: number | null
+          city: string | null
+          country: string | null
+          created_at: string | null
+          currentStep: number | null
+          description: string | null
+          distributionFrequency: string | null
+          documents: Json | null
+          dscr: number | null
+          featuredImage: string | null
+          gallery: Json | null
+          holdPeriod: number | null
+          id: string
+          investmentType: string | null
+          latitude: number | null
+          longitude: number | null
+          ltv: number | null
+          maximumInvestment: number | null
+          minimumInvestment: number | null
+          noi: number | null
+          occupancyRate: number | null
+          pricePerShare: number | null
+          projectedReturn: number | null
+          propertyType: string | null
+          propertyValue: number | null
+          rejection_reason: string | null
+          shareTypes: Json | null
+          shortDescription: string | null
+          sponsor_id: string
+          squareFootage: number | null
+          state: string | null
+          status: string | null
+          submitted_at: string | null
+          targetRaise: number | null
+          title: string
+          totalShares: number | null
+          units: number | null
+          updated_at: string | null
+          video: string | null
+          virtualTour: string | null
+          yearBuilt: number | null
+          zip: string | null
+        }
+        Insert: {
+          address?: string | null
+          approved_at?: string | null
+          capRate?: number | null
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          currentStep?: number | null
+          description?: string | null
+          distributionFrequency?: string | null
+          documents?: Json | null
+          dscr?: number | null
+          featuredImage?: string | null
+          gallery?: Json | null
+          holdPeriod?: number | null
+          id?: string
+          investmentType?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          ltv?: number | null
+          maximumInvestment?: number | null
+          minimumInvestment?: number | null
+          noi?: number | null
+          occupancyRate?: number | null
+          pricePerShare?: number | null
+          projectedReturn?: number | null
+          propertyType?: string | null
+          propertyValue?: number | null
+          rejection_reason?: string | null
+          shareTypes?: Json | null
+          shortDescription?: string | null
+          sponsor_id: string
+          squareFootage?: number | null
+          state?: string | null
+          status?: string | null
+          submitted_at?: string | null
+          targetRaise?: number | null
+          title?: string
+          totalShares?: number | null
+          units?: number | null
+          updated_at?: string | null
+          video?: string | null
+          virtualTour?: string | null
+          yearBuilt?: number | null
+          zip?: string | null
+        }
+        Update: {
+          address?: string | null
+          approved_at?: string | null
+          capRate?: number | null
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          currentStep?: number | null
+          description?: string | null
+          distributionFrequency?: string | null
+          documents?: Json | null
+          dscr?: number | null
+          featuredImage?: string | null
+          gallery?: Json | null
+          holdPeriod?: number | null
+          id?: string
+          investmentType?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          ltv?: number | null
+          maximumInvestment?: number | null
+          minimumInvestment?: number | null
+          noi?: number | null
+          occupancyRate?: number | null
+          pricePerShare?: number | null
+          projectedReturn?: number | null
+          propertyType?: string | null
+          propertyValue?: number | null
+          rejection_reason?: string | null
+          shareTypes?: Json | null
+          shortDescription?: string | null
+          sponsor_id?: string
+          squareFootage?: number | null
+          state?: string | null
+          status?: string | null
+          submitted_at?: string | null
+          targetRaise?: number | null
+          title?: string
+          totalShares?: number | null
+          units?: number | null
+          updated_at?: string | null
+          video?: string | null
+          virtualTour?: string | null
+          yearBuilt?: number | null
+          zip?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sponsor_properties_sponsor_id_fkey"
+            columns: ["sponsor_id"]
+            isOneToOne: false
+            referencedRelation: "sponsor_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sponsor_review_prompts: {
         Row: {
           deal_id: string | null
