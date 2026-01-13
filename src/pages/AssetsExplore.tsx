@@ -142,7 +142,7 @@ export default function AssetsExplore() {
   const loading = isDebt ? loansLoading : propertiesLoading;
   const selectedSponsorName = sponsors.find(s => s.id === selectedSponsor)?.company_name;
   return <div className="min-h-screen pb-24">
-      <header className="sticky top-0 z-40 glass-card border-b border-border/50 px-4 py-4">
+      <header className="sticky top-0 z-40 glass-card border-b border-border/50 px-4 py-4 pt-[calc(1rem+env(safe-area-inset-top))]">
         <div className="flex items-center gap-3 mb-4">
           <button onClick={() => navigate("/assets")} className="p-2 rounded-xl bg-secondary hover:bg-secondary/80 transition-colors">
             <ArrowLeft className="w-5 h-5" />
