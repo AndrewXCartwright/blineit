@@ -4306,6 +4306,60 @@ export type Database = {
           },
         ]
       }
+      sponsor_applications: {
+        Row: {
+          company_name: string
+          contact_name: string
+          created_at: string
+          email: string
+          estimated_portfolio_value: number | null
+          id: string
+          investment_strategy: string | null
+          phone: string | null
+          property_types: string[]
+          reviewed_at: string | null
+          reviewed_by: string | null
+          reviewer_notes: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          company_name: string
+          contact_name: string
+          created_at?: string
+          email: string
+          estimated_portfolio_value?: number | null
+          id?: string
+          investment_strategy?: string | null
+          phone?: string | null
+          property_types?: string[]
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          company_name?: string
+          contact_name?: string
+          created_at?: string
+          email?: string
+          estimated_portfolio_value?: number | null
+          id?: string
+          investment_strategy?: string | null
+          phone?: string | null
+          property_types?: string[]
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       sponsor_credentials: {
         Row: {
           created_at: string | null

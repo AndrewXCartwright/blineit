@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Calculator, Users, Eye, Lightbulb, LucideIcon } from "lucide-react";
+import { Calculator, Users, Eye, Building2, LucideIcon } from "lucide-react";
 interface QuickAction {
   icon: LucideIcon | string;
   label: string;
@@ -18,9 +18,9 @@ const actions: QuickAction[] = [{
   label: "Watchlist",
   route: "/watchlist"
 }, {
-  icon: Lightbulb,
-  label: "Insights",
-  route: "/insights"
+  icon: Building2,
+  label: "Sponsor",
+  route: "/sponsor"
 }];
 const QuickActions = () => {
   const navigate = useNavigate();
