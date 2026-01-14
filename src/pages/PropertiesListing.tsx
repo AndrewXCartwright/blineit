@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Building2, MapPin, TrendingUp, Flame, Search, SlidersHorizontal, Grid3X3, List, ChevronLeft } from "lucide-react";
+import { Building2, MapPin, TrendingUp, Flame, Search, SlidersHorizontal, Grid3X3, List, ChevronLeft, Clock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -26,6 +26,16 @@ interface Property {
   image_url?: string;
 }
 
+type InvestmentType = "all" | "real-estate" | "factor" | "lien" | "safe";
+
+const investmentTypeTabs: { value: InvestmentType; label: string }[] = [
+  { value: "all", label: "All" },
+  { value: "real-estate", label: "Real Estate" },
+  { value: "factor", label: "Factor" },
+  { value: "lien", label: "Lien" },
+  { value: "safe", label: "SAFE" },
+];
+
 export default function PropertiesListing() {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -36,6 +46,7 @@ export default function PropertiesListing() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
   const [sortBy, setSortBy] = useState("newest");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [investmentType, setInvestmentType] = useState<InvestmentType>("all");
 
   const fetchProperties = useCallback(async () => {
     setLoading(true);
@@ -155,9 +166,41 @@ export default function PropertiesListing() {
           </div>
         </header>
 
+        {/* Investment Type Tabs */}
+        <div className="px-4 py-3 border-b border-border overflow-x-auto">
+          <div className="flex gap-2">
+            {investmentTypeTabs.map((tab) => (
+              <button
+                key={tab.value}
+                onClick={() => setInvestmentType(tab.value)}
+                className={`px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all flex-shrink-0 ${
+                  investmentType === tab.value
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-secondary text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Content */}
         <main className="p-4">
-          {loading ? (
+          {/* Coming Soon placeholder for Factor, Lien, SAFE */}
+          {investmentType !== "all" && investmentType !== "real-estate" ? (
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                <Clock className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">
+                {investmentType === "factor" ? "Factor" : investmentType === "lien" ? "Lien" : "SAFE"} Investments Coming Soon
+              </h3>
+              <p className="text-muted-foreground max-w-md">
+                We're preparing new investment opportunities. Check back soon!
+              </p>
+            </div>
+          ) : loading ? (
             <div className={viewMode === "grid" ? "grid grid-cols-2 gap-3" : "space-y-3"}>
               {[...Array(6)].map((_, i) => (
                 <div key={i} className="glass-card rounded-2xl overflow-hidden">
