@@ -161,7 +161,7 @@ export function TokenTradeModal({
           onClick={handleClose}
         />
         
-        <div className="relative w-full max-w-lg glass-card rounded-t-3xl p-6 animate-slide-up max-h-[90vh] overflow-y-auto">
+        <div className="relative w-full max-w-lg glass-card rounded-t-3xl p-6 pb-24 animate-slide-up max-h-[90vh] overflow-y-auto">
           {/* Header */}
           <div className="flex items-start justify-between mb-6">
             <div>
