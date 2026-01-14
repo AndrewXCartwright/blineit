@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Building2, MapPin, TrendingUp, Flame, Search, SlidersHorizontal, Grid3X3, List, ChevronLeft, Clock, FileText } from "lucide-react";
+import { Building2, MapPin, TrendingUp, Flame, Search, SlidersHorizontal, Grid3X3, List, ChevronLeft, Clock, FileText, Landmark } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +12,8 @@ import { PullToRefresh } from "@/components/PullToRefresh";
 import { BottomNav } from "@/components/BottomNav";
 import { FactorDealCard } from "@/components/factor/FactorDealCard";
 import { useFactorDeals } from "@/hooks/useFactorDeals";
+import { LienDealCard } from "@/components/lien/LienDealCard";
+import { useLienDeals } from "@/hooks/useLienDeals";
 
 interface Property {
   id: string;
@@ -52,6 +54,9 @@ export default function PropertiesListing() {
 
   // Factor deals hook
   const { deals: factorDeals, loading: factorLoading } = useFactorDeals();
+  
+  // Lien deals hook
+  const { deals: lienDeals, loading: lienLoading } = useLienDeals();
 
   const fetchProperties = useCallback(async () => {
     setLoading(true);
@@ -227,14 +232,46 @@ export default function PropertiesListing() {
                 ))}
               </div>
             )
-          ) : investmentType === "lien" || investmentType === "safe" ? (
+          ) : investmentType === "lien" ? (
+            lienLoading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="glass-card rounded-2xl overflow-hidden">
+                    <Skeleton className="h-20" />
+                    <div className="p-4 space-y-3">
+                      <Skeleton className="h-4 w-3/4" />
+                      <Skeleton className="h-3 w-1/2" />
+                      <div className="grid grid-cols-2 gap-3">
+                        <Skeleton className="h-12" />
+                        <Skeleton className="h-12" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : lienDeals.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-16 text-center">
+                <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                  <Landmark className="h-8 w-8 text-muted-foreground" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">No Lien Deals Available Yet</h3>
+                <p className="text-muted-foreground max-w-md">
+                  New lien investment opportunities will be listed here soon.
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {lienDeals.map((deal) => (
+                  <LienDealCard key={deal.id} deal={deal} />
+                ))}
+              </div>
+            )
+          ) : investmentType === "safe" ? (
             <div className="flex flex-col items-center justify-center py-16 text-center">
               <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
                 <Clock className="h-8 w-8 text-muted-foreground" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">
-                {investmentType === "lien" ? "Lien" : "SAFE"} Investments Coming Soon
-              </h3>
+              <h3 className="text-xl font-semibold mb-2">SAFE Investments Coming Soon</h3>
               <p className="text-muted-foreground max-w-md">
                 We're preparing new investment opportunities. Check back soon!
               </p>
