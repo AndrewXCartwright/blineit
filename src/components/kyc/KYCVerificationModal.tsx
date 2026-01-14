@@ -18,7 +18,7 @@ export function KYCVerificationModal({ isOpen, onClose, onVerified }: KYCVerific
 
   const handleStartVerification = () => {
     onClose();
-    navigate("/kyc-verification");
+    navigate("/kyc");
   };
 
   // Handle already verified case - user can proceed
