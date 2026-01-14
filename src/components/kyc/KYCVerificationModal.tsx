@@ -13,20 +13,33 @@ export function KYCVerificationModal({ isOpen, onClose, onVerified }: KYCVerific
   const { kycStatus, isVerified } = useKYC();
   const navigate = useNavigate();
 
+  // Don't render if not open
   if (!isOpen) return null;
-
-  // If already verified, call onVerified and close
-  if (isVerified || kycStatus === "verified") {
-    onVerified?.();
-    return null;
-  }
 
   const handleStartVerification = () => {
     onClose();
     navigate("/kyc-verification");
   };
 
+  // Handle already verified case - user can proceed
+  const handleProceedVerified = () => {
+    onVerified?.();
+    onClose();
+  };
+
   const getStatusContent = () => {
+    // Already verified
+    if (isVerified || kycStatus === "verified") {
+      return {
+        icon: <CheckCircle className="w-16 h-16 text-emerald-500" />,
+        title: "Already Verified",
+        description: "Your identity has been verified. You can proceed with your purchase.",
+        showButton: true,
+        buttonText: "Continue",
+        onButtonClick: handleProceedVerified,
+      };
+    }
+
     switch (kycStatus) {
       case "in_review":
       case "pending":
@@ -35,6 +48,7 @@ export function KYCVerificationModal({ isOpen, onClose, onVerified }: KYCVerific
           title: "Verification In Progress",
           description: "Your identity verification is being reviewed. This usually takes 1-2 business days.",
           showButton: false,
+          onButtonClick: undefined,
         };
       case "rejected":
         return {
@@ -43,6 +57,7 @@ export function KYCVerificationModal({ isOpen, onClose, onVerified }: KYCVerific
           description: "Your identity verification was not approved. Please try again with valid documents.",
           showButton: true,
           buttonText: "Try Again",
+          onButtonClick: handleStartVerification,
         };
       default:
         return {
@@ -51,6 +66,7 @@ export function KYCVerificationModal({ isOpen, onClose, onVerified }: KYCVerific
           description: "Before you can purchase tokens, we need to verify your identity. This is a one-time process that helps us comply with securities regulations.",
           showButton: true,
           buttonText: "Start Verification",
+          onButtonClick: handleStartVerification,
         };
     }
   };
@@ -109,11 +125,11 @@ export function KYCVerificationModal({ isOpen, onClose, onVerified }: KYCVerific
           <div className="space-y-3">
             {content.showButton && (
               <Button
-                onClick={handleStartVerification}
+                onClick={content.onButtonClick}
                 className="w-full gradient-primary text-primary-foreground font-display font-bold py-6"
               >
                 {content.buttonText}
-                <ExternalLink className="w-4 h-4 ml-2" />
+                {kycStatus !== "verified" && !isVerified && <ExternalLink className="w-4 h-4 ml-2" />}
               </Button>
             )}
             
