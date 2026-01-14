@@ -371,6 +371,13 @@ export function TokenTradeModal({
           )}
         </div>
       </div>
+
+      {/* KYC Verification Modal */}
+      <KYCVerificationModal
+        isOpen={showKYCModal}
+        onClose={() => setShowKYCModal(false)}
+        onVerified={onKYCVerified}
+      />
     </>
   );
 }
