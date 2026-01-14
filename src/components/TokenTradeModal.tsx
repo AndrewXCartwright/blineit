@@ -116,6 +116,7 @@ export function TokenTradeModal({
   };
 
   const handleConfirm = () => {
+    console.log('handleConfirm called', { mode, tokens, total, isDisabled, showKYCModal });
     if (isDisabled) return;
     
     if (mode === "buy") {

@@ -9,18 +9,21 @@ export function useKYCGate() {
   const [pendingCallback, setPendingCallback] = useState<(() => void) | null>(null);
 
   const requireKYC = useCallback((onApproved: () => void) => {
+    console.log('requireKYC called', { user: !!user, isVerified, kycStatus });
+    
     if (!user) {
-      // Not logged in - could redirect to auth
+      console.log('requireKYC: No user, returning early');
       return;
     }
 
     if (isVerified || kycStatus === "verified") {
-      // User is verified, proceed immediately
+      console.log('requireKYC: User is verified, proceeding immediately');
       onApproved();
     } else {
-      // User not verified, show KYC modal
+      console.log('requireKYC: User NOT verified, showing KYC modal');
       setPendingCallback(() => onApproved);
       setShowKYCModal(true);
+      console.log('requireKYC: showKYCModal set to true');
     }
   }, [user, isVerified, kycStatus]);
 
