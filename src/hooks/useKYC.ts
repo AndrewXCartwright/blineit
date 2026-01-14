@@ -112,27 +112,19 @@ export function useKYC() {
 
     const fetchKYC = async () => {
       try {
-        // Fetch profile KYC status
-        const { data: profile } = await supabase
+        // Fetch profile KYC status from profiles table
+        const { data: profile, error } = await supabase
           .from("profiles")
           .select("kyc_status")
           .eq("user_id", user.id)
           .single();
 
-        if (profile?.kyc_status) {
-          setKycStatus(profile.kyc_status as KYCStatus);
+        if (error) {
+          console.error("Error fetching profile KYC status:", error);
         }
 
-        // Fetch KYC verification details
-        const { data: kyc } = await supabase
-          .from("kyc_verifications")
-          .select("*")
-          .eq("user_id", user.id)
-          .single();
-
-        if (kyc) {
-          setKycData(kyc as unknown as KYCData);
-          setKycStatus(kyc.status as KYCStatus);
+        if (profile?.kyc_status) {
+          setKycStatus(profile.kyc_status as KYCStatus);
         }
       } catch (error) {
         console.error("Error fetching KYC data:", error);
