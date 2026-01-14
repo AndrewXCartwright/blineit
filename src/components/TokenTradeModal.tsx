@@ -161,33 +161,33 @@ export function TokenTradeModal({
           onClick={handleClose}
         />
         
-        <div className="relative w-full max-w-lg glass-card rounded-t-3xl p-6 pb-24 animate-slide-up max-h-[90vh] overflow-y-auto">
+        <div className="relative w-full max-w-lg glass-card rounded-t-3xl p-4 pb-6 animate-slide-up max-h-[90vh] overflow-y-auto">
           {/* Header */}
-          <div className="flex items-start justify-between mb-6">
+          <div className="flex items-start justify-between mb-3">
             <div>
-              <h2 className="font-display text-xl font-bold text-foreground">{propertyName}</h2>
-              <p className="text-muted-foreground text-sm">
+              <h2 className="font-display text-lg font-bold text-foreground">{propertyName}</h2>
+              <p className="text-muted-foreground text-xs">
                 Current price: <span className="text-foreground font-semibold">${tokenPrice.toFixed(2)}</span>
               </p>
             </div>
             <button
               onClick={handleClose}
-              className="p-2 rounded-full bg-secondary hover:bg-secondary/80 transition-colors"
+              className="p-1.5 rounded-full bg-secondary hover:bg-secondary/80 transition-colors"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
 
           {success ? (
-            <div className="text-center py-12 animate-fade-in">
-              <div className="text-5xl mb-4">{mode === "buy" ? "🎉" : "✅"}</div>
-              <h3 className="font-display text-xl font-bold text-foreground mb-2">
+            <div className="text-center py-8 animate-fade-in">
+              <div className="text-4xl mb-3">{mode === "buy" ? "🎉" : "✅"}</div>
+              <h3 className="font-display text-lg font-bold text-foreground mb-2">
                 {mode === "buy" ? "Purchase Complete!" : "Sale Complete!"}
               </h3>
-              <p className="text-muted-foreground">{successMessage}</p>
+              <p className="text-muted-foreground text-sm">{successMessage}</p>
               <button
                 onClick={handleClose}
-                className="mt-6 px-8 py-3 rounded-xl gradient-primary text-primary-foreground font-display font-bold transition-all hover:opacity-90"
+                className="mt-4 px-6 py-2.5 rounded-xl gradient-primary text-primary-foreground font-display font-bold transition-all hover:opacity-90"
               >
                 Done
               </button>
@@ -195,10 +195,10 @@ export function TokenTradeModal({
           ) : (
             <>
               {/* Mode Toggle */}
-              <div className="flex gap-2 mb-6">
+              <div className="flex gap-2 mb-3">
                 <button
                   onClick={() => setMode("buy")}
-                  className={`flex-1 py-3 rounded-xl font-display font-bold transition-all ${
+                  className={`flex-1 py-2.5 rounded-xl font-display font-bold text-sm transition-all ${
                     mode === "buy"
                       ? "gradient-primary text-primary-foreground"
                       : "bg-secondary text-muted-foreground hover:text-foreground border-2 border-border"
@@ -208,7 +208,7 @@ export function TokenTradeModal({
                 </button>
                 <button
                   onClick={() => setMode("sell")}
-                  className={`flex-1 py-3 rounded-xl font-display font-bold transition-all ${
+                  className={`flex-1 py-2.5 rounded-xl font-display font-bold text-sm transition-all ${
                     mode === "sell"
                       ? "gradient-primary text-primary-foreground"
                       : "bg-secondary text-muted-foreground hover:text-foreground border-2 border-border"
@@ -220,15 +220,15 @@ export function TokenTradeModal({
 
               {/* Sell Mode: Show owned tokens */}
               {mode === "sell" && (
-                <div className="p-4 rounded-xl bg-secondary/50 mb-4 flex items-center justify-between">
-                  <span className="text-muted-foreground">Tokens owned</span>
+                <div className="p-3 rounded-xl bg-secondary/50 mb-3 flex items-center justify-between">
+                  <span className="text-muted-foreground text-sm">Tokens owned</span>
                   <span className="font-display font-bold text-foreground">{userTokens.toLocaleString()}</span>
                 </div>
               )}
 
               {/* Input Mode Toggle */}
-              <div className="flex items-center justify-between mb-4">
-                <label className="text-sm text-muted-foreground">
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-xs text-muted-foreground">
                   {inputMode === "tokens" ? "Number of tokens" : "USD amount"}
                 </label>
                 <button
@@ -241,7 +241,7 @@ export function TokenTradeModal({
               </div>
 
               {/* Amount Input */}
-              <div className="mb-4">
+              <div className="mb-3">
                 <div className="relative">
                   {inputMode === "usd" && (
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground font-semibold">$</span>
@@ -254,25 +254,25 @@ export function TokenTradeModal({
                       : handleUsdAmountChange(e.target.value)
                     }
                     placeholder="0"
-                    className={`w-full bg-secondary border border-border rounded-xl py-4 text-2xl font-display font-bold text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent ${
+                    className={`w-full bg-secondary border border-border rounded-xl py-3 text-xl font-display font-bold text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent ${
                       inputMode === "usd" ? "pl-8 pr-4" : "px-4"
                     }`}
                   />
                 </div>
                 {inputMode === "tokens" && tokens > 0 && (
-                  <p className="text-sm text-muted-foreground mt-2">
+                  <p className="text-xs text-muted-foreground mt-1">
                     ≈ ${(tokens * tokenPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </p>
                 )}
                 {inputMode === "usd" && tokens > 0 && (
-                  <p className="text-sm text-muted-foreground mt-2">
+                  <p className="text-xs text-muted-foreground mt-1">
                     ≈ {tokens.toFixed(2)} tokens
                   </p>
                 )}
               </div>
 
               {/* Quick Buttons */}
-              <div className="flex gap-2 mb-6">
+              <div className="flex gap-2 mb-3">
                 {mode === "buy" ? (
                   <>
                     <QuickButton onClick={() => handleQuickAmount(10)} label="10" />
@@ -290,49 +290,37 @@ export function TokenTradeModal({
                 )}
               </div>
 
-              {/* Order Summary */}
-              <div className="glass-card rounded-xl p-4 space-y-3 mb-6">
-                <h4 className="font-display font-semibold text-foreground">Order Summary</h4>
-                
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Tokens</span>
-                  <span className="text-foreground">{tokens.toFixed(2)}</span>
-                </div>
-                
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Price per token</span>
-                  <span className="text-foreground">${tokenPrice.toFixed(2)}</span>
-                </div>
-                
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Subtotal</span>
+              {/* Order Summary - Compact */}
+              <div className="glass-card rounded-xl p-3 space-y-1.5 mb-3">
+                <div className="flex justify-between text-xs">
+                  <span className="text-muted-foreground">{tokens.toFixed(2)} tokens × ${tokenPrice.toFixed(2)}</span>
                   <span className="text-foreground">
                     ${subtotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </div>
                 
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-between text-xs">
                   <span className="text-muted-foreground">Platform fee (1%)</span>
                   <span className={mode === "sell" ? "text-destructive" : "text-foreground"}>
                     {mode === "sell" ? "-" : ""}${fee.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </div>
                 
-                <div className="border-t border-border pt-3 flex justify-between">
-                  <span className="font-display font-semibold text-foreground">
-                    {mode === "buy" ? "Total cost" : "You receive"}
+                <div className="border-t border-border pt-1.5 flex justify-between">
+                  <span className="font-display font-semibold text-sm text-foreground">
+                    {mode === "buy" ? "Total" : "You receive"}
                   </span>
-                  <span className="font-display font-bold text-lg text-foreground">
+                  <span className="font-display font-bold text-foreground">
                     ${(mode === "buy" ? total : proceeds).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </div>
 
-                <div className="border-t border-border pt-3 flex justify-between">
-                  <span className="flex items-center gap-2 text-muted-foreground">
-                    <Wallet className="w-4 h-4" />
-                    Your balance
+                <div className="border-t border-border pt-1.5 flex justify-between">
+                  <span className="flex items-center gap-1.5 text-muted-foreground text-xs">
+                    <Wallet className="w-3 h-3" />
+                    Balance
                   </span>
-                  <span className={`font-semibold ${insufficientBalance ? "text-destructive" : "text-foreground"}`}>
+                  <span className={`text-sm font-semibold ${insufficientBalance ? "text-destructive" : "text-foreground"}`}>
                     ${walletBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </div>
@@ -340,12 +328,12 @@ export function TokenTradeModal({
 
               {/* Error Messages */}
               {insufficientBalance && (
-                <p className="text-destructive text-sm mb-4 text-center">
+                <p className="text-destructive text-xs mb-2 text-center">
                   Insufficient balance. You need ${(total - walletBalance).toFixed(2)} more.
                 </p>
               )}
               {insufficientTokens && (
-                <p className="text-destructive text-sm mb-4 text-center">
+                <p className="text-destructive text-xs mb-2 text-center">
                   You only own {userTokens} tokens.
                 </p>
               )}
@@ -354,17 +342,17 @@ export function TokenTradeModal({
               <button
                 onClick={handleConfirm}
                 disabled={isDisabled}
-                className="w-full mt-6 py-4 rounded-xl gradient-primary text-primary-foreground font-display font-bold text-lg transition-all hover:opacity-90 glow-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-xl gradient-primary text-primary-foreground font-display font-bold transition-all hover:opacity-90 glow-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {processing ? (
                   <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <Loader2 className="w-4 h-4 animate-spin" />
                     Processing...
                   </>
                 ) : (
                   mode === "buy" 
-                    ? `Confirm Purchase - $${total.toFixed(2)}` 
-                    : `Confirm Sale - ${tokens.toFixed(0)} tokens`
+                    ? `Confirm - $${total.toFixed(2)}` 
+                    : `Sell ${tokens.toFixed(0)} tokens`
                 )}
               </button>
             </>
