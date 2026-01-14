@@ -354,7 +354,7 @@ export function TokenTradeModal({
               <button
                 onClick={handleConfirm}
                 disabled={isDisabled}
-                className="w-full py-4 rounded-xl gradient-primary text-primary-foreground font-display font-bold text-lg transition-all hover:opacity-90 glow-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full mt-6 py-4 rounded-xl gradient-primary text-primary-foreground font-display font-bold text-lg transition-all hover:opacity-90 glow-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {processing ? (
                   <>
@@ -362,7 +362,9 @@ export function TokenTradeModal({
                     Processing...
                   </>
                 ) : (
-                  mode === "buy" ? "Confirm Purchase" : "Confirm Sale"
+                  mode === "buy" 
+                    ? `Confirm Purchase - $${total.toFixed(2)}` 
+                    : `Confirm Sale - ${tokens.toFixed(0)} tokens`
                 )}
               </button>
             </>
