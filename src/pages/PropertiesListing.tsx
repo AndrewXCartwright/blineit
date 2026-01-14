@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Building2, MapPin, TrendingUp, Flame, Search, SlidersHorizontal, Grid3X3, List, ChevronLeft, Clock } from "lucide-react";
+import { Building2, MapPin, TrendingUp, Flame, Search, SlidersHorizontal, Grid3X3, List, ChevronLeft, Clock, FileText } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +10,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
 import { PullToRefresh } from "@/components/PullToRefresh";
 import { BottomNav } from "@/components/BottomNav";
+import { FactorDealCard } from "@/components/factor/FactorDealCard";
+import { useFactorDeals } from "@/hooks/useFactorDeals";
 
 interface Property {
   id: string;
@@ -47,6 +49,9 @@ export default function PropertiesListing() {
   const [sortBy, setSortBy] = useState("newest");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [investmentType, setInvestmentType] = useState<InvestmentType>("all");
+
+  // Factor deals hook
+  const { deals: factorDeals, loading: factorLoading } = useFactorDeals();
 
   const fetchProperties = useCallback(async () => {
     setLoading(true);
@@ -187,14 +192,48 @@ export default function PropertiesListing() {
 
         {/* Content */}
         <main className="p-4">
-          {/* Coming Soon placeholder for Factor, Lien, SAFE */}
-          {investmentType !== "all" && investmentType !== "real-estate" ? (
+          {/* Factor Deals */}
+          {investmentType === "factor" ? (
+            factorLoading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="glass-card rounded-2xl overflow-hidden">
+                    <Skeleton className="h-20" />
+                    <div className="p-4 space-y-3">
+                      <Skeleton className="h-4 w-3/4" />
+                      <Skeleton className="h-3 w-1/2" />
+                      <div className="grid grid-cols-2 gap-3">
+                        <Skeleton className="h-12" />
+                        <Skeleton className="h-12" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : factorDeals.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-16 text-center">
+                <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                  <FileText className="h-8 w-8 text-muted-foreground" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">No Factor Deals Available Yet</h3>
+                <p className="text-muted-foreground max-w-md">
+                  New factor investment opportunities will be listed here soon.
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {factorDeals.map((deal) => (
+                  <FactorDealCard key={deal.id} deal={deal} />
+                ))}
+              </div>
+            )
+          ) : investmentType === "lien" || investmentType === "safe" ? (
             <div className="flex flex-col items-center justify-center py-16 text-center">
               <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
                 <Clock className="h-8 w-8 text-muted-foreground" />
               </div>
               <h3 className="text-xl font-semibold mb-2">
-                {investmentType === "factor" ? "Factor" : investmentType === "lien" ? "Lien" : "SAFE"} Investments Coming Soon
+                {investmentType === "lien" ? "Lien" : "SAFE"} Investments Coming Soon
               </h3>
               <p className="text-muted-foreground max-w-md">
                 We're preparing new investment opportunities. Check back soon!
