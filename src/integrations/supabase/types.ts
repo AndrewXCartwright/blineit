@@ -1611,6 +1611,71 @@ export type Database = {
         }
         Relationships: []
       }
+      factor_deals: {
+        Row: {
+          company_name: string
+          created_at: string | null
+          current_raised: number | null
+          discount_rate: number
+          documents: Json | null
+          factor_type: string
+          id: string
+          invoice_amount: number
+          min_investment: number | null
+          risk_rating: string | null
+          sponsor_id: string | null
+          status: string | null
+          target_raise: number | null
+          term_days: number
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          company_name: string
+          created_at?: string | null
+          current_raised?: number | null
+          discount_rate: number
+          documents?: Json | null
+          factor_type: string
+          id?: string
+          invoice_amount: number
+          min_investment?: number | null
+          risk_rating?: string | null
+          sponsor_id?: string | null
+          status?: string | null
+          target_raise?: number | null
+          term_days: number
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          company_name?: string
+          created_at?: string | null
+          current_raised?: number | null
+          discount_rate?: number
+          documents?: Json | null
+          factor_type?: string
+          id?: string
+          invoice_amount?: number
+          min_investment?: number | null
+          risk_rating?: string | null
+          sponsor_id?: string | null
+          status?: string | null
+          target_raise?: number | null
+          term_days?: number
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "factor_deals_sponsor_id_fkey"
+            columns: ["sponsor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       faq_articles: {
         Row: {
           answer: string
@@ -2202,6 +2267,74 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      lien_deals: {
+        Row: {
+          collateral_value: number
+          created_at: string | null
+          documents: Json | null
+          id: string
+          interest_rate: number
+          lien_position: string
+          ltv_ratio: number | null
+          min_investment: number | null
+          principal_amount: number
+          property_address: string
+          property_city: string | null
+          property_state: string | null
+          sponsor_id: string | null
+          status: string | null
+          term_months: number
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          collateral_value: number
+          created_at?: string | null
+          documents?: Json | null
+          id?: string
+          interest_rate: number
+          lien_position: string
+          ltv_ratio?: number | null
+          min_investment?: number | null
+          principal_amount: number
+          property_address: string
+          property_city?: string | null
+          property_state?: string | null
+          sponsor_id?: string | null
+          status?: string | null
+          term_months: number
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          collateral_value?: number
+          created_at?: string | null
+          documents?: Json | null
+          id?: string
+          interest_rate?: number
+          lien_position?: string
+          ltv_ratio?: number | null
+          min_investment?: number | null
+          principal_amount?: number
+          property_address?: string
+          property_city?: string | null
+          property_state?: string | null
+          sponsor_id?: string | null
+          status?: string | null
+          term_months?: number
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lien_deals_sponsor_id_fkey"
+            columns: ["sponsor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       likes: {
         Row: {
@@ -3988,6 +4121,74 @@ export type Database = {
           status?: string | null
         }
         Relationships: []
+      }
+      safe_deals: {
+        Row: {
+          company_name: string
+          created_at: string | null
+          current_raised: number | null
+          description: string | null
+          discount_rate: number | null
+          documents: Json | null
+          has_mfn: boolean | null
+          has_pro_rata: boolean | null
+          id: string
+          min_investment: number | null
+          sponsor_id: string | null
+          stage: string
+          status: string | null
+          target_raise: number
+          team: Json | null
+          updated_at: string | null
+          valuation_cap: number | null
+        }
+        Insert: {
+          company_name: string
+          created_at?: string | null
+          current_raised?: number | null
+          description?: string | null
+          discount_rate?: number | null
+          documents?: Json | null
+          has_mfn?: boolean | null
+          has_pro_rata?: boolean | null
+          id?: string
+          min_investment?: number | null
+          sponsor_id?: string | null
+          stage: string
+          status?: string | null
+          target_raise: number
+          team?: Json | null
+          updated_at?: string | null
+          valuation_cap?: number | null
+        }
+        Update: {
+          company_name?: string
+          created_at?: string | null
+          current_raised?: number | null
+          description?: string | null
+          discount_rate?: number | null
+          documents?: Json | null
+          has_mfn?: boolean | null
+          has_pro_rata?: boolean | null
+          id?: string
+          min_investment?: number | null
+          sponsor_id?: string | null
+          stage?: string
+          status?: string | null
+          target_raise?: number
+          team?: Json | null
+          updated_at?: string | null
+          valuation_cap?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "safe_deals_sponsor_id_fkey"
+            columns: ["sponsor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       saved_calculations: {
         Row: {
