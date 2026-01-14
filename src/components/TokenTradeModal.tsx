@@ -4,6 +4,8 @@ import { Confetti } from "./Confetti";
 import { CountUp } from "./CountUp";
 import { useUserData } from "@/hooks/useUserData";
 import { useBuyTokens, useSellTokens } from "@/hooks/useUserData";
+import { useKYCGate } from "@/hooks/useKYCGate";
+import { KYCVerificationModal } from "@/components/kyc/KYCVerificationModal";
 
 interface TokenTradeModalProps {
   isOpen: boolean;
@@ -38,6 +40,7 @@ export function TokenTradeModal({
   const { walletBalance, refetch } = useUserData();
   const { buyTokens } = useBuyTokens();
   const { sellTokens } = useSellTokens();
+  const { requireKYC, showKYCModal, setShowKYCModal, onKYCVerified } = useKYCGate();
 
   // Reset state when modal opens
   useEffect(() => {
@@ -86,10 +89,8 @@ export function TokenTradeModal({
     }
   };
 
-  const handleConfirm = async () => {
-    if (isDisabled) return;
+  const processPurchase = async () => {
     setProcessing(true);
-
     try {
       if (mode === "buy") {
         const result = await buyTokens(propertyId, total, tokenPrice);
@@ -114,6 +115,20 @@ export function TokenTradeModal({
     }
   };
 
+  const handleConfirm = () => {
+    if (isDisabled) return;
+    
+    if (mode === "buy") {
+      // Require KYC for purchases
+      requireKYC(() => {
+        processPurchase();
+      });
+    } else {
+      // Selling doesn't require KYC check (they already own tokens)
+      processPurchase();
+    }
+  };
+
   const handleClose = () => {
     if (success) {
       setTimeout(() => {
@@ -131,6 +146,14 @@ export function TokenTradeModal({
     <>
       <Confetti active={showConfetti} onComplete={() => setShowConfetti(false)} />
       
+      <KYCVerificationModal
+        isOpen={showKYCModal}
+        onClose={() => setShowKYCModal(false)}
+        onVerified={() => {
+          onKYCVerified();
+          processPurchase();
+        }}
+      />
       <div className="fixed inset-0 z-50 flex items-end justify-center">
         <div 
           className="absolute inset-0 bg-background/80 backdrop-blur-sm"
