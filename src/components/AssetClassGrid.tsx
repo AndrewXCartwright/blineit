@@ -61,6 +61,14 @@ const equityAssets: AssetClass[] = [{
   isLive: true,
   filterPath: "/startups"
 }, {
+  id: "vc-funds",
+  icon: "📈",
+  nameKey: "VC Funds",
+  value: "$310M",
+  subtitle: "",
+  isLive: true,
+  filterPath: "/vc"
+}, {
   id: "predictions",
   icon: "🎯",
   nameKey: "assets.predictions",
