@@ -141,9 +141,12 @@ export function InvestmentModal({
   // Determine if user can proceed (eligible or just needs to trigger KYC flow)
   const canProceed = isValidAmount && (eligibility.eligible || eligibility.nextStep === 'kyc');
 
+  // Hide InvestmentModal while KYC or Accreditation modals are active to avoid z-index issues
+  const isSubModalOpen = showKYCModal || showAccreditationModal;
+
   return (
     <>
-      <Dialog open={isOpen} onOpenChange={handleClose}>
+      <Dialog open={isOpen && !isSubModalOpen} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto pb-24">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
