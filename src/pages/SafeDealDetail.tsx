@@ -111,7 +111,7 @@ export default function SafeDealDetail() {
         <main className="p-4 flex flex-col items-center justify-center py-16 text-center">
           <AlertTriangle className="w-12 h-12 text-muted-foreground mb-4" />
           <h3 className="text-lg font-semibold mb-2">Deal not found</h3>
-          <p className="text-muted-foreground mb-4">This SAFE deal may have been removed or doesn't exist.</p>
+          <p className="text-muted-foreground mb-4">This startup investment may have been removed or doesn't exist.</p>
           <Button onClick={() => navigate("/explore")}>Back to Explore</Button>
         </main>
         <BottomNav />
@@ -190,12 +190,12 @@ export default function SafeDealDetail() {
       <main className="p-4 space-y-4">
         {activeTab === "Overview" && (
           <>
-            {/* SAFE Terms */}
+            {/* Investment Terms (SAFE/Convertible) */}
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-base flex items-center gap-2">
                   <Shield className="w-5 h-5" />
-                  SAFE Terms
+                  Investment Terms
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -306,7 +306,7 @@ export default function SafeDealDetail() {
                 
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">Investment Type</span>
-                  <span className="font-semibold">SAFE</span>
+                  <span className="font-semibold">Startup / VC</span>
                 </div>
 
                 <div className="flex justify-between items-center">
