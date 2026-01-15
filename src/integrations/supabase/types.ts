@@ -6830,6 +6830,96 @@ export type Database = {
         }
         Relationships: []
       }
+      vc_funds: {
+        Row: {
+          carried_interest: number | null
+          created_at: string | null
+          current_raised: number | null
+          description: string | null
+          documents: Json | null
+          exemption_type: string | null
+          fund_manager: string
+          fund_name: string
+          fund_stage: string | null
+          fund_term_years: number | null
+          gp_name: string
+          id: string
+          image_url: string | null
+          investment_focus: string | null
+          location_city: string | null
+          location_state: string | null
+          management_fee: number | null
+          min_investment: number | null
+          portfolio_companies: Json | null
+          status: string | null
+          target_fund_size: number
+          target_portfolio_size: number | null
+          team: Json | null
+          thesis: string | null
+          track_record: Json | null
+          updated_at: string | null
+          vintage_year: number | null
+        }
+        Insert: {
+          carried_interest?: number | null
+          created_at?: string | null
+          current_raised?: number | null
+          description?: string | null
+          documents?: Json | null
+          exemption_type?: string | null
+          fund_manager: string
+          fund_name: string
+          fund_stage?: string | null
+          fund_term_years?: number | null
+          gp_name: string
+          id?: string
+          image_url?: string | null
+          investment_focus?: string | null
+          location_city?: string | null
+          location_state?: string | null
+          management_fee?: number | null
+          min_investment?: number | null
+          portfolio_companies?: Json | null
+          status?: string | null
+          target_fund_size: number
+          target_portfolio_size?: number | null
+          team?: Json | null
+          thesis?: string | null
+          track_record?: Json | null
+          updated_at?: string | null
+          vintage_year?: number | null
+        }
+        Update: {
+          carried_interest?: number | null
+          created_at?: string | null
+          current_raised?: number | null
+          description?: string | null
+          documents?: Json | null
+          exemption_type?: string | null
+          fund_manager?: string
+          fund_name?: string
+          fund_stage?: string | null
+          fund_term_years?: number | null
+          gp_name?: string
+          id?: string
+          image_url?: string | null
+          investment_focus?: string | null
+          location_city?: string | null
+          location_state?: string | null
+          management_fee?: number | null
+          min_investment?: number | null
+          portfolio_companies?: Json | null
+          status?: string | null
+          target_fund_size?: number
+          target_portfolio_size?: number | null
+          team?: Json | null
+          thesis?: string | null
+          track_record?: Json | null
+          updated_at?: string | null
+          vintage_year?: number | null
+        }
+        Relationships: []
+      }
       waitlist: {
         Row: {
           asset_class: string
