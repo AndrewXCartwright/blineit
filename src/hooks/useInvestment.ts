@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { syncInvestmentToDigiShares } from "@/services/digishares-sync";
-export type InvestmentType = 'real_estate' | 'factor' | 'lien' | 'safe';
+export type InvestmentType = 'real_estate' | 'factor' | 'lien' | 'safe' | 'private_business';
 
 export interface Investment {
   id: string;

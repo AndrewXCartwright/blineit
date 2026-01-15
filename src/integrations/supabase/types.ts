@@ -3459,6 +3459,89 @@ export type Database = {
         }
         Relationships: []
       }
+      private_businesses: {
+        Row: {
+          annual_revenue: number | null
+          business_name: string
+          business_type: string
+          created_at: string | null
+          current_raised: number | null
+          description: string | null
+          documents: Json | null
+          exemption_type: string | null
+          id: string
+          industry: string
+          location_city: string | null
+          location_state: string | null
+          min_investment: number | null
+          projected_return: number | null
+          revenue_share_percentage: number | null
+          sponsor_id: string | null
+          status: string | null
+          target_raise: number
+          team: Json | null
+          term_months: number | null
+          updated_at: string | null
+          years_in_operation: number | null
+        }
+        Insert: {
+          annual_revenue?: number | null
+          business_name: string
+          business_type: string
+          created_at?: string | null
+          current_raised?: number | null
+          description?: string | null
+          documents?: Json | null
+          exemption_type?: string | null
+          id?: string
+          industry: string
+          location_city?: string | null
+          location_state?: string | null
+          min_investment?: number | null
+          projected_return?: number | null
+          revenue_share_percentage?: number | null
+          sponsor_id?: string | null
+          status?: string | null
+          target_raise: number
+          team?: Json | null
+          term_months?: number | null
+          updated_at?: string | null
+          years_in_operation?: number | null
+        }
+        Update: {
+          annual_revenue?: number | null
+          business_name?: string
+          business_type?: string
+          created_at?: string | null
+          current_raised?: number | null
+          description?: string | null
+          documents?: Json | null
+          exemption_type?: string | null
+          id?: string
+          industry?: string
+          location_city?: string | null
+          location_state?: string | null
+          min_investment?: number | null
+          projected_return?: number | null
+          revenue_share_percentage?: number | null
+          sponsor_id?: string | null
+          status?: string | null
+          target_raise?: number
+          team?: Json | null
+          term_months?: number | null
+          updated_at?: string | null
+          years_in_operation?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "private_businesses_sponsor_id_fkey"
+            columns: ["sponsor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           allow_mentions: boolean | null
