@@ -55,7 +55,7 @@ const equityAssets: AssetClass[] = [{
 }, {
   id: "startups",
   icon: "🚀",
-  nameKey: "assets.startupsVc",
+  nameKey: "assets.startups",
   value: "$180M",
   subtitle: "",
   isLive: true,

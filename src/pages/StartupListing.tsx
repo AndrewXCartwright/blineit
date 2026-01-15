@@ -85,7 +85,7 @@ export default function StartupListing() {
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div className="flex-1">
-            <h1 className="text-xl font-display font-bold text-foreground">Startups & VC</h1>
+            <h1 className="text-xl font-display font-bold text-foreground">Startups</h1>
             <p className="text-xs text-muted-foreground">Invest in early-stage companies</p>
           </div>
           <Button 

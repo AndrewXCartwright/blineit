@@ -11,7 +11,7 @@ import { format } from "date-fns";
 const assetClassLabels: Record<string, { name: string; icon: string }> = {
   gold_commodities: { name: "Gold & Commodities", icon: "🥇" },
   private_business: { name: "Private Business", icon: "🏭" },
-  startups_vc: { name: "Startups & VC", icon: "🚀" },
+  startups_vc: { name: "Startups", icon: "🚀" },
 };
 
 export default function AdminWaitlists() {

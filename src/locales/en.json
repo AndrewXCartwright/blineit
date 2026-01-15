@@ -123,7 +123,7 @@
     "commercial": "Commercial",
     "goldCryptoCommodities": "Gold, Crypto & Commodities",
     "privateBusiness": "Private Business",
-    "startupsVc": "Startups & VC",
+    "startups": "Startups",
     "predictions": "Predictions",
     "realEstateLoans": "Real Estate Loans",
     "commercialMortgages": "Commercial Loans",
@@ -664,7 +664,9 @@
     "explore": "Explore",
     "predict": "Predict",
     "wallet": "Wallet",
-    "profile": "Profile"
+    "profile": "Profile",
+    "assets": "Assets",
+    "mainNavigation": "Main navigation"
   },
   "leaderboard": {
     "title": "Leaderboard",

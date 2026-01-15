@@ -60,6 +60,7 @@ const PEFundsListing = lazy(() => import("./pages/PEFundsListing"));
 const PEFundDetail = lazy(() => import("./pages/PEFundDetail"));
 const KYCVerification = lazy(() => import("./pages/KYCVerification"));
 const ComingSoon = lazy(() => import("./pages/ComingSoon"));
+const CommoditiesComingSoon = lazy(() => import("./pages/CommoditiesComingSoon"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Referrals = lazy(() => import("./pages/Referrals"));
 const ReferralLanding = lazy(() => import("./pages/ReferralLanding"));
@@ -267,6 +268,7 @@ const App = () => (
                   <Route path="/pe" element={<ProtectedRoute><PEFundsListing /></ProtectedRoute>} />
                   <Route path="/pe/:id" element={<ProtectedRoute><PEFundDetail /></ProtectedRoute>} />
                   <Route path="/predict" element={<ProtectedRoute><Predict /></ProtectedRoute>} />
+                  <Route path="/commodities" element={<ProtectedRoute><CommoditiesComingSoon /></ProtectedRoute>} />
                   <Route path="/wallet" element={<ProtectedRoute><Wallet /></ProtectedRoute>} />
                   <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                   <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />

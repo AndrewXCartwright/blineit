@@ -332,7 +332,7 @@ export default function SafeDealDetail() {
                 
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">Investment Type</span>
-                  <span className="font-semibold">Startup / VC</span>
+                  <span className="font-semibold">Startup</span>
                 </div>
 
                 <div className="flex justify-between items-center">

@@ -41,7 +41,7 @@ const investmentTypeTabs: { value: InvestmentType; label: string }[] = [
   { value: "real-estate", label: "Real Estate" },
   { value: "factor", label: "Factor" },
   { value: "lien", label: "Lien" },
-  { value: "safe", label: "Startups & VC" },
+  { value: "safe", label: "Startups" },
   { value: "private-business", label: "Private Business" },
 ];
 
@@ -303,7 +303,7 @@ export default function PropertiesListing() {
                 </div>
                 <h3 className="text-xl font-semibold mb-2">No Startup Investments Available Yet</h3>
                 <p className="text-muted-foreground max-w-md">
-                  New startup and VC investment opportunities will be listed here soon.
+                  New startup investment opportunities will be listed here soon.
                 </p>
               </div>
             ) : (
