@@ -17,75 +17,92 @@ interface AssetClass {
   waitlistId?: WaitlistAssetClass;
 }
 
-const equityAssets: AssetClass[] = [{
-  id: "real-estate",
-  icon: "🏠",
-  nameKey: "assets.realEstate",
-  value: "$1.2B",
-  subtitle: "45",
-  subtitleKey: "assets.properties",
-  isLive: true,
-  filterPath: "/assets/explore?type=equity&class=real-estate"
-}, {
-  id: "commercial",
-  icon: "🏢",
-  nameKey: "assets.commercial",
-  value: "$840M",
-  subtitle: "28",
-  subtitleKey: "assets.properties",
-  isLive: true,
-  filterPath: "/assets/explore?type=equity&class=commercial"
-}, {
-  id: "gold-crypto-commodities",
-  icon: "🥇",
-  nameKey: "assets.goldCryptoCommodities",
-  value: "$1.9B",
-  subtitle: "Coming Q2 2026",
-  isLive: false,
-  launchDate: "Q2 2026",
-  waitlistId: "gold_commodities"
-}, {
-  id: "private",
-  icon: "🏭",
-  nameKey: "assets.privateBusiness",
-  value: "$320M",
-  subtitle: "",
-  isLive: true,
-  filterPath: "/private-business"
-}, {
-  id: "startups",
-  icon: "🚀",
-  nameKey: "assets.startups",
-  value: "$180M",
-  subtitle: "",
-  isLive: true,
-  filterPath: "/startups"
-}, {
-  id: "vc-funds",
-  icon: "📈",
-  nameKey: "VC Funds",
-  value: "$310M",
-  subtitle: "",
-  isLive: true,
-  filterPath: "/vc"
-}, {
-  id: "pe-funds",
-  icon: "💼",
-  nameKey: "Private Equity",
-  value: "$725M",
-  subtitle: "",
-  isLive: true,
-  filterPath: "/pe"
-}, {
-  id: "predictions",
-  icon: "🎯",
-  nameKey: "assets.predictions",
-  value: "",
-  subtitleKey: "assets.volume",
-  subtitle: "$2.4M",
-  isLive: true,
-  filterPath: "/predict"
-}];
+const equityAssets: AssetClass[] = [
+  // LEFT COLUMN (odd indices when rendered in 2-col grid)
+  {
+    id: "real-estate",
+    icon: "🏠",
+    nameKey: "assets.realEstate",
+    value: "$1.2B",
+    subtitle: "45",
+    subtitleKey: "assets.properties",
+    isLive: true,
+    filterPath: "/assets/explore?type=equity&class=real-estate"
+  },
+  // RIGHT COLUMN
+  {
+    id: "commercial",
+    icon: "🏢",
+    nameKey: "assets.commercial",
+    value: "$840M",
+    subtitle: "28",
+    subtitleKey: "assets.properties",
+    isLive: true,
+    filterPath: "/assets/explore?type=equity&class=commercial"
+  },
+  // LEFT COLUMN
+  {
+    id: "startups",
+    icon: "🚀",
+    nameKey: "assets.startups",
+    value: "$180M",
+    subtitle: "",
+    isLive: true,
+    filterPath: "/startups"
+  },
+  // RIGHT COLUMN
+  {
+    id: "private",
+    icon: "🏭",
+    nameKey: "assets.privateBusiness",
+    value: "$320M",
+    subtitle: "",
+    isLive: true,
+    filterPath: "/private-business"
+  },
+  // LEFT COLUMN
+  {
+    id: "vc-funds",
+    icon: "📈",
+    nameKey: "VC Funds",
+    value: "$310M",
+    subtitle: "",
+    isLive: true,
+    filterPath: "/vc"
+  },
+  // RIGHT COLUMN
+  {
+    id: "pe-funds",
+    icon: "💼",
+    nameKey: "Private Equity",
+    value: "$725M",
+    subtitle: "",
+    isLive: true,
+    filterPath: "/pe"
+  },
+  // LEFT COLUMN
+  {
+    id: "predictions",
+    icon: "🎯",
+    nameKey: "assets.predictions",
+    value: "",
+    subtitleKey: "assets.volume",
+    subtitle: "$2.4M",
+    isLive: true,
+    filterPath: "/predict"
+  },
+  // RIGHT COLUMN
+  {
+    id: "gold-crypto-commodities",
+    icon: "🥇",
+    nameKey: "assets.goldCryptoCommodities",
+    value: "$1.9B",
+    subtitle: "Coming Q2 2026",
+    isLive: false,
+    launchDate: "Q2 2026",
+    waitlistId: "gold_commodities"
+  }
+];
 
 const debtAssets: AssetClass[] = [{
   id: "re-loans",
