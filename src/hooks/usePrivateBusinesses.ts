@@ -21,6 +21,7 @@ export interface PrivateBusiness {
   location_state: string | null;
   team: any[];
   documents: any[];
+  image_url: string | null;
   sponsor_id: string | null;
   created_at: string;
   updated_at: string;
