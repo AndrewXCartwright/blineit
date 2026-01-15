@@ -7,6 +7,7 @@ export interface SafeDeal {
   company_name: string;
   description: string | null;
   stage: string;
+  industry: string | null;
   valuation_cap: number | null;
   discount_rate: number | null;
   has_mfn: boolean;
@@ -15,6 +16,11 @@ export interface SafeDeal {
   current_raised: number;
   status: string;
   min_investment: number;
+  exemption_type: string;
+  location_city: string | null;
+  location_state: string | null;
+  website_url: string | null;
+  image_url: string | null;
   team: Json;
   documents: Json;
   sponsor_id: string | null;
@@ -41,7 +47,7 @@ export function useSafeDeals() {
       setError(fetchError.message);
       setDeals([]);
     } else {
-      setDeals(data || []);
+      setDeals((data as unknown as SafeDeal[]) || []);
     }
     setLoading(false);
   }, []);
@@ -57,7 +63,7 @@ export function useSafeDeals() {
       console.error("Error fetching safe deal:", fetchError);
       return null;
     }
-    return data;
+    return data as unknown as SafeDeal;
   }, []);
 
   useEffect(() => {

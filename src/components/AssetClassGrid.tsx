@@ -57,10 +57,9 @@ const equityAssets: AssetClass[] = [{
   icon: "🚀",
   nameKey: "assets.startupsVc",
   value: "$180M",
-  subtitle: "Coming Q3 2026",
-  isLive: false,
-  launchDate: "Q3 2026",
-  waitlistId: "startups_vc"
+  subtitle: "",
+  isLive: true,
+  filterPath: "/startups"
 }, {
   id: "predictions",
   icon: "🎯",
