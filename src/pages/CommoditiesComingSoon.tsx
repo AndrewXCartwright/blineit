@@ -68,7 +68,7 @@ export default function CommoditiesComingSoon() {
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div className="flex-1">
-            <h1 className="text-xl font-display font-bold text-foreground">Gold, Crypto & Commodities</h1>
+            <h1 className="text-xl font-display font-bold text-foreground">Gold & Crypto</h1>
             <p className="text-xs text-muted-foreground">Coming Q2 2026</p>
           </div>
           <div className="p-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500">
@@ -86,11 +86,11 @@ export default function CommoditiesComingSoon() {
           </div>
           
           <h2 className="text-2xl font-display font-bold">
-            Invest in Tokenized Precious Metals, Crypto & Commodities
+            Invest in Tokenized Precious Metals & Crypto
           </h2>
           
           <p className="text-muted-foreground">
-            Access alternative assets with fractional ownership. Diversify your portfolio with gold, silver, cryptocurrencies, and commodity funds.
+            Access alternative assets with fractional ownership. Diversify your portfolio with gold, silver, and cryptocurrencies.
           </p>
         </div>
 
@@ -138,7 +138,7 @@ export default function CommoditiesComingSoon() {
               <Bell className="w-8 h-8 mx-auto mb-2 text-primary" />
               <h3 className="text-lg font-semibold">Get Early Access</h3>
               <p className="text-sm text-muted-foreground">
-                Be the first to know when commodities investing launches
+                Be the first to know when gold & crypto investing launches
               </p>
             </div>
 
