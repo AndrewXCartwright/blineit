@@ -49,10 +49,9 @@ const equityAssets: AssetClass[] = [{
   icon: "🏭",
   nameKey: "assets.privateBusiness",
   value: "$320M",
-  subtitle: "Coming Q1 2026",
-  isLive: false,
-  launchDate: "Q1 2026",
-  waitlistId: "private_business"
+  subtitle: "",
+  isLive: true,
+  filterPath: "/private-business"
 }, {
   id: "startups",
   icon: "🚀",
