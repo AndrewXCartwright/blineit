@@ -69,6 +69,14 @@ const equityAssets: AssetClass[] = [{
   isLive: true,
   filterPath: "/vc"
 }, {
+  id: "pe-funds",
+  icon: "💼",
+  nameKey: "Private Equity",
+  value: "$725M",
+  subtitle: "",
+  isLive: true,
+  filterPath: "/pe"
+}, {
   id: "predictions",
   icon: "🎯",
   nameKey: "assets.predictions",
