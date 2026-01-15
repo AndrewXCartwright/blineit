@@ -165,17 +165,27 @@ export default function PrivateBusinessDetail() {
         </div>
       </header>
 
-      {/* Hero Banner */}
-      <div className="h-32 relative overflow-hidden bg-gradient-to-br from-emerald-500/30 via-emerald-500/20 to-background">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Building2 className="w-16 h-16 text-emerald-500/20" />
-        </div>
-        {business.location_city && business.location_state && (
-          <div className="absolute bottom-3 left-4 flex items-center gap-1 text-sm text-foreground/80">
-            <MapPin className="w-4 h-4" />
-            <span>{business.location_city}, {business.location_state}</span>
+      {/* Hero Image */}
+      <div className="relative h-64 md:h-80 w-full overflow-hidden">
+        <img 
+          src={business.image_url || "https://images.unsplash.com/photo-1556740738-b6a63e27c4df?w=800"} 
+          alt={business.business_name}
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1556740738-b6a63e27c4df?w=800";
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+        <div className="absolute bottom-4 left-4 right-4 text-white">
+          <h2 className="text-2xl font-bold">{business.business_name}</h2>
+          <div className="flex items-center gap-2 mt-1 text-sm opacity-90">
+            {business.industry && <span>{business.industry}</span>}
+            {business.industry && business.location_city && <span>•</span>}
+            {business.location_city && business.location_state && (
+              <span>{business.location_city}, {business.location_state}</span>
+            )}
           </div>
-        )}
+        </div>
       </div>
 
       {/* Tabs */}

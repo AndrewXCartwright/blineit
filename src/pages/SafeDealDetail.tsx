@@ -27,16 +27,26 @@ import { useSafeDeals, type SafeDeal } from "@/hooks/useSafeDeals";
 import { InvestmentModal } from "@/components/shared/InvestmentModal";
 
 const stageLabels: Record<string, string> = {
+  angel: "Angel",
   pre_seed: "Pre-Seed",
   seed: "Seed",
   series_a: "Series A",
+  series_b: "Series B",
+  series_c: "Series C",
+  growth: "Growth",
 };
 
 const stageColors: Record<string, string> = {
-  pre_seed: "bg-purple-500/10 text-purple-500",
-  seed: "bg-blue-500/10 text-blue-500",
-  series_a: "bg-green-500/10 text-green-500",
+  angel: "bg-purple-400/10 text-purple-400",
+  pre_seed: "bg-blue-400/10 text-blue-400",
+  seed: "bg-emerald-500/10 text-emerald-500",
+  series_a: "bg-orange-500/10 text-orange-500",
+  series_b: "bg-red-500/10 text-red-500",
+  series_c: "bg-amber-500/10 text-amber-500",
+  growth: "bg-amber-500/10 text-amber-500",
 };
+
+const defaultImage = "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800";
 
 function formatCurrency(amount: number): string {
   return new Intl.NumberFormat("en-US", {
@@ -160,10 +170,26 @@ export default function SafeDealDetail() {
         </div>
       </header>
 
-      {/* Hero Banner */}
-      <div className="h-32 relative overflow-hidden bg-gradient-to-br from-violet-500/30 via-violet-500/20 to-background">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Rocket className="w-16 h-16 text-violet-500/20" />
+      {/* Hero Image */}
+      <div className="relative h-64 md:h-80 w-full overflow-hidden">
+        <img 
+          src={deal.image_url || defaultImage} 
+          alt={deal.company_name}
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = defaultImage;
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+        <div className="absolute bottom-4 left-4 right-4 text-white">
+          <h2 className="text-2xl font-bold">{deal.company_name}</h2>
+          <div className="flex items-center gap-2 mt-1 text-sm opacity-90">
+            {deal.industry && <span>{deal.industry}</span>}
+            {deal.industry && deal.location_city && <span>•</span>}
+            {deal.location_city && deal.location_state && (
+              <span>{deal.location_city}, {deal.location_state}</span>
+            )}
+          </div>
         </div>
       </div>
 
