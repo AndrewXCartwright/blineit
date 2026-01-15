@@ -116,7 +116,7 @@ export default function AdminDashboard() {
               { type: "investment", text: "New $5,000 investment in Sunset Apartments", time: "2 minutes ago" },
               { type: "signup", text: "New user signed up: john@example.com", time: "15 minutes ago" },
               { type: "bet", text: "New bet placed on Miami Property Sale", time: "1 hour ago" },
-              { type: "waitlist", text: "New waitlist signup for Gold & Commodities", time: "2 hours ago" },
+              { type: "waitlist", text: "New waitlist signup for Gold & Crypto", time: "2 hours ago" },
             ].map((activity, i) => (
               <div key={i} className="flex items-center justify-between p-3 bg-secondary/50 rounded-lg">
                 <span className="text-sm text-foreground">{activity.text}</span>

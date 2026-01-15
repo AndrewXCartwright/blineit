@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { format } from "date-fns";
 
 const assetClassLabels: Record<string, { name: string; icon: string }> = {
-  gold_commodities: { name: "Gold & Commodities", icon: "🥇" },
+  gold_commodities: { name: "Gold & Crypto", icon: "🥇" },
   private_business: { name: "Private Business", icon: "🏭" },
   startups_vc: { name: "Startups", icon: "🚀" },
 };

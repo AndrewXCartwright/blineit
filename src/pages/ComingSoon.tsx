@@ -26,7 +26,7 @@ interface AssetClassConfig {
 const assetClassConfigs: Record<AssetClass, AssetClassConfig> = {
   gold_commodities: {
     id: "gold_commodities",
-    name: "Gold & Commodities",
+    name: "Gold & Crypto",
     icon: "🥇",
     launchDate: "Q3 2025",
     color: "amber",
