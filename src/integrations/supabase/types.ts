@@ -3470,6 +3470,7 @@ export type Database = {
           documents: Json | null
           exemption_type: string | null
           id: string
+          image_url: string | null
           industry: string
           location_city: string | null
           location_state: string | null
@@ -3494,6 +3495,7 @@ export type Database = {
           documents?: Json | null
           exemption_type?: string | null
           id?: string
+          image_url?: string | null
           industry: string
           location_city?: string | null
           location_state?: string | null
@@ -3518,6 +3520,7 @@ export type Database = {
           documents?: Json | null
           exemption_type?: string | null
           id?: string
+          image_url?: string | null
           industry?: string
           location_city?: string | null
           location_state?: string | null
