@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useKYCGate } from "@/hooks/useKYCGate";
 import { KYCVerificationModal } from "@/components/kyc/KYCVerificationModal";
+import { AccreditationModal } from "@/components/accreditation/AccreditationModal";
 import { useInvestment, type InvestmentType } from "@/hooks/useInvestment";
 import { useInvestorEligibility, type OfferingRequirements } from "@/hooks/useInvestorEligibility";
 import { useNavigate } from "react-router-dom";
@@ -47,6 +48,7 @@ export function InvestmentModal({
   const [amount, setAmount] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [showAccreditationModal, setShowAccreditationModal] = useState(false);
   
   const { requireKYC, showKYCModal, setShowKYCModal, isVerified: kycVerified } = useKYCGate();
   const { createInvestment, loading: investmentLoading } = useInvestment();
@@ -89,7 +91,8 @@ export function InvestmentModal({
     }
 
     if (eligibility.nextStep === 'accreditation') {
-      // User needs accreditation - don't proceed
+      // User needs accreditation - show modal
+      setShowAccreditationModal(true);
       return;
     }
 
@@ -356,6 +359,20 @@ export function InvestmentModal({
         onClose={() => setShowKYCModal(false)}
         onVerified={() => {
           setShowKYCModal(false);
+        }}
+      />
+
+      {/* Accreditation Modal */}
+      <AccreditationModal
+        isOpen={showAccreditationModal}
+        onClose={() => setShowAccreditationModal(false)}
+        onVerified={() => {
+          setShowAccreditationModal(false);
+          // Re-check eligibility and proceed if now eligible
+          const newEligibility = checkEligibility(offeringRequirements, numericAmount);
+          if (newEligibility.eligible) {
+            processInvestment();
+          }
         }}
       />
     </>
