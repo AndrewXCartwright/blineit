@@ -56,6 +56,8 @@ const PrivateBusinessListing = lazy(() => import("./pages/PrivateBusinessListing
 const StartupListing = lazy(() => import("./pages/StartupListing"));
 const VCFundsListing = lazy(() => import("./pages/VCFundsListing"));
 const VCFundDetail = lazy(() => import("./pages/VCFundDetail"));
+const PEFundsListing = lazy(() => import("./pages/PEFundsListing"));
+const PEFundDetail = lazy(() => import("./pages/PEFundDetail"));
 const KYCVerification = lazy(() => import("./pages/KYCVerification"));
 const ComingSoon = lazy(() => import("./pages/ComingSoon"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -262,6 +264,8 @@ const App = () => (
                   <Route path="/startups" element={<ProtectedRoute><StartupListing /></ProtectedRoute>} />
                   <Route path="/vc" element={<ProtectedRoute><VCFundsListing /></ProtectedRoute>} />
                   <Route path="/vc/:id" element={<ProtectedRoute><VCFundDetail /></ProtectedRoute>} />
+                  <Route path="/pe" element={<ProtectedRoute><PEFundsListing /></ProtectedRoute>} />
+                  <Route path="/pe/:id" element={<ProtectedRoute><PEFundDetail /></ProtectedRoute>} />
                   <Route path="/predict" element={<ProtectedRoute><Predict /></ProtectedRoute>} />
                   <Route path="/wallet" element={<ProtectedRoute><Wallet /></ProtectedRoute>} />
                   <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
