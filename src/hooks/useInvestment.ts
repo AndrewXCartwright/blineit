@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
-
+import { syncInvestmentToDigiShares } from "@/services/digishares-sync";
 export type InvestmentType = 'real_estate' | 'factor' | 'lien' | 'safe';
 
 export interface Investment {
@@ -76,8 +76,24 @@ export function useInvestment() {
         return data as Investment;
       }
 
+      const finalData = (updatedData || data) as Investment;
+
+      // Sync to DigiShares (non-blocking)
+      try {
+        await syncInvestmentToDigiShares({
+          id: finalData.id,
+          investment_type: finalData.investment_type,
+          investment_id: finalData.investment_id,
+          amount: finalData.amount,
+          user_id: finalData.user_id,
+        });
+      } catch (syncError) {
+        console.error('DigiShares sync failed:', syncError);
+        // Don't block the user - investment is still recorded
+      }
+
       toast.success("Investment successful!");
-      return (updatedData || data) as Investment;
+      return finalData;
     } catch (err) {
       console.error("Investment error:", err);
       setError("An unexpected error occurred");

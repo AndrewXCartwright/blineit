@@ -1169,6 +1169,39 @@ export type Database = {
         }
         Relationships: []
       }
+      digishares_sync: {
+        Row: {
+          created_at: string | null
+          digishares_meta_key: string | null
+          digishares_sto_id: string | null
+          id: string
+          investment_id: string
+          investment_type: string
+          last_synced_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          digishares_meta_key?: string | null
+          digishares_sto_id?: string | null
+          id?: string
+          investment_id: string
+          investment_type: string
+          last_synced_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          digishares_meta_key?: string | null
+          digishares_sto_id?: string | null
+          id?: string
+          investment_id?: string
+          investment_type?: string
+          last_synced_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       direct_messages: {
         Row: {
           content: string
