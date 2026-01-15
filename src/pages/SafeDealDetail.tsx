@@ -24,6 +24,7 @@ import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BottomNav } from "@/components/BottomNav";
 import { useSafeDeals, type SafeDeal } from "@/hooks/useSafeDeals";
+import { InvestmentModal } from "@/components/shared/InvestmentModal";
 
 const stageLabels: Record<string, string> = {
   pre_seed: "Pre-Seed",
@@ -60,6 +61,7 @@ export default function SafeDealDetail() {
   const [deal, setDeal] = useState<SafeDeal | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Overview");
+  const [showInvestModal, setShowInvestModal] = useState(false);
 
   const tabs = ["Overview", "Team", "Documents", "Activity"];
 
@@ -312,7 +314,7 @@ export default function SafeDealDetail() {
                   <Badge className={stageColor}>{stageLabel}</Badge>
                 </div>
 
-                <Button className="w-full" size="lg">
+                <Button className="w-full" size="lg" onClick={() => setShowInvestModal(true)}>
                   Invest Now
                 </Button>
               </CardContent>
@@ -419,6 +421,20 @@ export default function SafeDealDetail() {
       </main>
 
       <BottomNav />
+
+      {/* Investment Modal */}
+      {deal && (
+        <InvestmentModal
+          isOpen={showInvestModal}
+          onClose={() => setShowInvestModal(false)}
+          investmentType="safe"
+          investmentId={deal.id}
+          title={deal.company_name}
+          minInvestment={deal.min_investment}
+          targetRaise={deal.target_raise}
+          currentRaised={deal.current_raised}
+        />
+      )}
     </div>
   );
 }

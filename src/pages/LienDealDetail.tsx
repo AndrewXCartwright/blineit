@@ -22,6 +22,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BottomNav } from "@/components/BottomNav";
 import { useLienDeals, type LienDeal } from "@/hooks/useLienDeals";
+import { InvestmentModal } from "@/components/shared/InvestmentModal";
 
 const lienPositionLabels: Record<string, string> = {
   first: "1st Lien Position",
@@ -69,6 +70,7 @@ export default function LienDealDetail() {
   const [deal, setDeal] = useState<LienDeal | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Overview");
+  const [showInvestModal, setShowInvestModal] = useState(false);
 
   const tabs = ["Overview", "Property", "Documents", "Activity"];
 
@@ -282,7 +284,7 @@ export default function LienDealDetail() {
                   <span className="font-semibold text-success">{deal.interest_rate}% APR</span>
                 </div>
 
-                <Button className="w-full" size="lg">
+                <Button className="w-full" size="lg" onClick={() => setShowInvestModal(true)}>
                   Invest Now
                 </Button>
               </CardContent>
@@ -402,6 +404,18 @@ export default function LienDealDetail() {
       </main>
 
       <BottomNav />
+
+      {/* Investment Modal */}
+      {deal && (
+        <InvestmentModal
+          isOpen={showInvestModal}
+          onClose={() => setShowInvestModal(false)}
+          investmentType="lien"
+          investmentId={deal.id}
+          title={deal.title}
+          minInvestment={deal.min_investment}
+        />
+      )}
     </div>
   );
 }
