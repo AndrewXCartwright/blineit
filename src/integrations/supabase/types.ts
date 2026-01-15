@@ -4296,9 +4296,14 @@ export type Database = {
           description: string | null
           discount_rate: number | null
           documents: Json | null
+          exemption_type: string | null
           has_mfn: boolean | null
           has_pro_rata: boolean | null
           id: string
+          image_url: string | null
+          industry: string | null
+          location_city: string | null
+          location_state: string | null
           min_investment: number | null
           sponsor_id: string | null
           stage: string
@@ -4307,6 +4312,7 @@ export type Database = {
           team: Json | null
           updated_at: string | null
           valuation_cap: number | null
+          website_url: string | null
         }
         Insert: {
           company_name: string
@@ -4315,9 +4321,14 @@ export type Database = {
           description?: string | null
           discount_rate?: number | null
           documents?: Json | null
+          exemption_type?: string | null
           has_mfn?: boolean | null
           has_pro_rata?: boolean | null
           id?: string
+          image_url?: string | null
+          industry?: string | null
+          location_city?: string | null
+          location_state?: string | null
           min_investment?: number | null
           sponsor_id?: string | null
           stage: string
@@ -4326,6 +4337,7 @@ export type Database = {
           team?: Json | null
           updated_at?: string | null
           valuation_cap?: number | null
+          website_url?: string | null
         }
         Update: {
           company_name?: string
@@ -4334,9 +4346,14 @@ export type Database = {
           description?: string | null
           discount_rate?: number | null
           documents?: Json | null
+          exemption_type?: string | null
           has_mfn?: boolean | null
           has_pro_rata?: boolean | null
           id?: string
+          image_url?: string | null
+          industry?: string | null
+          location_city?: string | null
+          location_state?: string | null
           min_investment?: number | null
           sponsor_id?: string | null
           stage?: string
@@ -4345,6 +4362,7 @@ export type Database = {
           team?: Json | null
           updated_at?: string | null
           valuation_cap?: number | null
+          website_url?: string | null
         }
         Relationships: [
           {
