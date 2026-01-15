@@ -1,11 +1,13 @@
-import { useState } from "react";
-import { X, DollarSign, Loader2, CheckCircle, AlertCircle } from "lucide-react";
+import { useState, useMemo } from "react";
+import { X, DollarSign, Loader2, CheckCircle, AlertCircle, XCircle, Shield, BadgeCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useKYCGate } from "@/hooks/useKYCGate";
 import { KYCVerificationModal } from "@/components/kyc/KYCVerificationModal";
 import { useInvestment, type InvestmentType } from "@/hooks/useInvestment";
+import { useInvestorEligibility, type OfferingRequirements } from "@/hooks/useInvestorEligibility";
+import { useNavigate } from "react-router-dom";
 
 interface InvestmentModalProps {
   isOpen: boolean;
@@ -17,6 +19,7 @@ interface InvestmentModalProps {
   minInvestment: number;
   targetRaise?: number;
   currentRaised?: number;
+  requiresAccreditation?: boolean;
 }
 
 function formatCurrency(amount: number): string {
@@ -38,19 +41,35 @@ export function InvestmentModal({
   minInvestment,
   targetRaise,
   currentRaised = 0,
+  requiresAccreditation = false,
 }: InvestmentModalProps) {
+  const navigate = useNavigate();
   const [amount, setAmount] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   
-  const { requireKYC, showKYCModal, setShowKYCModal, isVerified } = useKYCGate();
+  const { requireKYC, showKYCModal, setShowKYCModal, isVerified: kycVerified } = useKYCGate();
   const { createInvestment, loading: investmentLoading } = useInvestment();
+  const { checkEligibility, isKYCVerified, accreditationStatus } = useInvestorEligibility();
 
   const numericAmount = parseFloat(amount) || 0;
   const tokens = pricePerToken > 0 ? numericAmount / pricePerToken : numericAmount;
   const remainingToRaise = targetRaise ? targetRaise - currentRaised : null;
 
   const quickAmounts = [100, 500, 1000, 5000];
+
+  // Build offering requirements
+  const offeringRequirements: OfferingRequirements = useMemo(() => ({
+    requires_kyc: true, // All investments require KYC
+    requires_accreditation: requiresAccreditation,
+    min_investment: minInvestment,
+  }), [requiresAccreditation, minInvestment]);
+
+  // Check eligibility
+  const eligibility = useMemo(() => 
+    checkEligibility(offeringRequirements, numericAmount),
+    [checkEligibility, offeringRequirements, numericAmount]
+  );
 
   const handleQuickSelect = (value: number) => {
     setAmount(value.toString());
@@ -61,28 +80,43 @@ export function InvestmentModal({
       return;
     }
 
-    // KYC check
-    requireKYC(async () => {
-      setIsProcessing(true);
-      
-      const investment = await createInvestment({
-        investment_type: investmentType,
-        investment_id: investmentId,
-        amount: numericAmount,
-        tokens: tokens,
+    // Check eligibility before proceeding
+    if (eligibility.nextStep === 'kyc') {
+      requireKYC(async () => {
+        await processInvestment();
       });
+      return;
+    }
 
-      setIsProcessing(false);
+    if (eligibility.nextStep === 'accreditation') {
+      // User needs accreditation - don't proceed
+      return;
+    }
 
-      if (investment) {
-        setIsSuccess(true);
-        setTimeout(() => {
-          setIsSuccess(false);
-          setAmount("");
-          onClose();
-        }, 2000);
-      }
+    // All checks passed, process investment
+    await processInvestment();
+  };
+
+  const processInvestment = async () => {
+    setIsProcessing(true);
+    
+    const investment = await createInvestment({
+      investment_type: investmentType,
+      investment_id: investmentId,
+      amount: numericAmount,
+      tokens: tokens,
     });
+
+    setIsProcessing(false);
+
+    if (investment) {
+      setIsSuccess(true);
+      setTimeout(() => {
+        setIsSuccess(false);
+        setAmount("");
+        onClose();
+      }, 2000);
+    }
   };
 
   const handleClose = () => {
@@ -93,8 +127,16 @@ export function InvestmentModal({
     }
   };
 
+  const handleGoToAccreditation = () => {
+    onClose();
+    navigate('/accreditation');
+  };
+
   const isValidAmount = numericAmount >= minInvestment && 
     (!remainingToRaise || numericAmount <= remainingToRaise);
+
+  // Determine if user can proceed (eligible or just needs to trigger KYC flow)
+  const canProceed = isValidAmount && (eligibility.eligible || eligibility.nextStep === 'kyc');
 
   return (
     <>
@@ -124,6 +166,86 @@ export function InvestmentModal({
                 <span className="text-sm text-muted-foreground">Investment Type:</span>
                 <span className="text-sm font-medium capitalize">{investmentType.replace('_', ' ')}</span>
               </div>
+
+              {/* Eligibility Status */}
+              <div className="bg-muted/50 rounded-lg p-4 space-y-3">
+                <h4 className="font-medium flex items-center gap-2">
+                  <Shield className="w-4 h-4" />
+                  Investor Requirements
+                </h4>
+                <div className="space-y-2">
+                  {/* KYC Status */}
+                  <div className="flex items-center gap-2 text-sm">
+                    {eligibility.checks.kyc ? (
+                      <>
+                        <CheckCircle className="w-4 h-4 text-success" />
+                        <span className="text-success">Identity Verified</span>
+                      </>
+                    ) : (
+                      <>
+                        <XCircle className="w-4 h-4 text-destructive" />
+                        <span className="text-destructive">Identity Verification Required</span>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Accreditation Status (only show if required) */}
+                  {requiresAccreditation && (
+                    <div className="flex items-center gap-2 text-sm">
+                      {eligibility.checks.accreditation ? (
+                        <>
+                          <BadgeCheck className="w-4 h-4 text-success" />
+                          <span className="text-success">Accreditation Verified</span>
+                        </>
+                      ) : (
+                        <>
+                          <XCircle className="w-4 h-4 text-destructive" />
+                          <span className="text-destructive">Accreditation Required</span>
+                        </>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Min Investment Status */}
+                  {numericAmount > 0 && (
+                    <div className="flex items-center gap-2 text-sm">
+                      {eligibility.checks.minInvestment ? (
+                        <>
+                          <CheckCircle className="w-4 h-4 text-success" />
+                          <span className="text-success">Meets Minimum Investment</span>
+                        </>
+                      ) : (
+                        <>
+                          <XCircle className="w-4 h-4 text-destructive" />
+                          <span className="text-destructive">Below Minimum ({formatCurrency(minInvestment)})</span>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Accreditation CTA if needed */}
+              {requiresAccreditation && !eligibility.checks.accreditation && (
+                <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4">
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+                    <div className="space-y-2">
+                      <p className="text-sm font-medium">Accreditation Required</p>
+                      <p className="text-sm text-muted-foreground">
+                        This investment requires accredited investor status. Please complete your accreditation verification to proceed.
+                      </p>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={handleGoToAccreditation}
+                      >
+                        Verify Accreditation
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Amount Input */}
               <div className="space-y-2">
@@ -194,12 +316,6 @@ export function InvestmentModal({
               </div>
 
               {/* Validation Messages */}
-              {numericAmount > 0 && numericAmount < minInvestment && (
-                <div className="flex items-center gap-2 text-destructive text-sm">
-                  <AlertCircle className="w-4 h-4" />
-                  Minimum investment is {formatCurrency(minInvestment)}
-                </div>
-              )}
               {remainingToRaise && numericAmount > remainingToRaise && (
                 <div className="flex items-center gap-2 text-destructive text-sm">
                   <AlertCircle className="w-4 h-4" />
@@ -213,13 +329,17 @@ export function InvestmentModal({
                   className="w-full"
                   size="lg"
                   onClick={handleConfirmInvestment}
-                  disabled={!isValidAmount || isProcessing || investmentLoading}
+                  disabled={!canProceed || isProcessing || investmentLoading}
                 >
                   {isProcessing || investmentLoading ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                       Processing...
                     </>
+                  ) : eligibility.nextStep === 'kyc' ? (
+                    'Verify Identity & Invest'
+                  ) : eligibility.nextStep === 'accreditation' ? (
+                    'Accreditation Required'
                   ) : (
                     `Confirm Investment • ${formatCurrency(numericAmount)}`
                   )}
