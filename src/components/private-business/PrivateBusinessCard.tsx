@@ -53,30 +53,65 @@ export function PrivateBusinessCard({ business }: PrivateBusinessCardProps) {
     ? Math.min((business.current_raised / business.target_raise) * 100, 100)
     : 0;
 
-  const exemptionLabel = business.exemption_type === 'reg_cf' 
-    ? "Open to All Investors" 
-    : "Accredited Only";
-  const exemptionColor = business.exemption_type === 'reg_cf'
-    ? "bg-success/10 text-success"
-    : "bg-amber-500/10 text-amber-500";
+  // Exemption labels with proper handling for different types
+  const getExemptionLabel = (type: string) => {
+    switch (type) {
+      case 'reg_cf':
+        return "Open to All Investors";
+      case 'reg_a_plus':
+        return "Open to All Investors";
+      case 'reg_d_506c':
+        return "Accredited Only";
+      case 'reg_d_506b':
+        return "Accredited Only";
+      default:
+        return "Open to All Investors";
+    }
+  };
+
+  const getExemptionColor = (type: string) => {
+    switch (type) {
+      case 'reg_cf':
+        return "bg-success/10 text-success";
+      case 'reg_a_plus':
+        return "bg-blue-500/10 text-blue-500";
+      case 'reg_d_506c':
+      case 'reg_d_506b':
+        return "bg-amber-500/10 text-amber-500";
+      default:
+        return "bg-success/10 text-success";
+    }
+  };
+
+  const exemptionLabel = getExemptionLabel(business.exemption_type);
+  const exemptionColor = getExemptionColor(business.exemption_type);
+
+  const defaultImage = "https://images.unsplash.com/photo-1556740738-b6a63e27c4df?w=800";
+  const imageUrl = business.image_url || defaultImage;
 
   return (
     <div className="glass-card rounded-2xl overflow-hidden animate-fade-in interactive-card">
-      {/* Header with gradient */}
-      <div className="h-20 relative overflow-hidden bg-gradient-to-br from-emerald-500/20 via-emerald-500/10 to-background">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Building2 className="w-10 h-10 text-emerald-500/30" />
-        </div>
+      {/* Image Header */}
+      <div className="h-32 relative overflow-hidden">
+        <img 
+          src={imageUrl} 
+          alt={business.business_name}
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = defaultImage;
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
         <div className="absolute top-2 left-2 flex gap-2 flex-wrap">
-          <Badge className={`${industryColor} text-[10px] font-medium`}>
+          <Badge className={`${industryColor} text-[10px] font-medium backdrop-blur-sm`}>
             {business.industry}
           </Badge>
-          <Badge className={`${typeColor} text-[10px] font-medium`}>
+          <Badge className={`${typeColor} text-[10px] font-medium backdrop-blur-sm`}>
             {typeLabel}
           </Badge>
         </div>
         <div className="absolute top-2 right-2">
-          <Badge className={`${exemptionColor} text-[10px]`}>
+          <Badge className={`${exemptionColor} text-[10px] backdrop-blur-sm`}>
             {exemptionLabel}
           </Badge>
         </div>
