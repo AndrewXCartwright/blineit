@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { InvestmentModal } from "@/components/shared/InvestmentModal";
 
 // Sample offerings data
 const sampleOfferingsData: Record<string, {
@@ -321,6 +322,7 @@ export default function OfferingDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [investmentAmount, setInvestmentAmount] = useState<number>(1000);
+  const [showInvestModal, setShowInvestModal] = useState(false);
   
   const offering = id ? sampleOfferingsData[id] : null;
   
@@ -536,16 +538,14 @@ export default function OfferingDetail() {
               </div>
             </div>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button className="w-full" size="lg" disabled>
-                  Invest {formatCurrency(investmentAmount)}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>This is a sample offering for demonstration purposes</p>
-              </TooltipContent>
-            </Tooltip>
+            <Button 
+              className="w-full" 
+              size="lg" 
+              disabled={investmentAmount < offering.minInvestment}
+              onClick={() => setShowInvestModal(true)}
+            >
+              Invest {formatCurrency(investmentAmount)}
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -716,6 +716,21 @@ export default function OfferingDetail() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Investment Modal */}
+      {offering && (
+        <InvestmentModal
+          isOpen={showInvestModal}
+          onClose={() => setShowInvestModal(false)}
+          investmentType={offering.category === 'factor' ? 'factor' : 'lien'}
+          investmentId={offering.id}
+          title={offering.name}
+          pricePerToken={offering.tokenPrice}
+          minInvestment={offering.minInvestment}
+          targetRaise={offering.offeringSize}
+          currentRaised={fundedAmount}
+        />
+      )}
     </div>
   );
 }
