@@ -48,7 +48,8 @@ export function getMetaKey(investmentType: string, subType?: string): string {
     real_estate: 'Equity_Real_Estate_',
     factor: 'Factor_Receivables_',
     lien: 'Lien_Secured_',
-    safe: 'SAFE_'
+    safe: 'SAFE_',
+    private_business: 'Private_Business_'
   };
   
   const prefix = typeMap[investmentType] || 'Equity_Real_Estate_';

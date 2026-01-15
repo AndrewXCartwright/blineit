@@ -16,6 +16,8 @@ import { LienDealCard } from "@/components/lien/LienDealCard";
 import { useLienDeals } from "@/hooks/useLienDeals";
 import { SafeDealCard } from "@/components/safe/SafeDealCard";
 import { useSafeDeals } from "@/hooks/useSafeDeals";
+import { PrivateBusinessCard } from "@/components/private-business/PrivateBusinessCard";
+import { usePrivateBusinesses } from "@/hooks/usePrivateBusinesses";
 
 interface Property {
   id: string;
@@ -32,7 +34,7 @@ interface Property {
   image_url?: string;
 }
 
-type InvestmentType = "all" | "real-estate" | "factor" | "lien" | "safe";
+type InvestmentType = "all" | "real-estate" | "factor" | "lien" | "safe" | "private-business";
 
 const investmentTypeTabs: { value: InvestmentType; label: string }[] = [
   { value: "all", label: "All" },
@@ -40,6 +42,7 @@ const investmentTypeTabs: { value: InvestmentType; label: string }[] = [
   { value: "factor", label: "Factor" },
   { value: "lien", label: "Lien" },
   { value: "safe", label: "Startups & VC" },
+  { value: "private-business", label: "Private Business" },
 ];
 
 export default function PropertiesListing() {
@@ -62,6 +65,9 @@ export default function PropertiesListing() {
   
   // SAFE deals hook
   const { deals: safeDeals, loading: safeLoading } = useSafeDeals();
+  
+  // Private Business hook
+  const { businesses: privateBusinesses, loading: businessLoading } = usePrivateBusinesses();
 
   const fetchProperties = useCallback(async () => {
     setLoading(true);
@@ -304,6 +310,42 @@ export default function PropertiesListing() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {safeDeals.map((deal) => (
                   <SafeDealCard key={deal.id} deal={deal} />
+                ))}
+              </div>
+            )
+          ) : investmentType === "private-business" ? (
+            businessLoading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="glass-card rounded-2xl overflow-hidden">
+                    <Skeleton className="h-20" />
+                    <div className="p-4 space-y-3">
+                      <Skeleton className="h-4 w-3/4" />
+                      <Skeleton className="h-3 w-full" />
+                      <Skeleton className="h-3 w-2/3" />
+                      <div className="grid grid-cols-2 gap-3">
+                        <Skeleton className="h-12" />
+                        <Skeleton className="h-12" />
+                      </div>
+                      <Skeleton className="h-2 w-full" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : privateBusinesses.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-16 text-center">
+                <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                  <Building2 className="h-8 w-8 text-muted-foreground" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">No Private Business Investments Available Yet</h3>
+                <p className="text-muted-foreground max-w-md">
+                  New revenue share and equity opportunities in operating businesses will be listed here soon.
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {privateBusinesses.map((business) => (
+                  <PrivateBusinessCard key={business.id} business={business} />
                 ))}
               </div>
             )
