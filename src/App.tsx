@@ -50,6 +50,7 @@ const InvestmentDetail = lazy(() => import("./pages/InvestmentDetail"));
 const LoanDetail = lazy(() => import("./pages/LoanDetail"));
 const FactorDealDetail = lazy(() => import("./pages/FactorDealDetail"));
 const LienDealDetail = lazy(() => import("./pages/LienDealDetail"));
+const SafeDealDetail = lazy(() => import("./pages/SafeDealDetail"));
 const KYCVerification = lazy(() => import("./pages/KYCVerification"));
 const ComingSoon = lazy(() => import("./pages/ComingSoon"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -261,6 +262,7 @@ const App = () => (
                   <Route path="/loan/:id" element={<ProtectedRoute><LoanDetail /></ProtectedRoute>} />
                   <Route path="/factor/:id" element={<ProtectedRoute><FactorDealDetail /></ProtectedRoute>} />
                   <Route path="/lien/:id" element={<ProtectedRoute><LienDealDetail /></ProtectedRoute>} />
+                  <Route path="/safe/:id" element={<ProtectedRoute><SafeDealDetail /></ProtectedRoute>} />
                   <Route path="/sponsors" element={<ProtectedRoute><SponsorDirectory /></ProtectedRoute>} />
                   <Route path="/kyc" element={<ProtectedRoute><KYCVerification /></ProtectedRoute>} />
                   <Route path="/referrals" element={<ProtectedRoute><Referrals /></ProtectedRoute>} />
