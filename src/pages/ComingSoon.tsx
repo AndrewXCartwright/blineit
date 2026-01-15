@@ -79,7 +79,7 @@ const assetClassConfigs: Record<AssetClass, AssetClassConfig> = {
   },
   startups_vc: {
     id: "startups_vc",
-    name: "Startups & VC",
+    name: "Startups",
     icon: "🚀",
     launchDate: "Q3 2026",
     color: "purple",

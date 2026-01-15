@@ -1,4 +1,4 @@
-import { Home, Layers, Target, Wallet, User } from "lucide-react";
+import { Home, Layers, Target, Coins, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -10,7 +10,7 @@ export function BottomNav() {
     { icon: Home, label: t('nav.home'), path: "/" },
     { icon: Layers, label: t('common.explore'), path: "/assets" },
     { icon: Target, label: t('nav.predict'), path: "/predict" },
-    { icon: Wallet, label: t('nav.wallet'), path: "/wallet" },
+    { icon: Coins, label: t('nav.assets'), path: "/commodities" },
     { icon: User, label: t('nav.profile'), path: "/profile" },
   ];
 
