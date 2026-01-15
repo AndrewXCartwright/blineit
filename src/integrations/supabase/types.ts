@@ -2196,6 +2196,53 @@ export type Database = {
           },
         ]
       }
+      investments: {
+        Row: {
+          amount: number
+          created_at: string | null
+          digishares_transaction_id: string | null
+          id: string
+          investment_id: string
+          investment_type: string
+          status: string | null
+          tokens: number
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          digishares_transaction_id?: string | null
+          id?: string
+          investment_id: string
+          investment_type: string
+          status?: string | null
+          tokens: number
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          digishares_transaction_id?: string | null
+          id?: string
+          investment_id?: string
+          investment_type?: string
+          status?: string | null
+          tokens?: number
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "investments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       kyc_verifications: {
         Row: {
           address_line1: string | null

@@ -20,6 +20,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BottomNav } from "@/components/BottomNav";
 import { useFactorDeals, type FactorDeal } from "@/hooks/useFactorDeals";
+import { InvestmentModal } from "@/components/shared/InvestmentModal";
 
 const factorTypeLabels: Record<string, string> = {
   invoice: "Invoice Factoring",
@@ -65,6 +66,7 @@ export default function FactorDealDetail() {
   const [deal, setDeal] = useState<FactorDeal | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Overview");
+  const [showInvestModal, setShowInvestModal] = useState(false);
 
   const tabs = ["Overview", "Borrower", "Documents", "Activity"];
 
@@ -273,7 +275,7 @@ export default function FactorDealDetail() {
                   </>
                 )}
 
-                <Button className="w-full" size="lg">
+                <Button className="w-full" size="lg" onClick={() => setShowInvestModal(true)}>
                   Invest Now
                 </Button>
               </CardContent>
@@ -369,6 +371,20 @@ export default function FactorDealDetail() {
       </main>
 
       <BottomNav />
+
+      {/* Investment Modal */}
+      {deal && (
+        <InvestmentModal
+          isOpen={showInvestModal}
+          onClose={() => setShowInvestModal(false)}
+          investmentType="factor"
+          investmentId={deal.id}
+          title={deal.company_name}
+          minInvestment={deal.min_investment}
+          targetRaise={deal.target_raise || undefined}
+          currentRaised={deal.current_raised}
+        />
+      )}
     </div>
   );
 }
