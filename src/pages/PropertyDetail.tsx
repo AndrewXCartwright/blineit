@@ -645,12 +645,12 @@ export default function PropertyDetail() {
 
         {/* Key Metrics Grid */}
         <div className="grid grid-cols-3 gap-3">
-          <MetricCard icon={<DollarSign className="w-4 h-4" />} label={t('property.totalValue')} value={`$${(property.value / 1000000).toFixed(1)}M`} />
-          <MetricCard icon={<Percent className="w-4 h-4" />} label={t('property.apy')} value={`${property.apy}%`} highlight="success" />
-          <MetricCard icon={<Users className="w-4 h-4" />} label={t('property.tokenHolders')} value={property.holders.toLocaleString()} />
-          <MetricCard icon={<BarChart3 className="w-4 h-4" />} label={t('property.occupancy')} value={`${property.occupancy}%`} />
-          <MetricCard icon={<Building2 className="w-4 h-4" />} label={t('property.units')} value={property.units.toString()} />
-          <MetricCard icon={<Calendar className="w-4 h-4" />} label={t('property.yearBuilt')} value={property.year_built?.toString() || "N/A"} />
+          <MetricCard icon={<DollarSign className="w-5 h-5" />} label={t('property.totalValue')} value={`$${(property.value / 1000000).toFixed(1)}M`} />
+          <MetricCard icon={<Percent className="w-5 h-5" />} label={t('property.apy')} value={`${property.apy}%`} highlight="success" />
+          <MetricCard icon={<Users className="w-5 h-5" />} label={t('property.tokenHolders')} value={property.holders.toLocaleString()} />
+          <MetricCard icon={<BarChart3 className="w-5 h-5" />} label={t('property.occupancy')} value={`${property.occupancy}%`} />
+          <MetricCard icon={<Building2 className="w-5 h-5" />} label={t('property.units')} value={property.units.toString()} />
+          <MetricCard icon={<Calendar className="w-5 h-5" />} label={t('property.yearBuilt')} value={property.year_built?.toString() || "N/A"} />
         </div>
 
         {/* Your Position Card */}
@@ -1135,16 +1135,16 @@ function MetricCard({
   highlight?: "success" | "accent";
 }) {
   return (
-    <div className={`glass-card rounded-xl p-3 text-center animate-fade-in ${
+    <div className={`glass-card rounded-xl p-4 text-center animate-fade-in ${
       highlight === "success" ? "border-success/30" : highlight === "accent" ? "border-accent/30" : ""
     }`}>
-      <div className={`mx-auto mb-1.5 ${
+      <div className={`mx-auto mb-2 ${
         highlight === "success" ? "text-success" : highlight === "accent" ? "text-accent" : "text-primary"
       }`}>
         {icon}
       </div>
-      <p className="text-xs text-muted-foreground mb-0.5">{label}</p>
-      <p className={`font-display font-bold text-sm ${
+      <p className="text-sm font-medium text-muted-foreground mb-1">{label}</p>
+      <p className={`font-display font-bold text-2xl ${
         highlight === "success" ? "text-success" : "text-foreground"
       }`}>{value}</p>
     </div>
