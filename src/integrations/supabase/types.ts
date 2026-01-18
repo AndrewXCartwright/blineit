@@ -3662,6 +3662,7 @@ export type Database = {
           following_count: number | null
           id: string
           is_admin: boolean
+          is_platform_admin: boolean | null
           is_verified_investor: boolean | null
           kyc_status: string | null
           kyc_submitted_at: string | null
@@ -3715,6 +3716,7 @@ export type Database = {
           following_count?: number | null
           id?: string
           is_admin?: boolean
+          is_platform_admin?: boolean | null
           is_verified_investor?: boolean | null
           kyc_status?: string | null
           kyc_submitted_at?: string | null
@@ -3768,6 +3770,7 @@ export type Database = {
           following_count?: number | null
           id?: string
           is_admin?: boolean
+          is_platform_admin?: boolean | null
           is_verified_investor?: boolean | null
           kyc_status?: string | null
           kyc_submitted_at?: string | null
