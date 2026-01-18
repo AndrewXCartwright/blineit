@@ -316,7 +316,7 @@ export function useSponsorPortal() {
         for (const inv of investmentsData) {
           const { data: profile } = await supabase
             .from('profiles')
-            .select('id, name, email, kyc_status, country')
+            .select('id, name, email, kyc_status')
             .eq('user_id', inv.user_id)
             .single();
 
