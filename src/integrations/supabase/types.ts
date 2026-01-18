@@ -3261,6 +3261,7 @@ export type Database = {
           min_investment: number | null
           portfolio_companies: Json | null
           preferred_return: number | null
+          sponsor_id: string | null
           status: string | null
           strategy: string | null
           target_company_size: string | null
@@ -3294,6 +3295,7 @@ export type Database = {
           min_investment?: number | null
           portfolio_companies?: Json | null
           preferred_return?: number | null
+          sponsor_id?: string | null
           status?: string | null
           strategy?: string | null
           target_company_size?: string | null
@@ -3327,6 +3329,7 @@ export type Database = {
           min_investment?: number | null
           portfolio_companies?: Json | null
           preferred_return?: number | null
+          sponsor_id?: string | null
           status?: string | null
           strategy?: string | null
           target_company_size?: string | null
@@ -6956,6 +6959,7 @@ export type Database = {
           management_fee: number | null
           min_investment: number | null
           portfolio_companies: Json | null
+          sponsor_id: string | null
           status: string | null
           target_fund_size: number
           target_portfolio_size: number | null
@@ -6985,6 +6989,7 @@ export type Database = {
           management_fee?: number | null
           min_investment?: number | null
           portfolio_companies?: Json | null
+          sponsor_id?: string | null
           status?: string | null
           target_fund_size: number
           target_portfolio_size?: number | null
@@ -7014,6 +7019,7 @@ export type Database = {
           management_fee?: number | null
           min_investment?: number | null
           portfolio_companies?: Json | null
+          sponsor_id?: string | null
           status?: string | null
           target_fund_size?: number
           target_portfolio_size?: number | null
