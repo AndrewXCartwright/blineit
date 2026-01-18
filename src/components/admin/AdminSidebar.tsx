@@ -1,9 +1,10 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { 
   LayoutDashboard, Building2, Landmark, Target, Users, 
-  ClipboardList, Receipt, Settings, ArrowLeft, ShieldCheck, Gift, Droplets
+  ClipboardList, Receipt, Settings, ArrowLeft, ShieldCheck, Gift, Droplets, Globe, FileText, UserCog
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useIsPlatformAdmin } from "@/hooks/usePlatformAdmin";
 
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/admin" },
@@ -19,8 +20,16 @@ const navItems = [
   { icon: Settings, label: "Settings", path: "/admin/settings" },
 ];
 
+const platformNavItems = [
+  { icon: Globe, label: "Platform Dashboard", path: "/admin/platform" },
+  { icon: FileText, label: "All Offerings", path: "/admin/platform/offerings" },
+  { icon: UserCog, label: "All Sponsors", path: "/admin/platform/sponsors" },
+  { icon: Settings, label: "Platform Settings", path: "/admin/platform/settings" },
+];
+
 export function AdminSidebar() {
   const navigate = useNavigate();
+  const { isPlatformAdmin } = useIsPlatformAdmin();
 
   return (
     <aside className="w-64 min-h-screen bg-card border-r border-border flex flex-col">
@@ -36,7 +45,7 @@ export function AdminSidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-1">
+      <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
         {navItems.map((item) => (
           <NavLink
             key={item.path}
@@ -55,6 +64,34 @@ export function AdminSidebar() {
             {item.label}
           </NavLink>
         ))}
+
+        {/* Platform Admin Section */}
+        {isPlatformAdmin && (
+          <>
+            <div className="pt-4 pb-2">
+              <p className="px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Platform Admin
+              </p>
+            </div>
+            {platformNavItems.map((item) => (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                className={({ isActive }) =>
+                  cn(
+                    "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all",
+                    isActive
+                      ? "bg-amber-500 text-white"
+                      : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                  )
+                }
+              >
+                <item.icon className="w-5 h-5" />
+                {item.label}
+              </NavLink>
+            ))}
+          </>
+        )}
       </nav>
 
       {/* Footer */}
